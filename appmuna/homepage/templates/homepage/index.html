@@ -1,0 +1,1160 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>Integrasi Muna Dalam Angka</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+        <meta content="Coderthemes" name="author">
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="{% static 'app-design/assets/css/icons.min.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'app-design/assets/css/app.min.css' %}" rel="stylesheet" type="text/css" id="light-style">
+        <link href="{% static 'app-design/assets/css/app-dark.min.css' %}" rel="stylesheet" type="text/css" id="dark-style"> 
+
+    </head>
+
+    <body class="loading" data-layout-config='{"darkMode":false}'>
+
+        <!-- NAVBAR START -->
+        <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark">
+            <div class="container">
+
+                <!-- logo -->
+                <a href="index.html" class="navbar-brand me-lg-5">
+                    <img src="{% static 'customs/images/bps_kab_muna_dark.png' %}" alt="" class="logo-dark" height="45">
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="mdi mdi-menu"></i>
+                </button>
+
+                <!-- menus -->
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+                    <!-- left menu -->
+                    <ul class="navbar-nav me-auto align-items-center">
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link active" href="">Beranda</a>
+                        </li>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="">Data Strategis</a>
+                        </li>
+
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="">Data Kinerja Pembangunan</a>
+                        </li>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="">Tabel Statistik</a>
+                        </li>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="">Permohonan Data</a>
+                        </li>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="">Kontak</a>
+                        </li>
+                    </ul>
+
+                    <!-- right menu -->
+                    <ul class="navbar-nav ms-auto align-items-center">
+
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item me-0">
+                                <form action="{% url 'auth_:logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <a type="submit" class="nav-link d-lg-none">Bank Data</a>
+                                    <button type="submit" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Halo, Rifki Gustiawan !" title="">
+                                        <i class="mdi mdi-logout me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>   
+                        {% else %}
+                            <li class="nav-item me-0">
+                                <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" target="_blank" class="nav-link d-lg-none">Login Sekarang</a>
+                                <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" target="_blank" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex">
+                                    <i class="mdi mdi-login me-2"></i> Login Sekarang
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+        <!-- NAVBAR END -->
+
+        <!-- START HERO -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-5">
+                        <div class="mt-md-4">
+                            <div>
+                                <span class="badge bg-danger rounded-pill">Baru</span>
+                                <span class="text-white-50 ms-1">Selamat datang di portal Satu Data Muna</span>
+                            </div>
+                            <h2 class="text-white fw-normal mb-4 mt-3 hero-title">
+                                Portal Satu Data Muna (SDM)
+                            </h2>
+
+                            <p class="mb-4 font-16 text-white-50"><span class="text-white fw-normal">SDM</span> merupakan wujud sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia layanan data dan berbagai Dinas OPD selaku stakeholder penyedia data statistik sektoral.</p>
+
+                            <a href="" target="_blank" class="btn btn-danger">Kunjungi Aplikasi <i class="mdi mdi-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-5 offset-md-2">
+                        <div class="text-md-end mt-3 mt-md-0">
+                            <img src="{% static 'app-design/assets/images/startup.svg' %}" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- END HERO -->
+
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <h1 class="mt-0"><i class="mdi mdi-heart-multiple-outline"></i></h1>
+                            <h3>Penyedia Data Statistik<span class="text-primary"> Untuk Indonesia Maju</span></h3>
+                            <p class="text-muted mt-2">Data yang dikhususkan untuk keperluan penyusunan dan penilaian kinerja pembangunan pemerintah Kab. Muna
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row pt-4 align-items-center">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <div class="app-search dropdown ml-5">
+                            <form>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:450px;height:50px">
+                                    <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                                    <button class="btn btn-primary btn-sm rounded" style="margin-left:15px" id="button-top-search">Cari Data</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- END FEATURES 2 -->
+
+        <section class="py-5 bg-light-lighten border-top border-bottom border-light">
+            <div class="container">
+                <div class="row pb-3 align-items-center">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <ol class="carousel-indicators" style="margin-bottom: -30px;">
+                            <li data-bs-target="#carouselExampleControls" data-bs-slide-to="0" class="active bg-primary-lighten"></li>
+                            <li data-bs-target="#carouselExampleControls" data-bs-slide-to="1" class="bg-primary-lighten"></li>
+                            <li data-bs-target="#carouselExampleControls" data-bs-slide-to="2" class="bg-primary-lighten"></li>
+                            <li data-bs-target="#carouselExampleControls" data-bs-slide-to="3" class="bg-primary-lighten"></li>
+                        </ol>
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
+                                                <h3 class="mt-3 mb-3">36,254</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
+                                                    <span class="text-nowrap">Since last month</span>  
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
+                                                <h3 class="mt-3 mb-3">5,543</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
+                                                <h3 class="mt-3 mb-3">$6,254</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-pulse widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
+                                                <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
+                                                <h3 class="mt-3 mb-3">36,254</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
+                                                    <span class="text-nowrap">Since last month</span>  
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
+                                                <h3 class="mt-3 mb-3">5,543</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
+                                                <h3 class="mt-3 mb-3">$6,254</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-pulse widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
+                                                <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
+                                                <h3 class="mt-3 mb-3">36,254</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
+                                                    <span class="text-nowrap">Since last month</span>  
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
+                                                <h3 class="mt-3 mb-3">5,543</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
+                                                <h3 class="mt-3 mb-3">$6,254</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-pulse widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
+                                                <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
+                                                <h3 class="mt-3 mb-3">36,254</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
+                                                    <span class="text-nowrap">Since last month</span>  
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
+                                                <h3 class="mt-3 mb-3">5,543</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
+                                                <h3 class="mt-3 mb-3">$6,254</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card widget-flat py-2">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-pulse widget-icon"></i>
+                                                </div>
+                                                <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
+                                                <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                                                <p class="mb-0 text-muted">
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
+                                                    <span class="text-nowrap">Since last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev" style="margin-left: -130px;">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </span>
+                            </div>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next" style="margin-right: -130px;">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- START SERVICES -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row py-4">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <h1 class="mt-0"><i class="mdi mdi-infinity"></i></h1>
+                            <h3>Pusat Layanan <span class="text-primary">Statistik Terpadu</span></h3>
+                            <p class="text-muted mt-2">Layanan statistik terpadu merupakan program percepatan layanan data dan informasi statistik <br> yang disusun secara inheren oleh BPS Kabupaten Muna.</p>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="text-center p-3">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <i class="uil uil-desktop text-primary font-24"></i>
+                                </span>
+                            </div>
+                            <h4 class="mt-3">Data Strategis</h4>
+                            <p class="text-muted mt-2 mb-0">Ringkasan data statistik yang diperoleh dari berbagai dimensi statistik unggulan pada tahun berjalan.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="text-center p-3">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <i class="uil uil-table text-primary font-24"></i>
+                                </span>
+                            </div>
+                            <h4 class="mt-3">Tabel Statistik</h4>
+                            <p class="text-muted mt-2 mb-0">Fitur pencarian data yang ditujukan untuk mempermudah pengguna dalam menemukan data yang diinginkan.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="text-center p-3">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <i class="uil uil-presentation text-primary font-24"></i>
+                                </span>
+                            </div>
+                            <h4 class="mt-3">Infografis</h4>
+                            <p class="text-muted mt-2 mb-0">Visualisasi data statistik yang disajikan menggunakan ilustrasi, grafik, dan teks interaktif.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="text-center p-3">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <i class="uil uil-newspaper text-primary font-24"></i>
+                                </span>
+                            </div>
+                            <h4 class="mt-3">Data Kinerja Pembangunan</h4>
+                            <p class="text-muted mt-2 mb-0">Kumpulan data yang ditujukan sebagai dasar penyusunan rencana kinerja pembangunan pemerintah Kab. Muna.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="text-center p-3">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <i class="uil uil-envelope-edit text-primary font-24"></i>
+                                </span>
+                            </div>
+                            <h4 class="mt-3">Permohonan Data</h4>
+                            <p class="text-muted mt-2 mb-0">Layanan yang dikhususkan bagi pengguna untuk memperoleh data yang tidak tercakup pada tabel dinamis.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="text-center p-3">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <i class="uil uil-forwaded-call text-primary font-24"></i>
+                                </span>
+                            </div>
+                            <h4 class="mt-3">Konsultasi Data Statistik</h4>
+                            <p class="text-muted mt-2 mb-0">Layanan internal BPS Kab. Muna kepada pihak eksternal dalam rangka pelayanan statistik terpadu.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- END SERVICES -->
+        <!-- START FEATURES 2 -->
+
+        <section class="py-4 bg-light-lighten border-top border-bottom border-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <h1 class="mt-0"><i class="mdi mdi-heart-multiple-outline"></i></h1>
+                            <h3>Data Strategis<span class="text-danger"> Kabupaten Muna</span></h3>
+                            <p class="text-muted mt-2">Data yang dikhususkan untuk keperluan penyusunan dan penilaian kinerja pembangunan pemerintah Kab. Muna
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="row mt-2 py-5 align-items-center">
+                    <div class="col-lg-5">
+                        <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-lg-6 offset-lg-1">
+                        <h3 class="fw-normal">Komponen penyusun kinerja pembangunan</h3>
+                        <p class="text-muted mt-3">Komponen ini diperoleh dari berbagai kompilasi data BPS Kab. Muna maupun instansi lain yang saling terkait.</p>
+
+                        <div class="mt-4">
+                            <p class="text-muted"><i class="mdi mdi-circle-medium text-primary"></i> Karakteristik Penduduk</p>
+                            <p class="text-muted"><i class="mdi mdi-circle-medium text-primary"></i> Pengangguran</p>
+                            <p class="text-muted"><i class="mdi mdi-circle-medium text-primary"></i> PDRB & Pertumbuhan Ekonomi</p>
+                            <p class="text-muted"><i class="mdi mdi-circle-medium text-primary"></i> Kemiskinan</p>
+                        </div>
+
+                        <a href="" class="btn btn-primary btn-rounded mt-3">Muat lebih banyak <i class="mdi mdi-arrow-right ms-1"></i></a>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- END FEATURES 2 -->
+
+        <section class="py-5">
+            <div class="container">
+                <div class="row pb-3 align-items-center">
+                    <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
+                        <ol class="carousel-indicators" style="margin-bottom: -30px;">
+                            <li data-bs-target="#carouselControls1" data-bs-slide-to="0" class="active bg-primary-lighten"></li>
+                            <li data-bs-target="#carouselControls1" data-bs-slide-to="1" class="bg-primary-lighten"></li>
+                            <li data-bs-target="#carouselControls1" data-bs-slide-to="2" class="bg-primary-lighten"></li>
+                            <li data-bs-target="#carouselControls1" data-bs-slide-to="3" class="bg-primary-lighten"></li>
+                        </ol>
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item active">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                    <div class="col-md-6 col-lg-3">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <p class="card-text">
+                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end col-->
+                                </div>
+                            </div>
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselControls1" role="button" data-bs-slide="prev" style="margin-left: -130px;">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </span>
+                            </div>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselControls1" role="button" data-bs-slide="next" style="margin-right: -130px;">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5 bg-light-lighten border-top border-bottom border-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <h3>Pintasan Utama</h3>
+                            <p class="text-muted mt-2">Layanan infografis dan visualisasi data statistik interaktif.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-4">
+                        <div class="card cta-box bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="w-100 overflow-hidden">
+                                        <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
+                                        <h3 class="m-0 fw-normal cta-box-title">Data <b>Strategis</b> Kabupaten Muna <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
+                                    </div>
+                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
+                                </div>
+
+                                <br>
+                                <br>
+                                <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
+                            </div>
+                            <!-- end card-body -->
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card cta-box bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="w-100 overflow-hidden">
+                                        <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
+                                        <h3 class="m-0 fw-normal cta-box-title">Data Kinerja <b>Pembangunan</b> <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
+                                    </div>
+                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
+                                </div>
+                                <br>                                
+                                <br>
+                                <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
+                            </div>
+                            <!-- end card-body -->
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card cta-box bg-primary text-white">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="w-100 overflow-hidden">
+                                        <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
+                                        <h3 class="m-0 fw-normal cta-box-title">Tabel <b>Statistik</b> Kabupaten Muna <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
+                                    </div>
+                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
+                                </div>
+                                <br>
+                                <br>
+                                <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
+                            </div>
+                            <!-- end card-body -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+                <!-- START FEATURES 1 -->
+        <section class="py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <h3>Infografis dan <span class="text-primary">Visualisasi Data</span></h3>
+                            <p class="text-muted mt-2">Layanan infografis dan visualisasi data statistik interaktif.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-4">
+                        <div class="demo-box text-center">
+                            <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                            <h5 class="mt-3 f-17">Vertical Layout</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="demo-box text-center mt-3 mt-lg-0">
+                            <img src="{% static 'app-design/assets/images/layouts/layout-2.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                            <h5 class="mt-3 f-17">Horizontal Layout</h5>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="demo-box text-center mt-3 mt-lg-0">
+                            <img src="{% static 'app-design/assets/images/layouts/layout-3.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                            <h5 class="mt-3 f-17">Detached Layout</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    
+                    <div class="col-lg-4">
+                        <div class="demo-box text-center">
+                            <img src="{% static 'app-design/assets/images/layouts/layout-5.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                            <h5 class="mt-3 f-17">Light Sidenav Layout</h5>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="demo-box text-center mt-3 mt-lg-0">
+                            <img src="{% static 'app-design/assets/images/layouts/layout-6.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                            <h5 class="mt-3 f-17">Boxed Layout</h5>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="demo-box text-center mt-3 mt-lg-0">
+                            <img src="{% static 'app-design/assets/images/layouts/layout-4.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                            <h5 class="mt-3 f-17">Semi Dark Layout</h5>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- END FEATURES 1 -->
+
+        <!-- START FAQ -->
+        <section class="py-5 bg-light-lighten border-top border-bottom border-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <h1 class="mt-0"><i class="mdi mdi-newspaper-variant-multiple-outline"></i></h1>
+                            <h3>Berita dan Fenomena <span class="text-primary">Statistik</span></h3>
+                            <p class="text-muted mt-2">Ringkasan fenomena sosial maupun ekonomi yang disajikan menurut hasil kegiatan statistik oleh BPS Kabupaten Muna.</p>
+                            <button type="button" class="btn btn-primary btn-sm mt-2"><i class="mdi mdi-newspaper me-1"></i> Muat lebih banyak berita</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-lg-5 offset-lg-1">
+                        <!-- Question/Answer -->
+                        <div>
+                            <div class="faq-question-q-box">Q.</div>
+                            <h4 class="faq-question text-body">Can I use this template for my client?</h4>
+                            <p class="faq-answer mb-4 pb-1 text-muted">Yup, the marketplace license allows you to use this theme
+                                in any end products.
+                                For more information on licenses, please refere <a href="../../licenses/index.htm" target="_blank">here</a>.</p>
+                        </div>
+
+                        <!-- Question/Answer -->
+                        <div>
+                            <div class="faq-question-q-box">Q.</div>
+                            <h4 class="faq-question text-body">How do I get help with the theme?</h4>
+                            <p class="faq-answer mb-4 pb-1 text-muted">Use our dedicated support email (support@coderthemes.com) to send your issues or feedback. We are here to help anytime.</p>
+                        </div>
+                        
+                        <div>
+                            <div class="faq-question-q-box">Q.</div>
+                            <h4 class="faq-question text-body">How do I get help with the theme?</h4>
+                            <p class="faq-answer mb-4 pb-1 text-muted">Use our dedicated support email (support@coderthemes.com) to send your issues or feedback. We are here to help anytime.</p>
+                        </div>
+                    </div>
+                    <!--/col-lg-5 -->
+
+                    <div class="col-lg-5">
+                        <!-- Question/Answer -->
+                        <div>
+                            <div class="faq-question-q-box">Q.</div>
+                            <h4 class="faq-question text-body">Can this theme work with Wordpress?</h4>
+                            <p class="faq-answer mb-4 pb-1 text-muted">No. This is a HTML template. It won't directly with
+                                wordpress, though you can convert this into wordpress compatible theme.</p>
+                        </div>
+
+                        <!-- Question/Answer -->
+                        <div>
+                            <div class="faq-question-q-box">Q.</div>
+                            <h4 class="faq-question text-body">Will you regularly give updates of Hyper?</h4>
+                            <p class="faq-answer mb-4 pb-1 text-muted">Yes, We will update the Hyper regularly. All the
+                                future updates would be available without any cost.</p>
+                        </div>
+                        <div>
+                            <div class="faq-question-q-box">Q.</div>
+                            <h4 class="faq-question text-body">Will you regularly give updates of Hyper?</h4>
+                            <p class="faq-answer mb-4 pb-1 text-muted">Yes, We will update the Hyper regularly. All the
+                                future updates would be available without any cost.</p>
+                        </div>
+                    </div>
+                    <!--/col-lg-5-->
+                </div>
+                <!-- end row -->
+
+            </div> <!-- end container-->
+        </section>
+        <!-- END FAQ -->
+
+        {% if request.user.is_authenticated %}
+            <!-- START CONTACT -->
+            <section class="py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="text-center">
+                                <h3>Hubungi <span class="text-primary">Kami</span></h3>
+                                <p class="text-muted mt-2">Silahkan isi formulir berikut apabila terdapat hal yang ingin ditanyakan.
+                                    <br>Tim kami akan segera menghubungi anda melalui Email atau WhatsApp.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center mt-3">
+                        <div class="col-md-4">
+                            <p class="text-muted"><span class="fw-bold">Customer Support:</span><br> <span class="d-block mt-1">+1 234 56 7894</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Email Address:</span><br> <span class="d-block mt-1">info@gmail.com</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Office Address:</span><br> <span class="d-block mt-1">4461 Cedar Street Moro, AR 72368</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Office Time:</span><br> <span class="d-block mt-1">9:00AM To 6:00PM</span></p>
+                        </div>
+
+                        <div class="col-md-8">
+                            <form>
+                                <div class="row mt-4">
+                                    <div class="col-lg-6">
+                                        <div class="mb-2">
+                                            <label for="fullname" class="form-label">Your Name</label>
+                                            <input class="form-control form-control-light" type="text" id="fullname" placeholder="Name...">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-2">
+                                            <label for="emailaddress" class="form-label">Your Email</label>
+                                            <input class="form-control form-control-light" type="email" required="" id="emailaddress" placeholder="Enter you email...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-lg-12">
+                                        <div class="mb-2">
+                                            <label for="subject" class="form-label">Your Subject</label>
+                                            <input class="form-control form-control-light" type="text" id="subject" placeholder="Enter subject...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-lg-12">
+                                        <div class="mb-2">
+                                            <label for="comments" class="form-label">Message</label>
+                                            <textarea id="comments" rows="4" class="form-control form-control-light" placeholder="Type your message here..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-12 text-end">
+                                        <button class="btn btn-primary">Send a Message <i class="mdi mdi-telegram ms-1"></i> </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- END CONTACT -->
+        {% endif %}
+        <!-- START FOOTER -->
+        <footer class="bg-dark py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        
+                        <a href="https://munakab.bps.go.id/"><img src="{% static 'customs/images/bps_kab_muna_dark.png' %}" alt="" class="logo-dark" height="45"></a>
+                       
+                        <p class="text-muted mt-4">BPS Kabupaten Muna
+                            <br> Jl. Jati No.24, Butung-Butung, Kec. Katobu, 
+                            <br> Kabupaten Muna, Sulawesi Tenggara 93611.</p>
+
+                        <ul class="social-list list-inline mt-3">
+                            <li class="list-inline-item text-center">
+                                <a href="https://wa.me/6285720813630?text=Halo Admin, ada beberapa hal yang ingin kami tanyakan :)" class="social-list-item border-success text-success" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Whatsapp" title=""><i class="mdi mdi-whatsapp"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="https://www.instagram.com/bpskabmuna/" class="social-list-item border-danger text-danger" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Instagram" title=""><i class="mdi mdi-instagram"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="https://web.facebook.com/bpskabupatenmuna" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Facebook" title=""><i class="mdi mdi-facebook"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="https://www.youtube.com/channel/UC2n0NObcNhRcXJqIiH8sewg" class="social-list-item border-danger text-danger" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Youtube" title=""><i class="mdi mdi-youtube-subscription"></i></a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-light">Instansi</h5>
+
+                        <ul class="list-unstyled ps-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="https://munakab.bps.go.id/" class="text-muted">Tentang Kami</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Hubungi Kami</a></li>
+                        </ul>
+
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-light">Menu</h5>
+
+                        <ul class="list-unstyled ps-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Data Strategis</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Data Kinerja Pembangunan</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Tabel Statistik</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Berita Statistik</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Permohonan Data</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-light">Tautan Lainnya</h5>
+
+                        <ul class="list-unstyled ps-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Jadwal Rilis Data</a></li>
+                            <li class="mt-2"><a href="https://munakab.go.id/" class="text-muted">Pemda Kab. Muna</a></li>
+                            <li class="mt-2"><a href="https://munabarat.go.id/main/" class="text-muted">Pemda Kab. Muna Barat</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mt-5">
+                            <p class="text-muted mt-4 text-center mb-0">© <script>document.write(new Date().getFullYear())</script> made with <span class="text-danger">&hearts;</span> by BPS Kabupaten Muna</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- END FOOTER -->
+
+        <!-- bundle -->
+        <script>
+            $('#carouselExampleControls').carousel({
+                interval: 3000
+              })            
+        </script>
+        <script src="{% static 'app-design/assets/js/vendor.min.js' %}"></script>
+        <script src="{% static 'app-design/assets/js/app.min.js' %}"></script>
+
+    </body>
+
+</html>
