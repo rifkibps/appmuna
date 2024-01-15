@@ -1,0 +1,65 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg py-lg-3 border-bottom border-light">
+    <div class="container">
+
+        <!-- logo -->
+        <a href="index.html" class="navbar-brand me-lg-5">
+            <img src="{% static 'customs/images/bps_kab_muna_light.png' %}" alt="" class="logo-dark" height="45">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="mdi mdi-menu"></i>
+        </button>
+
+        <!-- menus -->
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
+            <!-- left menu -->
+            <ul class="navbar-nav me-auto align-items-center">
+                <li class="nav-item mx-lg-1">
+                    <a class="nav-link text-muted active" href="">Beranda</a>
+                </li>
+                <li class="nav-item mx-lg-1">
+                    <a class="nav-link text-muted" href="">Data Strategis</a>
+                </li>
+
+                <li class="nav-item mx-lg-1">
+                    <a class="nav-link text-muted" href="">Data Kinerja Pembangunan</a>
+                </li>
+                <li class="nav-item mx-lg-1">
+                    <a class="nav-link text-muted" href="">Tabel Statistik</a>
+                </li>
+                <li class="nav-item mx-lg-1">
+                    <a class="nav-link text-muted" href="">Permohonan Data</a>
+                </li>
+                <li class="nav-item mx-lg-1">
+                    <a class="nav-link text-muted" href="">Kontak</a>
+                </li>
+            </ul>
+
+            <!-- right menu -->
+            <ul class="navbar-nav ms-auto align-items-center">
+
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item me-0">
+                        <form action="{% url 'auth_:logout' %}" method="post">
+                            {% csrf_token %}
+                            <a type="submit" class="nav-link d-lg-none">Bank Data</a>
+                            <button type="submit" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Halo, Rifki Gustiawan !" title="">
+                                <i class="mdi mdi-logout me-2"></i> Logout
+                            </button>
+                        </form>
+                    </li>   
+                {% else %}
+                    <li class="nav-item me-0">
+                        <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" target="_blank" class="nav-link d-lg-none">Login Sekarang</a>
+                        <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" target="_blank" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex">
+                            <i class="mdi mdi-login me-2"></i> Login Sekarang
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+
+        </div>
+    </div>
+</nav>

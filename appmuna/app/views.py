@@ -10,6 +10,7 @@ class HomeAppClassView(View):
         }
         return render(request, 'app/index.html', context)
 
+
 class DashboardAppClassView(View):
     print('hello world')
     print('Ini perubahan dari master')
