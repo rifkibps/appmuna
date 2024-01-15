@@ -11,4 +11,4 @@ class HomeAppClassView(View):
         return render(request, 'app/index.html', context)
 
 class DashboardAppClassView(View):
-    pass
+    print('hello world')
