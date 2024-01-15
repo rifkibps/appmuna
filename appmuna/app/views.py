@@ -12,3 +12,4 @@ class HomeAppClassView(View):
 
 class DashboardAppClassView(View):
     print('hello world')
+    print('Ini perubahan dari master')
