@@ -10,13 +10,15 @@ class DataRequestForm(models.Model):
        ('3', 'Permohonan Data Ditolak')
    )
    
-   desc = models.CharField(max_length=256, null=False, blank=False, verbose_name='Deskripsi Permohonan Data' )
-   name = models.CharField(max_length=256, null=False, blank=False, verbose_name='Nama Pemohon')
-   contact = models.CharField(max_length=15, blank=False, verbose_name='Kontak Pemohon')
+   title = models.CharField(max_length=256, null=False, blank=False, verbose_name='Deskripsi Permohonan Data' )
+   name_person = models.CharField(max_length=256, null=False, blank=False, verbose_name='Nama Pemohon')
+   contact_person = models.CharField(max_length=15, blank=False, verbose_name='Kontak Pemohon')
 
-   agency = models.CharField(max_length=256, blank=False, verbose_name='Instansi Pemohon')
-   desc_data = models.TextField(null=False, blank=False, verbose_name='Deskripsi Data')
+   agency_person = models.CharField(max_length=256, blank=False, verbose_name='Instansi Pemohon')
+   desc = models.TextField(null=False, blank=False, verbose_name='Deskripsi Data')
    app_letter = models.FileField(null=False, blank=False, upload_to='requst_form_letter', verbose_name='Surat Permohonan')
+   request_at = models.DateTimeField(auto_now_add=True, editable=False)
+   approved_at = models.DateTimeField(null=True, editable=False)
    status = models.CharField(max_length=1, choices=status, default=0, verbose_name='Status Permohonan')
 
    def __str__(self):

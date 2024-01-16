@@ -42,7 +42,7 @@
 
                 {% if request.user.is_authenticated %}
                     <li class="nav-item me-0">
-                        <form action="{% url 'auth_:logout' %}" method="post">
+                        <form action="{% url 'auth:logout' %}" method="post">
                             {% csrf_token %}
                             <a type="submit" class="nav-link d-lg-none">Bank Data</a>
                             <button type="submit" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Halo, Rifki Gustiawan !" title="">
