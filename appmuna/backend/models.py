@@ -24,7 +24,7 @@ class BackendSubjectsModel(models.Model):
    show_state = models.CharField(max_length=1, choices=status, verbose_name='Tampilkan Subject')
 
    def __str__(self):
-      return f"{self.name} | {self.get_subject_group_display}"
+      return f"{self.get_subject_group_display()} | {self.name}"
 
 # Characteristic Subject CSA Model
 class BackendSubjectsSCAModel(models.Model):
@@ -113,7 +113,7 @@ class BackendPeriodNameItemsModel(models.Model):
    item_period = models.CharField(max_length=256, null=False, blank=False, verbose_name='Item Periode Waktu' )
 
    def __str__(self):
-      return f"{self.row_id.name} | {self.item_row}"
+      return f"{self.period_id.name} | {self.item_period}"
 
 # Unit Name Model
 class BackendUnitsModel(models.Model):
@@ -123,12 +123,13 @@ class BackendUnitsModel(models.Model):
         verbose_name_plural = 'Satuan Data Statistik'   
 
    name = models.CharField(max_length=256, null=False, blank=False, verbose_name='Nama Satuan' )
+   desc = models.TextField(null=True, blank=True, verbose_name='Keterangan Satuan' )
 
    def __str__(self):
       return f"{self.name}"
    
 
-# Indikatior Model
+# Indikator Model
 class BackendIndicatorsModel(models.Model):
    
    class Meta:
@@ -145,14 +146,14 @@ class BackendIndicatorsModel(models.Model):
    )
 
    subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_indicator')
-   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=False, related_name='subject_csa_indicator')
+   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_indicator')
    name =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Nama Indikator' )
    desc =  models.TextField(null=False, blank=False, verbose_name='Deskripsi Indikator' )
    footer_desc =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Keterangan Indikator' )
-   col_group_id = models.ForeignKey(BackendCharacteristicsModel, on_delete=models.CASCADE, null=False, related_name='cols_indicator')
-   row_group_id = models.ForeignKey(BackendRowsModel, on_delete=models.CASCADE, null=False, related_name='rows_indicator')
-   time_period_id = models.ForeignKey(BackendPeriodsModel, on_delete=models.CASCADE, null=False, related_name='period_indicator')
-   unit_id = models.ForeignKey(BackendUnitsModel, on_delete=models.CASCADE, null=False, related_name='unit_indicator')
+   col_group_id = models.ForeignKey(BackendCharacteristicsModel, on_delete=models.CASCADE, null=True, blank=True, related_name='cols_indicator', verbose_name='Kelompok Karakteristik' )
+   row_group_id = models.ForeignKey(BackendRowsModel, on_delete=models.CASCADE, null=False, related_name='rows_indicator', verbose_name='Kelompok Judul Baris')
+   time_period_id = models.ForeignKey(BackendPeriodsModel, on_delete=models.CASCADE, null=False, related_name='period_indicator', verbose_name='Periode Data')
+   unit_id = models.ForeignKey(BackendUnitsModel, on_delete=models.CASCADE, null=True, blank=True, related_name='unit_indicator', verbose_name='Satuan')
    decimal_point = models.IntegerField(null=False, blank=False, default=2, verbose_name='Jumlah Desimal')
    stat_category = models.CharField(max_length=1, choices = cats, null=False, blank=False, verbose_name='Kategori Statistik')
    show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Indikator')
@@ -162,6 +163,23 @@ class BackendIndicatorsModel(models.Model):
    def __str__(self):
       return f"{self.subject_id.name} | {self.name}"
 
+# Indikator Content Model
+class BackendContentIndicatorsModel(models.Model):
+   
+   class Meta:
+        verbose_name = 'Master Konten Tabel'
+        verbose_name_plural = 'Master Konten Tabel'   
+
+   indicator_id = models.ForeignKey(BackendIndicatorsModel, on_delete=models.CASCADE, null=False, related_name='content_indicator')
+   year = models.CharField(max_length=5, null=False, blank=False, verbose_name='Tahun Indikator')
+   item_period = models.CharField(max_length=1, null=False, blank=False, verbose_name='Periode Waktu')
+   item_char = models.CharField(max_length=1, null=False, blank=False)
+   item_row = models.CharField(max_length=1, null=False, blank=False)
+   value = models.FloatField(null=True, verbose_name = 'Nilai Tabel')
+
+   def __str__(self):
+      return f"{self.indicator_id.name} | {self.year}"
+   
 
 # infografis Model
 class BackendInfographicsModel(models.Model):
