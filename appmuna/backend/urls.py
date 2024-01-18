@@ -6,5 +6,16 @@ app_name = 'backend'
 urlpatterns = [
     path('backend/', views.BackendAppClassView.as_view(), name='backend'),
     path('backend/units', views.BackendUnitsClassView.as_view(), name='backend-units'),
-    path('backend/periods', views.BackendPeriodsItemsClassView.as_view(), name='backend-periods')
+    path('backend/units/json', views.BackendUnitsJsonClassView.as_view(), name='backend-units-json'),
+    path('backend/units/input', views.BackendUnitInputClassView.as_view(), name='backend-units-input'),
+    path('backend/units/input/<int:unit_id>', views.BackendUnitInputClassView.as_view(), name='backend-units-input'),
+    path('backend/units/delete', views.BackendUnitsClassView.as_view(), name='backend-units-delete'),
+
+
+    path('backend/periods', views.BackendPeriodsItemsClassView.as_view(), name='backend-periods'),
+    path('backend/rows', views.BackendRowsItemsClassView.as_view(), name='backend-rows'),
+    path('backend/columns', views.BackendCharsItemsClassView.as_view(), name='backend-cols'),
+    path('backend/subjects', views.BackendCharsItemsClassView.as_view(), name='backend-subjs'),
+    path('backend/indicators', views.BackendIndicatorsClassView.as_view(), name='backend-indicators'),
+    path('backend/content', views.BackendContentIndicatorsClassView.as_view(), name='backend-content-tables'),    
 ]

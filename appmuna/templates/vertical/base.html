@@ -91,23 +91,27 @@
                             </a>
                             <div class="collapse" id="sidebarEcommerce">
                                 <ul class="side-nav-second-level">
+
                                     <li>
-                                        <a href="apps-ecommerce-products-details.html">Indikator</a>
+                                        <a href="{% url 'backend:backend-content-tables' %}">Konten Tabel</a>
+                                    </li>                                    
+                                    <li>
+                                        <a href="{% url 'backend:backend-indicators' %}">Indikator/Tabel</a>
                                     </li>
                                     <li>
-                                        <a href="apps-ecommerce-products.html">Subject</a>
+                                        <a href="{% url 'backend:backend-subjs' %}">Subject</a>
                                     </li>
                                     <li>
-                                        <a href="apps-ecommerce-orders.html">Karakteristik</a>
+                                        <a href="{% url 'backend:backend-cols' %}">Karakteristik</a>
                                     </li>
                                     <li>
-                                        <a href="apps-ecommerce-orders-details.html">Judul Baris</a>
+                                        <a href="{% url 'backend:backend-rows' %}">Judul Baris</a>
                                     </li>
                                     <li>
-                                        <a href="apps-ecommerce-customers.html">Periode</a>
+                                        <a href="{% url 'backend:backend-periods' %}">Periode</a>
                                     </li>
                                     <li>
-                                        <a href="apps-ecommerce-shopping-cart.html">Satuan</a>
+                                        <a href="{% url 'backend:backend-units' %}">Satuan</a>
                                     </li>
                                 </ul>
                             </div>

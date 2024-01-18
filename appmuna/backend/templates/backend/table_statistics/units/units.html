@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
-                            <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-refresh"></i></button>
+                            <button type="button" class="btn btn-success mb-2 me-1" id="redraw-table"><i class="mdi mdi-refresh"></i></button>
                             <button type="button" class="btn btn-light mb-2 me-1">Import</button>
                             <button type="button" class="btn btn-light mb-2">Export</button>
                         </div>
@@ -54,28 +54,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck2">
-                                        <label class="form-check-label" for="customCheck2">&nbsp;</label>
-                                    </div>
-                                </td>
-                                <td>
-                                    1
-                                </td>
-                                <td>
-                                    Juta Rupiah
-                                </td>
-                                <td>
-                                    Rp1.000.000
-                                </td>
-                                <td class="table-action">
-                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                </td>
-                            </tr>
 
                         </tbody>
                     </table>
@@ -92,20 +70,140 @@
 
 {% block js-extender %}
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    'use strict'
+
+    var swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-primary'},
+        buttonsStyling: true
+    })
+
+    var table = $("#units-datatable").DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            "url": "{% url 'backend:backend-units-json' %}",
+            "headers": {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            "type": "POST",
+            "data": function (d){
+                return $.extend({}, d, {
+                    "status_filter": $('#status-select-filter').val(),
+                })
+            },
+        },
+        columns :[
+            {"data": 'checkbox'},
+            {"data": 'no'},
+            {"data": 'name'},
+            {"data" : 'desc'},
+            {"data" : 'actions'},
+        ],
+        lengthMenu: [5, 25, 50, 100,'All'],
+        order: [[2, 'asc']],
+        columnDefs: [
+         {
+            'targets': [0], /* column index */
+            'orderable': false, /* true or false */
+        },    
+        {
+            'targets': [4], /* column index */
+            'orderable': false, /* true or false */
+        }],
+        keys: !0,
+        language: {
+            paginate: {
+            previous: "<i class='mdi mdi-chevron-left'>",
+            next: "<i class='mdi mdi-chevron-right'>",
+            },
+        },
+        drawCallback: function () {
+            $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+        },
+    });
+
+
+
+
+</script>
+
+<script>
+
+    function deleteUnit(e){
+        
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "Apakah anda yakin ingin menghapus data mitra?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '{% url 'backend:backend-units' %}',
+                    type: "POST",
+                    dataType: "json",
+                    data : {
+                        'id' : e
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": '{{csrf_token}}',
+                    },
+                    success: (data) => {
+                        if (data.status == 'success'){
+                            Swal.fire(
+                                'Deleted!',
+                                data.message,
+                                'success'
+                                )
+                            table.ajax.reload();
+                        }else{
+                            Swal.fire(
+                                'Something wrong!',
+                                 data.message,
+                                'info'
+                            )
+                        }
+                    },
+                    error: (error) => {
+                        console.log(error);
+                    }
+                });
+            }
+        }) 
+
+    }
+
+    $('#redraw-table').on('click', function (){
+        table.draw();
+    })
+
+
+</script>
+
 <script>
 
     $(document).ready(function() {
         "use strict";
-        $("#units-datatable").DataTable({
+        $("#unitas-datatable").DataTable({
             language: {
                 paginate: {
                     previous: "<i class='mdi mdi-chevron-left'>",
                     next: "<i class='mdi mdi-chevron-right'>"
                 },
                 info: "Showing units _START_ to _END_ of _TOTAL_",
-                lengthMenu: 'Display <select class=\'form-select form-select-sm ms-1 me-1\'><option value="5">5</option><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> products'
+                lengthMenu: 'Display <select class=\'form-select form-select-sm ms-1 me-1\'><option value="8">8</option><option value="25">25</option><option value="50">50</option><option value="-1">All</option></select> products'
             },
-            pageLength: 5,
+            pageLength: 8,
             columns: [{
                 orderable: !1,
                 targets: 0,
