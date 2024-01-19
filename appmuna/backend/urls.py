@@ -7,9 +7,8 @@ urlpatterns = [
     path('backend/', views.BackendAppClassView.as_view(), name='backend'),
     path('backend/units', views.BackendUnitsClassView.as_view(), name='backend-units'),
     path('backend/units/json', views.BackendUnitsJsonClassView.as_view(), name='backend-units-json'),
-    path('backend/units/input', views.BackendUnitInputClassView.as_view(), name='backend-units-input'),
-    path('backend/units/input/<int:unit_id>', views.BackendUnitInputClassView.as_view(), name='backend-units-input'),
-    path('backend/units/delete', views.BackendUnitsClassView.as_view(), name='backend-units-delete'),
+    path('backend/units/delete', views.BackendUnitDeleteClassView.as_view(), name='backend-units-delete'),
+    path('backend/units/detail', views.BackendUnitDetailClassView.as_view(), name='backend-units-detail'),
 
 
     path('backend/periods', views.BackendPeriodsItemsClassView.as_view(), name='backend-periods'),

@@ -21,8 +21,11 @@
 {% endblock nav_content %}
 
 {% block content %}
+
+
 <div class="row">
     <div class="col-12">
+        
         <div class="card">
             <div class="card-body">
                 <div class="row mb-4">
@@ -57,7 +60,10 @@
                             </div>
                             <div class="invalid-feedback" id="msg-{{form.desc.id_for_label}}">
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <input type="hidden" name="submit">
+                            <input type="submit" value="Save" data-btn='save' class="btn btn-primary btn-submit">
+                            <input type="submit" value="Save and add another" data-btn='save-add' class="btn btn-primary btn-submit" >
+                            <input type="submit" value="Save and continue editing" data-btn='save-edit' class="btn btn-primary btn-submit">
                         </form>
                     </div>
                 </div>
@@ -67,19 +73,36 @@
 </div>
 
 
-
 {% endblock content %}
 
 
 {% block js-extender %}
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+    'use strict'
+    
+    var swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-primary'},
+        buttonsStyling: true
+    })
+
+    $(".btn-submit").on("click", function (e){
+        e.preventDefault()
+        var btn_ctrl = $(this).attr('data-btn')
+        $('input[name=submit]').prop('value', btn_ctrl)
+        $("#unit-form").submit()
+
+    })
+    
     $("input[name=desc]").prop("required", false);
 
     $("#unit-form").on("submit", function (e){
         e.preventDefault()
-        
+         
+        var btn_act = $('input[name=submit]').val()
         var serializedData = $(this).serialize();
         $('.invalid-feedback').html('')
         $('.is_invalid').removeClass('is_invalid')
@@ -90,8 +113,21 @@
             data: serializedData,
             
             success: function (response) {
-                console.log(response)
+
+                if(btn_act == 'save'){
+                    Swal.fire(
+                        'Added!',
+                        'Data Berhasil Ditambahkan',
+                        'success'
+                    )
+                }else if(btn_act == 'save-add'){
+                    $("#unit-form")[0].reset()
+                    $("#unit-form").removeClass('was-validated')
+                }else{
+                    return window.location.href = "{% url 'backend:backend-units' %}"
+                }
             },
+
             error: function (response) {
                 var errors = response["responseJSON"]["error"]
                 for (const [key, value] of Object.entries(errors)) {

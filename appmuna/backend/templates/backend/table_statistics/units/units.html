@@ -20,13 +20,62 @@
 {% endblock nav_content %}
 
 {% block content %}
-<div class="row">
+
+<div class="row d-none" id="input-card">
+    <div class="col-12">  
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-sm-4">
+                        <a href="javascript: void(0);" id="add-form-close" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Satuan Data</a>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="text-sm-end">
+                            <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-refresh"></i></button>
+                            <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                            <button type="button" class="btn btn-light mb-2">Export</button>
+                        </div>
+                    </div><!-- end col-->
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-5">
+                        <form method="POST" action="{% url 'backend:backend-units' %}" class="needs-validation" id="unit-form" novalidate>
+                            {% csrf_token %}
+                            <input type="hidden" name="id" id="id_id">
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">{{form.name.label}}</label>
+                                {{form.name}}
+                                <div class="invalid-feedback" id="msg-{{form.name.id_for_label}}">
+                                    Satuan data harus diisi (required)
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">{{form.desc.label}}</label>
+                                {{form.desc}}
+                            </div>
+                            <div class="invalid-feedback" id="msg-{{form.desc.id_for_label}}">
+                            </div>
+                            <input type="hidden" name="submit">
+                            <input type="submit" value="Save" data-btn='save' class="btn btn-primary btn-submit">
+                            <input type="submit" value="Save and add another" data-btn='save-add' class="btn btn-primary btn-submit" >
+                            <input type="submit" value="Save and continue editing" data-btn='save-edit' class="btn btn-primary btn-submit">
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+</div>
+
+<div class="row" id="preview-card">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <div class="row mb-2">
                     <div class="col-sm-4">
-                        <a href="javascript:void(0);" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Tambah Satuan</a>
+                        <a href="javascript: void(0);" class="btn btn-danger mb-2" id="add-form-open"><i class="mdi mdi-plus-circle me-2"></i> Tambah Satuan</a>
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
@@ -127,12 +176,34 @@
         },
     });
 
-
-
-
 </script>
 
 <script>
+
+    function updateUnit(e){
+        $.ajax({
+            url: '{% url 'backend:backend-units-detail' %}',
+            type: "POST",
+            dataType: "json",
+            data : {
+                'id' : e
+            },
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            success: (data) => {
+                for (const [key, value] of Object.entries(data.instance)) {
+                    $('#id_'+key).val(value)
+                }
+                $('#input-card').removeClass('d-none')
+                $('#preview-card').addClass('d-none')
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
 
     function deleteUnit(e){
         
@@ -148,7 +219,7 @@
             if (result.isConfirmed) {
 
                 $.ajax({
-                    url: '{% url 'backend:backend-units' %}',
+                    url: '{% url 'backend:backend-units-delete' %}',
                     type: "POST",
                     dataType: "json",
                     data : {
@@ -160,22 +231,15 @@
                     },
                     success: (data) => {
                         if (data.status == 'success'){
-                            Swal.fire(
-                                'Deleted!',
-                                data.message,
-                                'success'
-                                )
+                            push_notif("Sucess!", data.message, "success") 
                             table.ajax.reload();
                         }else{
-                            Swal.fire(
-                                'Something wrong!',
-                                 data.message,
-                                'info'
-                            )
+                            push_notif("Something wrong!", data.message, "error") 
+                            table.ajax.reload();
                         }
                     },
                     error: (error) => {
-                        console.log(error);
+                        push_notif("Something wrong!", error, "danger") 
                     }
                 });
             }
@@ -183,57 +247,88 @@
 
     }
 
+    function resetForm(){
+        $("#unit-form")[0].reset()
+        $("#unit-form").removeClass('was-validated')
+        $("#id_id").val("")
+    }
+
     $('#redraw-table').on('click', function (){
         table.draw();
     })
 
+    $('#add-form-open').on('click', function (){
+        $('#input-card').removeClass('d-none')
+        $('#preview-card').addClass('d-none')
+
+        $('#unit-form').attr('action', "{% url 'backend:backend-units' %}")
+        resetForm()
+    })
+
+    $('#add-form-close').on('click', function (){
+        $('#input-card').addClass('d-none')
+        $('#preview-card').removeClass('d-none')
+        
+    })
 
 </script>
 
 <script>
+    $(".btn-submit").on("click", function (e){
+        e.preventDefault()
+        var btn_ctrl = $(this).attr('data-btn')
+        $('input[name=submit]').prop('value', btn_ctrl)
+        $("#unit-form").submit()
+    })
+    
+    $("input[name=desc]").prop("required", false);
 
-    $(document).ready(function() {
-        "use strict";
-        $("#unitas-datatable").DataTable({
-            language: {
-                paginate: {
-                    previous: "<i class='mdi mdi-chevron-left'>",
-                    next: "<i class='mdi mdi-chevron-right'>"
-                },
-                info: "Showing units _START_ to _END_ of _TOTAL_",
-                lengthMenu: 'Display <select class=\'form-select form-select-sm ms-1 me-1\'><option value="8">8</option><option value="25">25</option><option value="50">50</option><option value="-1">All</option></select> products'
-            },
-            pageLength: 8,
-            columns: [{
-                orderable: !1,
-                targets: 0,
-                render: function(e, l, a, o) {
-                    return "display" === l && (e = '<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div>'), e
-                },
-                checkboxes: {
-                    selectRow: !0,
-                    selectAllRender: '<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div>'
+    $("#unit-form").on("submit", function (e){
+        e.preventDefault()
+         
+        var btn_act = $('input[name=submit]').val()
+        var serializedData = $(this).serialize();
+        $('.invalid-feedback').html('')
+        $('.is_invalid').removeClass('is_invalid')
+        
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('action'),
+            data: serializedData,
+            
+            success: function (response) {
+
+                if(btn_act == 'save'){
+                    resetForm()
+                    $('#input-card').addClass('d-none')
+                    $('#preview-card').removeClass('d-none')
+                }else if(btn_act == 'save-add'){
+                    resetForm()
+                }else{
+                    $("#unit-form").removeClass('was-validated')
                 }
-            }, {
-                orderable: !0
-            }, {
-                orderable: !0
-            }, {
-                orderable: !0
-            }, {
-                orderable: !1
-            }],
-            select: {
-                style: "multi"
+                push_notif("Sucess!", response.message, "success") 
+                table.ajax.reload();
             },
-            order: [
-                [1, "asc"]
-            ],
-            drawCallback: function() {
-                $(".dataTables_paginate > .pagination").addClass("pagination-rounded"), $("#products-datatable_length label").addClass("form-label")
+
+            error: function (response) {
+                var errors = response["responseJSON"]["error"]
+                for (const [key, value] of Object.entries(errors)) {
+                    var msgs = '<ul>'
+                    value.forEach(function (item, index) {
+                    
+                        msgs += '<li>'+item+'</li>'
+                        });
+                    
+                    msgs += '</ul>'
+                    $('#id_'+ key).addClass('is-invalid');
+                    $('#msg-id_'+key).html(msgs)
+                }    
             }
         })
-    });
+
+    })
+
 </script>
 
 {% endblock js-extender %}

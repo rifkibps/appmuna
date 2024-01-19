@@ -91,11 +91,11 @@ class BackendUnitsJsonClassView(LoginRequiredMixin, View):
                 'no'    : idx+1,
                 'name': obj.name,
                 'desc': obj.desc,
-                'actions': f'<a href="{reverse_lazy("backend:backend-units-input", kwargs={"unit_id": obj.id})}" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteUnit({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+                'actions': f'<a href="javascript:void(0);" onclick="updateUnit({obj.id})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteUnit({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
     
             })
 
-        return {
+        return {    
             'draw': draw,
             'recordsTotal': records_total,
             'recordsFiltered': records_filtered,
@@ -107,72 +107,74 @@ class BackendUnitsClassView(View):
     def get(self, request):
         context = {
             'title' : 'Backend | Satuan Data',
-            'data'  : models.BackendUnitsModel.objects.values()
+            'data'  : models.BackendUnitsModel.objects.values(),
+            'form'  : forms.BackendUnitForm()
         }
 
         return render(request, 'backend/table_statistics/units/units.html', context)
 
-    # Delete method
+
     def post(self, request):
 
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if is_ajax:
+            if request.method == 'POST':
+
+                if request.POST.get('id'):
+                    print(request.POST.get('id'))
+                    data = get_object_or_404(models.BackendUnitsModel, pk=request.POST.get('id'))
+                    form = forms.BackendUnitForm(request.POST, instance=data)
+                    msg = f'The Satuan Data Statistik “NAME” was changed successfully.'
+                else:
+                    form = forms.BackendUnitForm(request.POST)
+                    msg = 'The Satuan Data Statistik “NAME” was added successfully.'
+
+                if form.is_valid():
+                    old_dt = form.cleaned_data.get('name')
+                    form.save()
+                    return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendUnitDeleteClassView(View):
+    # Cleaned
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendUnitsModel, pk=request.POST.get('id'))
+                    old_dt = data.name 
+                    data.delete()
+                    return JsonResponse({'status' : 'success', 'message': f'The Satuan Data Statistik "{old_dt}" was deleted successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+
+class BackendUnitDetailClassView(View):
+
+    def post(self, request):
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
         if is_ajax:
             if request.method == 'POST':
                 
                 id = request.POST.get('id')
+                data_petugas = models.BackendUnitsModel.objects.filter(pk=id)
 
-                data = models.BackendUnitsModel.objects.filter(pk = id)
-
-                if data.exists():
-                    data.delete()
-                    return JsonResponse({'status' : 'success', 'message': 'Data deleted successfully'})
+                if data_petugas.exists():
+                    return JsonResponse({'status' : 'success', 'instance': list(data_petugas.values())[0]}, status=200)
                 else:
-                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                    return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
                 
-        return JsonResponse({'status': 'Invalid request'}, status=400)
-    
-
-class BackendUnitInputClassView(View):
-
-    def get(self, request, *args, **kwargs):
-
-        context = {
-            'title' : 'Backend | Input Satuan Data',
-            'form'  : forms.BackendUnitForm()
-        }
-
-        model = models.BackendUnitsModel.objects
-
-        if self.kwargs.get('unit_id') is not None:
-            if model.filter(pk=self.kwargs['unit_id']).exists:
-                context['form'] = forms.BackendUnitForm(instance=model.get(pk=self.kwargs['unit_id']))
-
-        return render(request, 'backend/table_statistics/units/input.html', context)
-
-
-    def post(self, request, *args, **kwargs):
-
-        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-        if is_ajax:
-            if request.method == 'POST':
-
-                if self.kwargs.get('unit_id') is not None:
-                    data = get_object_or_404(models.BackendUnitsModel, pk=self.kwargs.get('unit_id'))
-                    form = forms.BackendUnitForm(request.POST, instance=data)
-                    msg = 'Data added successfully'
-                else:
-                    form = forms.BackendUnitForm(request.POST)
-                    msg = 'Data updated successfully'
-
-                if form.is_valid():
-                    form.save()
-                    return JsonResponse({"status": 'success', 'message': msg}, status=200)
-                else:
-                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
-
-        return JsonResponse({'status': 'Invalid request'}, status=400)
-    
+        return JsonResponse({'status': 'Invalid request'}, status=400) 
 
 
 # <========================================== END BACKEND UNITS ===============================================>
