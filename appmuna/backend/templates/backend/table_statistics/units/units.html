@@ -76,6 +76,7 @@
                 <div class="row mb-2">
                     <div class="col-sm-4">
                         <a href="javascript: void(0);" class="btn btn-danger mb-2" id="add-form-open"><i class="mdi mdi-plus-circle me-2"></i> Tambah Satuan</a>
+                        <a href="javascript: void(0);" class="btn btn-danger mb-2" id="add-form-open"><i class="mdi mdi-plus-circle me-2"></i> Hapus 15 data</a>
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
@@ -92,8 +93,8 @@
                             <tr>
                                 <th class="all" style="width: 5%;">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                        <input type="checkbox" class="form-check-input" id="checkAll">
+                                        <label class="form-check-label" for="checkAll">&nbsp;</label>
                                     </div>
                                 </th>
                                 <th style="width: 5%;">No</th>
@@ -124,6 +125,8 @@
 <script>
     'use strict'
 
+    var valsId = []
+
     var swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-primary'},
@@ -140,30 +143,22 @@
                 "X-CSRFToken": '{{csrf_token}}',
             },
             "type": "POST",
-            "data": function (d){
-                return $.extend({}, d, {
-                    "status_filter": $('#status-select-filter').val(),
-                })
-            },
         },
         columns :[
-            {"data": 'checkbox'},
+            {"data" : 'checkbox'},
             {"data": 'no'},
             {"data": 'name'},
             {"data" : 'desc'},
             {"data" : 'actions'},
         ],
-        lengthMenu: [5, 25, 50, 100,'All'],
+        lengthMenu: [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, 'All']],
         order: [[2, 'asc']],
         columnDefs: [
          {
             'targets': [0], /* column index */
-            'orderable': false, /* true or false */
+            'orderable': !1, /* true or false */             
         },    
-        {
-            'targets': [4], /* column index */
-            'orderable': false, /* true or false */
-        }],
+        ],
         keys: !0,
         language: {
             paginate: {
@@ -173,12 +168,30 @@
         },
         drawCallback: function () {
             $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+
+            if (valsId.length > 0) {
+                $('input[name="select"]').each(function () {
+    
+                        var sThisVal = $(this).val();
+                        if (valsId.includes(sThisVal)) 
+                            $(this).prop('checked', true)
+                });
+            }
         },
     });
 
 </script>
 
 <script>
+
+    function pushValue(e){
+
+        if (!valsId.includes($(e).val())){
+            valsId.push(String($(e).val()));
+        } else{
+            valsId = valsId.filter(item => item !== $(e).val())
+        }
+    }
 
     function updateUnit(e){
         $.ajax({
@@ -270,7 +283,7 @@
         $('#preview-card').removeClass('d-none')
         
     })
-
+ 
 </script>
 
 <script>
@@ -329,6 +342,20 @@
 
     })
 
+    $("#checkAll").change(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+
+        if (this.checked) {
+            $('input[name="select"]').each(function () {
+                if (!valsId.includes($(this).val())) 
+                    valsId.push(String($(this).val()));
+            });
+        }else{
+            $('input[name="select"]').each(function () {
+                valsId = valsId.filter(item => item !== $(this).val())
+            });
+        }
+    });
 </script>
 
 {% endblock js-extender %}

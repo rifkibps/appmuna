@@ -15,6 +15,7 @@ from django.shortcuts import get_object_or_404
 
 from . import models
 from . import forms
+from operator import itemgetter
 
 class BackendAppClassView(View):
 
@@ -31,18 +32,18 @@ class BackendUnitsJsonClassView(LoginRequiredMixin, View):
 
     def post(self, request):
         
-        data_wilayah = self._datatables(request)
-        return HttpResponse(json.dumps(data_wilayah, cls=DjangoJSONEncoder), content_type='application/json')
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
 		
     def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'name' 
+
         datatables = request.POST
-        
         # Get Draw
         draw = int(datatables.get('draw'))
         start = int(datatables.get('start'))
-        length = int(datatables.get('length'))
-        page_number = int(start / length + 1)
-
         search = datatables.get('search[value]')
 
         order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
@@ -50,12 +51,18 @@ class BackendUnitsJsonClassView(LoginRequiredMixin, View):
         order_col = 'columns[' + str(order_idx) + '][data]'
         order_col_name = datatables.get(order_col)
 
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
         if (order_dir == "desc"):
             order_col_name =  str('-' + order_col_name)
 
         model = models.BackendUnitsModel.objects     
         model = model.exclude(Q(name=None))
-      
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+   
         records_total = model.count()
         records_filtered = records_total
         
@@ -68,9 +75,10 @@ class BackendUnitsJsonClassView(LoginRequiredMixin, View):
             records_filtered = records_total
         
         model = model.order_by(order_col_name)
-
-
+            
         # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
+        page_number = int(start / length + 1)
         paginator = Paginator(model, length)
 
         try:
@@ -80,19 +88,17 @@ class BackendUnitsJsonClassView(LoginRequiredMixin, View):
         except EmptyPage:
             object_list = paginator.page(1).object_list
 
-        
         data = []
 
-        for idx, obj in enumerate(object_list):
+        for obj in object_list:
 
             data.append(
             {
-                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input" id="check{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
-                'no'    : idx+1,
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj.id == x[1]][0][0],
                 'name': obj.name,
                 'desc': obj.desc,
                 'actions': f'<a href="javascript:void(0);" onclick="updateUnit({obj.id})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteUnit({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
-    
             })
 
         return {    
@@ -121,7 +127,6 @@ class BackendUnitsClassView(View):
             if request.method == 'POST':
 
                 if request.POST.get('id'):
-                    print(request.POST.get('id'))
                     data = get_object_or_404(models.BackendUnitsModel, pk=request.POST.get('id'))
                     form = forms.BackendUnitForm(request.POST, instance=data)
                     msg = f'The Satuan Data Statistik “NAME” was changed successfully.'
