@@ -189,15 +189,14 @@ class BackendUnitDetailClassView(LoginRequiredMixin, View):
             if request.method == 'POST':
                 
                 id = request.POST.get('id')
-                data_petugas = models.BackendUnitsModel.objects.filter(pk=id)
+                data = models.BackendUnitsModel.objects.filter(pk=id)
 
-                if data_petugas.exists():
-                    return JsonResponse({'status' : 'success', 'instance': list(data_petugas.values())[0]}, status=200)
+                if data.exists():
+                    return JsonResponse({'status' : 'success', 'instance': list(data.values())[0]}, status=200)
                 else:
                     return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
                 
         return JsonResponse({'status': 'Invalid request'}, status=400) 
-
 
 class BackendUnitsExportClassView(LoginRequiredMixin, View):
 
@@ -215,15 +214,64 @@ class BackendUnitsExportClassView(LoginRequiredMixin, View):
 
 
 # <========================================== START BACKEND PERIODS ===============================================>
+    
 class BackendPeriodsItemsClassView(LoginRequiredMixin, View):
+
     def get(self, request):
         context = {
             'title' : 'Backend | Satuan Data',
-            'form' : forms.BackendUnitForm()
+            'form' : forms.BackendPeriodForm()
         }
+        instance = models.BackendPeriodsModel.objects.get(pk=1)
+        a = models.BackendPeriodNameItemsModel.objects.filter(pk=1,period_id=instance ).first()
+        print(a)
 
         return render(request, 'backend/table_statistics/periods.html', context)
 
+    def post(self, request):
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+
+                if len(request.POST.getlist('items[]')) == 0:
+                    return JsonResponse({"status": 'failed', "error": 'Data items cannot be empty'}, status=400)
+                
+                if request.POST.get('id'):
+                    if len(request.POST.getlist('items[]')) == 0:
+                        return JsonResponse({"status": 'failed', "error": 'The data item cannot be empty if you want to update the data'}, status=400)
+            
+                    data = get_object_or_404(models.BackendPeriodsModel, pk=request.POST.get('id'))
+                    form = forms.BackendPeriodForm(request.POST, instance=data)
+                    msg = f'The period data statistic “NAME” was changed successfully.'
+                else:
+                    form = forms.BackendPeriodForm(request.POST)
+                    msg = 'The period data statistic “NAME” was added successfully.'
+
+                if form.is_valid():
+
+                    old_dt = form.cleaned_data.get('name')
+                    instance = form.save()
+                    
+                    if request.POST.get('id'):
+                        
+                        for id, item in zip(request.POST.getlist('ids[]'), request.POST.getlist('items[]')):
+
+                            item_data = models.BackendPeriodNameItemsModel.objects.filter(pk=id,period_id=instance).first()
+                            item_data.item_period = item
+                            item_data.save()
+
+                        return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                    else:
+                        for item in request.POST.getlist('items[]'):
+                            models.BackendPeriodNameItemsModel(period_id = instance, item_period = item).save()
+
+                        return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
 
 class BackendPeriodsJsonClassView(LoginRequiredMixin, View):
 
@@ -310,11 +358,11 @@ class BackendPeriodsJsonClassView(LoginRequiredMixin, View):
 
             data.append(
             {
-                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj['id']}" value="{obj['id']}"><label class="form-check-label" for="check{obj['id']}">&nbsp;</label></div>',
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj["id"]}" value="{obj["id"]}"><label class="form-check-label" for="check{obj["id"]}">&nbsp;</label></div>',
                 'no': [x for x in id_def_data if obj['id'] == x[1]][0][0],
                 'name': obj['name'],
                 'period_item__item_period': "; ".join(obj['period_item__item_period']),
-                'actions': f'<a href="javascript:void(0);" onclick="updatePeriods({obj['id']})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deletePeriods({obj['id']})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+                'actions': f'<a href="javascript:void(0);" onclick="updatePeriod({obj["id"]})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deletePeriod({obj["id"]})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
             })
 
         return {    
@@ -344,7 +392,40 @@ class BackendPeriodsdDeleteClassView(LoginRequiredMixin, View):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
 
+class BackendPeriodDetailClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                id = request.POST.get('id')
+                data = models.BackendPeriodsModel.objects.prefetch_related('period_item').filter(pk=id).order_by('period_item__id').values('id', 'name', 'period_item__item_period', 'period_item__id')
+
+                data_period = {
+                        'id' : None,
+                        'name' : None,
+                        'items' : []
+                }   
+                for dt in data:
+                    data_period['id'] = dt['id']
+                    data_period['name'] = dt['name']
+                    data_period['items'].append(
+                        {
+                            'id' : dt['period_item__id'],
+                            'item' : dt['period_item__item_period']
+                        })
+
+                if data.exists():
+                    return JsonResponse({'status' : 'success', 'instance': data_period}, status=200)
+                else:
+                    return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
 # <========================================== END BACKEND PERIODS ===============================================>
+    
 class BackendRowsItemsClassView(View):
     def get(self, request):
         context = {

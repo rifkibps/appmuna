@@ -16,6 +16,8 @@ urlpatterns = [
     path('backend/periods', views.BackendPeriodsItemsClassView.as_view(), name='backend-periods'),
     path('backend/periods/json', views.BackendPeriodsJsonClassView.as_view(), name='backend-periods-json'),
     path('backend/periods/delete', views.BackendPeriodsdDeleteClassView.as_view(), name='backend-periods-delete'),
+    path('backend/periods/detail', views.BackendPeriodDetailClassView.as_view(), name='backend-periods-detail'),
+    
     
     path('backend/rows', views.BackendRowsItemsClassView.as_view(), name='backend-rows'),
     path('backend/columns', views.BackendCharsItemsClassView.as_view(), name='backend-cols'),

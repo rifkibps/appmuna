@@ -27,7 +27,7 @@ class BackendUnitForm(forms.ModelForm):
         }
 
 
-class BackendUnitForm(forms.ModelForm):
+class BackendPeriodForm(forms.ModelForm):
 
     class Meta:
         model = models.BackendPeriodsModel

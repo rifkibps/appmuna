@@ -45,10 +45,10 @@
                             </div>
                         </div>
                     </div>
-                    <h4>Item Periode Waktu</h4>
+                    <h5>Item Periode Waktu</h5>
                     <div class="row mb-3">
-                        <div class="col-lg-5">
-                            <table class="table table-sm">
+                        <div class="col-lg-6">
+                            <table class="table table-sm" id="items-table">
                                 <thead>
                                     <tr>
                                         <th style="width:10%">No</th>
@@ -59,22 +59,14 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>1</td>
+                                        <td class="num-row">1</td>
                                         <td>
-                                            <input type="text" class="form-control form-control-sm" name="items[]">
+                                            <input type="hidden" name="ids[]">
+                                            <input type="text" class="form-control form-control-sm" name="items[]" placeholder="Isikan item satuan data" required>
                                         </td>
                                         <td>
-                                            
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>
-                                            <input type="text" class="form-control form-control-sm" name="items[]">
-                                        </td>
-                                        <td>
-                                            <a href="javascript: void(0);" class="btn btn-sm"><i class="mdi mdi-plus"></i> add</a>
-                                            <a href="javascript: void(0);" class="btn btn-sm"> <i class="mdi mdi-close"></i> remove</a>
+                                            <a href="javascript: void(0);" class="btn btn-sm addRow"><i class="mdi mdi-plus"></i> add</a>
+                                            <a href="javascript: void(0);" class="btn btn-sm removeRow"> <i class="mdi mdi-close"></i> remove</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -124,7 +116,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
                         </tbody>
                     </table>
                 </div>
@@ -204,8 +195,53 @@
 
 <script>
 
+    
+    function updatePeriod(e){
+        $.ajax({
+            url: '{% url 'backend:backend-periods-detail' %}',
+            type: "POST",
+            dataType: "json",
+            data : {
+                'id' : e
+            },
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            success: (data) => {
+                console.log(data)
+                $('#id_id').val(data.instance.id)
+                $('#id_name').val(data.instance.name)
 
-    function deletePeriods(e){
+                data.instance.items.forEach(function (item, index) {
+                    console.log(item.id, item.item)
+
+                    if (index == 0){
+                        $('#items-table tbody tr').find($('input[name="ids[]"]')).val(item.id);
+                        $('#items-table tbody tr').find($('input[name="items[]"]')).val(item.item);
+                    }else{
+                        var curRow = $('#items-table tbody tr').last();
+                        curRow = curRow.clone(true)
+                        curRow.append(curRow);
+                        curRow.find($('input[name="ids[]"]')).val(item.id);
+                        curRow.find($('input[name="items[]"]')).val(item.item);
+                    }
+
+                });
+
+
+                $('#input-card').removeClass('d-none')
+                $('#preview-card').addClass('d-none')
+
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
+
+
+    function deletePeriod(e){
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
             text: "Apakah anda yakin ingin menghapus data periode?",
@@ -252,6 +288,63 @@
         $("#id_id").val("")
     }
 
+
+</script>
+
+<script>
+    $(".btn-submit").on("click", function (e){
+        e.preventDefault()
+        var btn_ctrl = $(this).attr('data-btn')
+        $('input[name=submit]').prop('value', btn_ctrl)
+        $("#period-form").submit()
+    })
+
+
+    $("#period-form").on("submit", function (e){
+        e.preventDefault()
+        var btn_act = $('input[name=submit]').val()
+        var serializedData = $(this).serialize();
+        $('.invalid-feedback').html('')
+        $('.is_invalid').removeClass('is_invalid')
+        
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('action'),
+            data: serializedData,
+            
+            success: function (response) {
+
+                if(btn_act == 'save'){
+                    resetForm()
+                    $('#input-card').addClass('d-none')
+                    $('#preview-card').removeClass('d-none')
+                }else if(btn_act == 'save-add'){
+                    resetForm()
+                }else{
+                    $("#unit-form").removeClass('was-validated')
+                }
+                push_notif("Sucess!", response.message, "success") 
+                table.ajax.reload();
+            },
+
+            error: function (response) {
+                var errors = response["responseJSON"]["error"]
+                for (const [key, value] of Object.entries(errors)) {
+                    var msgs = '<ul>'
+                    value.forEach(function (item, index) {
+                    
+                        msgs += '<li>'+item+'</li>'
+                        });
+                    
+                    msgs += '</ul>'
+                    $('#id_'+ key).addClass('is-invalid');
+                    $('#msg-id_'+key).html(msgs)
+                }    
+            }
+        })
+
+    })
+
     $('#redraw-table').on('click', function (){
         table.draw();
     })
@@ -259,15 +352,45 @@
     $('#add-form-open').on('click', function (){
         $('#input-card').removeClass('d-none')
         $('#preview-card').addClass('d-none')
-
-        $('#period-form').attr('action', "{% url 'backend:backend-periods' %}")
-        resetForm()
     })
 
     $('#add-form-close').on('click', function (){
         $('#input-card').addClass('d-none')
         $('#preview-card').removeClass('d-none')
-        
+        $('#items-table tbody').find('tr:not(:eq(0))').remove();
+        resetForm()
     })
+    
+
+    $('.addRow').on('click', function(){
+        $curRow = $(this).parent().parent();
+        $newRow = $curRow.clone(true);
+        $curRow.after($newRow);
+        $newRow.find('input').val('');
+
+        var idx = 1
+        $('.num-row').each(function () {
+            $(this).html(idx);
+            idx += 1
+        });
+
+    });
+
+        
+    $('.removeRow').on('click', function(){
+        
+        if ($('.num-row').length == 1)
+            return push_notif("Something Wrong!", 'Minimal harus terdapat 1 item yang terisi', "error") 
+
+        $(this).parent().parent().remove();
+        
+        var idx = 1
+        $('.num-row').each(function () {
+            $(this).html(idx);
+            idx += 1
+        });
+
+    });
+
 </script>
 {% endblock js-extender %}
