@@ -13,11 +13,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 
-from . import models
-from . import forms
+from . import models, forms, resources
 from operator import itemgetter
 
-class BackendAppClassView(View):
+class BackendAppClassView(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {
@@ -26,7 +25,7 @@ class BackendAppClassView(View):
         return render(request, 'backend/table_statistics/index.html', context)
 
 
-# <======================================== UNIT CLASS VIEW ====================================================>
+# <======================================== START BACKEND UNITS ====================================================>
 
 class BackendUnitsJsonClassView(LoginRequiredMixin, View):
 
@@ -108,7 +107,7 @@ class BackendUnitsJsonClassView(LoginRequiredMixin, View):
             'data': data,
         }
 
-class BackendUnitsClassView(View):
+class BackendUnitsClassView(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {
@@ -143,10 +142,8 @@ class BackendUnitsClassView(View):
 
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-
-class BackendUnitDeleteClassView(View):
+class BackendUnitDeleteClassView(LoginRequiredMixin, View):
     # Cleaned
-
     def post(self, request):
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
@@ -163,7 +160,27 @@ class BackendUnitDeleteClassView(View):
         return JsonResponse({'status': 'Invalid request'}, status=400)
     
 
-class BackendUnitDetailClassView(View):
+class BackendUnitMultipleDeleteClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+
+                try:
+                
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = get_object_or_404(models.BackendUnitsModel, pk=dt)
+                        model.delete()   
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} units of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendUnitDetailClassView(LoginRequiredMixin, View):
 
     def post(self, request):
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
@@ -182,15 +199,152 @@ class BackendUnitDetailClassView(View):
         return JsonResponse({'status': 'Invalid request'}, status=400) 
 
 
-# <========================================== END BACKEND UNITS ===============================================>
+class BackendUnitsExportClassView(LoginRequiredMixin, View):
+
+    def get(self, request):
     
-class BackendPeriodsItemsClassView(View):
+        resource = resources.BackendUnitsResource()
+        dataset = resource.export()
+
+        response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="Satuan Data.xls"'
+        return response 
+    
+# <========================================== END BACKEND UNITS ===============================================>
+
+
+
+# <========================================== START BACKEND PERIODS ===============================================>
+class BackendPeriodsItemsClassView(LoginRequiredMixin, View):
     def get(self, request):
         context = {
-            'title' : 'Backend | Satuan Data'
+            'title' : 'Backend | Satuan Data',
+            'form' : forms.BackendUnitForm()
         }
+
         return render(request, 'backend/table_statistics/periods.html', context)
-    
+
+
+class BackendPeriodsJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        print('Hello world')
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'name' 
+
+        datatables = request.POST
+
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+        model = models.BackendPeriodsModel.objects.prefetch_related('period_item')
+        model = model.exclude(Q(name=None) | Q(period_item__item_period=None))
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+        
+        records_total = model.count()
+        records_filtered = records_total
+        
+        
+        if search:
+            
+            model = models.BackendPeriodsModel.objects.prefetch_related('period_item').filter(
+                Q(name=search)|Q(period_item__item_period=search)
+            ).exclude(Q(name=None) | Q(period_item__item_period=None))
+
+            records_total = model.count()
+            records_filtered = records_total
+        
+
+        model = model.order_by(order_col_name).values('id', 'name', 'period_item__item_period')
+
+        data_periods = []
+
+        for dt in model:
+
+            idx = next((index for (index, d) in enumerate(data_periods) if d["id"] == dt['id']), None)
+
+            if idx is not None:
+                data_periods[idx]['period_item__item_period'].append(dt['period_item__item_period'])
+            else:
+                data_periods.append({
+                    'id' : dt['id'],
+                    'name' : dt['name'],
+                    'period_item__item_period' : [dt['period_item__item_period'], ]
+                })
+
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(data_periods)
+        page_number = int(start / length + 1)
+        paginator = Paginator(data_periods, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+
+        for obj in object_list:
+
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj['id']}" value="{obj['id']}"><label class="form-check-label" for="check{obj['id']}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj['id'] == x[1]][0][0],
+                'name': obj['name'],
+                'period_item__item_period': "; ".join(obj['period_item__item_period']),
+                'actions': f'<a href="javascript:void(0);" onclick="updatePeriods({obj['id']})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deletePeriods({obj['id']})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+
+
+class BackendPeriodsdDeleteClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                print('Masukk')
+                try:
+                    data = get_object_or_404(models.BackendPeriodsModel, pk=request.POST.get('id'))
+                    old_dt = data.name 
+                    data.delete()
+                    return JsonResponse({'status' : 'success', 'message': f'The periods data statistics "{old_dt}" was deleted successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+# <========================================== END BACKEND PERIODS ===============================================>
 class BackendRowsItemsClassView(View):
     def get(self, request):
         context = {

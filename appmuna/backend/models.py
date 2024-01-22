@@ -115,6 +115,7 @@ class BackendPeriodNameItemsModel(models.Model):
    def __str__(self):
       return f"{self.period_id.name} | {self.item_period}"
 
+
 # Unit Name Model
 class BackendUnitsModel(models.Model):
    

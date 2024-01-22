@@ -25,3 +25,25 @@ class BackendUnitForm(forms.ModelForm):
                 attrs = attrs_input | {'placeholder' : 'Isikan keterangan satuan (opt)'}
             )
         }
+
+
+class BackendUnitForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendPeriodsModel
+
+        fields = [
+            'name',
+        ]
+
+        attrs_input = {
+            'class' : 'form-control',
+            'required': 'required',
+            'placeholder': '...'
+        }
+
+        widgets = {
+            'name': forms.TextInput(
+                attrs = attrs_input | {'placeholder' : 'Isikan satuan'}
+            )
+        }

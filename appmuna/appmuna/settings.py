@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'app',
     'homepage',
     'backend',
-    'authentication'
+    'authentication',
+    'import_export'
 ]
 
 MIDDLEWARE = [

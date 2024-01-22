@@ -21,21 +21,23 @@
 
 {% block content %}
 
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-primary alert-dismissible d-none" id="alertDelMultiple" role="alert">
+            Anda dapat menghapus <span id="countData"></span> data terpilih? <a href="javascript: void(0);" class="alert-link" id="submitMultiple">Hapus Data</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+       
+    </div>
+</div>
 <div class="row d-none" id="input-card">
     <div class="col-12">  
         <div class="card">
             <div class="card-body">
                 <div class="row mb-4">
                     <div class="col-sm-4">
-                        <a href="javascript: void(0);" id="add-form-close" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Satuan Data</a>
+                        <a href="javascript: void(0);" id="add-form-close" class="btn btn-danger mb-2"><i class="mdi mdi-file-table-box-multiple me-2"></i> Satuan Data</a>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end">
-                            <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-refresh"></i></button>
-                            <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                            <button type="button" class="btn btn-light mb-2">Export</button>
-                        </div>
-                    </div><!-- end col-->
                 </div>
 
                 <div class="row">
@@ -76,13 +78,11 @@
                 <div class="row mb-2">
                     <div class="col-sm-4">
                         <a href="javascript: void(0);" class="btn btn-danger mb-2" id="add-form-open"><i class="mdi mdi-plus-circle me-2"></i> Tambah Satuan</a>
-                        <a href="javascript: void(0);" class="btn btn-danger mb-2" id="add-form-open"><i class="mdi mdi-plus-circle me-2"></i> Hapus 15 data</a>
                     </div>
                     <div class="col-sm-8">
                         <div class="text-sm-end">
                             <button type="button" class="btn btn-success mb-2 me-1" id="redraw-table"><i class="mdi mdi-refresh"></i></button>
-                            <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                            <button type="button" class="btn btn-light mb-2">Export</button>
+                            <a type="button" href="{% url 'backend:backend-units-export' %}" class="btn btn-light mb-2">Export</a>
                         </div>
                     </div><!-- end col-->
                 </div>
@@ -191,6 +191,13 @@
         } else{
             valsId = valsId.filter(item => item !== $(e).val())
         }
+
+        if (valsId.length > 0) {
+            $('#countData').html(valsId.length)
+            $('#alertDelMultiple').removeClass('d-none')
+        }else{
+            $('#alertDelMultiple').addClass('d-none')
+        }
     }
 
     function updateUnit(e){
@@ -222,7 +229,7 @@
         
         swalWithBootstrapButtons.fire({
             title: 'Are you sure?',
-            text: "Apakah anda yakin ingin menghapus data mitra?",
+            text: "Apakah anda yakin ingin menghapus data satuan?",
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Yes, delete it!',
@@ -355,7 +362,56 @@
                 valsId = valsId.filter(item => item !== $(this).val())
             });
         }
+
+        if (valsId.length > 0) {
+            $('#countData').html(valsId.length)
+            $('#alertDelMultiple').removeClass('d-none')
+        }else{
+            $('#alertDelMultiple').addClass('d-none')
+        }
     });
+
+    $('#submitMultiple').click(function (){
+                
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "Apakah anda yakin ingin menghapus " + valsId.length + " data?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '{% url 'backend:backend-units-multiple-delete' %}',
+                    type: "POST",
+                    dataType: "json",
+                    data : {
+                        'valsId' : valsId
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": '{{csrf_token}}',
+                    },
+                    success: (response) => {
+                        $('#alertDelMultiple').addClass('d-none')
+                        if (response.status == 'success'){
+                            push_notif("Sucess!", response.message, "success") 
+                            table.ajax.reload();
+                        }else{
+                            push_notif("Something wrong!", response.message, "error") 
+                            table.ajax.reload();
+                        }
+                    },
+                    error: (error) => {
+                        push_notif("Something wrong!", error, "danger") 
+                    }
+                });
+            }
+        }) 
+    })
 </script>
 
 {% endblock js-extender %}
