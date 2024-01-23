@@ -322,7 +322,7 @@ class BackendPeriodsJsonClassView(LoginRequiredMixin, View):
         if search:
             
             model = models.BackendPeriodsModel.objects.prefetch_related('period_item').filter(
-                Q(name=search)|Q(period_item__item_period=search)
+                Q(name__icontains=search)|Q(period_item__item_period__icontains=search)
             ).exclude(Q(name=None) | Q(period_item__item_period=None))
 
             records_total = model.count()
@@ -578,7 +578,7 @@ class BackendRowsJsonClassView(LoginRequiredMixin, View):
         if search:
             
             model = models.BackendRowsModel.objects.prefetch_related('row_items').filter(
-                Q(name=search)|Q(row_items__item_row=search)
+                Q(name__icontains=search)|Q(row_items__item_row__icontains=search)
             ).exclude(Q(name=None) | Q(row_items__order_num=None) | Q(row_items__item_row = None))
 
             records_total = model.count()
@@ -727,13 +727,13 @@ class BackendRowsExportClassView(LoginRequiredMixin, View):
 
 # <========================================== START BACKEND CHARACTERISTICS ===============================================>
 
-class BackendCharsItemsClassView(View):
+class BackendCharsClassView(View):
     def get(self, request):
         context = {
-            'title' : 'Backend | Subjek'
+            'title' : 'Backend | Karakteristik Data',
+            'form' : forms.BackendCharForm()
         }
-        return render(request, 'backend/table_statistics/subjects.html', context)
-
+        return render(request, 'backend/table_statistics/characteristics.html', context)
 
     def post(self, request):
 
@@ -771,9 +771,9 @@ class BackendCharsItemsClassView(View):
                         for id, item in zip(request.POST.getlist('ids[]'), request.POST.getlist('item_chars[]')):
                             
                             if id == '':
-                                models.BackendCharacteristicItemsModel(row_id = instance, item_char = item).save()
+                                models.BackendCharacteristicItemsModel(char_id = instance, item_char = item).save()
                             else:
-                                item_data = models.BackendCharacteristicItemsModel.objects.filter(pk=id, row_id=instance).first()
+                                item_data = models.BackendCharacteristicItemsModel.objects.filter(pk=id, char_id=instance).first()
                                 item_data.item_char = item
                                 item_data.save()
 
@@ -793,6 +793,179 @@ class BackendCharsItemsClassView(View):
 
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
+class BackendCharsJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'name' 
+
+        datatables = request.POST
+
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+        model = models.BackendCharacteristicsModel.objects.prefetch_related('characteristic_items')
+        model = model.exclude(Q(name=None) | Q(characteristic_items__item_char = None))
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+        
+        records_total = model.count()
+        records_filtered = records_total
+        
+        
+        if search:
+            model = models.BackendCharacteristicsModel.objects.prefetch_related('characteristic_items').filter(
+                Q(name__icontains=search)|Q(characteristic_items__item_char__icontains=search)
+            ).exclude(Q(name=None) | Q(characteristic_items__item_char = None))
+
+            records_total = model.count()
+            print(search)
+            print(records_total)
+            records_filtered = records_total
+        
+
+        model = model.order_by(order_col_name).values('id', 'name', 'characteristic_items__item_char')
+
+        data_periods = []
+
+        for dt in model:
+
+            idx = next((index for (index, d) in enumerate(data_periods) if d["id"] == dt['id']), None)
+
+            if idx is not None:
+                data_periods[idx]['characteristic_items__item_char'].append(dt['characteristic_items__item_char'])
+            else:
+                data_periods.append({
+                    'id' : dt['id'],
+                    'name' : dt['name'],
+                    'characteristic_items__item_char' : [
+                        dt['characteristic_items__item_char']
+                    ]
+                })
+
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(data_periods)
+        page_number = int(start / length + 1)
+        paginator = Paginator(data_periods, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+        for obj in object_list:
+
+            list_item = '<ol>'
+            for item in obj['characteristic_items__item_char']:
+                list_item += f'<li>{item}</li>'
+            list_item += '<ol>'
+
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj["id"]}" value="{obj["id"]}"><label class="form-check-label" for="check{obj["id"]}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj['id'] == x[1]][0][0],
+                'name': obj['name'],
+                'characteristic_items__item_char': list_item,
+                'actions': f'<a href="javascript:void(0);" onclick="updateChar({obj["id"]})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteChar({obj["id"]})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+
+class BackendCharDeleteClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendCharacteristicsModel, pk=request.POST.get('id'))
+                    old_dt = data.name 
+                    data.delete()
+                    return JsonResponse({'status' : 'success', 'message': f'The rows data statistics "{old_dt}" was deleted successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendCharsMultipleDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+
+                try:
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = get_object_or_404(models.BackendCharacteristicsModel, pk=dt)
+                        model.delete()   
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+class BackendCharDetailClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                id = request.POST.get('id')
+                data = models.BackendCharacteristicsModel.objects.prefetch_related('characteristic_items').filter(pk=id).values('id', 'name', 'characteristic_items__id', 'characteristic_items__item_char')
+
+                row_data = {
+                        'id' : None,
+                        'name' : None,
+                        'items' : []
+                }
+
+                for dt in data:
+                    row_data['id'] = dt['id']
+                    row_data['name'] = dt['name']
+                    row_data['items'].append(
+                        {
+                            'id' : dt['characteristic_items__id'],
+                            'item_char' : dt['characteristic_items__item_char']
+                    })
+
+                if data.exists():
+                    return JsonResponse({'status' : 'success', 'instance': row_data}, status=200)
+                else:
+                    return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
 
 # <========================================== End BACKEND CHARACTERISTICS ===============================================>
     

@@ -27,12 +27,18 @@ urlpatterns = [
     path('backend/rows/delete', views.BackendRowDeleteClassView.as_view(), name='backend-row-delete'),
     path('backend/rows/multiple-delete', views.BackendRowsMultipleDeleteClassView.as_view(), name='backend-rows-multiple-delete'),
     path('backend/rows/export', views.BackendRowsExportClassView.as_view(), name='backend-rows-export'),
-    
+
+
+    path('backend/characteristics', views.BackendCharsClassView.as_view(), name='backend-chars'),
+    path('backend/characteristics/json', views.BackendCharsJsonClassView.as_view(), name='backend-chars-json'),
+    path('backend/characteristics/delete', views.BackendCharDeleteClassView.as_view(), name='backend-char-delete'),
+    path('backend/characteristics/multiple-delete', views.BackendCharsMultipleDeleteClassView.as_view(), name='backend-chars-multiple-delete'),
+    path('backend/characteristics/detail', views.BackendCharDetailClassView.as_view(), name='backend-char-detail'),
+   
 
 
 
-    path('backend/columns', views.BackendCharsItemsClassView.as_view(), name='backend-cols'),
-    path('backend/subjects', views.BackendCharsItemsClassView.as_view(), name='backend-subjs'),
+    path('backend/subjects', views.BackendCharsClassView.as_view(), name='backend-subjs'),
     path('backend/indicators', views.BackendIndicatorsClassView.as_view(), name='backend-indicators'),
     path('backend/content', views.BackendContentIndicatorsClassView.as_view(), name='backend-content-tables'),    
 ]
