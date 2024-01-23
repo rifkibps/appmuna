@@ -20,7 +20,15 @@
 {% endblock nav_content %}
 
 {% block content %}
-
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-primary alert-dismissible d-none" id="alertDelMultiple" role="alert">
+            Anda dapat menghapus <span id="countData"></span> data terpilih? <a href="javascript: void(0);" class="alert-link" id="submitMultiple">Hapus Data</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+       
+    </div>
+</div>
 <div class="row d-none" id="input-card">
     <div class="col-12">  
         <div class="card">
@@ -76,7 +84,6 @@
                     <input type="hidden" name="submit">
                     <input type="submit" value="Save" data-btn='save' class="btn btn-primary btn-submit">
                     <input type="submit" value="Save and add another" data-btn='save-add' class="btn btn-primary btn-submit" >
-                    <input type="submit" value="Save and continue editing" data-btn='save-edit' class="btn btn-primary btn-submit">
                 </form>
             </div> <!-- end card-body-->
         </div> <!-- end card-->
@@ -94,7 +101,7 @@
                     <div class="col-sm-8">
                         <div class="text-sm-end">
                             <button type="button" class="btn btn-success mb-2 me-1" id="redraw-table"><i class="mdi mdi-refresh"></i></button>
-                            <button type="button" class="btn btn-light mb-2">Export</button>
+                            <a type="button" href="{% url 'backend:backend-periods-export' %}" class="btn btn-light mb-2">Export</a>
                         </div>
                     </div><!-- end col-->
                 </div>
@@ -105,8 +112,8 @@
                             <tr>
                                 <th class="all" style="width: 5%;">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                        <input type="checkbox" class="form-check-input" id="checkAll">
+                                        <label class="form-check-label" for="checkAll">&nbsp;</label>
                                     </div>
                                 </th>
                                 <th style="width: 5%;">No</th>
@@ -195,7 +202,22 @@
 
 <script>
 
-    
+    function pushValue(e){
+
+        if (!valsId.includes($(e).val())){
+            valsId.push(String($(e).val()));
+        } else{
+            valsId = valsId.filter(item => item !== $(e).val())
+        }
+
+        if (valsId.length > 0) {
+            $('#countData').html(valsId.length)
+            $('#alertDelMultiple').removeClass('d-none')
+        }else{
+            $('#alertDelMultiple').addClass('d-none')
+        }
+    }
+
     function updatePeriod(e){
         $.ajax({
             url: '{% url 'backend:backend-periods-detail' %}',
@@ -209,24 +231,28 @@
                 "X-CSRFToken": '{{csrf_token}}',
             },
             success: (data) => {
-                console.log(data)
                 $('#id_id').val(data.instance.id)
                 $('#id_name').val(data.instance.name)
 
                 data.instance.items.forEach(function (item, index) {
-                    console.log(item.id, item.item)
 
                     if (index == 0){
                         $('#items-table tbody tr').find($('input[name="ids[]"]')).val(item.id);
                         $('#items-table tbody tr').find($('input[name="items[]"]')).val(item.item);
                     }else{
-                        var curRow = $('#items-table tbody tr').last();
-                        curRow = curRow.clone(true)
-                        curRow.append(curRow);
-                        curRow.find($('input[name="ids[]"]')).val(item.id);
-                        curRow.find($('input[name="items[]"]')).val(item.item);
+                        $curRow = $('#items-table tbody tr').last();
+                        $newRow = $curRow.clone(true)
+                        $curRow.after($newRow);
+                        $newRow.find($('input[name="ids[]"]')).val(item.id);
+                        $newRow.find($('input[name="items[]"]')).val(item.item);
                     }
 
+                });
+
+                var idx = 1
+                $('.num-row').each(function () {
+                    $(this).html(idx);
+                    idx += 1
                 });
 
 
@@ -315,13 +341,13 @@
             success: function (response) {
 
                 if(btn_act == 'save'){
+                    $("#items-table tbody tr:not(:first)").remove();
                     resetForm()
                     $('#input-card').addClass('d-none')
                     $('#preview-card').removeClass('d-none')
                 }else if(btn_act == 'save-add'){
+                    $("#items-table tbody tr:not(:first)").remove();
                     resetForm()
-                }else{
-                    $("#unit-form").removeClass('was-validated')
                 }
                 push_notif("Sucess!", response.message, "success") 
                 table.ajax.reload();
@@ -352,12 +378,14 @@
     $('#add-form-open').on('click', function (){
         $('#input-card').removeClass('d-none')
         $('#preview-card').addClass('d-none')
+
     })
+    
 
     $('#add-form-close').on('click', function (){
         $('#input-card').addClass('d-none')
         $('#preview-card').removeClass('d-none')
-        $('#items-table tbody').find('tr:not(:eq(0))').remove();
+        $("#items-table tbody tr:not(:first)").remove();
         resetForm()
     })
     
@@ -375,7 +403,6 @@
         });
 
     });
-
         
     $('.removeRow').on('click', function(){
         
@@ -391,6 +418,71 @@
         });
 
     });
+
+    $("#checkAll").change(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+
+        if (this.checked) {
+            $('input[name="select"]').each(function () {
+                if (!valsId.includes($(this).val())) 
+                    valsId.push(String($(this).val()));
+            });
+        }else{
+            $('input[name="select"]').each(function () {
+                valsId = valsId.filter(item => item !== $(this).val())
+            });
+        }
+
+        if (valsId.length > 0) {
+            $('#countData').html(valsId.length)
+            $('#alertDelMultiple').removeClass('d-none')
+        }else{
+            $('#alertDelMultiple').addClass('d-none')
+        }
+    });
+
+    $('#submitMultiple').click(function (){
+                
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "Apakah anda yakin ingin menghapus " + valsId.length + " data?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '{% url 'backend:backend-periods-multiple-delete' %}',
+                    type: "POST",
+                    dataType: "json",
+                    data : {
+                        'valsId' : valsId
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": '{{csrf_token}}',
+                    },
+                    success: (response) => {
+                        $('#alertDelMultiple').addClass('d-none')
+                        if (response.status == 'success'){
+                            push_notif("Sucess!", response.message, "success") 
+                            table.ajax.reload();
+                        }else{
+                            push_notif("Something wrong!", response.message, "error") 
+                            table.ajax.reload();
+                        }
+                        valsId = []
+                    },
+                    error: (error) => {
+                        push_notif("Something wrong!", error, "danger") 
+                    }
+                });
+            }
+        }) 
+    })
 
 </script>
 {% endblock js-extender %}
