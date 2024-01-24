@@ -147,8 +147,8 @@ class BackendIndicatorsModel(models.Model):
       ('2', 'Tidak')
    )
 
-   subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_indicator')
-   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_indicator')
+   subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_indicator', verbose_name='Subjek Statistik')
+   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_indicator', verbose_name='Subjek CSA')
    name =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Nama Indikator' )
    desc =  models.TextField(null=False, blank=False, verbose_name='Deskripsi Indikator' )
    footer_desc =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Keterangan Indikator' )

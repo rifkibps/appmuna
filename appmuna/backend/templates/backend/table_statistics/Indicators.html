@@ -43,29 +43,91 @@
 
                 <div class="row">
                     <div class="col-lg-5">
-                        <form method="POST" action="{% url 'backend:backend-subjs' %}" class="needs-validation" id="subjects-form" novalidate>
+                        <form method="POST" action="{% url 'backend:backend-indicators' %}" class="needs-validation" id="indicators-form" novalidate>
                             {% csrf_token %}
-                            <input type="hidden" name="id" id="id_id">
+                            <input type="hidden" name="id" id="id">
                             <div class="mb-3">
-                                <label for="{{form.name.id_for_label}}" class="form-label">{{form.name.label}}</label>
-                                {{form.name}}
-                                <div class="invalid-feedback" id="msg-{{form.name.id_for_label}}">
-                                    Subject data harus diisi (required)
+                                <label for="{{form.subject_id.id_for_label}}" class="form-label">{{form.subject_id.label}}</label>
+                                {{form.subject_id}}
+                                <div class="invalid-feedback" id="msg-{{form.subject_id.id_for_label}}">
                                 </div>
                             </div>
                             
                             <div class="mb-3">
-                                <label for="{{form.subject_group.id_for_label}}" class="form-label">{{form.subject_group.label}}</label>
-                                {{form.subject_group}}
-                            </div>
-                            <div class="invalid-feedback" id="msg-{{form.subject_group.id_for_label}}">
+                                <label for="{{form.subject_csa_id.id_for_label}}" class="form-label">{{form.subject_csa_id.label}}</label>
+                                {{form.subject_csa_id}}
+                                <div class="invalid-feedback" id="msg-{{form.subject_csa_id.id_for_label}}">
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="{{form.show_state.id_for_label}}" class="form-label">{{form.show_state.label}}</label> <br>
-                                {{form.show_state}}
+                                <label for="{{form.name.id_for_label}}" class="form-label">{{form.name.label}}</label>
+                                {{form.name}}
+                                <div class="invalid-feedback" id="msg-{{form.name.id_for_label}}">
+                                </div>
                             </div>
-                            <div class="invalid-feedback" id="msg-{{form.show_state.id_for_label}}">
+
+                            <div class="mb-3">
+                                <label for="{{form.desc.id_for_label}}" class="form-label">{{form.desc.label}}</label>
+                                {{form.desc}}
+                                <div class="invalid-feedback" id="msg-{{form.desc.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.footer_desc.id_for_label}}" class="form-label">{{form.footer_desc.label}}</label>
+                                {{form.footer_desc}}
+                                <div class="invalid-feedback" id="msg-{{form.footer_desc.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.col_group_id.id_for_label}}" class="form-label">{{form.col_group_id.label}}</label>
+                                {{form.col_group_id}}
+                                <div class="invalid-feedback" id="msg-{{form.col_group_id.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.row_group_id.id_for_label}}" class="form-label">{{form.row_group_id.label}}</label>
+                                {{form.row_group_id}}
+                                <div class="invalid-feedback" id="msg-{{form.row_group_id.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.time_period_id.id_for_label}}" class="form-label">{{form.time_period_id.label}}</label>
+                                {{form.time_period_id}}
+                                <div class="invalid-feedback" id="msg-{{form.time_period_id.id_for_label}}">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{form.unit_id.id_for_label}}" class="form-label">{{form.unit_id.label}}</label>
+                                {{form.unit_id}}
+                                <div class="invalid-feedback" id="msg-{{form.unit_id.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.decimal_point.id_for_label}}" class="form-label">{{form.decimal_point.label}}</label>
+                                {{form.decimal_point}}
+                                <div class="invalid-feedback" id="msg-{{form.decimal_point.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.stat_category.id_for_label}}" class="form-label">{{form.stat_category.label}}</label>
+                                {{form.stat_category}}
+                                <div class="invalid-feedback" id="msg-{{form.stat_category.id_for_label}}">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="{{form.show_state.id_for_label}}" class="form-label">{{form.show_state.label}}</label>
+                                {{form.show_state}}
+                                <div class="invalid-feedback" id="msg-{{form.show_state.id_for_label}}">
+                                </div>
                             </div>
 
                             <input type="hidden" name="submit">
@@ -255,8 +317,11 @@
                 "X-CSRFToken": '{{csrf_token}}',
             },
             success: (data) => {
+                
+                console.log(data)
+
                 for (const [key, value] of Object.entries(data.instance)) {
-                    $('#id_'+key).val(value)
+                    $('#'+key).val(value)
                 }
                 $('#input-card').removeClass('d-none')
                 $('#preview-card').addClass('d-none')
@@ -344,7 +409,6 @@
 
     $("#indicators-form").on("submit", function (e){
         e.preventDefault()
-         
         var btn_act = $('input[name=submit]').val()
         var serializedData = $(this).serialize();
         $('.invalid-feedback').html('')
@@ -371,6 +435,7 @@
 
             error: function (response) {
                 var errors = response["responseJSON"]["error"]
+                console.log(errors)
                 for (const [key, value] of Object.entries(errors)) {
                     var msgs = '<ul>'
                     value.forEach(function (item, index) {
@@ -379,8 +444,8 @@
                         });
                     
                     msgs += '</ul>'
-                    $('#id_'+ key).addClass('is-invalid');
-                    $('#msg-id_'+key).html(msgs)
+                    $('#'+ key).addClass('is-invalid');
+                    $('#msg-'+key).html(msgs)
                 }    
             }
         })

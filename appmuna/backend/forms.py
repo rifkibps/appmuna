@@ -149,39 +149,39 @@ class BackendIndicatorForm(forms.ModelForm):
 
         widgets = {
             'subject_id': forms.Select(
-                attrs = attrs_input | {'class' : 'form-select', 'id': 'id_subject_id'}
+                attrs = attrs_input | {'class' : 'form-select', 'id': 'subject_id_id'}
             ),
             'subject_csa_id': forms.Select(
-                attrs = attrs_input | {'class' : 'form-select', 'id': 'id_subject_csa_id'}
+                attrs = {'class' : 'form-select', 'id': 'subject_csa_id_id'}
             ),
             'name': forms.TextInput(
-                attrs = attrs_input | {'placeholder' : 'Isikan nama indikator'}
+                attrs = attrs_input | {'placeholder' : 'Isikan nama indikator', 'id': 'name'}
             ),
             'desc': forms.TextInput(
-                attrs = attrs_input | {'placeholder' : 'Isikan deskripsi'}
+                attrs = attrs_input | {'placeholder' : 'Isikan deskripsi', 'id': 'desc'}
             ),
             'footer_desc': forms.TextInput(
-                attrs = attrs_input | {'placeholder' : 'Isikan keterangan / sumber data'}
+                attrs = attrs_input | {'placeholder' : 'Isikan keterangan / sumber data', 'id': 'footer_desc'}
             ),
             'col_group_id': forms.Select(
-                attrs = attrs_input | {'class' : 'form-select', 'id': 'id_col_group_id'}
+                attrs = {'class' : 'form-select', 'id': 'col_group_id_id'}
             ),
             'row_group_id': forms.Select(
-                attrs = attrs_input | {'class' : 'form-select', 'id': 'id_row_group_id'}
+                attrs = attrs_input | {'class' : 'form-select', 'id': 'row_group_id_id'}
             ),
             'time_period_id': forms.Select(
-                attrs = attrs_input | {'class' : 'form-select', 'id': 'id_time_period_id'}
+                attrs = attrs_input | {'class' : 'form-select', 'id': 'time_period_id_id'}
             ),
             'unit_id': forms.Select(
-                attrs = attrs_input | {'class' : 'form-select', 'id': 'id_unit_id'}
+                attrs = attrs_input | {'class' : 'form-select', 'id': 'unit_id_id'}
             ),
             'decimal_point': forms.TextInput(
-                attrs = attrs_input | {'class' : 'form-select'}
+                attrs = attrs_input  | {'id': 'decimal_point'}
             ),
             'stat_category': forms.Select(
-                attrs = attrs_input | {'class' : 'form-select'}
+                attrs = attrs_input | {'class' : 'form-select', 'id': 'stat_category'}
             ),
             'show_state': forms.Select(
-                attrs = attrs_input | {'class' : 'form-select'}
+                attrs = attrs_input | {'class' : 'form-select', 'id': 'show_state'}
             )
         }

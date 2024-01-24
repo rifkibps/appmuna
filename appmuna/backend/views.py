@@ -1182,7 +1182,8 @@ class BackendIndicatorsClassView(View):
     
     def get(self, request):
         context = {
-            'title' : 'Backend | Tabel Statistik'
+            'title' : 'Backend | Tabel Statistik',
+            'form' : forms.BackendIndicatorForm
         }
         return render(request, 'backend/table_statistics/indicators.html', context)
     

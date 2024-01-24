@@ -42,7 +42,7 @@ urlpatterns = [
     path('backend/subjects/multiple-delete', views.BackendSubjectsMultipleDeleteClassView.as_view(), name='backend-subjs-multiple-delete'),
     path('backend/subjects/switch', views.BackendSubjectSwitchStateClassView.as_view(), name='backend-subj-switch'),
     path('backend/subjects/detail', views.BackendSubjectDetailClassView.as_view(), name='backend-subj-detail'),
-    path('backend/subjects/export', views.BackendSubjectsExportClassView.as_view(), name='backend-subj-export'),
+    path('backend/subjects/export', views.BackendSubjectsExportClassView.as_view(), name='backend-subjs-export'),
     
 
     path('backend/indicators', views.BackendIndicatorsClassView.as_view(), name='backend-indicators'),
