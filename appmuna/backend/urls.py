@@ -36,9 +36,25 @@ urlpatterns = [
     path('backend/characteristics/detail', views.BackendCharDetailClassView.as_view(), name='backend-char-detail'),
    
 
+    path('backend/subjects', views.BackendSubjectsClassView.as_view(), name='backend-subjs'),
+    path('backend/subjects/json', views.BackendSubjectsJsonClassView.as_view(), name='backend-subjs-json'),
+    path('backend/subjects/delete', views.BackendSubjectDeleteClassView.as_view(), name='backend-subj-delete'),
+    path('backend/subjects/multiple-delete', views.BackendSubjectsMultipleDeleteClassView.as_view(), name='backend-subjs-multiple-delete'),
+    path('backend/subjects/switch', views.BackendSubjectSwitchStateClassView.as_view(), name='backend-subj-switch'),
+    path('backend/subjects/detail', views.BackendSubjectDetailClassView.as_view(), name='backend-subj-detail'),
+    path('backend/subjects/export', views.BackendSubjectsExportClassView.as_view(), name='backend-subj-export'),
+    
 
-
-    path('backend/subjects', views.BackendCharsClassView.as_view(), name='backend-subjs'),
     path('backend/indicators', views.BackendIndicatorsClassView.as_view(), name='backend-indicators'),
-    path('backend/content', views.BackendContentIndicatorsClassView.as_view(), name='backend-content-tables'),    
+    path('backend/indicators/json', views.BackendIndicatorsJsonClassView.as_view(), name='backend-indicators-json'),
+    path('backend/indicators/switch', views.BackendIndicatorSwitchStateClassView.as_view(), name='backend-indicator-switch'),
+    path('backend/indicators/detail', views.BackendIndicatorDetailClassView.as_view(), name='backend-indicator-detail'),
+    path('backend/indicators/delete', views.BackendIndicatorDeleteClassView.as_view(), name='backend-indicator-delete'),
+    path('backend/indicators/export', views.BackendIndicatorsExportClassView.as_view(), name='backend-indicators-export'),
+    path('backend/indicators/multiple-delete', views.BackendIndicatorsMultipleDeleteClassView.as_view(), name='backend-indicator-multiple-delete'),
+    
+
+
+
+    path('backend/content', views.BackendIndicatorsClassView.as_view(), name='backend-content-tables'),    
 ]

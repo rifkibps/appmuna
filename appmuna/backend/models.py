@@ -20,8 +20,8 @@ class BackendSubjectsModel(models.Model):
    )
 
    name = models.CharField(max_length=256, null=False, blank=False, verbose_name='Nama Subject' )
-   subject_group = models.CharField(max_length=1, choices=groups, verbose_name='Kelompok Subject')
-   show_state = models.CharField(max_length=1, choices=status, verbose_name='Tampilkan Subject')
+   subject_group = models.CharField(max_length=1, null=False, blank=False, choices=groups, verbose_name='Kelompok Subject')
+   show_state = models.CharField(max_length=1, null=False, blank=False, choices=status, verbose_name='Tampilkan Subject')
 
    def __str__(self):
       return f"{self.get_subject_group_display()} | {self.name}"
@@ -141,6 +141,7 @@ class BackendIndicatorsModel(models.Model):
       ('1', 'Dasar'),
       ('2', 'Sektoral')
    )
+
    state = (
       ('1', 'Ya'),
       ('2', 'Tidak')
