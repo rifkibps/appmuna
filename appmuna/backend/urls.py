@@ -62,5 +62,5 @@ urlpatterns = [
 
     path('backend/content/input/', views.BackendContentInputClassView.as_view(), name='backend-content-input'),
     path('backend/content/input/form', views.BackendContentInputFormClassView.as_view(), name='backend-content-input-form'),
-    path('backend/content/input/submit', views.BackendContentInputFormClassView.as_view(), name='backend-content-input-submit')
+    path('backend/content/input/submit', views.BackendContentInputFormSubmitClassView.as_view(), name='backend-content-input-submit')
 ]

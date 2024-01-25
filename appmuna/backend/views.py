@@ -1570,50 +1570,47 @@ class BackendContentInputClassView(View):
         
 
         context = {
-            'd-form' : 'd-none',
-            'title' : 'Backend | Tabel Statistik',
+            'title' :   'Backend | Tabel Statistik',
             'subjects' : models.BackendSubjectsModel.objects.values(),
+            
         }
 
         years = datetime.datetime.today().year
         context['years'] = list(range(years+16, years - 25, -1))
                 
         if request.GET.get('subject_id') and request.GET.get('indicator_id') and request.GET.get('year') and request.GET.get('periode_id'):
+            context['d_form'] = 'submitted'
             subject_id = request.GET.get('subject_id')
             indicator_id = request.GET.get('indicator_id')
             year = request.GET.get('year')
-            period_id = request.GET.get('periode_id')
+            period_item_id = request.GET.get('periode_id')
 
             data_indicator = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
             
-            context['name'] = data_indicator.name
-            context['desc'] = data_indicator.desc
-            context['footer_desc'] = data_indicator.footer_desc
-            context['unit_id'] = data_indicator.unit_id.name
-            context['stat_category'] = data_indicator.get_stat_category_display()
+            context['data_indicator'] = data_indicator
             context['created_at'] = data_indicator.created_at.strftime('%d %B %Y'),
             context['updated_at'] = data_indicator.updated_at.strftime('%d %B %Y'),
-            context['subject_id'] = data_indicator.subject_id.name
-            context['time_period_id'] = data_indicator.time_period_id.name
 
             data_rows = models.BackendRowsItemsModel.objects.filter(row_id = data_indicator.row_group_id).order_by('order_num')
-            context['row_group_id'] = data_rows.values()
+            context['rows_groups'] = data_rows.values()
 
-            context['subject_csa_id'] = data_indicator.subject_csa_id.name if data_indicator.subject_csa_id is not None else '-'
-            context['col_group_id'] = ['Tidak tersedia']
+            context['subject_csa'] = data_indicator.subject_csa_id.name if data_indicator.subject_csa_id is not None else '-'
+            context['col_groups'] = ['Tidak tersedia']
             context['col_group_name'] = ''
+            context['range'] = range(1, 4)
             if data_indicator.col_group_id is not None:
-                data_chars = models.BackendCharacteristicItemsModel.objects.filter(char_id = data_indicator.col_group_id)
-                context['col_group_id'] = data_chars.values()
-                context['col_group_name'] = data_chars.first().char_id.name
+                data_chars = models.BackendCharacteristicItemsModel.objects.filter(char_id = data_indicator.col_group_id).order_by('id')
+                context['col_groups'] = data_chars.values()
+                context['range'] = range(1, 3 + data_chars.count())
             
             context['col_group_name'] = data_indicator.subject_id.name
             context['row_group_name'] = data_rows.first().row_id.name
 
-            context['current_year'] = year
-            context['subject_id'] = get_object_or_404(models.BackendSubjectsModel, pk=subject_id)
-            context['periode_id'] = get_object_or_404(models.BackendPeriodNameItemsModel, pk=period_id)
-            context['d-none'] = ''
+            context['current_year'] = int(year)
+            context['subject_id'] = subject_id
+            context['period'] = get_object_or_404(models.BackendPeriodNameItemsModel, pk=period_item_id)
+            context['period_items'] = models.BackendPeriodNameItemsModel.objects.filter(period_id=data_indicator.time_period_id)
+            context['indicators'] = models.BackendIndicatorsModel.objects.filter(subject_id=subject_id).values()
 
         return render(request, 'backend/table_statistics/content/input.html', context)
 
@@ -1654,7 +1651,7 @@ class BackendContentInputClassView(View):
                         opt = '<option selected>Data indikator belum tersedia</option>'
                         return JsonResponse({'status': 'failed', 'message': 'Data indikator belum tersedia', 'instance' : opt}, status=200)
         return JsonResponse({'status': 'Invalid request'}, status=400)
-    
+
 
 class BackendContentInputFormClassView(LoginRequiredMixin, View):
 
@@ -1694,5 +1691,34 @@ class BackendContentInputFormClassView(LoginRequiredMixin, View):
                     else:
                         opt = '<option selected>Data indikator belum tersedia</option>'
                         return JsonResponse({'status': 'failed', 'message': 'Data indikator belum tersedia', 'instance' : opt}, status=200)
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+
+class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                model = models.BackendContentIndicatorsModel
+
+                data_request = request.POST
+                indicator_id = data_request.get('indicator_id')
+                year = data_request.get('year')
+                item_period = data_request.get('item_period')
+
+                # indicator_data = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
+
+                # chars_item = models.BackendCharacteristicItemsModel.objects.filter(char_id = indicator_data.col_group_id).order_by('id')
+                print(indicator_id)
+
+                # for col_del in ['csrfmiddlewaretoken', 'indicator_id', 'year', 'item_period']:
+                #     del data_request[col_del]
+
+
+
+                print(data_request)
         return JsonResponse({'status': 'Invalid request'}, status=400)
     

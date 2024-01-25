@@ -47,28 +47,28 @@
                             </div>
                             <div class="mt-3 d-none d-xl-block">
                                 <h5 class="text-left">Nama Tabel:</h5>
-                                <p class="text-left">{{name}}</p>
+                                <p class="text-left">{{data_indicator.name}}</p>
                                 <h5 class="text-left">Subjek:</h5>
-                                <p class="text-left">{{subject_id}}</p>
+                                <p class="text-left">{{data_indicator.subject_id.name}}</p>
                                 <h5 class="text-left">Subjek CSA:</h5>
-                                <p class="text-left">{{subject_csa_id}}</p>
+                                <p class="text-left">{{subject_csa}}</p>
                                 <h5 class="text-left">Deskripsi:</h5>
-                                <p style="text-align: justify;">{{desc}}</p>
+                                <p style="text-align: justify;">{{data_indicator.desc}}</p>
                             </div>
-    
+                            
                             <div class="mt-3 d-none d-xl-block">
-                                <h5 class="text-left">Kelompok Karakteristik ({{col_group_name}})</h5>
+                                <h5 class="text-left">Kelompok Karakteristik {% if d_form %}({{col_group_name}}){% endif %}</h5>
                                 <ul class="ps-3">
-                                    {% for dt  in col_group_id %}
+                                    {% for dt  in col_groups %}
                                         <li class="text-left text-muted">{{dt.item_char}}</li>
                                     {% endfor %}
                                 </ul>
                             </div>
     
                             <div class="mt-3 d-none d-xl-block">
-                                <h5 class="text-left">Kelompok Judul Baris ({{row_group_name}})</h5>
+                                <h5 class="text-left">Kelompok Judul Baris {% if d_form %}({{row_group_name}}){% endif %}</h5>
                                 <ul class="px-1" style="list-style:none">
-                                    {% for dt  in row_group_id %}
+                                    {% for dt  in rows_groups %}
                                         <li class="text-left text-muted">{{dt.order_num}}.&emsp;{{dt.item_row}}</li>
                                     {% endfor %}
                                 </ul>
@@ -76,11 +76,11 @@
     
                             <div class="mt-3 d-none d-xl-block">
                                 <h5 class="text-left">Periode Data:</h5>
-                                <p class="text-left">{{time_period_id}}</p>
+                                <p class="text-left">{{data_indicator.time_period_id.name}}</p>
                                 <h5 class="text-left">Satuan:</h5>
-                                <p class="text-left">{{unit_id}}</p>
+                                <p class="text-left">{{data_indicator.unit_id.name}}</p>
                                 <h5 class="text-left">Kategori Statistik:</h5>
-                                <p class="text-left"><span class="badge bg-primary">{{stat_category}}</span></p>
+                                <p class="text-left"><span class="badge bg-primary">{{data_indicator.get_stat_category_display}}</span></p>
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,11 @@
                         <div class="row mb-3">
                             <div class="col-sm-4">
                                 <button class="btn btn-primary btn-sm btn-rounded font-12" disabled> Tahun {{current_year}} </button>
-                                <button class="btn btn-info btn-sm btn-rounded font-12" disabled> {{periode_id.item_period}} </button>
+
+                                {% if d_form %}
+                                   <button class="btn btn-info btn-sm btn-rounded font-12" disabled> {{period.item_period}} </button>
+                                {% endif %}
+
                             </div>
                             <div class="col-sm-8">
                                 <div class="text-sm-end">
@@ -103,7 +107,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <h3 class="font-weight-bold"><strong>{{name}}</strong></strong></h3>
+                            <h3 class="font-weight-bold"><strong>{{data_indicator.name}}</strong></strong></h3>
                         </div>
                         
                         <div class="mt-3">
@@ -111,57 +115,66 @@
                         </div>
 
 
-                        <form method="POST" action="{% url 'backend:backend-content-input-submit' %}" class="needs-validation" novalidate="">
+                        <form method="POST" action="{% url 'backend:backend-content-input-submit' %}" class="needs-validation" id="content-form-submit" novalidate="">
                             {% csrf_token %}
-                            <table class="table table-sm table-bordered table-centered table-responsive nowrap w-100 mb-1">
-                                    <thead class="bg-primary-lighten">
-                                        <tr>
-                                            <td rowspan="2" class="text-center">No</td>
-                                            <td rowspan="2" class="text-center">Kelompok</td>
-                                            
-                                            {% if col_group_id.0 != 'Tidak tersedia' %}
-                                                <td class="text-center" colspan="{{ col_group_id|length }}">Karakteristik Data</td>
-                                            {% else %}
-                                                <td class="text-center" >{{current_year}}</td>
-                                            {% endif %}
-
-                                        </tr>
-                                        <tr>
-                                            {% if col_group_id.0 != 'Tidak tersedia' %}
-                                            
-                                                {% for dt_col in col_group_id %}
-                                                    <td class="text-center" data-id="{{dt_col.id}}">{{dt_col.item_char}}</td>
-                                                {% endfor %}
-                                
-                                            {% endif %}
-        
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        {% for dt_row in row_group_id %}
+                            <input type="hidden" name="indicator_id" id="indicator_id" value="{{data_indicator.id}}">
+                            <input type="hidden" name="year" id="year" value="{{current_year}}">
+                            <input type="hidden" name="item_period" id="item_period" value="{{period.id}}">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered table-centered nowrap w-100 mb-1">
+                                        <thead class="bg-primary-lighten">
                                             <tr>
-                                                <td class="text-center">{{dt_row.order_num}}</td>
-                                                <td>{{dt_row.item_row}}</td>
-                                                
-                                                {% if col_group_id != '' %}
-                                                    {% for dt_col in col_group_id %}
-                                                        <td><input type="text" class="form-control form-control-sm" name="{{dt_row.id}}-{{dt_col.id}}" style="text-align: right"></td>
-                                                    {% endfor %}
-
+                                                <td rowspan="2" class="text-center">No</td>
+                                                <td rowspan="2" class="text-center">Kelompok</td>
+                                                {% if col_groups.0 != 'Tidak tersedia' %}
+                                                    <td class="text-center" colspan="{{ col_groups|length }}">Karakteristik Data {% if d_form %}({{data_indicator.unit_id.name}}){% endif %}</td>
                                                 {% else %}
-                                                    <td><input type="text" class="form-control form-control-sm" name="{{dt_row.id}}" style="text-align: right"></td>
+                                                    <td class="text-center" >{{current_year}}</td>
                                                 {% endif %}
-                                                
+    
                                             </tr>
-                                        {% endfor %}
-
-                                    </tbody>
-                            </table>
+                                            <tr>
+                                                {% if col_groups.0 != 'Tidak tersedia' %}
+                                                
+                                                    {% for dt_col in col_groups %}
+                                                        <td class="text-center" data-id="{{dt_col.id}}">{{dt_col.item_char}}</td>
+                                                    {% endfor %}
+                                    
+                                                {% endif %}
+                                            </tr>
+                                            <tr>
+                                                {% for no in range %}
+                                                <td class="text-center">({{no}})</td>
+                                                {% endfor %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+    
+                                            {% for dt_row in rows_groups %}
+                                                <tr>
+                                                    <td class="text-center">{{dt_row.order_num}}</td>
+                                                    <td>{{dt_row.item_row}}</td>
+                                                    
+                                                    {% if col_groups != '' %}
+                                                        {% for dt_col in col_groups %}
+                                                            <td><input type="text" class="form-control form-control-sm" name="{{dt_row.id}}-{{dt_col.id}}" style="text-align: right"></td>
+                                                        {% endfor %}
+    
+                                                    {% else %}
+                                                        <td><input type="text" class="form-control form-control-sm" name="{{dt_row.id}}" style="text-align: right"></td>
+                                                    {% endif %}
+                                                </tr>
+                                            {% endfor %}
+    
+                                        </tbody>
+                                </table>
+                            </div>
                                 
+                            <h5 class="font-13 font-weight-light" style="font-size:14px"><i>{{data_indicator.footer_desc}}</i></h5>
+                            <div class="mt-3 mb-4">
+                                <button class="btn btn-rounded btn-primary mt-3" type="submit">Simpan Data Tabel</button>
+                            </div>
                         </form>
-                        <h5 class="font-13 font-weight-light" style="font-size:14px"><i>{{footer_desc}}</i></h5>
-
                     </div>
                 </div>
             </div> <!-- end col -->
@@ -184,11 +197,16 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="mb-3">
-                                <label class="control-label form-label">Subjek Statistik</label>
+                                <label class="control-label form-label">Subjek Statistik</h1></label>
                                 <select class="form-select" name="subject_id" id="subject_id" required="">
                                     <option value="" selected>Pilih Subjek</option>
                                     {% for dt in subjects %}
+                                       
+                                        {% if data_indicator.subject_id.id == dt.id %}
+                                        <option value="{{dt.id}}" selected>{{dt.name}}</option>
+                                        {% else %}
                                         <option value="{{dt.id}}">{{dt.name}}</option>
+                                        {% endif %}
                                     {% endfor %}
                                 </select>
                                 <div class="invalid-feedback">Indikator/Tabel statistik harus terisi</div>
@@ -199,6 +217,14 @@
                                 <label class="control-label form-label">Nama Indikator</label>
                                 <select class="form-select" name="indicator_id" id="indicator_id" required="">
                                     <option value="" selected>Pilih Indikator</option>
+                                    {% for dt in indicators %}
+                                       
+                                    {% if data_indicator.id == dt.id %}
+                                    <option value="{{dt.id}}" selected>{{dt.name}}</option>
+                                    {% else %}
+                                    <option value="{{dt.id}}">{{dt.name}}</option>
+                                    {% endif %}
+                                {% endfor %}
                                 </select>
                                 <div class="invalid-feedback">Indikator/Tabel statistik harus terisi</div>
                             </div>
@@ -208,8 +234,13 @@
                                 <label class="control-label form-label">Tahun</label>
                                 <select class="form-select" name="year" id="year" required="">
                                     <option value="" selected="">Pilih Tahun</option>
-                                    {% for year in years %}
-                                        <option value="{{year}}">{{year}}</option>
+                                    {% for year_ in years %}
+                                        {% if current_year == year_ %}
+                                        <option value="{{year_}}" selected>{{year_}}</option>
+                                        {% else %}
+                                        <option value="{{year_}}">{{year_}}</option>
+                                        {% endif %}
+
                                     {% endfor %}
                                 </select>
                                 <div class="invalid-feedback">Tahun harus terisi</div>
@@ -220,6 +251,13 @@
                                 <label class="control-label form-label">Turunan Tahun</label>
                                 <select class="form-select" name="periode_id" id="periode_id" required="">
                                     <option value="" selected="">Pilih Turunan Tahun</option>
+                                    {% for period_item in period_items %}
+                                        {% if period.id == period_item.id %}
+                                        <option value="{{period_item.id}}" selected>{{period_item.item_period}}</option>
+                                        {% else %}
+                                        <option value="{{period_item.id}}">{{period_item.item_period}}</option>
+                                        {% endif %}
+                                    {% endfor %}
                                 </select>
                                 <div class="invalid-feedback">Periode Turunan Tahun harus terisi</div>
                             </div>
@@ -335,6 +373,29 @@
                 push_notif("Something wrong!", error.message, "error");
             }
         });
+    })
+    
+    $('#content-form-submit').on('submit', function (e){
+        e.preventDefault()
+
+        var serializedData = $(this).serialize();
+        $('.invalid-feedback').html('')
+        $('.is_invalid').removeClass('is_invalid')
+        
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('action'),
+            data: serializedData,
+            
+            success: function (response) {
+
+                push_notif("Sucess!", response.message, "success") 
+            },
+
+            error: function (response) {
+                push_notif("Something wrong!", response.message, "error") 
+            }
+        })
     })
     
 </script>
