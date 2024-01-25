@@ -50,11 +50,17 @@ urlpatterns = [
     path('backend/indicators/switch', views.BackendIndicatorSwitchStateClassView.as_view(), name='backend-indicator-switch'),
     path('backend/indicators/detail', views.BackendIndicatorDetailClassView.as_view(), name='backend-indicator-detail'),
     path('backend/indicators/delete', views.BackendIndicatorDeleteClassView.as_view(), name='backend-indicator-delete'),
-    path('backend/indicators/export', views.BackendIndicatorsExportClassView.as_view(), name='backend-indicators-export'),
     path('backend/indicators/multiple-delete', views.BackendIndicatorsMultipleDeleteClassView.as_view(), name='backend-indicator-multiple-delete'),
+    path('backend/indicators/export', views.BackendIndicatorsExportClassView.as_view(), name='backend-indicators-export'),
     
 
+    path('backend/content', views.BackendContentClassView.as_view(), name='backend-content'),
+    path('backend/content/manage/json', views.BackendContentJsonClassView.as_view(), name='backend-content-json'),
+    path('backend/content/manage/delete', views.BackendContentDeleteClassView.as_view(), name='backend-content-delete'),
+    path('backend/content/manage/multiple-delete', views.BackendContentMultipleDeleteClassView.as_view(), name='backend-content-multiple-delete'),
+    path('backend/content/manage/export', views.BackendContentExportClassView.as_view(), name='backend-content-export'),
 
-
-    path('backend/content', views.BackendIndicatorsClassView.as_view(), name='backend-content-tables'),    
+    path('backend/content/input/', views.BackendContentInputClassView.as_view(), name='backend-content-input'),
+    path('backend/content/input/form', views.BackendContentInputFormClassView.as_view(), name='backend-content-input-form'),
+    path('backend/content/input/submit', views.BackendContentInputFormClassView.as_view(), name='backend-content-input-submit')
 ]

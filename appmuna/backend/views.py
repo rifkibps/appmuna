@@ -14,6 +14,8 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 
 from . import models, forms, resources
+
+import datetime
 from operator import itemgetter
 
 class BackendAppClassView(LoginRequiredMixin, View):
@@ -1176,7 +1178,9 @@ class BackendSubjectsExportClassView(LoginRequiredMixin, View):
 
 
 # <========================================== end Backend Subjects ===============================================>
+    
 
+# <========================================== start Backend Content ===============================================>
 
 class BackendIndicatorsClassView(View):
     
@@ -1357,7 +1361,6 @@ class BackendIndicatorDetailClassView(LoginRequiredMixin, View):
                 
         return JsonResponse({'status': 'Invalid request'}, status=400)
     
-
 class BackendIndicatorDeleteClassView(LoginRequiredMixin, View):
 
     def post(self, request):
@@ -1394,7 +1397,6 @@ class BackendIndicatorsMultipleDeleteClassView(LoginRequiredMixin, View):
 
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-
 class BackendIndicatorsExportClassView(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -1406,3 +1408,291 @@ class BackendIndicatorsExportClassView(LoginRequiredMixin, View):
         response['Content-Disposition'] = 'attachment; filename="Data Indikator.xls"'
         return response 
 
+
+# <========================================== end Backend Content ===============================================>
+    
+class BackendContentClassView(View):
+    
+    def get(self, request):
+        context = {
+            'title' : 'Backend | Tabel Statistik',
+        }
+        return render(request, 'backend/table_statistics/content/manage.html', context)
+
+class BackendContentJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'indicator_id__subject_id__name' 
+
+        datatables = request.POST
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+        model = models.BackendContentIndicatorsModel.objects   
+        model = model.exclude(
+            Q(indicator_id=None) |
+            Q(year=None) |
+            Q(item_period=None) |
+            Q(item_row=None) |
+            Q(value=None)
+        )
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+   
+        records_total = model.count()
+        records_filtered = records_total
+        
+        if search:
+            model = models.BackendContentIndicatorsModel.objects.filter(
+                Q(indicator_id__subject_id__name__icontains=search) |
+                Q(indicator_id__name__icontains=search) |
+                Q(year__icontains=search)
+            ).exclude(
+            Q(indicator_id=None) |
+            Q(year=None) |
+            Q(item_period=None) |
+            Q(item_row=None) |
+            Q(value=None)
+        )
+
+            records_total = model.count()
+            records_filtered = records_total
+        
+        model = model.order_by(order_col_name)
+            
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
+        page_number = int(start / length + 1)
+        paginator = Paginator(model, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+
+        for obj in object_list:
+
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj.id == x[1]][0][0],
+                'indicator_id__subject_id__name': obj.indicator_id.subject_id.name,
+                'indicator_id__name': obj.indicator_id.name,
+                'indicator_id__stat_category': obj.indicator_id.get_stat_category_display(),
+                'indicator_id__time_period_id__name': obj.indicator_id.time_period_id.name,
+                'year': obj.year,
+                'created_at' : obj.created_at.strftime('%d-%m-%Y'),
+                'updated_at' : obj.updated_at.strftime('%d-%m-%Y'),
+                'actions': f'<a href="javascript:void(0);" onclick="updateContent({obj.id})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteContent({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+    
+class BackendContentDeleteClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendContentIndicatorsModel, pk=request.POST.get('id'))
+                    old_dt = data.indicator_id.name 
+                    data.delete()
+                    return JsonResponse({'status' : 'success', 'message': f'The table data statistics "{old_dt}" was deleted successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendContentMultipleDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = get_object_or_404(models.BackendContentIndicatorsModel, pk=dt)
+                        model.delete()   
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendContentExportClassView(LoginRequiredMixin, View):
+
+    def get(self, request):
+    
+        resource = resources.BackendContentResource()
+        dataset = resource.export()
+
+        response = HttpResponse(dataset.xls, content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="Data Konten Tabel.xls"'
+        return response 
+
+class BackendContentInputClassView(View):
+    
+    def get(self, request):
+        
+
+        context = {
+            'd-form' : 'd-none',
+            'title' : 'Backend | Tabel Statistik',
+            'subjects' : models.BackendSubjectsModel.objects.values(),
+        }
+
+        years = datetime.datetime.today().year
+        context['years'] = list(range(years+16, years - 25, -1))
+                
+        if request.GET.get('subject_id') and request.GET.get('indicator_id') and request.GET.get('year') and request.GET.get('periode_id'):
+            subject_id = request.GET.get('subject_id')
+            indicator_id = request.GET.get('indicator_id')
+            year = request.GET.get('year')
+            period_id = request.GET.get('periode_id')
+
+            data_indicator = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
+            
+            context['name'] = data_indicator.name
+            context['desc'] = data_indicator.desc
+            context['footer_desc'] = data_indicator.footer_desc
+            context['unit_id'] = data_indicator.unit_id.name
+            context['stat_category'] = data_indicator.get_stat_category_display()
+            context['created_at'] = data_indicator.created_at.strftime('%d %B %Y'),
+            context['updated_at'] = data_indicator.updated_at.strftime('%d %B %Y'),
+            context['subject_id'] = data_indicator.subject_id.name
+            context['time_period_id'] = data_indicator.time_period_id.name
+
+            data_rows = models.BackendRowsItemsModel.objects.filter(row_id = data_indicator.row_group_id).order_by('order_num')
+            context['row_group_id'] = data_rows.values()
+
+            context['subject_csa_id'] = data_indicator.subject_csa_id.name if data_indicator.subject_csa_id is not None else '-'
+            context['col_group_id'] = ['Tidak tersedia']
+            context['col_group_name'] = ''
+            if data_indicator.col_group_id is not None:
+                data_chars = models.BackendCharacteristicItemsModel.objects.filter(char_id = data_indicator.col_group_id)
+                context['col_group_id'] = data_chars.values()
+                context['col_group_name'] = data_chars.first().char_id.name
+            
+            context['col_group_name'] = data_indicator.subject_id.name
+            context['row_group_name'] = data_rows.first().row_id.name
+
+            context['current_year'] = year
+            context['subject_id'] = get_object_or_404(models.BackendSubjectsModel, pk=subject_id)
+            context['periode_id'] = get_object_or_404(models.BackendPeriodNameItemsModel, pk=period_id)
+            context['d-none'] = ''
+
+        return render(request, 'backend/table_statistics/content/input.html', context)
+
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                subject_id = request.POST.get('subject_id')
+                indicator_id = request.POST.get('indicator_id')
+
+                if subject_id:
+                    data = models.BackendIndicatorsModel.objects.filter(subject_id=subject_id)
+
+                    if data.exists():
+                        opt = '<option value="" selected>Pilih Indikator</option>'
+                        for dt in data:
+                            opt += f'<option value="{dt.id}">{dt.name}</option>'
+
+                        return JsonResponse({'status' : 'success', 'instance': opt}, status=200)
+                    else:
+                        opt = '<option selected>Data indikator belum tersedia</option>'
+                        return JsonResponse({'status': 'failed', 'message': 'Data indikator belum tersedia', 'instance' : opt}, status=200)
+                
+                if indicator_id:
+                    data = models.BackendIndicatorsModel.objects.filter(pk=indicator_id)
+                    if data.exists():
+                        items_period = models.BackendPeriodNameItemsModel.objects.filter(period_id=data.first().time_period_id)
+                        
+                        opt = '<option value="" selected>Pilih Turunan Tahun</option>'
+                        for dt in items_period:
+                            opt += f'<option value="{dt.id}">{dt.item_period}</option>'
+
+                        return JsonResponse({'status' : 'success', 'instance': opt}, status=200)
+                    else:
+                        opt = '<option selected>Data indikator belum tersedia</option>'
+                        return JsonResponse({'status': 'failed', 'message': 'Data indikator belum tersedia', 'instance' : opt}, status=200)
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+
+class BackendContentInputFormClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                subject_id = request.POST.get('subject_id')
+                indicator_id = request.POST.get('indicator_id')
+
+                if subject_id:
+                    data = models.BackendIndicatorsModel.objects.filter(subject_id=subject_id)
+
+                    if data.exists():
+                        opt = '<option value="" selected>Pilih Indikator</option>'
+                        for dt in data:
+                            opt += f'<option value="{dt.id}">{dt.name}</option>'
+
+                        return JsonResponse({'status' : 'success', 'instance': opt}, status=200)
+                    else:
+                        opt = '<option selected>Data indikator belum tersedia</option>'
+                        return JsonResponse({'status': 'failed', 'message': 'Data indikator belum tersedia', 'instance' : opt}, status=200)
+                
+                if indicator_id:
+                    data = models.BackendIndicatorsModel.objects.filter(pk=indicator_id)
+                    if data.exists():
+                        items_period = models.BackendPeriodNameItemsModel.objects.filter(period_id=data.first().time_period_id)
+                        
+                        opt = '<option value="" selected>Pilih Turunan Tahun</option>'
+                        for dt in items_period:
+                            opt += f'<option value="{dt.id}">{dt.item_period}</option>'
+
+                        print(opt)
+                        return JsonResponse({'status' : 'success', 'instance': opt}, status=200)
+                    else:
+                        opt = '<option selected>Data indikator belum tersedia</option>'
+                        return JsonResponse({'status': 'failed', 'message': 'Data indikator belum tersedia', 'instance' : opt}, status=200)
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    

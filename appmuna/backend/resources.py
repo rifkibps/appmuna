@@ -73,8 +73,8 @@ class BackendIndicatorResource(resources.ModelResource):
     decimal_point = Field(attribute="decimal_point", column_name="Jumlah Desimal")
     stat_category = Field(attribute="get_stat_category_display", column_name="Kategori Statistik")
     show_state = Field(attribute="get_show_state_display", column_name="Tampilkan Indikator")
-    created_at = Field(attribute="created_at", column_name="Dibuat")
-    updated_at = Field(attribute="updated_at", column_name="Terakhir Diupdate")
+    created_at = Field(attribute="created_at", column_name="Dibuat", widget=widgets.DateWidget("%d/%m/%Y"))
+    updated_at = Field(attribute="updated_at", column_name="Terakhir Diupdate", widget=widgets.DateWidget("%d/%m/%Y"))
 
     class Meta:
         model = models.BackendIndicatorsModel
@@ -91,6 +91,39 @@ class BackendIndicatorResource(resources.ModelResource):
             'decimal_point',
             'stat_category',
             'show_state',
+            'created_at',
+            'updated_at',
+        )
+        
+
+class BackendContentResource(resources.ModelResource):
+
+    indicator_id__subject_id__name = Field(attribute="indicator_id__subject_id__name", column_name="Subjek Statistik")
+    indicator_id__subject_csa_id__name = Field(attribute="indicator_id__subject_csa_id__name", column_name="Subjek Statistik CSA")
+    indicator_id__name = Field(attribute="indicator_id__name", column_name="Nama Tabel/Indikator")
+    indicator_id__desc = Field(attribute="indicator_id__desc", column_name="Deskripsi Tabel/Indikator")
+    indicator_id__footer_desc = Field(attribute="indicator_id__footer_desc", column_name="Keterangan Tabel/Indikator")
+
+    indicator_id__stat_category = Field(attribute="get_indicator_id__stat_category_display", column_name="Kategori Indikator Statistik")
+    indicator_id__time_period_id__name = Field(attribute="indicator_id__time_period_id__name", column_name="Periode Waktu")
+    indicator_id__unit_id__name = Field(attribute="indicator_id__unit_id__name", column_name="Satuan Data")
+    year = Field(attribute="year", column_name="Tahun")
+
+    created_at = Field(attribute="created_at", column_name="Dibuat", widget=widgets.DateWidget("%d/%m/%Y"))
+    updated_at = Field(attribute="updated_at", column_name="Terakhir Diupdate", widget=widgets.DateWidget("%d/%m/%Y"))
+
+    class Meta:
+        model = models.BackendContentIndicatorsModel
+        fields = (
+            'indicator_id__subject_id__name',
+            'indicator_id__subject_csa_id__name',
+            'indicator_id__name',
+            'indicator_id__desc',
+            'indicator_id__footer_desc',
+            'indicator_id__stat_category',
+            'indicator_id__time_period_id__name',
+            'indicator_id__unit_id__name',
+            'year',
             'created_at',
             'updated_at',
         )

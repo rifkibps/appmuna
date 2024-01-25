@@ -1,0 +1,342 @@
+{% extends 'vertical/base.html' %}
+{% load static %}
+
+{% block nav_content %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Konten Aplikasi</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Tabel Statistik</a></li>
+                    <li class="breadcrumb-item active">Konten Tabel Statistik</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Konten Tabel Statistik</h4>
+        </div>
+    </div>
+</div>     
+<!-- end page title --> 
+{% endblock nav_content %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-primary alert-dismissible d-none" id="alertStatusInput" role="alert">
+            Anda dapat menghapus <span id="countData"></span> data terpilih? <a href="javascript: void(0);" class="alert-link" id="submitMultiple">Hapus Data</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+       
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <a href="javascript:void(0)" id="input-table" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Pilih Tabel Statistik</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-lg-3">
+                    <div class="card">
+                        <div id="external-events" class="card-body">
+                            <div class="external-event bg-info-lighten text-info" data-class="bg-info">
+                                Detail Tabel/Indikator
+                            </div>
+                            <div class="mt-3 d-none d-xl-block">
+                                <h5 class="text-left">Nama Tabel:</h5>
+                                <p class="text-left">{{name}}</p>
+                                <h5 class="text-left">Subjek:</h5>
+                                <p class="text-left">{{subject_id}}</p>
+                                <h5 class="text-left">Subjek CSA:</h5>
+                                <p class="text-left">{{subject_csa_id}}</p>
+                                <h5 class="text-left">Deskripsi:</h5>
+                                <p style="text-align: justify;">{{desc}}</p>
+                            </div>
+    
+                            <div class="mt-3 d-none d-xl-block">
+                                <h5 class="text-left">Kelompok Karakteristik ({{col_group_name}})</h5>
+                                <ul class="ps-3">
+                                    {% for dt  in col_group_id %}
+                                        <li class="text-left text-muted">{{dt.item_char}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+    
+                            <div class="mt-3 d-none d-xl-block">
+                                <h5 class="text-left">Kelompok Judul Baris ({{row_group_name}})</h5>
+                                <ul class="px-1" style="list-style:none">
+                                    {% for dt  in row_group_id %}
+                                        <li class="text-left text-muted">{{dt.order_num}}.&emsp;{{dt.item_row}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+    
+                            <div class="mt-3 d-none d-xl-block">
+                                <h5 class="text-left">Periode Data:</h5>
+                                <p class="text-left">{{time_period_id}}</p>
+                                <h5 class="text-left">Satuan:</h5>
+                                <p class="text-left">{{unit_id}}</p>
+                                <h5 class="text-left">Kategori Statistik:</h5>
+                                <p class="text-left"><span class="badge bg-primary">{{stat_category}}</span></p>
+                            </div>
+                        </div>
+                    </div>
+            </div> <!-- end col-->
+
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-body px-3 mt-4 mt-lg-0">
+                        <div class="row mb-3">
+                            <div class="col-sm-4">
+                                <button class="btn btn-primary btn-sm btn-rounded font-12" disabled> Tahun {{current_year}} </button>
+                                <button class="btn btn-info btn-sm btn-rounded font-12" disabled> {{periode_id.item_period}} </button>
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="text-sm-end">
+                                    <button type="button" class="btn btn-primary btn-sm btn-rounded font-12 me-1"> <i class="mdi mdi-file-move"></i> Import </button>
+                                    <button type="button" class="btn btn-primary btn-sm btn-rounded font-12"> <i class="mdi mdi-download"></i> Export </button>
+                                </div>
+                            </div><!-- end col-->
+                        </div>
+
+                        <div class="mb-3">
+                            <h3 class="font-weight-bold"><strong>{{name}}</strong></strong></h3>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <p class="font-weight-light font-13">Terakhir diperbarui: {{updated_at.0}}</p>
+                        </div>
+
+
+                        <form method="POST" action="{% url 'backend:backend-content-input-submit' %}" class="needs-validation" novalidate="">
+                            {% csrf_token %}
+                            <table class="table table-sm table-bordered table-centered table-responsive nowrap w-100 mb-1">
+                                    <thead class="bg-primary-lighten">
+                                        <tr>
+                                            <td rowspan="2" class="text-center">No</td>
+                                            <td rowspan="2" class="text-center">Kelompok</td>
+                                            
+                                            {% if col_group_id.0 != 'Tidak tersedia' %}
+                                                <td class="text-center" colspan="{{ col_group_id|length }}">Karakteristik Data</td>
+                                            {% else %}
+                                                <td class="text-center" >{{current_year}}</td>
+                                            {% endif %}
+
+                                        </tr>
+                                        <tr>
+                                            {% if col_group_id.0 != 'Tidak tersedia' %}
+                                            
+                                                {% for dt_col in col_group_id %}
+                                                    <td class="text-center" data-id="{{dt_col.id}}">{{dt_col.item_char}}</td>
+                                                {% endfor %}
+                                
+                                            {% endif %}
+        
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {% for dt_row in row_group_id %}
+                                            <tr>
+                                                <td class="text-center">{{dt_row.order_num}}</td>
+                                                <td>{{dt_row.item_row}}</td>
+                                                
+                                                {% if col_group_id != '' %}
+                                                    {% for dt_col in col_group_id %}
+                                                        <td><input type="text" class="form-control form-control-sm" name="{{dt_row.id}}-{{dt_col.id}}" style="text-align: right"></td>
+                                                    {% endfor %}
+
+                                                {% else %}
+                                                    <td><input type="text" class="form-control form-control-sm" name="{{dt_row.id}}" style="text-align: right"></td>
+                                                {% endif %}
+                                                
+                                            </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                            </table>
+                                
+                        </form>
+                        <h5 class="font-13 font-weight-light" style="font-size:14px"><i>{{footer_desc}}</i></h5>
+
+                    </div>
+                </div>
+            </div> <!-- end col -->
+
+        </div> <!-- end row -->
+
+    </div>
+    <!-- end col-12 -->
+</div> <!-- end row -->
+
+<div class="modal fade" id="select-table-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="GET" class="needs-validation" name="event-form" id="form-prepare-content" novalidate="">
+                <div class="modal-header py-3 px-4 border-bottom-0">
+                    <h5 class="modal-title text-secondary" id="modal-title">Pilih Indikator/Tabel Statistik</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 pb-4 pt-0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label class="control-label form-label">Subjek Statistik</label>
+                                <select class="form-select" name="subject_id" id="subject_id" required="">
+                                    <option value="" selected>Pilih Subjek</option>
+                                    {% for dt in subjects %}
+                                        <option value="{{dt.id}}">{{dt.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="invalid-feedback">Indikator/Tabel statistik harus terisi</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label class="control-label form-label">Nama Indikator</label>
+                                <select class="form-select" name="indicator_id" id="indicator_id" required="">
+                                    <option value="" selected>Pilih Indikator</option>
+                                </select>
+                                <div class="invalid-feedback">Indikator/Tabel statistik harus terisi</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="control-label form-label">Tahun</label>
+                                <select class="form-select" name="year" id="year" required="">
+                                    <option value="" selected="">Pilih Tahun</option>
+                                    {% for year in years %}
+                                        <option value="{{year}}">{{year}}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="invalid-feedback">Tahun harus terisi</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="mb-3">
+                                <label class="control-label form-label">Turunan Tahun</label>
+                                <select class="form-select" name="periode_id" id="periode_id" required="">
+                                    <option value="" selected="">Pilih Turunan Tahun</option>
+                                </select>
+                                <div class="invalid-feedback">Periode Turunan Tahun harus terisi</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary" id="btn-save-event">Pilih Data</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div> <!-- end modal-content-->
+    </div> <!-- end modal dialog-->
+</div>
+
+{% endblock content %}
+
+
+{% block js-extender %}
+
+<script>
+
+    'use strict'
+
+    function resetForm(){
+        $("#indicators-form")[0].reset()
+        $("#indicators-form").removeClass('was-validated')
+        $("#id_id").val("")
+    }
+
+    $("#form-prepare-contentA").on("submit", function (e){
+        
+        e.preventDefault()
+        var btn_act = $('input[name=submit]').val()
+        var serializedData = $(this).serialize();
+        $('.invalid-feedback').html('')
+        $('.is_invalid').removeClass('is_invalid')
+        
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('action'),
+            data: serializedData,
+            
+            success: function (response) {
+                console.log(response)
+            },
+
+            error: function (response) {
+                push_notif("Something wrong!", response.message, "error");
+            }
+        })
+
+    })
+
+    $('#input-table').on('click', function (e){
+        $('#select-table-modal').modal('show')
+    })
+
+    $('#subject_id').on('change', function (e){
+        
+        $.ajax({
+            url: '{% url 'backend:backend-content-input' %}',
+            type: "POST",
+            dataType: "json",
+            data : {
+                'subject_id' : $(this).val()
+            },
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            success: (data) => {
+                console.log(data)
+                if (data.status == 'success'){
+                    $('#indicator_id').html('')
+                    $('#indicator_id').html(data.instance)
+                }else{
+                    $('#indicator_id').html(data.instance)
+                    push_notif("Something wrong!", data.message, "error");
+                }
+            },
+            error: (error) => {
+                push_notif("Something wrong!", error.message, "error");
+            }
+        });
+    })
+    
+    $('#indicator_id').on('change', function (e){
+        
+        $.ajax({
+            url: '{% url 'backend:backend-content-input' %}',
+            type: "POST",
+            dataType: "json",
+            data : {
+                'indicator_id' : $(this).val()
+            },
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            success: (data) => {
+                console.log(data)
+                if (data.status == 'success'){
+                    $('#periode_id').html('')
+                    $('#periode_id').html(data.instance)
+                }else{
+                    $('#periode_id').html(data.instance)
+                    push_notif("Something wrong!", data.message, "error");
+                }
+            },
+            error: (error) => {
+                push_notif("Something wrong!", error.message, "error");
+            }
+        });
+    })
+    
+</script>
+
+{% endblock js-extender %}
