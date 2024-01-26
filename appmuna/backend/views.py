@@ -17,6 +17,7 @@ from . import models, forms, resources
 
 import datetime
 from operator import itemgetter
+from datetime import datetime as datetime_
 
 class BackendAppClassView(LoginRequiredMixin, View):
 
@@ -1567,26 +1568,38 @@ class BackendContentExportClassView(LoginRequiredMixin, View):
 class BackendContentInputClassView(View):
     
     def get(self, request):
-        
 
         context = {
             'title' :   'Backend | Tabel Statistik',
             'subjects' : models.BackendSubjectsModel.objects.values(),
-            
         }
 
         years = datetime.datetime.today().year
         context['years'] = list(range(years+16, years - 25, -1))
-                
-        if request.GET.get('subject_id') and request.GET.get('indicator_id') and request.GET.get('year') and request.GET.get('periode_id'):
+        
+        if request.GET.get('subject_id') and request.GET.get('indicator_id_select') and request.GET.get('year') and request.GET.get('periode_id'):
+
+
+
+
             context['d_form'] = 'submitted'
             subject_id = request.GET.get('subject_id')
-            indicator_id = request.GET.get('indicator_id')
+            indicator_id = request.GET.get('indicator_id_select')
             year = request.GET.get('year')
             period_item_id = request.GET.get('periode_id')
-
+            
             data_indicator = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
             
+            data_contents = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id, year=year, item_period = period_item_id).values()
+            
+            data_content_table = []
+            for dt in data_contents:
+                data_content_table.append({
+                    dt["item_row"] : {dt["item_char"] : dt["value"]},
+                })
+
+            context['data_contents'] = data_content_table
+
             context['data_indicator'] = data_indicator
             context['created_at'] = data_indicator.created_at.strftime('%d %B %Y'),
             context['updated_at'] = data_indicator.updated_at.strftime('%d %B %Y'),
@@ -1709,16 +1722,33 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
                 year = data_request.get('year')
                 item_period = data_request.get('item_period')
 
-                # indicator_data = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
+                indicator_data = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
+                chars_item = models.BackendCharacteristicItemsModel.objects.filter(char_id = indicator_data.col_group_id).order_by('id')
+                rows_item = models.BackendRowsItemsModel.objects.filter(row_id = indicator_data.row_group_id).order_by('id')
 
-                # chars_item = models.BackendCharacteristicItemsModel.objects.filter(char_id = indicator_data.col_group_id).order_by('id')
-                print(indicator_id)
+                objs_bulk_create = []
+                for key, value in data_request.items():
+                    if key in ['csrfmiddlewaretoken', 'indicator_id', 'year', 'item_period']:
+                        continue
+                    
+                    row_item_id, col_item_id = key.split('-')
+                    
+                    objs_bulk_create.append(
+                        model(
+                            indicator_id = indicator_data,
+                            year = year,
+                            item_period = item_period,
+                            item_char = col_item_id,
+                            item_row = row_item_id,
+                            value = data_request.get(key)
+                        )
+                    )
 
-                # for col_del in ['csrfmiddlewaretoken', 'indicator_id', 'year', 'item_period']:
-                #     del data_request[col_del]
-
-
-
-                print(data_request)
+                if len(objs_bulk_create) > 0:
+                    message = f'Data for the indicator <strong><i>"{indicator_data.name}"</i></strong> has been successfully updated on <strong>{datetime_.today().strftime('%d %B %Y')}</strong>.'
+                    model.objects.bulk_create(objs_bulk_create)
+                    return JsonResponse({'status': 'success', 'message' : message}, status=200)
+                else:
+                    return JsonResponse({'status': 'failed', 'message' : 'The indicator table content data is empty'}, status=200)
         return JsonResponse({'status': 'Invalid request'}, status=400)
     
