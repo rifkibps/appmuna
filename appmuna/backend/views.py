@@ -1595,7 +1595,7 @@ class BackendContentInputClassView(View):
             data_content_table = []
             for dt in data_contents:
                 data_content_table.append({
-                    dt["item_row"] : {dt["item_char"] : dt["value"]},
+                    dt["item_row"] : {dt["item_char"] : {'val':dt['value'], 'id' : dt['id']} }
                 })
 
             context['data_contents'] = data_content_table
@@ -1732,7 +1732,7 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
                         continue
                     
                     row_item_id, col_item_id = key.split('-')
-                    
+                    # Jangan langsung masukin item_char dari client, harus dilooping dulu dari server
                     objs_bulk_create.append(
                         model(
                             indicator_id = indicator_data,
@@ -1745,7 +1745,7 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
                     )
 
                 if len(objs_bulk_create) > 0:
-                    message = f'Data for the indicator <strong><i>"{indicator_data.name}"</i></strong> has been successfully updated on <strong>{datetime_.today().strftime('%d %B %Y')}</strong>.'
+                    message = f'Data for the indicator <strong><i>"{indicator_data.name}"</i></strong> has been successfully updated on <strong>{datetime_.today().strftime("%d %B %Y")}</strong>.'
                     model.objects.bulk_create(objs_bulk_create)
                     return JsonResponse({'status': 'success', 'message' : message}, status=200)
                 else:

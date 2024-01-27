@@ -174,9 +174,9 @@ class BackendContentIndicatorsModel(models.Model):
 
    indicator_id = models.ForeignKey(BackendIndicatorsModel, on_delete=models.CASCADE, null=False, related_name='content_indicator')
    year = models.CharField(max_length=5, null=False, blank=False, verbose_name='Tahun Indikator')
-   item_period = models.CharField(max_length=5, null=False, blank=False, verbose_name='Periode Waktu')
-   item_char = models.CharField(max_length=5, null=True, blank=True, verbose_name='Item Karakteristik Waktu')
-   item_row = models.CharField(max_length=5, null=False, blank=False, verbose_name='Item Judul Baris')
+   item_period = models.CharField(max_length=255, null=False, blank=False, verbose_name='Periode Waktu')
+   item_char = models.CharField(max_length=255, null=True, blank=True, verbose_name='Item Karakteristik Waktu')
+   item_row = models.CharField(max_length=255, null=False, blank=False, verbose_name='Item Judul Baris')
    value = models.FloatField(null=True, verbose_name = 'Nilai')
    created_at = models.DateField(auto_now_add = True, editable=False)
    updated_at = models.DateField(auto_now = True, editable=False)
