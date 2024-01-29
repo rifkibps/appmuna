@@ -1581,7 +1581,6 @@ class BackendContentInputClassView(View):
         
         if request.GET.get('subject_id') and request.GET.get('indicator_id_select') and request.GET.get('year') and request.GET.get('periode_id'):
 
-
             context['d_form'] = 'submitted'
             subject_id = request.GET.get('subject_id')
             indicator_id = request.GET.get('indicator_id_select')
