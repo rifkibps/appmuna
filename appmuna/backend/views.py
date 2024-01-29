@@ -19,6 +19,8 @@ import datetime
 from operator import itemgetter
 from datetime import datetime as datetime_
 
+from pprint import pprint
+
 class BackendAppClassView(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -1580,8 +1582,6 @@ class BackendContentInputClassView(View):
         if request.GET.get('subject_id') and request.GET.get('indicator_id_select') and request.GET.get('year') and request.GET.get('periode_id'):
 
 
-
-
             context['d_form'] = 'submitted'
             subject_id = request.GET.get('subject_id')
             indicator_id = request.GET.get('indicator_id_select')
@@ -1595,8 +1595,16 @@ class BackendContentInputClassView(View):
             data_content_table = []
             for dt in data_contents:
                 data_content_table.append({
-                    dt["item_row"] : {dt["item_char"] : {'val':dt['value'], 'id' : dt['id']} }
+                    dt["item_row"] : {
+                        dt["item_char"] : {
+                            'val': format(dt['value'], f'.{data_indicator.decimal_point}f') if dt['value'] else '',
+                            'id' : dt['id']
+                        }
+                    }
                 })
+
+            if len(data_contents) > 0 :
+                context['status_update'] = True
 
             context['data_contents'] = data_content_table
 
@@ -1718,37 +1726,137 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
                 model = models.BackendContentIndicatorsModel
 
                 data_request = request.POST
-                indicator_id = data_request.get('indicator_id')
                 year = data_request.get('year')
-                item_period = data_request.get('item_period')
 
-                indicator_data = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
-                chars_item = models.BackendCharacteristicItemsModel.objects.filter(char_id = indicator_data.col_group_id).order_by('id')
-                rows_item = models.BackendRowsItemsModel.objects.filter(row_id = indicator_data.row_group_id).order_by('id')
+                indicator_data = get_object_or_404(models.BackendIndicatorsModel, pk=data_request.get('indicator_id'))
+                period_data = models.BackendPeriodNameItemsModel.objects.filter(period_id=indicator_data.time_period_id.id, pk=data_request.get('item_period'))
 
-                objs_bulk_create = []
+                if period_data.exists() is False:
+                    return JsonResponse({'status': 'failed', 'message' : 'data period not found in dynamic table'}, status=200)
+
+                chars_items = models.BackendCharacteristicItemsModel.objects.filter(char_id = indicator_data.col_group_id).order_by('id')
+                rows_items = models.BackendRowsItemsModel.objects.filter(row_id = indicator_data.row_group_id).order_by('id')
+
+                data_collections = []
+
+                status_update = True if any("id_" in key for key in list(data_request.keys())) else False
+                
                 for key, value in data_request.items():
-                    if key in ['csrfmiddlewaretoken', 'indicator_id', 'year', 'item_period']:
+                    if key in ['csrfmiddlewaretoken', 'indicator_id', 'year', 'item_period'] or 'id_' in key:
                         continue
                     
                     row_item_id, col_item_id = key.split('-')
-                    # Jangan langsung masukin item_char dari client, harus dilooping dulu dari server
-                    objs_bulk_create.append(
-                        model(
-                            indicator_id = indicator_data,
-                            year = year,
-                            item_period = item_period,
-                            item_char = col_item_id,
-                            item_row = row_item_id,
-                            value = data_request.get(key)
-                        )
-                    )
+                    
+                    data_ =  {
+                            'indicator_id' : indicator_data,
+                            'year' : year,
+                            'item_period' : period_data.first().id,
+                            'item_char' : col_item_id,
+                            'item_row' : row_item_id,
+                            'value' : format(float(data_request.get(key)), f'.{str(indicator_data.decimal_point)}f') if data_request.get(key) else None
+                        }
 
-                if len(objs_bulk_create) > 0:
+                    if status_update:
+                        data_['id_content_indicator'] = data_request.get('id_' + key)
+
+                    data_collections.append(data_)
+
+
+                bulks_process = []
+                for row_item in rows_items:
+                    for char_item in chars_items:
+
+                        get_val = [x for x in data_collections if x['item_row'] == str(row_item.id) and x['item_char'] == str(char_item.id)]
+
+                        if len(get_val) > 0:
+                            data_query = get_val[0]
+
+                            if status_update:
+                                db_check = model.objects.filter(
+                                    id = data_query['id_content_indicator'],
+                                    indicator_id = data_query['indicator_id'],
+                                    year = data_query['year'],
+                                    item_period = data_query['item_period'],
+                                    item_char = data_query['item_char'],
+                                    item_row = data_query['item_row'],
+                                    )
+                                
+                                if db_check.exists():
+                                    content_indicator_structure = db_check.first()
+                                    content_indicator_structure.value = data_query['value']
+                                    bulks_process.append(content_indicator_structure)
+                                else:
+                                    return JsonResponse({'status': 'failed', 'message' : 'Data not found for the specified cell.'}, status=200)
+
+                            else:
+                                bulks_process.append(
+                                    model(
+                                        indicator_id = data_query['indicator_id'],
+                                        year = data_query['year'],
+                                        item_period = data_query['item_period'],
+                                        item_char = data_query['item_char'],
+                                        item_row = data_query['item_row'],
+                                        value = data_query['value']
+                                    )
+                                )
+                        else:
+                            return JsonResponse({'status': 'failed', 'message' : 'The indicator structure (line headings or characteristics) is inconsistent.'}, status=200)
+                    
+                if len(bulks_process) > 0:
                     message = f'Data for the indicator <strong><i>"{indicator_data.name}"</i></strong> has been successfully updated on <strong>{datetime_.today().strftime("%d %B %Y")}</strong>.'
-                    model.objects.bulk_create(objs_bulk_create)
+                    if status_update: 
+                        model.objects.bulk_update(bulks_process, ['value'])
+                    else:
+                        model.objects.bulk_create(bulks_process)
+
                     return JsonResponse({'status': 'success', 'message' : message}, status=200)
                 else:
                     return JsonResponse({'status': 'failed', 'message' : 'The indicator table content data is empty'}, status=200)
         return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+# class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
+    
+#     def post(self, request):
+#         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+#         if is_ajax:
+#             if request.method == 'POST':
+                
+#                 model = models.BackendContentIndicatorsModel
+
+#                 data_request = request.POST
+#                 indicator_id = data_request.get('indicator_id')
+#                 year = data_request.get('year')
+#                 item_period = data_request.get('item_period')
+
+#                 indicator_data = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
+#                 chars_item = models.BackendCharacteristicItemsModel.objects.filter(char_id = indicator_data.col_group_id).order_by('id')
+#                 rows_item = models.BackendRowsItemsModel.objects.filter(row_id = indicator_data.row_group_id).order_by('id')
+
+#                 objs_bulk_create = []
+#                 for key, value in data_request.items():
+#                     if key in ['csrfmiddlewaretoken', 'indicator_id', 'year', 'item_period']:
+#                         continue
+                    
+#                     row_item_id, col_item_id = key.split('-')
+#                     # Jangan langsung masukin item_char dari client, harus dilooping dulu dari server
+#                     objs_bulk_create.append(
+#                         model(
+#                             indicator_id = indicator_data,
+#                             year = year,
+#                             item_period = item_period,
+#                             item_char = col_item_id,
+#                             item_row = row_item_id,
+#                             value = data_request.get(key)
+#                         )
+#                     )
+
+#                 if len(objs_bulk_create) > 0:
+#                     message = f'Data for the indicator <strong><i>"{indicator_data.name}"</i></strong> has been successfully updated on <strong>{datetime_.today().strftime("%d %B %Y")}</strong>.'
+#                     model.objects.bulk_create(objs_bulk_create)
+#                     return JsonResponse({'status': 'success', 'message' : message}, status=200)
+#                 else:
+#                     return JsonResponse({'status': 'failed', 'message' : 'The indicator table content data is empty'}, status=200)
+#         return JsonResponse({'status': 'Invalid request'}, status=400)
     

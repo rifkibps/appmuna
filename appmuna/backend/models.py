@@ -113,7 +113,7 @@ class BackendPeriodNameItemsModel(models.Model):
    item_period = models.CharField(max_length=256, null=False, blank=False, verbose_name='Item Periode Waktu' )
 
    def __str__(self):
-      return f"{self.period_id.name} | {self.item_period}"
+      return f"{self.period_id}-{self.item_period} {self.period_id.name} | {self.item_period}"
 
 
 # Unit Name Model
@@ -177,13 +177,12 @@ class BackendContentIndicatorsModel(models.Model):
    item_period = models.CharField(max_length=255, null=False, blank=False, verbose_name='Periode Waktu')
    item_char = models.CharField(max_length=255, null=True, blank=True, verbose_name='Item Karakteristik Waktu')
    item_row = models.CharField(max_length=255, null=False, blank=False, verbose_name='Item Judul Baris')
-   value = models.FloatField(null=True, verbose_name = 'Nilai')
+   value = models.DecimalField(null=True, blank=True, verbose_name = 'Nilai', decimal_places = 10, max_digits=50)
    created_at = models.DateField(auto_now_add = True, editable=False)
    updated_at = models.DateField(auto_now = True, editable=False)
    
    def __str__(self):
       return f"{self.indicator_id.name} | {self.year}"
-   
 
 # infografis Model
 class BackendInfographicsModel(models.Model):
