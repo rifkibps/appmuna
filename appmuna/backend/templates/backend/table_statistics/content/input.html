@@ -105,9 +105,9 @@
                             </div>  
                             <div class="col-sm-8">
                                 <div class="text-sm-end">
-                                    {% if status_update %}
-                                        <button type="button" class="btn btn-success btn-sm btn-rounded font-12 me-1" id="edit-data-content"> <i class="mdi mdi-file-move"></i> Edit Data </button>
-                                    {% endif %}
+
+                                    <button type="button" class="btn btn-success btn-sm btn-rounded font-12 me-1 {% if status_update %} {% else %} d-none {% endif %}" id="edit-data-content"> <i class="mdi mdi-file-move"></i> Edit Data </button>
+                                    <button type="button" class="btn btn-primary btn-sm btn-rounded font-12 me-1 {% if status_update %} {% else %} d-none {% endif %}" id="delete-data-content"> <i class="mdi mdi-trash-can"></i> Hapus Data </button>
                                     <button type="button" class="btn btn-primary btn-sm btn-rounded font-12 me-1"> <i class="mdi mdi-file-move"></i> Import </button>
                                     <button type="button" class="btn btn-primary btn-sm btn-rounded font-12"> <i class="mdi mdi-download"></i> Export </button>
                                 </div>
@@ -166,16 +166,32 @@
 
                                                         {% for dt_col in col_groups %}
 
-                                                            {% with value=data_contents|get_item:dt_row.id|get_item:dt_col.id %}
-                                                                {% if value.0 %}
+                                                            {% if col_groups.0 != 'Tidak tersedia' %}
+            
+                                                                {% with value=data_contents|get_item:dt_row.id|get_item:dt_col.id %}
+                                                                    {% if value.0 %}
+                                                                        <td>
+                                                                            <input type="hidden" name="id_{{dt_row.id}}-{{dt_col.id}}" value="{{value.0.id}}">
+                                                                            <input type="text" class="form-control form-control-sm data-input-content" name="{{dt_row.id}}-{{dt_col.id}}" autocomplete="off" value="{{value.0.val}}" style="text-align: right">
+                                                                        </td>
+                                                                    {% else %}
+                                                                        <td><input type="text" class="form-control form-control-sm data-input-content" name="{{dt_row.id}}-{{dt_col.id}}" autocomplete="off" style="text-align: right"></td>
+                                                                    {% endif %}
+                                                                {% endwith %}
+                                                            {% else %}
+                                                                
+
+                                                                {% with value=data_contents|get_item:dt_row.id %}
+                                                                    {% if value %}
                                                                     <td>
                                                                         <input type="hidden" name="id_{{dt_row.id}}-{{dt_col.id}}" value="{{value.0.id}}">
                                                                         <input type="text" class="form-control form-control-sm data-input-content" name="{{dt_row.id}}-{{dt_col.id}}" autocomplete="off" value="{{value.0.val}}" style="text-align: right">
                                                                     </td>
-                                                                {% else %}
-                                                                    <td><input type="text" class="form-control form-control-sm data-input-content" name="{{dt_row.id}}-{{dt_col.id}}" autocomplete="off" style="text-align: right"></td>
-                                                                {% endif %}
-                                                            {% endwith %}
+                                                                    {% else %}
+                                                                        <td><input type="text" class="form-control form-control-sm data-input-content" name="{{dt_row.id}}-{{dt_col.id}}" autocomplete="off" style="text-align: right"></td>
+                                                                    {% endif %}
+                                                                {% endwith %}
+                                                            {% endif %}
 
                                                         {% endfor %}
     
@@ -398,6 +414,10 @@
 
                 if (response.status == 'success'){
                     push_notif("Sucess!", response.message, "success")
+                    
+                    $('#edit-data-content').removeClass('d-none')
+                    $('#delete-data-content').removeClass('d-none')
+
                     $('.data-input-content').attr('disabled', 'disabled')
                     $('#alertStatusInput .content-alert').html(response.message)
                     $('#alertStatusInput').removeClass('d-none')
@@ -421,7 +441,6 @@
     {% if status_update %}
     $('.data-input-content').attr('disabled', 'disabled')
     {% endif %}
-
     
         
     $('#edit-data-content').on('click', function (e){
@@ -435,6 +454,55 @@
         )
     })
     
+
+    $('#delete-data-content').on('click', function (e){
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "Apakah anda yakin ingin menghapus data?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+    
+                $.ajax({
+                    url: '{% url 'backend:backend-content-delete' %}',
+                    type: "POST",
+                    dataType: "json",
+                    data : {
+                        'indicator_id' : $('#indicator_id').val(),
+                        'year' : $('#year').val(),
+                        'item_period' : $('#item_period').val(),
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": '{{csrf_token}}',
+                    },
+                    success: (response) => {
+                        $('#alertStatusInput .content-alert').html(response.message)
+                        $('#alertStatusInput').removeClass('d-none')
+                        
+                        $('.data-input-content').val('')
+                        $('.data-input-content').removeAttr('disabled')
+
+                        if (response.status == 'success'){
+                            push_notif("Sucess!", response.message, "success") 
+                        }else{
+                            push_notif("Something wrong!", response.message, "error") 
+                        }
+                    },
+                    error: (error) => {
+                        push_notif("Something wrong!", error, "danger") 
+                    }
+                });
+            }
+        }) 
+
+    })
+
 </script>
 
 {% endblock js-extender %}

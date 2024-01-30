@@ -1529,8 +1529,8 @@ class BackendContentDeleteClassView(LoginRequiredMixin, View):
         if is_ajax:
             if request.method == 'POST':
                 try:
-                    data = get_object_or_404(models.BackendContentIndicatorsModel, pk=request.POST.get('id'))
-                    old_dt = data.indicator_id.name 
+                    data = get_object_or_404(models.BackendIndicatorsModel, pk=request.POST.get('id'))
+                    old_dt = data.name 
                     data.delete()
                     return JsonResponse({'status' : 'success', 'message': f'The table data statistics "{old_dt}" was deleted successfully.'})
                 except:
@@ -1590,17 +1590,27 @@ class BackendContentInputClassView(View):
             data_indicator = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
             
             data_contents = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id, year=year, item_period = period_item_id).values()
-            
+    
             data_content_table = []
             for dt in data_contents:
-                data_content_table.append({
-                    dt["item_row"] : {
-                        dt["item_char"] : {
+
+                if len(dt['item_char']) > 0:
+                    content_data = {
+                        dt["item_row"] : {
+                            dt["item_char"] : {
+                                'val': format(dt['value'], f'.{data_indicator.decimal_point}f') if dt['value'] else '',
+                                'id' : dt['id']
+                            }
+                        }
+                    }
+                else:
+                    content_data = {
+                        dt["item_row"] : {
                             'val': format(dt['value'], f'.{data_indicator.decimal_point}f') if dt['value'] else '',
                             'id' : dt['id']
                         }
                     }
-                })
+                data_content_table.append(content_data)
 
             if len(data_contents) > 0 :
                 context['status_update'] = True
@@ -1731,7 +1741,7 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
                 period_data = models.BackendPeriodNameItemsModel.objects.filter(period_id=indicator_data.time_period_id.id, pk=data_request.get('item_period'))
 
                 if period_data.exists() is False:
-                    return JsonResponse({'status': 'failed', 'message' : 'data period not found in dynamic table'}, status=200)
+                    return JsonResponse({'status': 'failed', 'message' : 'Data period not found in dynamic table'}, status=200)
 
                 chars_items = models.BackendCharacteristicItemsModel.objects.filter(char_id = indicator_data.col_group_id).order_by('id')
                 rows_items = models.BackendRowsItemsModel.objects.filter(row_id = indicator_data.row_group_id).order_by('id')
@@ -1760,29 +1770,64 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
 
                     data_collections.append(data_)
 
-
                 bulks_process = []
                 for row_item in rows_items:
-                    for char_item in chars_items:
+                    
+                    if chars_items.count() > 0:
+                        for char_item in chars_items:
 
-                        get_val = [x for x in data_collections if x['item_row'] == str(row_item.id) and x['item_char'] == str(char_item.id)]
+                            get_val = [x for x in data_collections if x['item_row'] == str(row_item.id) and x['item_char'] == str(char_item.id)]
+
+                            if len(get_val) > 0:
+                                data_query = get_val[0]
+
+                                if status_update:
+                                    db_check = model.objects.filter(
+                                        id = data_query['id_content_indicator'],
+                                        indicator_id = data_query['indicator_id'],
+                                        year = data_query['year'],
+                                        item_period = data_query['item_period'],
+                                        item_char = data_query['item_char'],
+                                        item_row = data_query['item_row'],
+                                        )
+                                    
+                                    if db_check.exists():
+                                        content_indicator_structure = db_check.first()
+                                        content_indicator_structure.value = data_query['value']
+                                        bulks_process.append(content_indicator_structure)
+                                    else:
+                                        return JsonResponse({'status': 'failed', 'message' : 'Data not found for the specified cell.'}, status=200)
+
+                                else:
+                                    bulks_process.append(
+                                        model(
+                                            indicator_id = data_query['indicator_id'],
+                                            year = data_query['year'],
+                                            item_period = data_query['item_period'],
+                                            item_char = data_query['item_char'],
+                                            item_row = data_query['item_row'],
+                                            value = data_query['value']
+                                        )
+                                    )
+                            else:
+                                return JsonResponse({'status': 'failed', 'message' : 'The indicator structure (line headings or characteristics) is inconsistent.'}, status=200)
+                    else:
+                        get_val = next(item for item in data_collections if item["item_row"] == str(row_item.id))
 
                         if len(get_val) > 0:
-                            data_query = get_val[0]
 
                             if status_update:
                                 db_check = model.objects.filter(
-                                    id = data_query['id_content_indicator'],
-                                    indicator_id = data_query['indicator_id'],
-                                    year = data_query['year'],
-                                    item_period = data_query['item_period'],
-                                    item_char = data_query['item_char'],
-                                    item_row = data_query['item_row'],
+                                    id = get_val['id_content_indicator'],
+                                    indicator_id = get_val['indicator_id'],
+                                    year = get_val['year'],
+                                    item_period = get_val['item_period'],
+                                    item_row = get_val['item_row'],
                                     )
                                 
                                 if db_check.exists():
                                     content_indicator_structure = db_check.first()
-                                    content_indicator_structure.value = data_query['value']
+                                    content_indicator_structure.value = get_val['value']
                                     bulks_process.append(content_indicator_structure)
                                 else:
                                     return JsonResponse({'status': 'failed', 'message' : 'Data not found for the specified cell.'}, status=200)
@@ -1790,17 +1835,17 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
                             else:
                                 bulks_process.append(
                                     model(
-                                        indicator_id = data_query['indicator_id'],
-                                        year = data_query['year'],
-                                        item_period = data_query['item_period'],
-                                        item_char = data_query['item_char'],
-                                        item_row = data_query['item_row'],
-                                        value = data_query['value']
+                                        indicator_id = get_val['indicator_id'],
+                                        year = get_val['year'],
+                                        item_period = get_val['item_period'],
+                                        item_char = get_val['item_char'],
+                                        item_row = get_val['item_row'],
+                                        value = get_val['value']
                                     )
                                 )
                         else:
                             return JsonResponse({'status': 'failed', 'message' : 'The indicator structure (line headings or characteristics) is inconsistent.'}, status=200)
-                    
+                        
                 if len(bulks_process) > 0:
                     message = f'Data for the indicator <strong><i>"{indicator_data.name}"</i></strong> has been successfully updated on <strong>{datetime_.today().strftime("%d %B %Y")}</strong>.'
                     if status_update: 
@@ -1812,6 +1857,29 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
                 else:
                     return JsonResponse({'status': 'failed', 'message' : 'The indicator table content data is empty'}, status=200)
         return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendContentDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+            
+                try:
+                    data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=request.POST.get('indicator_id'), year=request.POST.get('year'), item_period = request.POST.get('item_period'))
+                    name = data.first().indicator_id.name
+                    year = data.first().year
+                    period_name = models.BackendPeriodNameItemsModel.objects.filter(pk=request.POST.get('item_period'))
+                    data.delete()
+                    msg = f'Statistical table "{name}" for {year} {period_name.first().item_period} has been successfully deleted'
+                    return JsonResponse({'status' : 'success', 'message': msg})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
 
 
 # class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
