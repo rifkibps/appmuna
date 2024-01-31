@@ -57,9 +57,8 @@
                                 <th>No</th>
                                 <th>Subjek</th>
                                 <th>Tabel/Indikator</th>
-                                <th>Kategori Statistik</th>
-                                <th>Periode Data</th>
                                 <th>Tahun</th>
+                                <th>Periode Data</th>
                                 <th>Dibuat</th>
                                 <th>Diupdate</th>
                                 <th>Action</th>
@@ -111,9 +110,8 @@
             {"data" : 'no'},
             {"data" : 'indicator_id__subject_id__name'},
             {"data" : 'indicator_id__name'},
-            {"data" : 'indicator_id__stat_category'},
-            {"data" : 'indicator_id__time_period_id__name'},
             {"data" : 'year'},
+            {"data" : 'indicator_id__time_period_id__name'},
             {"data" : 'created_at'},
             {"data" : 'updated_at'},
             {"data" : 'actions'},
@@ -183,7 +181,9 @@
                     type: "POST",
                     dataType: "json",
                     data : {
-                        'id' : e
+                        'indicator_id' : $(e).attr('data-indicator_id'),
+                        'year' : $(e).attr('data-year'),
+                        'item_period' : $(e).attr('data-item_period')
                     },
                     headers: {
                         "X-Requested-With": "XMLHttpRequest",
