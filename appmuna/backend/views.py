@@ -1419,7 +1419,11 @@ class BackendContentClassView(View):
     def get(self, request):
         context = {
             'title' : 'Backend | Tabel Statistik',
+            'subjects' : models.BackendSubjectsModel.objects.values(),
         }
+
+        years = datetime.datetime.today().year
+        context['years'] = list(range(years+16, years - 25, -1))
         return render(request, 'backend/table_statistics/content/manage.html', context)
 
 class BackendContentJsonClassView(LoginRequiredMixin, View):
@@ -1451,16 +1455,15 @@ class BackendContentJsonClassView(LoginRequiredMixin, View):
         if (order_dir == "desc"):
             order_col_name =  str('-' + order_col_name)
 
-        model = models.BackendContentIndicatorsModel.objects   
+        model = models.BackendContentIndicatorsModel.objects
         model = model.exclude(
             Q(indicator_id=None) |
             Q(year=None) |
             Q(item_period=None) |
-            Q(item_row=None) |
-            Q(value=None)
-        )
+            Q(item_row=None)
+        ).values('indicator_id', 'year', 'item_period').distinct()
 
-        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = list(model.order_by(def_col).values_list('indicator_id', 'year', 'item_period').distinct())
         id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
    
         records_total = model.count()
@@ -1475,14 +1478,13 @@ class BackendContentJsonClassView(LoginRequiredMixin, View):
             Q(indicator_id=None) |
             Q(year=None) |
             Q(item_period=None) |
-            Q(item_row=None) |
-            Q(value=None)
-        )
+            Q(item_row=None)
+        ).values('indicator_id', 'year', 'item_period').distinct()
 
             records_total = model.count()
             records_filtered = records_total
         
-        model = model.order_by(order_col_name)
+        model = model.order_by(order_col_name).distinct()
             
         # Conf Paginator
         length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
@@ -1499,19 +1501,19 @@ class BackendContentJsonClassView(LoginRequiredMixin, View):
         data = []
 
         for obj in object_list:
-
+            obj_dt = models.BackendContentIndicatorsModel.objects.filter(indicator_id = obj['indicator_id'], year=obj['year'], item_period=obj['item_period']).first()
+            obj_period = models.BackendPeriodNameItemsModel.objects.filter(pk = obj_dt.item_period).first()
             data.append(
             {
-                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
-                'no': [x for x in id_def_data if obj.id == x[1]][0][0],
-                'indicator_id__subject_id__name': obj.indicator_id.subject_id.name,
-                'indicator_id__name': obj.indicator_id.name,
-                'indicator_id__stat_category': obj.indicator_id.get_stat_category_display(),
-                'indicator_id__time_period_id__name': obj.indicator_id.time_period_id.name,
-                'year': obj.year,
-                'created_at' : obj.created_at.strftime('%d-%m-%Y'),
-                'updated_at' : obj.updated_at.strftime('%d-%m-%Y'),
-                'actions': f'<a href="javascript:void(0);" onclick="updateContent({obj.id})" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteContent({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj_dt.id}" value="{obj_dt.indicator_id.id}-{obj_dt.year}-{obj_dt.item_period}"><label class="form-check-label" for="check{obj_dt.id}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj_dt.indicator_id.id == x[1] and obj_dt.year == x[2] and obj_dt.item_period == x[3]][0][0],
+                'indicator_id__subject_id__name': obj_dt.indicator_id.subject_id.name,
+                'indicator_id__name': obj_dt.indicator_id.name,
+                'indicator_id__time_period_id__name': obj_period.item_period,
+                'year': obj_dt.year,
+                'created_at' : obj_dt.created_at.strftime('%d-%m-%Y'),
+                'updated_at' : obj_dt.updated_at.strftime('%d-%m-%Y'),
+                'actions': f'<a href="{reverse_lazy("backend:backend-content-input")}?subject_id={obj_dt.indicator_id.subject_id.id}&indicator_id_select={obj_dt.indicator_id.id}&year={obj_dt.year}&periode_id={obj_dt.item_period}" target="blank" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" data-indicator_id="{obj_dt.indicator_id.id}" data-year="{obj_dt.year}" data-item_period="{obj_dt.item_period}" onclick="deleteContent(this)" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
             })
 
         return {    
@@ -1528,11 +1530,15 @@ class BackendContentDeleteClassView(LoginRequiredMixin, View):
 
         if is_ajax:
             if request.method == 'POST':
+            
                 try:
-                    data = get_object_or_404(models.BackendIndicatorsModel, pk=request.POST.get('id'))
-                    old_dt = data.name 
+                    data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=request.POST.get('indicator_id'), year=request.POST.get('year'), item_period = request.POST.get('item_period'))
+                    name = data.first().indicator_id.name
+                    year = data.first().year
+                    period_name = models.BackendPeriodNameItemsModel.objects.filter(pk=request.POST.get('item_period'))
                     data.delete()
-                    return JsonResponse({'status' : 'success', 'message': f'The table data statistics "{old_dt}" was deleted successfully.'})
+                    msg = f'Statistical table "{name}" for {year} {period_name.first().item_period} has been successfully deleted'
+                    return JsonResponse({'status' : 'success', 'message': msg})
                 except:
                     return JsonResponse({'status': 'failed', 'message': 'Data not available'})
                 
@@ -1548,8 +1554,13 @@ class BackendContentMultipleDeleteClassView(LoginRequiredMixin, View):
                 try:
                     data = request.POST.getlist('valsId[]')
                     for dt in data:
-                        model = get_object_or_404(models.BackendContentIndicatorsModel, pk=dt)
-                        model.delete()   
+                        indicator_id, year, item_period_id = dt.split('-')
+                        model = models.BackendContentIndicatorsModel.objects.filter(indicator_id = indicator_id, year = year, item_period = item_period_id)
+                        if model.exists():
+                            model.delete()
+                        else:
+                            return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+                        
                     return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
                 except:
                     return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
@@ -1567,12 +1578,12 @@ class BackendContentExportClassView(LoginRequiredMixin, View):
         response['Content-Disposition'] = 'attachment; filename="Data Konten Tabel.xls"'
         return response 
 
-class BackendContentInputClassView(View):
+class BackendContentInputClassView(LoginRequiredMixin,View):
     
     def get(self, request):
 
         context = {
-            'title' :   'Backend | Tabel Statistik',
+            'title' :   'Backend | Input Tabel Statistik',
             'subjects' : models.BackendSubjectsModel.objects.values(),
         }
 
@@ -1580,7 +1591,7 @@ class BackendContentInputClassView(View):
         context['years'] = list(range(years+16, years - 25, -1))
         
         if request.GET.get('subject_id') and request.GET.get('indicator_id_select') and request.GET.get('year') and request.GET.get('periode_id'):
-
+            
             context['d_form'] = 'submitted'
             subject_id = request.GET.get('subject_id')
             indicator_id = request.GET.get('indicator_id_select')
@@ -1588,6 +1599,7 @@ class BackendContentInputClassView(View):
             period_item_id = request.GET.get('periode_id')
             
             data_indicator = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
+            context['title'] = data_indicator.name
             
             data_contents = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id, year=year, item_period = period_item_id).values()
     
@@ -1682,7 +1694,6 @@ class BackendContentInputClassView(View):
                         return JsonResponse({'status': 'failed', 'message': 'Data indikator belum tersedia', 'instance' : opt}, status=200)
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-
 class BackendContentInputFormClassView(LoginRequiredMixin, View):
 
     def post(self, request):
@@ -1723,7 +1734,6 @@ class BackendContentInputFormClassView(LoginRequiredMixin, View):
                         return JsonResponse({'status': 'failed', 'message': 'Data indikator belum tersedia', 'instance' : opt}, status=200)
         return JsonResponse({'status': 'Invalid request'}, status=400)
     
-
 class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
     
     def post(self, request):
@@ -1858,7 +1868,6 @@ class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
                     return JsonResponse({'status': 'failed', 'message' : 'The indicator table content data is empty'}, status=200)
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-
 class BackendContentDeleteClassView(LoginRequiredMixin, View):
     
     def post(self, request):
@@ -1881,49 +1890,14 @@ class BackendContentDeleteClassView(LoginRequiredMixin, View):
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
 
+# <========================================== Start Berita Statistik ===============================================>
 
-# class BackendContentInputFormSubmitClassView(LoginRequiredMixin, View):
+class BackendStatsNewsClassView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {
+            'title' : 'Backend | Berita Statistik'
+        }
+        return render(request, 'backend/table_statistics/news.html', context)
     
-#     def post(self, request):
-#         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-
-#         if is_ajax:
-#             if request.method == 'POST':
-                
-#                 model = models.BackendContentIndicatorsModel
-
-#                 data_request = request.POST
-#                 indicator_id = data_request.get('indicator_id')
-#                 year = data_request.get('year')
-#                 item_period = data_request.get('item_period')
-
-#                 indicator_data = get_object_or_404(models.BackendIndicatorsModel, pk=indicator_id)
-#                 chars_item = models.BackendCharacteristicItemsModel.objects.filter(char_id = indicator_data.col_group_id).order_by('id')
-#                 rows_item = models.BackendRowsItemsModel.objects.filter(row_id = indicator_data.row_group_id).order_by('id')
-
-#                 objs_bulk_create = []
-#                 for key, value in data_request.items():
-#                     if key in ['csrfmiddlewaretoken', 'indicator_id', 'year', 'item_period']:
-#                         continue
-                    
-#                     row_item_id, col_item_id = key.split('-')
-#                     # Jangan langsung masukin item_char dari client, harus dilooping dulu dari server
-#                     objs_bulk_create.append(
-#                         model(
-#                             indicator_id = indicator_data,
-#                             year = year,
-#                             item_period = item_period,
-#                             item_char = col_item_id,
-#                             item_row = row_item_id,
-#                             value = data_request.get(key)
-#                         )
-#                     )
-
-#                 if len(objs_bulk_create) > 0:
-#                     message = f'Data for the indicator <strong><i>"{indicator_data.name}"</i></strong> has been successfully updated on <strong>{datetime_.today().strftime("%d %B %Y")}</strong>.'
-#                     model.objects.bulk_create(objs_bulk_create)
-#                     return JsonResponse({'status': 'success', 'message' : message}, status=200)
-#                 else:
-#                     return JsonResponse({'status': 'failed', 'message' : 'The indicator table content data is empty'}, status=200)
-#         return JsonResponse({'status': 'Invalid request'}, status=400)
-    
+# <========================================== End Berita Statistik ===============================================>
