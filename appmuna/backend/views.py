@@ -1484,7 +1484,7 @@ class BackendContentJsonClassView(LoginRequiredMixin, View):
             records_total = model.count()
             records_filtered = records_total
         
-        model = model.order_by(order_col_name).distinct()
+        model = model.order_by(order_col_name)
             
         # Conf Paginator
         length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
@@ -1900,5 +1900,110 @@ class BackendStatsNewsClassView(LoginRequiredMixin, View):
             'title' : 'Backend | Berita Statistik'
         }
         return render(request, 'backend/table_statistics/news.html', context)
+
+
+class BackendStatsNewsJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'subject_id__name' 
+
+        datatables = request.POST
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+        model = models.BackendStatsNewsModel.objects
+        model = model.exclude(
+            Q(subject_id=None) |
+            Q(title=None) |
+            Q(content=None) |
+            Q(file=None) |
+            Q(thumbnail=None) |
+            Q(show_state=None) |    
+            Q(num_visits=None)
+        )
+
+        id_def_data = list(model.order_by(def_col).value('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+   
+        records_total = model.count()
+        records_filtered = records_total
+        
+        if search:
+            model = models.BackendStatsNewsModel.objects.filter(
+                Q(subject_id__name__icontains=search) |
+                Q(title__icontains=search) |
+                Q(content__icontains=search)
+            ).exclude(
+            Q(subject_id=None) |
+            Q(title=None) |
+            Q(content=None) |
+            Q(file=None) |
+            Q(thumbnail=None) |
+            Q(show_state=None) |    
+            Q(num_visits=None)
+            )
+
+            records_total = model.count()
+            records_filtered = records_total
+        
+        model = model.order_by(order_col_name)
+            
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
+        page_number = int(start / length + 1)
+        paginator = Paginator(model, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+
+        for obj in object_list:
     
+            checked = 'checked' if obj.show_state == '1' else ''
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj.id == x[1]][0][0],
+                'subject_id__name': obj.subject_id.name,
+                'title': obj.title,
+                'num_visits': obj.num_visits,
+                'year': obj.year,
+                'created_at' : obj.created_at.strftime('%d-%m-%Y'),
+                'updated_at' : obj.updated_at.strftime('%d-%m-%Y'),
+                'show_state': f'<div class="form-check form-switch"><input type="checkbox" class="form-check-input" onchange="switchState(this)" id="customSwitch{obj.id}" data-id="{obj.id}" value="1" {checked}></div>',
+                'actions': f'<a href="javascript:void(0)" target="blank" class="action-icon" onclick="updateStatNew({obj.id})"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteStatNew({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+
 # <========================================== End Berita Statistik ===============================================>

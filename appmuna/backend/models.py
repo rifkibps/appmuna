@@ -235,7 +235,7 @@ class BackendVideoGraphicsModel(models.Model):
 class BackendStatsNewsModel(models.Model):
 
    class Meta:
-        verbose_name = 'Berita Statistik'
+        verbose_name = 'Berita Statistik' 
         verbose_name_plural = 'Berita Statistik'
    
    state = (
@@ -251,6 +251,9 @@ class BackendStatsNewsModel(models.Model):
    file = models.FileField(null=False, blank=False, upload_to='stats_news', verbose_name='File Berita', validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
    thumbnail = models.ImageField(null=False, blank=False, upload_to='thumbnail-statsnews', verbose_name='Thumbnail Berita')
    show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Berita')
-   num_visits = models.IntegerField(null=False, blank=False, editable=False)
+   num_visits = models.IntegerField(null=False, blank=False, default=0, editable=False)
    created_at = models.DateField(auto_now_add = True, editable=False)
    updated_at = models.DateField(auto_now = True, editable=False)
+
+   def __str__(self):
+      return f"{self.subject_id.name} | {self.title} | {self.created_at.strftime('%d/%m/%Y')}"
