@@ -1522,9 +1522,9 @@ class BackendContentJsonClassView(LoginRequiredMixin, View):
             'recordsFiltered': records_filtered,
             'data': data,
         }
-    
-class BackendContentDeleteClassView(LoginRequiredMixin, View):
 
+class BackendContentDeleteClassView(LoginRequiredMixin, View):
+    
     def post(self, request):
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
@@ -1543,6 +1543,7 @@ class BackendContentDeleteClassView(LoginRequiredMixin, View):
                     return JsonResponse({'status': 'failed', 'message': 'Data not available'})
                 
         return JsonResponse({'status': 'Invalid request'}, status=400)
+    
 
 class BackendContentMultipleDeleteClassView(LoginRequiredMixin, View):
     
