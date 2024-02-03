@@ -1897,11 +1897,33 @@ class BackendStatsNewsClassView(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {
-            'title' : 'Backend | Berita Statistik'
+            'title' : 'Backend | Berita Statistik',
+            'form' : forms.BackendStatsNewsForm()
         }
-        return render(request, 'backend/table_statistics/news.html', context)
+        return render(request, 'backend/news/news.html', context)
+    
+    def post(self, request):
 
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if is_ajax:
+            if request.method == 'POST':
+                if request.POST.get('id'):
+                    data = get_object_or_404(models.BackendStatsNewsModel, pk=request.POST.get('id'))
+                    form = forms.BackendStatsNewsForm(request.POST,request.FILES, instance=data)
+                    msg = f'Statistical news with the title “NAME” has been successfully changed.'
+                else:
+                    form = forms.BackendStatsNewsForm(request.POST, request.FILES)
+                    msg = 'Statistical news with the title “NAME” has been successfully added.'
 
+                if form.is_valid():
+                    old_dt = form.cleaned_data.get('title')
+                    form.save()
+                    return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
 class BackendStatsNewsJsonClassView(LoginRequiredMixin, View):
 
     def post(self, request):
@@ -1912,7 +1934,7 @@ class BackendStatsNewsJsonClassView(LoginRequiredMixin, View):
     def _datatables(self, request):
 
         # Define default column for ordering first request
-        def_col = 'subject_id__name' 
+        def_col = 'title' 
 
         datatables = request.POST
         # Get Draw
@@ -1935,6 +1957,7 @@ class BackendStatsNewsJsonClassView(LoginRequiredMixin, View):
         model = model.exclude(
             Q(subject_id=None) |
             Q(title=None) |
+            Q(author=None) |
             Q(content=None) |
             Q(file=None) |
             Q(thumbnail=None) |
@@ -1942,7 +1965,7 @@ class BackendStatsNewsJsonClassView(LoginRequiredMixin, View):
             Q(num_visits=None)
         )
 
-        id_def_data = list(model.order_by(def_col).value('id'))
+        id_def_data = list(model.order_by(def_col).values_list('id'))
         id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
    
         records_total = model.count()
@@ -1953,6 +1976,449 @@ class BackendStatsNewsJsonClassView(LoginRequiredMixin, View):
                 Q(subject_id__name__icontains=search) |
                 Q(title__icontains=search) |
                 Q(content__icontains=search)
+            ).exclude(
+            Q(subject_id=None) |
+            Q(title=None) |
+            Q(content=None) |
+            Q(author=None) |
+            Q(file=None) |
+            Q(thumbnail=None) |
+            Q(show_state=None) |    
+            Q(num_visits=None)
+            )
+
+            records_total = model.count()
+            records_filtered = records_total
+        
+        model = model.order_by(order_col_name)
+            
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
+        page_number = int(start / length + 1)
+        paginator = Paginator(model, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+
+        for obj in object_list:
+    
+            checked = 'checked' if obj.show_state == '1' else ''
+            
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
+                'subject_id__name': obj.subject_id.name,
+                'title': f'<img src="{obj.thumbnail.url}" alt="contact-img" title="contact-img" class="rounded me-3" height="48"> <p class="m-0 d-inline-block align-middle font-16"><a href="#" class="text-body">{obj.title}</a></p>',
+                'num_visits': obj.num_visits,
+                'author': obj.author,
+                'created_at' : obj.created_at.strftime('%d-%m-%Y'),
+                'updated_at' : obj.updated_at.strftime('%d-%m-%Y'),
+                'show_state': f'<div class="form-check form-switch"><input type="checkbox" class="form-check-input" onchange="switchState(this)" id="customSwitch{obj.id}" data-id="{obj.id}" value="1" {checked}></div>',
+                'actions': f'<a href="{obj.file.url}" class="action-icon" download> <i class="mdi mdi-download"></i></a> <a href="javascript:void(0)" class="action-icon" onclick="updateStatNews({obj.id})"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteStatNews({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+
+class BackendStatsNewsDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+            
+                try:
+                    data = get_object_or_404(models.BackendStatsNewsModel, pk = request.POST.get('id'))
+                    name = data.title
+                    data.delete()
+                    msg = f'Statistical news with the title "{name}" was successfully deleted'
+                    return JsonResponse({'status' : 'success', 'message': msg})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+ 
+class BackendStatsNewsDetailClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                id = request.POST.get('id')
+                data = models.BackendStatsNewsModel.objects.filter(pk=id)
+
+                if data.exists():
+                    return JsonResponse({'status' : 'success', 'instance': list(data.values())[0]}, status=200)
+                else:
+                    return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendStatsNewsSwitchStateClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendStatsNewsModel, pk=request.POST.get('id'))
+                    old_dt = data.title
+                    current_state = '2' if data.show_state == '1' else '1'
+                    data.show_state = current_state
+                    data.save()
+                    return JsonResponse({'status' : 'success', 'message': f'The statistical news "{old_dt}" was updated successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendStatsNewsMultipleDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = models.BackendStatsNewsModel.objects.filter(pk = dt)
+                        if model.exists():
+                            model.delete()
+                        else:
+                            return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+                        
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+# <========================================== End Berita Statistik ===============================================>
+
+
+
+# <========================================== Start Infografis ===================================================>  
+    
+class BackendInfoGraphicsClassView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {
+            'title' : 'Backend | Infografis',
+            'form' : forms.BackendInfographicForm()
+        }
+
+        return render(request, 'backend/infographics/infographics.html', context)
+    
+    def post(self, request):
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if is_ajax:
+            if request.method == 'POST':
+                if request.POST.get('id'):
+                    data = get_object_or_404(models.BackendInfographicsModel, pk=request.POST.get('id'))
+                    form = forms.BackendInfographicForm(request.POST, request.FILES, instance=data)
+                    msg = f'Infographic with the title “NAME” has been successfully changed.'
+                else:
+                    form = forms.BackendInfographicForm(request.POST, request.FILES)
+                    msg = 'Infographic with the title “NAME” has been successfully added.'
+
+                if form.is_valid():
+                    old_dt = form.cleaned_data.get('title')
+                    form.save()
+                    return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendInfoGraphicsJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'title' 
+
+        datatables = request.POST
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+        model = models.BackendInfographicsModel.objects
+        model = model.exclude(
+            Q(subject_id=None) |
+            Q(title=None) |
+            Q(desc=None) |
+            Q(file=None) |
+            Q(show_state=None) |    
+            Q(num_visits=None)
+        )
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+   
+        records_total = model.count()
+        records_filtered = records_total
+        
+        if search:
+            model = models.BackendInfographicsModel.objects.filter(
+                Q(subject_id__name__icontains=search) |
+                Q(title__icontains=search) |
+                Q(desc__icontains=search)
+            ).exclude(
+            Q(subject_id=None) |
+            Q(title=None) |
+            Q(desc=None) |
+            Q(file=None) |
+            Q(show_state=None) |    
+            Q(num_visits=None)
+        )
+
+            records_total = model.count()
+            records_filtered = records_total
+        
+        model = model.order_by(order_col_name)
+            
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
+        page_number = int(start / length + 1)
+        paginator = Paginator(model, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+
+        for obj in object_list:
+    
+            checked = 'checked' if obj.show_state == '1' else ''
+            
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj.id == x[1]][0][0],
+                'subject_id__name': obj.subject_id.name,
+                'title': f'<p class="m-0 d-inline-block align-middle font-16"><a href="#" class="text-body">{obj.title}</a></p>',
+                'num_visits': obj.num_visits,
+                'desc': obj.desc,
+                'created_at' : obj.created_at.strftime('%d-%m-%Y'),
+                'updated_at' : obj.updated_at.strftime('%d-%m-%Y'),
+                'show_state': f'<div class="form-check form-switch"><input type="checkbox" class="form-check-input" onchange="switchState(this)" id="customSwitch{obj.id}" data-id="{obj.id}" value="1" {checked}></div>',
+                'actions': f'<a href="{obj.file.url}" class="action-icon" download> <i class="mdi mdi-download"></i></a> <a href="javascript:void(0)" class="action-icon" onclick="updateInfographic({obj.id})"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteInfographic({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+
+class BackendInfoGraphicDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+            
+                try:
+                    data = get_object_or_404(models.BackendInfographicsModel, pk = request.POST.get('id'))
+                    name = data.title
+                    data.delete()
+                    msg = f'Infographic with the title "{name}" was successfully deleted'
+                    return JsonResponse({'status' : 'success', 'message': msg})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendInfoGraphicSwitchStateClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendInfographicsModel, pk=request.POST.get('id'))
+                    old_dt = data.title
+                    current_state = '2' if data.show_state == '1' else '1'
+                    data.show_state = current_state
+                    data.save()
+                    return JsonResponse({'status' : 'success', 'message': f'The infogaphic "{old_dt}" was updated successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+class BackendInfoGraphicsSMultipleDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = models.BackendInfographicsModel.objects.filter(pk = dt)
+                        if model.exists():
+                            model.delete()
+                        else:
+                            return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+                        
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+class BackendInfoGraphicDetailClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                id = request.POST.get('id')
+                data = models.BackendInfographicsModel.objects.filter(pk=id)
+
+                if data.exists():
+                    return JsonResponse({'status' : 'success', 'instance': list(data.values())[0]}, status=200)
+                else:
+                    return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+# <========================================== End Infografis ===============================================>
+    
+
+
+
+# <========================================== Start Video Grafias ===================================================> 
+
+class BackendVideoGraphicsClassView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {
+            'title' : 'Backend | Video Grafis',
+            'form' : forms.BackendVideoGraphicForm()
+        }
+
+        return render(request, 'backend/infographics/videographics.html', context)
+    
+    def post(self, request):
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if is_ajax:
+            if request.method == 'POST':
+                if request.POST.get('id'):
+                    data = get_object_or_404(models.BackendVideoGraphicsModel, pk=request.POST.get('id'))
+                    form = forms.BackendVideoGraphicForm(request.POST, request.FILES, instance=data)
+                    msg = f'Videographic with the title “NAME” has been successfully changed.'
+                else:
+                    form = forms.BackendVideoGraphicForm(request.POST, request.FILES)
+                    msg = 'Videographic with the title “NAME” has been successfully added.'
+
+                if form.is_valid():
+                    old_dt = form.cleaned_data.get('title')
+                    form.save()
+                    return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendVideoGraphicsJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'title' 
+
+        datatables = request.POST
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+        model = models.BackendVideoGraphicsModel.objects
+        model = model.exclude(
+            Q(subject_id=None) |
+            Q(title=None) |
+            Q(desc=None) |
+            Q(file=None) |
+            Q(thumbnail=None) |
+            Q(show_state=None) |    
+            Q(num_visits=None)
+        )
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+   
+        records_total = model.count()
+        records_filtered = records_total
+        
+        if search:
+            model = models.BackendVideoGraphicsModel.objects.filter(
+                Q(subject_id__name__icontains=search) |
+                Q(title__icontains=search) |
+                Q(desc__icontains=search)
             ).exclude(
             Q(subject_id=None) |
             Q(title=None) |
@@ -1985,18 +2451,20 @@ class BackendStatsNewsJsonClassView(LoginRequiredMixin, View):
         for obj in object_list:
     
             checked = 'checked' if obj.show_state == '1' else ''
+            link =  f'<a href="{obj.link}" target="blank" class="font-16" ><i class="mdi mdi-youtube-tv"></i></a> | ' if obj.link else ''
+            link += f'<a href="{obj.file.url}" target="blank" class="font-16"><i class="mdi mdi-video"></i></a>' if obj.file else ''
+
             data.append(
             {
                 'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
                 'no': [x for x in id_def_data if obj.id == x[1]][0][0],
                 'subject_id__name': obj.subject_id.name,
-                'title': obj.title,
+                'title': f'<img src="{obj.thumbnail.url}" alt="contact-img" title="contact-img" class="rounded me-3" height="48"> <p class="m-0 d-inline-block align-middle font-16"><a href="#" class="text-body">{obj.title}</a><br> <span class="help-block font-14">Video Grafis: {link}</span>',
                 'num_visits': obj.num_visits,
-                'year': obj.year,
                 'created_at' : obj.created_at.strftime('%d-%m-%Y'),
-                'updated_at' : obj.updated_at.strftime('%d-%m-%Y'),
+                'updated_at' : obj.updated_at.strftime('%d/%m/%Y'),
                 'show_state': f'<div class="form-check form-switch"><input type="checkbox" class="form-check-input" onchange="switchState(this)" id="customSwitch{obj.id}" data-id="{obj.id}" value="1" {checked}></div>',
-                'actions': f'<a href="javascript:void(0)" target="blank" class="action-icon" onclick="updateStatNew({obj.id})"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteStatNew({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+                'actions': f'<a href="javascript:void(0)" class="action-icon" onclick="updateVideographic({obj.id})"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteVideographic({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
             })
 
         return {    
@@ -2006,4 +2474,85 @@ class BackendStatsNewsJsonClassView(LoginRequiredMixin, View):
             'data': data,
         }
 
-# <========================================== End Berita Statistik ===============================================>
+
+class BackendVideoGraphicDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+            
+                try:
+                    data = get_object_or_404(models.BackendVideoGraphicsModel, pk = request.POST.get('id'))
+                    name = data.title
+                    data.delete()
+                    msg = f'Videographic with the title "{name}" was successfully deleted'
+                    return JsonResponse({'status' : 'success', 'message': msg})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendVideoGraphicSwitchStateClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendVideoGraphicsModel, pk=request.POST.get('id'))
+                    old_dt = data.title
+                    current_state = '2' if data.show_state == '1' else '1'
+                    data.show_state = current_state
+                    data.save()
+                    return JsonResponse({'status' : 'success', 'message': f'The infogaphic "{old_dt}" was updated successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendVideoGraphicsMultipleDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = models.BackendVideoGraphicsModel.objects.filter(pk = dt)
+                        if model.exists():
+                            model.delete()
+                        else:
+                            return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+                        
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+
+class BackendVideoGraphicDetailClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                id = request.POST.get('id')
+                data = models.BackendVideoGraphicsModel.objects.filter(pk=id)
+
+                if data.exists():
+                    return JsonResponse({'status' : 'success', 'instance': list(data.values())[0]}, status=200)
+                else:
+                    return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+

@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'homepage',
     'backend',
     'authentication',
-    'import_export'
+    'import_export',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [

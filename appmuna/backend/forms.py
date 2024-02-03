@@ -185,3 +185,145 @@ class BackendIndicatorForm(forms.ModelForm):
                 attrs = attrs_input | {'class' : 'form-select', 'id': 'show_state'}
             )
         }
+
+class BackendStatsNewsForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendStatsNewsModel
+
+        fields = [
+            'subject_id',
+            'subject_csa_id',
+            'title',
+            'author',
+            'content',
+            'file',
+            'thumbnail',
+            'show_state',
+        ]
+
+        attrs_input = {
+            'class' : 'form-control',
+            'required': 'required',
+            'placeholder': '...'
+        }
+
+        widgets = {
+            'subject_id': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'subject_id'}
+            ),
+            'subject_csa_id': forms.Select(
+                attrs = {'class' : 'form-select' , 'id' : 'subject_csa_id'}
+            ),
+            'title': forms.TextInput(
+                attrs = attrs_input | {'placeholder' : 'Tuliskan judul berita statistik', 'id' : 'title'}
+            ),
+            'author': forms.TextInput(
+                attrs = attrs_input | {'id' : 'author'}
+            ),
+            'content': forms.TextInput(
+                attrs = attrs_input  | {'id' : 'content'}
+            ),
+            'file': forms.FileInput(
+                attrs = attrs_input | {'id' : 'file'}
+            ),
+            'thumbnail': forms.FileInput(
+                attrs = attrs_input   | {'id' : 'thumbnail'}
+            ),
+            'show_state': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'show_state'}
+            )
+        }
+
+
+class BackendInfographicForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendInfographicsModel
+
+        fields = [
+            'subject_id',
+            'subject_csa_id',
+            'title',
+            'desc',
+            'file',
+            'show_state',
+        ]
+
+        attrs_input = {
+            'class' : 'form-control',
+            'required': 'required',
+            'placeholder': '...'
+        }
+
+        widgets = {
+            'subject_id': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select',  'id' : 'subject_id'}
+            ),
+            'subject_csa_id': forms.Select(
+                attrs = {'class' : 'form-select' , 'id' : 'subject_csa_id'}
+            ),
+            'title': forms.TextInput(
+                attrs = attrs_input | {'placeholder' : 'Tuliskan judul infogragis', 'id' : 'title'}
+            ),
+            'desc': forms.TextInput(
+                attrs = attrs_input  | {'id' : 'desc'}
+            ),
+            'file': forms.FileInput(
+                attrs = attrs_input | {'id' : 'file'}
+            ),
+            'show_state': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'show_state'}
+            )
+        }
+
+
+class BackendVideoGraphicForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendVideoGraphicsModel
+
+        fields = [
+            'subject_id',
+            'subject_csa_id',
+            'title',
+            'desc',
+            'link',
+            'file',
+            'thumbnail',
+            'show_state',
+        ]
+
+        attrs_input = {
+            'class' : 'form-control',
+            'required': 'required',
+            'placeholder': '...'
+        }
+
+        widgets = {
+            'subject_id': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'subject_id'}
+            ),
+            'subject_csa_id': forms.Select(
+                attrs = {'class' : 'form-select' , 'id' : 'subject_csa_id'}
+            ),
+            'title': forms.TextInput(
+                attrs = attrs_input | {'placeholder' : 'Tuliskan judul berita statistik', 'id' : 'title'}
+            ),
+            'desc': forms.TextInput(
+                attrs = attrs_input  | {'id' : 'desc'}
+            ),
+            'link': forms.TextInput(
+                attrs = {'class' : 'form-control', 'placeholder' : 'Paste link Youtube Videografis', 'id' : 'link'}
+            ),
+            'file': forms.FileInput(
+                attrs = {'class' : 'form-control' , 'id' : 'file'}
+            ),
+            'thumbnail': forms.FileInput(
+                attrs = attrs_input   | {'id' : 'thumbnail'}
+            ),
+            'show_state': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'show_state'}
+            )
+        }
+    

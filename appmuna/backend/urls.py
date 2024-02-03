@@ -66,8 +66,26 @@ urlpatterns = [
     path('backend/content/input/submit', views.BackendContentInputFormSubmitClassView.as_view(), name='backend-content-input-submit'),
 
 
-
     path('backend/statistic-news', views.BackendStatsNewsClassView.as_view(), name='backend-news'),
-
+    path('backend/statistic-news/json', views.BackendStatsNewsJsonClassView.as_view(), name='backend-statnews-json'),
+    path('backend/statistic-news/delete', views.BackendStatsNewsDeleteClassView.as_view(), name='backend-statnews-delete'),
+    path('backend/statistic-news/detail', views.BackendStatsNewsDetailClassView.as_view(), name='backend-statnews-detail'),
+    path('backend/statistic-news/switch', views.BackendStatsNewsSwitchStateClassView.as_view(), name='backend-statnews-switch'),
+    path('backend/statistic-news/multiple-delete', views.BackendStatsNewsMultipleDeleteClassView.as_view(), name='backend-statnews-multiple-delete'),
     
+    path('backend/infographics', views.BackendInfoGraphicsClassView.as_view(), name='backend-infographics'),
+    path('backend/infographics/json', views.BackendInfoGraphicsJsonClassView.as_view(), name='backend-infographics-json'),
+    path('backend/infographics/delete', views.BackendInfoGraphicDeleteClassView.as_view(), name='backend-infographics-delete'),
+    path('backend/infographics/detail', views.BackendInfoGraphicDetailClassView.as_view(), name='backend-infographic-detail'),
+    path('backend/infographics/switch', views.BackendInfoGraphicSwitchStateClassView.as_view(), name='backend-infographic-switch'),
+    path('backend/infographics/multiple-delete', views.BackendInfoGraphicsSMultipleDeleteClassView.as_view(), name='backend-infographics-multiple-delete'),
+  
+    path('backend/videographics', views.BackendVideoGraphicsClassView.as_view(), name='backend-videographics'),
+    path('backend/videographics/json', views.BackendVideoGraphicsJsonClassView.as_view(), name='backend-videographics-json'),
+    path('backend/videographics/delete', views.BackendVideoGraphicDeleteClassView.as_view(), name='backend-videographic-delete'),
+    path('backend/videographics/switch', views.BackendVideoGraphicSwitchStateClassView.as_view(), name='backend-videographic-switch'),
+    path('backend/videographics/detail', views.BackendVideoGraphicDetailClassView.as_view(), name='backend-videographic-detail'),
+    path('backend/videographics/multiple-delete', views.BackendVideoGraphicsMultipleDeleteClassView.as_view(), name='backend-videographic-multiple-delete'),
+  
+   
 ]

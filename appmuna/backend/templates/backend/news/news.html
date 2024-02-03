@@ -1,6 +1,11 @@
 {% extends 'vertical/base.html' %}
 {% load static %}
 
+{% block css-extender %}
+    <link href="{% static 'app-design/assets/css/vendor/quill.core.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'app-design/assets/css/vendor/quill.snow.css' %}" rel="stylesheet" type="text/css" />
+{% endblock css-extender %}
+
 {% block nav_content %}
     <div class="row">
         <div class="col-12">
@@ -20,93 +25,536 @@
 {% endblock nav_content %}
 
 {% block content %}
+
 <div class="row">
     <div class="col-12">
+        <div class="alert alert-primary alert-dismissible d-none" id="alertDelMultiple" role="alert">
+            Anda dapat menghapus <span id="countData"></span> data terpilih? <a href="javascript: void(0);" class="alert-link" id="submitMultiple">Hapus Data</a>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+       
+    </div>
+</div>
+
+<div class="row d-none" id="input-card">
+    <div class="col-12">  
         <div class="card">
             <div class="card-body">
-                <div class="row mb-2">
+                <div class="row mb-4">
                     <div class="col-sm-4">
-                        <a href="javascript:void(0);" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i> Buat Berita Statistik </a>
+                        <a href="javascript: void(0);" id="add-form-close" class="btn btn-danger mb-2"><i class="mdi mdi-file-table-box-multiple me-2"></i> Berita Statistik</a>
                     </div>
-                    <div class="col-sm-8">
-                        <div class="text-sm-end">
-                            <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-refresh"></i></button>
-                            <button type="button" class="btn btn-light mb-2 me-1">Import</button>
-                            <button type="button" class="btn btn-light mb-2">Export</button>
-                        </div>
-                    </div><!-- end col-->
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="all" style="width: 20px;">
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                    </div>
-                                </th>
-                                <th>No</th>
-                                <th>Subject</th>
-                                <th>Judul Berita</th>
-                                <th>Jumlah Dikunjungi</th>
-                                <th>Created at</th>
-                                <th>Updated at</th>
-                                <th>Status</th>
-                                <th style="width: 85px;">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="customCheck2">
-                                        <label class="form-check-label" for="customCheck2">&nbsp;</label>
-                                    </div>
-                                </td>
-                                <td>
-                                    Aeron Chairs
-                                </td>
-                                <td>
-                                    <img src="assets/images/products/product-1.jpg" alt="contact-img" title="contact-img" class="rounded me-3" height="48">
-                                    <p class="m-0 d-inline-block align-middle font-16">
-                                        <a href="apps-ecommerce-products-details.html" class="text-body">Amazing Modern Chair</a>
-                                        <br>
-                                        <span class="text-warning mdi mdi-star"></span>
-                                        <span class="text-warning mdi mdi-star"></span>
-                                        <span class="text-warning mdi mdi-star"></span>
-                                        <span class="text-warning mdi mdi-star"></span>
-                                        <span class="text-warning mdi mdi-star"></span>
-                                    </p>
-                                </td>
 
-                                <td>
-                                    09/12/2018
-                                </td>
-                                <td>
-                                    $148.66
-                                </td>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'backend:backend-news' %}" class="needs-validation" id="statnews-form" novalidate>
+                            {% csrf_token %}
+                            <input type="hidden" name="id" id="id">
+                            <div class="mb-3">
+                                <label for="{{form.title.id_for_label}}" class="form-label">{{form.title.label}}</label>
+                                {{form.title}}
+                                <div class="invalid-feedback" id="msg-{{form.title.id_for_label}}">
+                                    Subject data harus diisi (required)
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="{{form.subject_id.id_for_label}}" class="form-label">{{form.subject_id.label}}</label>
+                                {{form.subject_id}}
+                                <div class="invalid-feedback" id="msg-{{form.subject_id.id_for_label}}">
+                                    Subject data harus diisi (required)
+                                </div>
+                            </div>
 
-                                <td>
-                                    254
-                                </td>
-                                <td>
-                                    <span class="badge bg-success">Active</span>
-                                </td>
+                            <div class="mb-3">
+                                <label for="{{form.subject_csa_id.id_for_label}}" class="form-label">{{form.subject_csa_id.label}}</label>
+                                {{form.subject_csa_id}}
+                                <div class="invalid-feedback" id="msg-{{form.subject_csa_id.id_for_label}}">
+                                    Subject data harus diisi (required)
+                                </div>
+                            </div>
 
-                                <td>
-                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
-                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
-                                    <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            <div class="mb-3">
+                                <label for="{{form.author.id_for_label}}" class="form-label">{{form.author.label}}</label>
+                                {{form.author}}
+                                <div class="invalid-feedback" id="msg-{{form.author.id_for_label}}">
+                                </div>
+                            </div>
+                            
+                            <label for="{{form.content.id_for_label}}" class="form-label">{{form.content.label}}</label>
+                            <div class="mb-3">
+                                <div id="snow-editor" style="height: 300px;">
+                                </div>
+                                <div class="invalid-feedback d-block" id="msg-{{form.content.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.file.id_for_label}}" class="form-label">{{form.file.label}}</label>
+                                {{form.file}}
+                                <span class="help-block d-none" id="help-{{form.file.id_for_label}}"></span>
+                                <div class="invalid-feedback" id="msg-{{form.file.id_for_label}}">
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.thumbnail.id_for_label}}" class="form-label">{{form.thumbnail.label}}</label>
+                                {{form.thumbnail}}
+                                <span class="help-block d-none" id="help-{{form.thumbnail.id_for_label}}"></span>
+                                <div class="invalid-feedback" id="msg-{{form.thumbnail.id_for_label}}">
+                                </div>
+
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{form.show_state.id_for_label}}" class="form-label">{{form.show_state.label}}</label> <br>
+                                {{form.show_state}}
+                                <div class="invalid-feedback" role="alert" id="msg-{{form.show_state.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <input type="hidden" name="submit">
+                            <input type="submit" value="Save" data-btn='save' class="btn btn-primary btn-submit">
+                            <input type="submit" value="Save and add another" data-btn='save-add' class="btn btn-primary btn-submit" >
+                            <input type="submit" value="Save and continue editing" data-btn='save-edit' class="btn btn-primary btn-submit">
+                        </form>
+                    </div>
                 </div>
             </div> <!-- end card-body-->
         </div> <!-- end card-->
     </div> <!-- end col -->
 </div>
 
+<div class="row" id="preview-card">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <a href="javascript:void(0);" class="btn btn-danger mb-2" id="add-form-open"><i class="mdi mdi-plus-circle me-2"></i> Buat Berita Statistik </a>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="text-sm-end">
+                            <button type="button" class="btn btn-success mb-2 me-1" id="redraw-table"><i class="mdi mdi-refresh"></i></button>
+                            <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                            <button type="button" class="btn btn-light mb-2">Export</button>
+                        </div>
+                    </div><!-- end col-->
+                </div>
+
+                <table class="table table-centered w-100 dt-responsive nowrap" id="statnews-datatable">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="all" style="width: 5%;">
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="checkAll">
+                                    <label class="form-check-label" for="checkAll">&nbsp;</label>
+                                </div>
+                            </th>
+                            <th>Subjek</th>
+                            <th>Judul Berita</th>
+                            <th>Penulis</th>
+                            <th>Dibaca</th>
+                            <th>Status</th>
+                            <th style="width: 85px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% comment %} <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="customCheck2">
+                                    <label class="form-check-label" for="customCheck2">&nbsp;</label>
+                                </div>
+                            </td>
+                            <td>
+                                1
+                            </td>
+                            <td>
+                                Kemiskinan
+                            </td>
+                            <td>
+                                <img src="assets/images/products/product-1.jpg" alt="contact-img" title="contact-img" class="rounded me-3" height="48">
+                                <p class="m-0 d-inline-block align-middle font-16">
+                                    <a href="apps-ecommerce-products-details.html" class="text-body">Amazing Modern Chair</a>
+                                </p>
+                            </td>
+
+                            <td>
+                                09/12/2018
+                            </td>
+                            <td>
+                                $148.66
+                            </td>
+
+                            <td>
+                                254
+                            </td>
+                            <td>
+                                <span class="badge bg-success">Active</span>
+                            </td>
+
+                            <td>
+                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-eye"></i></a>
+                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                <a href="javascript:void(0);" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+                            </td>
+                        </tr> {% endcomment %}
+                    </tbody>
+                </table>
+            </div> <!-- end card-body-->
+        </div> <!-- end card-->
+    </div> <!-- end col -->
+</div>
+
 {% endblock content %}
+
+{% block js-extender %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- quill js -->
+<script src="{% static 'app-design/assets/js/vendor/quill.min.js' %}"></script>
+<script src="{% static 'app-design/assets/js/pages/demo.quilljs.js' %}"></script>
+
+<script>
+    'use strict'
+
+    var valsId = []
+
+    var swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-primary'},
+        buttonsStyling: true
+    })
+
+    var table = $("#statnews-datatable").DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            "url": "{% url 'backend:backend-statnews-json' %}",
+            "headers": {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            "type": "POST",
+        },
+        columns :[
+            {"data" : 'checkbox'},
+            {"data": 'subject_id__name'},
+            {"data" : 'title'},
+            {"data" : 'author'},
+            {"data" : 'num_visits'},
+            {"data" : 'show_state'},
+            {"data" : 'actions'},
+        ],
+        lengthMenu: [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, 'All']],
+        order: [[2, 'asc']],
+        columnDefs: [
+         {
+            'targets': [0], /* column index */
+            'orderable': !1, /* true or false */             
+        },    
+        ],
+        keys: !0,
+        language: {
+            paginate: {
+            previous: "<i class='mdi mdi-chevron-left'>",
+            next: "<i class='mdi mdi-chevron-right'>",
+            },
+        },
+        drawCallback: function () {
+            $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+
+            if (valsId.length > 0) {
+                $('input[name="select"]').each(function () {
+    
+                        var sThisVal = $(this).val();
+                        if (valsId.includes(sThisVal)) 
+                            $(this).prop('checked', true)
+                });
+            }
+        },
+    });
+
+</script>
+
+<script>
+    function pushValue(e){
+
+        if (!valsId.includes($(e).val())){
+            valsId.push(String($(e).val()));
+        } else{
+            valsId = valsId.filter(item => item !== $(e).val())
+        }
+
+        if (valsId.length > 0) {
+            $('#countData').html(valsId.length)
+            $('#alertDelMultiple').removeClass('d-none')
+        }else{
+            $('#alertDelMultiple').addClass('d-none')
+        }
+    }
+
+    function resetForm(){
+        $("#statnews-form")[0].reset()
+        $("#statnews-form").removeClass('was-validated')
+        $("#id_id").val("")
+        $("#snow-editor .ql-editor").html("")
+    }
+
+    function deleteStatNews(e){
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "Apakah anda yakin ingin menghapus data?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '{% url 'backend:backend-statnews-delete' %}',
+                    type: "POST",
+                    dataType: "json",
+                    data : {
+                        'id' : e
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": '{{csrf_token}}',
+                    },
+                    success: (data) => {
+                        if (data.status == 'success'){
+                            push_notif("Sucess!", data.message, "success") 
+                            table.ajax.reload();
+                        }else{
+                            push_notif("Something wrong!", data.message, "error") 
+                            table.ajax.reload();
+                        }
+                    },
+                    error: (error) => {
+                        push_notif("Something wrong!", error, "danger") 
+                    }
+                });
+            }
+        }) 
+
+    }
+
+    function updateStatNews(e){
+        $.ajax({
+            url: '{% url 'backend:backend-statnews-detail' %}',
+            type: "POST",
+            dataType: "json",
+            data : {
+                'id' : e
+            },
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            success: (response) => {
+                
+                console.log(response)
+                if (response.status == 'success'){
+                    var init = response.instance
+                    $('#id').val(init.id)
+                    $('#title').val(init.title)
+                    $('#subject_id').val(init.subject_id_id)
+                    $('#subject_csa_id').val(init.subject_csa_id_id)
+                    $('#author').val(init.author)
+                    $("#snow-editor .ql-editor").html(init.content)
+                    $('#show_state').val(init.show_state)
+
+                    $('#help-file').html('<small>Current file: <a href="/media/'+init.file+'" class="action-icon">'+init.file+'</a>.</small>')
+                    $('#help-file').removeClass('d-none')
+
+                    $('#help-thumbnail').html('<small>Current file: <a href="/media/'+init.thumbnail+'" class="action-icon">'+init.thumbnail+'</a>.</small>')
+                    $('#help-thumbnail').removeClass('d-none')
+
+                    $('#input-card').removeClass('d-none')
+                    $('#preview-card').addClass('d-none')
+                }
+
+            },
+            error: (error) => {
+                console.log(error);
+            }
+        });
+    }
+
+    function switchState(e){
+        $.ajax({
+            url: '{% url 'backend:backend-statnews-switch' %}',
+            type: "POST",
+            dataType: "json",
+            data : {
+                'id' : $(e).attr('data-id'),
+            },
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            success: (data) => {
+                if (data.status == 'success'){
+                    push_notif("Sucess!", data.message, "success") 
+                    table.ajax.reload();
+                }else{
+                    push_notif("Something wrong!", data.message, "error") 
+                    table.ajax.reload();
+                }
+            },
+            error: (error) => {
+                push_notif("Something wrong!", error, "danger") 
+            }
+        });
+   } 
+
+    $('#redraw-table').on('click', function (){
+        table.draw();
+    })
+
+
+</script>
+
+<script>
+
+    $(".btn-submit").on("click", function (e){
+        e.preventDefault()
+        var btn_ctrl = $(this).attr('data-btn')
+        $('input[name=submit]').prop('value', btn_ctrl)
+        $("#statnews-form").submit()
+    })
+
+    $("#checkAll").change(function () {
+        $('input:checkbox').not(this).prop('checked', this.checked);
+
+        if (this.checked) {
+            $('input[name="select"]').each(function () {
+                if (!valsId.includes($(this).val())) 
+                    valsId.push(String($(this).val()));
+            });
+        }else{
+            $('input[name="select"]').each(function () {
+                valsId = valsId.filter(item => item !== $(this).val())
+            });
+        }
+
+        if (valsId.length > 0) {
+            $('#countData').html(valsId.length)
+            $('#alertDelMultiple').removeClass('d-none')
+        }else{
+            $('#alertDelMultiple').addClass('d-none')
+        }
+    });
+
+    $('#add-form-open').on('click', function (){
+        $('#input-card').removeClass('d-none')
+        $('#preview-card').addClass('d-none')
+    })
+    
+
+    $('#add-form-close').on('click', function (){
+        $('#input-card').addClass('d-none')
+        $('#preview-card').removeClass('d-none')
+        resetForm()
+    })
+
+    $("#statnews-form").on("submit", function (e){
+
+        e.preventDefault()
+        var btn_act = $('input[name=submit]').val()
+        var data = new FormData(this);
+        data.append("content", $('#snow-editor .ql-editor').html())
+
+        $('.invalid-feedback').html('')
+        $('.is_invalid').removeClass('is_invalid')
+
+        $.ajax({
+            type: 'post',
+            url: $(this).attr('action'),
+            processData: false,
+            contentType: false,
+            data: data ,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            success: function (response) {
+
+                if(btn_act == 'save'){
+                    resetForm()
+                    $('#input-card').addClass('d-none')
+                    $('#preview-card').removeClass('d-none')
+                }else if(btn_act == 'save-add'){
+                    resetForm()
+                }
+                push_notif("Sucess!", response.message, "success") 
+                table.ajax.reload();
+            },
+
+            error: function (response) {
+                var errors = response["responseJSON"]["error"]
+                console.log(errors)
+                for (const [key, value] of Object.entries(errors)) {
+                    var msgs = '<ul>'
+                    value.forEach(function (item, index) {
+                        msgs += '<li>'+item+'</li>'
+                        console.log(item)
+                        });
+                    msgs += '</ul>'
+                    $('#'+ key).addClass('is-invalid');
+                    $('#msg-'+key).html(msgs)
+                }    
+            }
+        })
+
+    })
+
+    $('#submitMultiple').click(function (){
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "Apakah anda yakin ingin menghapus " + valsId.length + " data?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: false
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: '{% url 'backend:backend-statnews-multiple-delete' %}',
+                    type: "POST",
+                    dataType: "json",
+                    data : {
+                        'valsId' : valsId
+                    },
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": '{{csrf_token}}',
+                    },
+                    success: (response) => {
+                        $('#alertDelMultiple').addClass('d-none')
+                        if (response.status == 'success'){
+                            push_notif("Sucess!", response.message, "success") 
+                            table.ajax.reload();
+                        }else{
+                            push_notif("Something wrong!", response.message, "error") 
+                            table.ajax.reload();
+                        }
+                        valsId = []
+                    },
+                    error: (error) => {
+                        push_notif("Something wrong!", error, "danger") 
+                    }
+                });
+            }
+        }) 
+    })
+</script>
+{% endblock js-extender %}

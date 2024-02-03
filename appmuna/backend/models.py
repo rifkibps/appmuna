@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from . import validators
 
 
 # Characteristic Subject Model
@@ -185,6 +186,25 @@ class BackendContentIndicatorsModel(models.Model):
    
    def __str__(self):
       return f"{self.indicator_id.name} | {self.year}"
+   
+
+class BackendContentStatisModel(models.Model):
+      class Meta:
+        verbose_name = 'Master Konten Tabel Statis'
+        verbose_name_plural = 'Master Konten Tabel Statis'   
+
+      state = (
+         ('1', 'Ya'),
+         ('2', 'Tidak')
+      )
+      subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_content_static')
+      subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_content_static')
+      title =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Judul Tabel' )
+      content = models.TextField(null=False, blank=False, verbose_name='Konten HTML' )
+      show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Infografis')
+
+      def __str__(self):
+         return f"{self.id} {self.subject_id.name} | {self.title}"
 
 # infografis Model
 class BackendInfographicsModel(models.Model):
@@ -199,15 +219,17 @@ class BackendInfographicsModel(models.Model):
     )
    
    subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_infographic')
-   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=False, related_name='subject_csa_infographic')
+   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_infographic')
    title =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Judul Infografis' )
    desc =  models.TextField(null=False, blank=False, verbose_name='Deskripsi Infografis' )
-   file = models.FileField(null=False, blank=False, upload_to='infographics', verbose_name='File Infografis')
+   file = models.FileField(null=False, blank=False, upload_to='infographics', verbose_name='File Infografis', validators=[FileExtensionValidator(allowed_extensions=["pdf"]), validators.validate_file_size])
    show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Infografis')
-   num_visits = models.IntegerField(null=False, blank=False, editable=False)
+   num_visits = models.IntegerField(null=False, blank=False, default=0, editable=False)
    created_at = models.DateField(auto_now_add = True, editable=False)
    updated_at = models.DateField(auto_now = True, editable=False)
 
+   def __str__(self):
+      return f"{self.id} {self.subject_id.name} | {self.title}"
 # videografis Model
 class BackendVideoGraphicsModel(models.Model):
    
@@ -221,15 +243,19 @@ class BackendVideoGraphicsModel(models.Model):
     )
    
    subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_videographic')
-   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=False, related_name='subject_csa_videographic')
+   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_videographic')
    title =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Judul Videografis')
    desc =  models.TextField(null=False, blank=False, verbose_name='Deskripsi Videografis')
-   file = models.FileField(null=False, blank=False, upload_to='videographics', verbose_name='File Videografis')
-   thumbnail = models.FileField(null=False, blank=False, upload_to='thumbnail-videographics', verbose_name='Thumbnail Videografis')
+   link = models.CharField(max_length=512, null=True, blank=True, verbose_name='Link Youtube')
+   file = models.FileField(null=True, blank=True, upload_to='videographics', verbose_name='File Videografis', validators=[FileExtensionValidator(allowed_extensions=["mp4", "mkv"]), validators.validate_video_file_size])
+   thumbnail = models.ImageField(null=False, blank=False, upload_to='thumbnail-videographics', validators=[validators.validate_file_size], verbose_name='Thumbnail Videografis')
    show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Videografis')
-   num_visits = models.IntegerField(null=False, blank=False, editable=False)
+   num_visits = models.IntegerField(null=False, blank=False, default=0, editable=False)
    created_at = models.DateField(auto_now_add = True, editable=False)
    updated_at = models.DateField(auto_now = True, editable=False)
+
+   def __str__(self):
+      return f"{self.id} {self.subject_id.name} | {self.title}"
 
 # Berita Statistik Model
 class BackendStatsNewsModel(models.Model):
@@ -243,13 +269,14 @@ class BackendStatsNewsModel(models.Model):
       ('2', 'Tidak')
     )
    
-   subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_stat_news')
-   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_stat_news')
+   subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_stat_news', verbose_name='Subjek Statistik')
+   subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_stat_news', verbose_name='Subjek CSA')
 
    title =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Judul Berita Statistik')
+   author = models.CharField(max_length=128, null=False, blank=False, default="BPS Kabupaten Muna", verbose_name='Penulis')
    content =  models.TextField(null=False, blank=False, verbose_name='Konten Berita')
-   file = models.FileField(null=False, blank=False, upload_to='stats_news', verbose_name='File Berita', validators=[FileExtensionValidator(allowed_extensions=["pdf"])])
-   thumbnail = models.ImageField(null=False, blank=False, upload_to='thumbnail-statsnews', verbose_name='Thumbnail Berita')
+   file = models.FileField(null=False, blank=False, upload_to='stats_news', verbose_name='File Berita', validators=[FileExtensionValidator(allowed_extensions=["pdf"]), validators.validate_file_size])
+   thumbnail = models.ImageField(null=False, blank=False, upload_to='thumbnail-statsnews', validators=[validators.validate_file_size], verbose_name='Thumbnail Berita')
    show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Berita')
    num_visits = models.IntegerField(null=False, blank=False, default=0, editable=False)
    created_at = models.DateField(auto_now_add = True, editable=False)
