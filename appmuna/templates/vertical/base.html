@@ -102,6 +102,9 @@
                                         <div class="collapse" id="sidebarPagesAuth">
                                             <ul class="side-nav-third-level">
                                                 <li>
+                                                    <a href="{% url 'backend:backend-static-table' %}">Tabel Statis</a>
+                                                </li>
+                                                <li>
                                                     <a href="{% url 'backend:backend-content-input' %}">Input Tabel</a>
                                                 </li>
                                                 <li>
@@ -158,39 +161,6 @@
                         </li>
 
                         <li class="side-nav-title side-nav-item mt-3">Permintaan Data</li>
-
-                        {% comment %} <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#permohonan_data" aria-expanded="false" aria-controls="permohonan_data" class="side-nav-link">
-                                <i class="uil-store"></i>
-                                <span> Permohonan Data </span>
-                                <span class="menu-arrow"></span>
-                            </a>
-                            
-                            <div class="collapse" id="permohonan_data">
-                                <ul class="side-nav-second-level">
-
-                                    <li class="side-nav-item">
-                                        <a data-bs-toggle="collapse" href="#sidebarTest" aria-expanded="false" aria-controls="sidebarTest">
-                                            <span> Authentication </span>
-                                            <span class="menu-arrow"></span>
-                                        </a>
-                                        <div class="collapse" id="sidebarTest">
-                                            <ul class="side-nav-third-level">
-                                                <li>
-                                                    <a href="pages-login.html">Login</a>
-                                                </li>
-                                                <li>
-                                                    <a href="pages-login-2.html">Login 2</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>                                    
-                                    <li class="side-nav-item">
-                                        <a href="{% url 'backend:backend-indicators' %}">Indikator/Tabel</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li> {% endcomment %}
 
                     </ul>
                     <!-- End Sidebar -->

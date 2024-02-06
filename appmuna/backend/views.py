@@ -1544,7 +1544,6 @@ class BackendContentDeleteClassView(LoginRequiredMixin, View):
                 
         return JsonResponse({'status': 'Invalid request'}, status=400)
     
-
 class BackendContentMultipleDeleteClassView(LoginRequiredMixin, View):
     
     def post(self, request):
@@ -2556,3 +2555,232 @@ class BackendVideoGraphicDetailClassView(LoginRequiredMixin, View):
                 
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
+
+# <========================================== End Video Grafias ===================================================> 
+    
+
+
+# <========================================== Start Static Table ===================================================> 
+    
+class BackendContentStatisClassView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {
+            'title' : 'Backend | Tabel Statis',
+            'form' : forms.BackendContentStatisForm()
+        }
+        return render(request, 'backend/table_statistics/static-tables.html', context)
+    
+    def post(self, request):
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if is_ajax:
+            if request.method == 'POST':
+                if request.POST.get('id'):
+                    data = get_object_or_404(models.BackendContentStatisModel, pk=request.POST.get('id'))
+                    form = forms.BackendContentStatisForm(request.POST,request.FILES, instance=data)
+                    msg = f'The static table with the title “NAME” has been successfully changed.'
+                else:
+                    form = forms.BackendContentStatisForm(request.POST, request.FILES)
+                    msg = 'The static table with the title “NAME” has been successfully added.'
+
+                if form.is_valid():
+                    old_dt = form.cleaned_data.get('title')
+                    form.save()
+                    return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendContentStatisJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'title' 
+
+        datatables = request.POST
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+
+        model = models.BackendContentStatisModel.objects
+        model = model.exclude(
+            Q(subject_id=None) |
+            Q(title=None) |
+            Q(year=None) |
+            Q(content=None) |
+            Q(footer_desc=None) |
+            Q(show_state=None) |    
+            Q(stat_category=None)
+        )
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+   
+        records_total = model.count()
+        records_filtered = records_total
+        
+        if search:
+            model = models.BackendContentStatisModel.objects.filter(
+                Q(subject_id__name__icontains=search) |
+                Q(title__icontains=search) |
+                Q(year__icontains=search) |
+                Q(content__icontains=search) |
+                Q(footer_desc__icontains=search)
+            ).exclude(
+                Q(subject_id=None) |
+                Q(title=None) |
+                Q(year=None) |
+                Q(content=None) |
+                Q(footer_desc=None) |
+                Q(show_state=None) |    
+                Q(stat_category=None)
+            )
+
+            records_total = model.count()
+            records_filtered = records_total
+
+        model = model.order_by(order_col_name)
+            
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
+        page_number = int(start / length + 1)
+        paginator = Paginator(model, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+
+        for obj in object_list:
+    
+            checked = 'checked' if obj.show_state == '1' else ''
+
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj.id == x[1]][0][0],
+                'subject_id__name': obj.subject_id.name,
+                'title': obj.title,
+                'year': obj.year,
+                'stat_category': obj.get_stat_category_display(),
+                'created_at' : obj.created_at.strftime('%d-%m-%Y'),
+                'updated_at' : obj.updated_at.strftime('%d/%m/%Y'),
+                'show_state': f'<div class="form-check form-switch"><input type="checkbox" class="form-check-input" onchange="switchState(this)" id="customSwitch{obj.id}" data-id="{obj.id}" value="1" {checked}></div>',
+                'actions': f'<a href="javascript:void(0)" class="action-icon" onclick="updateStaticTable({obj.id})"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deleteStaticTable({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+
+
+class BackendContentStatisDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+            
+                try:
+                    data = get_object_or_404(models.BackendContentStatisModel, pk = request.POST.get('id'))
+                    name = data.title
+                    data.delete()
+                    msg = f'The static table with the title "{name}" was successfully deleted'
+                    return JsonResponse({'status' : 'success', 'message': msg})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendContentStatisSwitchStateClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendContentStatisModel, pk=request.POST.get('id'))
+                    old_dt = data.title
+                    current_state = '2' if data.show_state == '1' else '1'
+                    data.show_state = current_state
+                    data.save()
+                    return JsonResponse({'status' : 'success', 'message': f'The static table "{old_dt}" was updated successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendContentStatisDetailClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                id = request.POST.get('id')
+                data = models.BackendContentStatisModel.objects.filter(pk=id)
+
+                if data.exists():
+                    return JsonResponse({'status' : 'success', 'instance': list(data.values())[0]}, status=200)
+                else:
+                    return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendContentStatisMultipleDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = models.BackendContentStatisModel.objects.filter(pk = dt)
+                        if model.exists():
+                            model.delete()
+                        else:
+                            return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+                        
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    

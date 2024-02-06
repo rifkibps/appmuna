@@ -186,6 +186,57 @@ class BackendIndicatorForm(forms.ModelForm):
             )
         }
 
+
+class BackendContentStatisForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendContentStatisModel
+
+        fields = [
+            'subject_id',
+            'subject_csa_id',
+            'title',
+            'year',
+            'content',
+            'footer_desc',
+            'stat_category',
+            'show_state',
+        ]
+
+        attrs_input = {
+            'class' : 'form-control',
+            'required': 'required',
+            'placeholder': '...'
+        }
+
+        widgets = {
+            'subject_id': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'subject_id'}
+            ),
+            'subject_csa_id': forms.Select(
+                attrs = {'class' : 'form-select' , 'id' : 'subject_csa_id'}
+            ),
+            'title': forms.TextInput(
+                attrs = attrs_input | {'placeholder' : 'Tuliskan judul berita statistik', 'id' : 'title'}
+            ),
+            'year': forms.TextInput(
+                attrs = attrs_input | {'placeholder' : 'Tuliskan keterangan tahun', 'id' : 'year'}
+            ),
+            'content': forms.TextInput(
+                attrs = attrs_input  | {'id' : 'content'}
+            ),
+            'footer_desc': forms.TextInput(
+                attrs = attrs_input  | {'placeholder' : 'Tuliskan keterangan sumber/informasi lain', 'id' : 'footer_desc'}
+            ),
+            'stat_category': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'stat_category'}
+            ),
+            'show_state': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'show_state'}
+            )
+        }
+
+
 class BackendStatsNewsForm(forms.ModelForm):
 
     class Meta:

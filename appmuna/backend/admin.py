@@ -35,7 +35,7 @@ admin.site.register(models.BackendCharacteristicsModel, CharacteristicItems)
 admin.site.register(models.BackendRowsModel, RowsItems)
 admin.site.register(models.BackendPeriodsModel, PeriodsItems)
 
-
+admin.site.register(models.BackendContentStatisModel)
 admin.site.register(models.BackendContentIndicatorsModel)
 admin.site.register(models.BackendUnitsModel)
 admin.site.register(models.BackendInfographicsModel)

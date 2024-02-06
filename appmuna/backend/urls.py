@@ -87,5 +87,16 @@ urlpatterns = [
     path('backend/videographics/detail', views.BackendVideoGraphicDetailClassView.as_view(), name='backend-videographic-detail'),
     path('backend/videographics/multiple-delete', views.BackendVideoGraphicsMultipleDeleteClassView.as_view(), name='backend-videographic-multiple-delete'),
   
-   
+    path('backend/static-table', views.BackendContentStatisClassView.as_view(), name='backend-static-table'),
+    path('backend/static-table/json', views.BackendContentStatisJsonClassView.as_view(), name='backend-static-json'),
+    path('backend/static-table/delete', views.BackendContentStatisDeleteClassView.as_view(), name='backend-static-delete'),
+    path('backend/static-table/switch', views.BackendContentStatisSwitchStateClassView.as_view(), name='backend-static-switch'),
+    path('backend/static-table/detail', views.BackendContentStatisDetailClassView.as_view(), name='backend-static-detail'),
+    path('backend/static-table/multiple-delete', views.BackendContentStatisMultipleDeleteClassView.as_view(), name='backend-static-multiple-delete'),
+
+
+
+
+
+
 ]

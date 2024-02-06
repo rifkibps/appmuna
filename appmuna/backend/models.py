@@ -197,11 +197,22 @@ class BackendContentStatisModel(models.Model):
          ('1', 'Ya'),
          ('2', 'Tidak')
       )
+
+      cats = (
+         ('1', 'Dasar'),
+         ('2', 'Sektoral')
+      )
+      
       subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_content_static')
       subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_content_static')
       title =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Judul Tabel' )
+      year = models.CharField(max_length=5, null=False, blank=False, verbose_name='Tahun Tabel')
       content = models.TextField(null=False, blank=False, verbose_name='Konten HTML' )
+      footer_desc =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Keterangan Tabel' )
+      stat_category = models.CharField(max_length=1, choices = cats, null=False, blank=False, verbose_name='Kategori Statistik')
       show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Infografis')
+      created_at = models.DateField(auto_now_add = True, editable=False)
+      updated_at = models.DateField(auto_now = True, editable=False)
 
       def __str__(self):
          return f"{self.id} {self.subject_id.name} | {self.title}"
