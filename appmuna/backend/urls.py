@@ -94,8 +94,12 @@ urlpatterns = [
     path('backend/static-table/detail', views.BackendContentStatisDetailClassView.as_view(), name='backend-static-detail'),
     path('backend/static-table/multiple-delete', views.BackendContentStatisMultipleDeleteClassView.as_view(), name='backend-static-multiple-delete'),
 
-
-
+    path('backend/data-request', views.BackendDataRequestsClassView.as_view(), name='backend-data-request'),
+    path('backend/data-request/json', views.BackendDataRequestsJsonClassView.as_view(), name='backend-request-json'),
+    path('backend/data-request/switch', views.BackendDataRequestsSwitchClassView.as_view(), name='backend-request-switch'),
+    path('backend/data-request/delete', views.BackendDataRequestDeleteClassView.as_view(), name='backend-request-delete'),
+    
+    path('backend/data-request/multiple-delete', views.BackendDataRequestsMultipleDeleteClassView.as_view(), name='backend-request-multiple-delete'),
 
 
 

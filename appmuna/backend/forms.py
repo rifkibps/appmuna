@@ -378,3 +378,51 @@ class BackendVideoGraphicForm(forms.ModelForm):
             )
         }
     
+
+
+class BackendDataRequestsForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendDataRequestsModel
+
+
+        fields = [
+            'name_person',
+            'contact_person',
+            'agency_person',
+            'subject_request',
+            'desc_data',
+            'app_letter',
+            'show_state',
+        ]
+
+        attrs_input = {
+            'class' : 'form-control',
+            'required': 'required',
+            'placeholder': '...'
+        }
+
+        widgets = {
+            'name_person': forms.TextInput(
+                attrs = attrs_input | {'id' : 'name_person'}
+            ),
+            'contact_person': forms.TextInput(
+                attrs = attrs_input | {'id' : 'contact_person'}
+            ),
+            'agency_person': forms.TextInput(
+                attrs = attrs_input | {'id' : 'agency_person'}
+            ),
+            'subject_request': forms.TextInput(
+                attrs = attrs_input | {'placeholder' : 'Tuliskan judul berita statistik', 'id' : 'subject_request'}
+            ),
+            'desc_data': forms.TextInput(
+                attrs = attrs_input | {'placeholder' : 'Tuliskan judul berita statistik', 'id' : 'desc_data'}
+            ),
+            'app_letter': forms.FileInput(
+                attrs = {'class' : 'form-control' , 'id' : 'app_letter'}
+            ),
+            'show_state': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'show_state'}
+            )
+        }
+

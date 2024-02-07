@@ -20,6 +20,7 @@ from operator import itemgetter
 from datetime import datetime as datetime_
 
 from pprint import pprint
+from django.utils.timezone import now
 
 class BackendAppClassView(LoginRequiredMixin, View):
 
@@ -2784,3 +2785,218 @@ class BackendContentStatisMultipleDeleteClassView(LoginRequiredMixin, View):
 
         return JsonResponse({'status': 'Invalid request'}, status=400)
     
+
+# <========================================== End Static Table ===================================================> 
+
+class BackendDataRequestsClassView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {
+            'title' : 'Backend | Permohonan Data',
+            'form' : forms.BackendDataRequestsForm()
+        }
+        return render(request, 'backend/data_requests/data_requests.html', context)
+    
+    def post(self, request):
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if is_ajax:
+            if request.method == 'POST':
+                if request.POST.get('id'):
+                    data = get_object_or_404(models.BackendDataRequestsModelq, pk=request.POST.get('id'))
+                    form = forms.BackendDataRequestsForm(request.POST,request.FILES, instance=data)
+                    msg = f'The data request with the title “NAME” has been successfully changed.'
+                else:
+                    form = forms.BackendDataRequestsForm(request.POST, request.FILES)
+                    msg = 'The data request with the title “NAME” has been successfully added.'
+
+                if form.is_valid():
+                    old_dt = form.cleaned_data.get('title')
+                    form.save()
+                    return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendDataRequestsJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'name_person' 
+
+        datatables = request.POST
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+        model = models.BackendDataRequestsModel.objects
+        model = model.exclude(
+            Q(name_person=None) |
+            Q(contact_person=None) |
+            Q(agency_person=None) |
+            Q(subject_request=None) |
+            Q(desc_data=None) |
+            Q(show_state=None)  
+        )
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+   
+        records_total = model.count()
+        records_filtered = records_total
+        
+        if search:
+            model = models.BackendDataRequestsModel.objects.filter(
+                Q(name_person__icontains=search) |
+                Q(contact_person__icontains=search) |
+                Q(agency_person__icontains=search) |
+                Q(subject_request__icontains=search) |
+                Q(desc_data__icontains=search)
+            ).exclude(
+                Q(name_person=None) |
+                Q(contact_person=None) |
+                Q(agency_person=None) |
+                Q(subject_request=None) |
+                Q(desc_data=None) |
+                Q(show_state=None)  
+            )
+
+            records_total = model.count()
+            records_filtered = records_total
+
+        model = model.order_by(order_col_name)
+            
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
+        page_number = int(start / length + 1)
+        paginator = Paginator(model, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+
+        for obj in object_list:
+    
+            checked = 'checked' if obj.show_state == '1' else ''
+            show_state = f'<select class="form-select form-select-sm" data-id="{obj.id}" onchange="update_state(this)">'
+
+            for val,choice in models.BackendDataRequestsModel._meta.get_field('show_state').choices:
+                
+                selected = 'selected' if val == obj.show_state else ''
+                show_state += f'<option value="{val}" {selected}>{choice}</option>'
+
+            show_state += '</select>'
+            link_app_letter = f'<a href="{obj.app_letter.url}" class="action-icon" download> <i class="mdi mdi-download"></i></a>' if obj.app_letter else ''
+
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj.id == x[1]][0][0],
+                'name_person': obj.name_person,
+                'agency_person': obj.agency_person,
+                'subject_request': obj.subject_request,
+                'contact_person': obj.contact_person,
+                'show_state': show_state,
+                'actions': f'{link_app_letter} <a href="javascript:void(0);" onclick="deleteDataRequest({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+
+
+class BackendDataRequestsSwitchClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendDataRequestsModel, pk=request.POST.get('id'))
+                    old_dt = data.subject_request
+                    data.show_state = request.POST.get('current_state')
+
+                    if request.POST.get('current_state') == "1":
+                        data.approved_at = now()
+
+                    data.save()
+                    return JsonResponse({'status' : 'success', 'message': f'The data request "{old_dt}" was updated successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendDataRequestDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+            
+                try:
+                    data = get_object_or_404(models.BackendDataRequestsModel, pk = request.POST.get('id'))
+                    name = data.subject_request
+                    data.delete()
+                    msg = f'The data request with the title "{name}" was successfully deleted'
+                    return JsonResponse({'status' : 'success', 'message': msg})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendDataRequestsMultipleDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = models.BackendDataRequestsModel.objects.filter(pk = dt)
+                        if model.exists():
+                            model.delete()
+                        else:
+                            return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+                        
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    
+
+

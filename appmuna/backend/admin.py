@@ -41,3 +41,6 @@ admin.site.register(models.BackendUnitsModel)
 admin.site.register(models.BackendInfographicsModel)
 admin.site.register(models.BackendVideoGraphicsModel)
 admin.site.register(models.BackendStatsNewsModel)
+
+admin.site.register(models.BackendDataRequestsModel)
+

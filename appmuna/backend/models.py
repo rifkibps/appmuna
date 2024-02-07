@@ -295,3 +295,30 @@ class BackendStatsNewsModel(models.Model):
 
    def __str__(self):
       return f"{self.subject_id.name} | {self.title} | {self.created_at.strftime('%d/%m/%Y')}"
+   
+
+class BackendDataRequestsModel(models.Model):
+    
+   class Meta:
+      verbose_name = 'Permohonan Data' 
+      verbose_name_plural = 'Permohonan Data'
+   
+   state = (
+      ('1', 'Disetujui'),
+      ('2', 'Data Tidak/Belum Tersedia'),
+      ('3', 'Menunggu Konfirmasi PIC')
+    )
+
+   name_person =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Nama Pemohon')
+   contact_person =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Kontak Pemohon')
+   agency_person = models.CharField(max_length=128, null=False, blank=False, verbose_name='Instansi Pemohon')
+
+   subject_request =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Judul Permohonan Data')
+   desc_data =  models.TextField(null=False, blank=False, verbose_name='Deskripsi Data yang Dimaksudkan')
+   app_letter = models.FileField(null=True, blank=True, upload_to='letter_data_request', verbose_name='Unggah Surat Permohonan', validators=[FileExtensionValidator(allowed_extensions=["pdf"]), validators.validate_file_size])
+   request_at = models.DateField(auto_now_add = True, editable=False)
+   approved_at = models.DateField(null=True, blank=True, verbose_name='Tanggal Disetujui')
+   show_state = models.CharField(max_length=1, choices = state, default="3", null=False, blank=False, verbose_name='Status Permohonan Data')
+
+   def __str__(self):
+      return f"{self.id} {self.name_person} | {self.agency_person} | {self.contact_person}"
