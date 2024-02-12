@@ -124,11 +124,19 @@
                             </div>
                             
                             <div class="mb-3">
+                                <label for="{{form.level_data.id_for_label}}" class="form-label">{{form.level_data.label}}</label>
+                                {{form.level_data}}
+                                <div class="invalid-feedback" id="msg-{{form.level_data.id_for_label}}">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="{{form.show_state.id_for_label}}" class="form-label">{{form.show_state.label}}</label>
                                 {{form.show_state}}
                                 <div class="invalid-feedback" id="msg-{{form.show_state.id_for_label}}">
                                 </div>
                             </div>
+                            
 
                             <input type="hidden" name="submit">
                             <input type="submit" value="Save" data-btn='save' class="btn btn-primary btn-submit">

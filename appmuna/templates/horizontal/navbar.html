@@ -1,9 +1,9 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg py-lg-3 border-bottom border-light">
+<nav class="navbar bg-white navbar-expand-lg py-lg-3 border-bottom border-light">
     <div class="container">
 
         <!-- logo -->
-        <a href="index.html" class="navbar-brand me-lg-5">
+        <a href="{% url 'app:home-app' %}" class="navbar-brand me-lg-5">
             <img src="{% static 'customs/images/bps_kab_muna_light.png' %}" alt="" class="logo-dark" height="45">
         </a>
 
@@ -17,23 +17,23 @@
             <!-- left menu -->
             <ul class="navbar-nav me-auto align-items-center">
                 <li class="nav-item mx-lg-1">
-                    <a class="nav-link text-muted active" href="">Beranda</a>
+                    <a class="nav-link text-muted active" href="{% url 'app:home-app' %}">Beranda</a>
                 </li>
                 <li class="nav-item mx-lg-1">
-                    <a class="nav-link text-muted" href="">Data Strategis</a>
+                    <a class="nav-link text-muted" href="{% url 'app:home-app' %}">Data Strategis</a>
                 </li>
 
                 <li class="nav-item mx-lg-1">
-                    <a class="nav-link text-muted" href="">Data Kinerja Pembangunan</a>
+                    <a class="nav-link text-muted" href="{% url 'app:home-app' %}">Data Kinerja Pembangunan</a>
                 </li>
                 <li class="nav-item mx-lg-1">
-                    <a class="nav-link text-muted" href="">Tabel Statistik</a>
+                    <a class="nav-link text-muted" href="{% url 'app:home-app' %}">Tabel Statistik</a>
                 </li>
                 <li class="nav-item mx-lg-1">
-                    <a class="nav-link text-muted" href="">Permohonan Data</a>
+                    <a class="nav-link text-muted" href="{% url 'app:home-app' %}">Permohonan Data</a>
                 </li>
                 <li class="nav-item mx-lg-1">
-                    <a class="nav-link text-muted" href="">Kontak</a>
+                    <a class="nav-link text-muted" href="{% url 'app:home-app' %}">Kontak</a>
                 </li>
             </ul>
 

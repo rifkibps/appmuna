@@ -43,4 +43,5 @@ admin.site.register(models.BackendVideoGraphicsModel)
 admin.site.register(models.BackendStatsNewsModel)
 
 admin.site.register(models.BackendDataRequestsModel)
+admin.site.register(models.BackendPublicationsModel)
 

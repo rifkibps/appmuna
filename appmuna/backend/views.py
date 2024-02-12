@@ -2788,6 +2788,8 @@ class BackendContentStatisMultipleDeleteClassView(LoginRequiredMixin, View):
 
 # <========================================== End Static Table ===================================================> 
 
+# <========================================== Start Data Request ===================================================> 
+
 class BackendDataRequestsClassView(LoginRequiredMixin, View):
 
     def get(self, request):
@@ -2999,4 +3001,238 @@ class BackendDataRequestsMultipleDeleteClassView(LoginRequiredMixin, View):
         return JsonResponse({'status': 'Invalid request'}, status=400)
     
 
+# <========================================== End Data Request ===================================================>
 
+
+# <========================================== Start Publication ===================================================>
+
+class BackendPublicationsClassView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {
+            'title' : 'Backend | Data Publikasi',
+            'form' : forms.BackendPublicationsForm()
+        }
+        return render(request, 'backend/publications/publications.html', context)
+    
+    def post(self, request):
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if is_ajax:
+            if request.method == 'POST':
+
+
+                if request.POST.get('id'):
+                    data = get_object_or_404(models.BackendPublicationsModel, pk=request.POST.get('id'))
+                   
+                    updated_request = request.POST.copy()
+
+                    if request.FILES.get('file'):
+                        rev_logs = data.revision_log + 1
+                        updated_request.update({'revision_log': rev_logs})
+                        print(request.POST)
+                    form = forms.BackendPublicationsForm(updated_request, request.FILES, instance=data)
+                    msg = f'The publication data with the title “NAME” has been successfully changed.'
+                else:
+                    form = forms.BackendPublicationsForm(request.POST, request.FILES)
+                    msg = 'The publication data with the title “NAME” has been successfully added.'
+
+                if form.is_valid():
+                    old_dt = form.cleaned_data.get('title')
+                    
+                    form.save()
+                    return JsonResponse({"status": 'success', 'message': msg.replace("NAME", old_dt)}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendPublicationsJsonClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        
+        data = self._datatables(request)
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
+		
+    def _datatables(self, request):
+
+        # Define default column for ordering first request
+        def_col = 'title' 
+
+        datatables = request.POST
+        # Get Draw
+        draw = int(datatables.get('draw'))
+        start = int(datatables.get('start'))
+        search = datatables.get('search[value]')
+
+        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
+        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
+        order_col = 'columns[' + str(order_idx) + '][data]'
+        order_col_name = datatables.get(order_col)
+
+        if 'no' in order_col_name:
+            order_col_name = def_col
+
+        if (order_dir == "desc"):
+            order_col_name =  str('-' + order_col_name)
+
+        model = models.BackendPublicationsModel.objects
+        model = model.exclude(
+            Q(title=None) |
+            Q(catalog_no=None) |
+            Q(publication_no=None) |
+            Q(release=None) |
+            Q(abstract=None) |
+            Q(file=None) |    
+            Q(show_state=None)
+        )
+
+        id_def_data = list(model.order_by(def_col).values_list('id'))
+        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
+   
+        records_total = model.count()
+        records_filtered = records_total
+        
+        if search:
+            model = models.BackendPublicationsModel.objects.filter(
+                Q(title__icontains=search) |
+                Q(catalog_no__icontains=search) |
+                Q(issn__icontains=search) |
+                Q(publication_no__icontains=search) |
+                Q(release__icontains=search) |
+                Q(abstract__icontains=search)
+            ).exclude(
+                Q(title=None) |
+                Q(catalog_no=None) |
+                Q(publication_no=None) |
+                Q(release=None) |
+                Q(abstract=None) |
+                Q(file=None) |    
+                Q(show_state=None)
+            )
+
+            records_total = model.count()
+            records_filtered = records_total
+
+        model = model.order_by(order_col_name)
+            
+        # Conf Paginator
+        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
+        page_number = int(start / length + 1)
+        paginator = Paginator(model, length)
+
+        try:
+            object_list = paginator.page(page_number).object_list
+        except PageNotAnInteger:
+            object_list = paginator.page(1).object_list
+        except EmptyPage:
+            object_list = paginator.page(1).object_list
+
+        data = []
+
+        for obj in object_list:
+    
+            checked = 'checked' if obj.show_state == '1' else ''
+
+            data.append(
+            {
+                'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
+                'no': [x for x in id_def_data if obj.id == x[1]][0][0],
+                'title': obj.title,
+                'catalog_no': f'{obj.catalog_no}/{obj.publication_no}/{obj.issn}',
+                'release': obj.release.strftime('%d-%m-%Y'),
+                'revision_log': obj.revision_log,
+                'show_state': f'<div class="form-check form-switch"><input type="checkbox" class="form-check-input" onchange="switchState(this)" id="customSwitch{obj.id}" data-id="{obj.id}" value="1" {checked}></div>',
+                'actions': f'<a href="{obj.file.url}" class="action-icon" download> <i class="mdi mdi-download"></i></a> <a href="javascript:void(0)" class="action-icon" onclick="updatePublication({obj.id})"> <i class="mdi mdi-square-edit-outline"></i></a> <a href="javascript:void(0);" onclick="deletePublication({obj.id})" class="action-icon"> <i class="mdi mdi-delete"></i></a>'
+            })
+
+        return {    
+            'draw': draw,
+            'recordsTotal': records_total,
+            'recordsFiltered': records_filtered,
+            'data': data,
+        }
+
+
+class BackendPublicationDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+            
+                try:
+                    data = get_object_or_404(models.BackendPublicationsModel, pk = request.POST.get('id'))
+                    name = data.title
+                    data.delete()
+                    msg = f'The publication data with the title "{name}" was successfully deleted'
+                    return JsonResponse({'status' : 'success', 'message': msg})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendPublicationSwitchClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = get_object_or_404(models.BackendPublicationsModel, pk=request.POST.get('id'))
+                    old_dt = data.title
+                    current_state = '2' if data.show_state == '1' else '1'
+                    data.show_state = current_state
+                    data.save()
+                    return JsonResponse({'status' : 'success', 'message': f'The publication data "{old_dt}" was updated successfully.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Data not available'})
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendPublicationDetailClassView(LoginRequiredMixin, View):
+
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                
+                id = request.POST.get('id')
+                data = models.BackendPublicationsModel.objects.filter(pk=id)
+
+                if data.exists():
+                    return JsonResponse({'status' : 'success', 'instance': list(data.values())[0]}, status=200)
+                else:
+                    return JsonResponse({'status': 'failed', 'message': 'Data tidak tersedia'}, status=200)
+                
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+
+
+class BackendPublicationMultipleDeleteClassView(LoginRequiredMixin, View):
+    
+    def post(self, request):
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+        if is_ajax:
+            if request.method == 'POST':
+                try:
+                    data = request.POST.getlist('valsId[]')
+                    for dt in data:
+                        model = models.BackendPublicationsModel.objects.filter(pk = dt)
+                        if model.exists():
+                            model.delete()
+                        else:
+                            return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+                        
+                    return JsonResponse({'status': 'success', 'message': f'Successfully deleted {len(data)} rows of data.'})
+                except:
+                    return JsonResponse({'status': 'failed', 'message': 'Something wrong'})
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    

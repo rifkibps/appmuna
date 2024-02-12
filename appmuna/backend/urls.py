@@ -98,9 +98,14 @@ urlpatterns = [
     path('backend/data-request/json', views.BackendDataRequestsJsonClassView.as_view(), name='backend-request-json'),
     path('backend/data-request/switch', views.BackendDataRequestsSwitchClassView.as_view(), name='backend-request-switch'),
     path('backend/data-request/delete', views.BackendDataRequestDeleteClassView.as_view(), name='backend-request-delete'),
-    
     path('backend/data-request/multiple-delete', views.BackendDataRequestsMultipleDeleteClassView.as_view(), name='backend-request-multiple-delete'),
 
 
-
+    path('backend/publications', views.BackendPublicationsClassView.as_view(), name='backend-publications'),
+    path('backend/publications/json', views.BackendPublicationsJsonClassView.as_view(), name='backend-publications-json'),
+    path('backend/publications/switch', views.BackendPublicationSwitchClassView.as_view(), name='backend-publication-switch'),
+    path('backend/publications/delete', views.BackendPublicationDeleteClassView.as_view(), name='backend-publication-delete'),
+    path('backend/publications/multiple-delete', views.BackendPublicationMultipleDeleteClassView.as_view(), name='backend-publications-multiple-delete'),
+    path('backend/publications/detail', views.BackendPublicationDetailClassView.as_view(), name='backend-publication-detail'),
+    
 ]

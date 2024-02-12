@@ -150,6 +150,12 @@ class BackendIndicatorsModel(models.Model):
       ('2', 'Tidak')
    )
 
+   level_choices = (
+      ('0', 'Indikator Biasa'),
+      ('1', 'Indikator Strategis'),
+      ('2', 'Indikator Pembangunan'),
+   )
+
    subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_indicator', verbose_name='Subjek Statistik')
    subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_indicator', verbose_name='Subjek CSA')
    name =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Nama Indikator' )
@@ -162,6 +168,7 @@ class BackendIndicatorsModel(models.Model):
    decimal_point = models.IntegerField(null=False, blank=False, default=2, verbose_name='Jumlah Desimal')
    stat_category = models.CharField(max_length=1, choices = cats, null=False, blank=False, verbose_name='Kategori Statistik')
    show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Indikator')
+   level_data = models.CharField(max_length=1, choices = level_choices, default= '0',null=False, blank=False, verbose_name='Level Data')
    created_at = models.DateField(auto_now_add = True, editable=False)
    updated_at = models.DateField(auto_now = True, editable=False)
    
@@ -322,3 +329,28 @@ class BackendDataRequestsModel(models.Model):
 
    def __str__(self):
       return f"{self.id} {self.name_person} | {self.agency_person} | {self.contact_person}"
+
+
+class BackendPublicationsModel(models.Model):
+    
+   class Meta:
+      verbose_name = 'Master Buku Publikasi' 
+      verbose_name_plural = 'Master Buku Publikasi'
+   
+   state = (
+      ('1', 'Ya'),
+      ('2', 'Tidak')
+    )
+
+   title =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Judul Publikasi')
+   catalog_no = models.CharField(max_length=50, null=False, blank=False, verbose_name='Nomor Catalog')
+   publication_no = models.CharField(max_length=50, null=False, blank=False, verbose_name='Nomor Publikasi')
+   issn = models.CharField(max_length=50, null=True, blank=True, verbose_name='Nomor ISSN/ISBN')
+   release = models.DateField(null=False, blank=False, verbose_name='Tanggal Release')
+   abstract = models.TextField(null=False, blank=False, verbose_name='Abstrak')
+   file = models.FileField(null=False, blank=False, upload_to='publications', verbose_name='File Publikasi', validators=[FileExtensionValidator(allowed_extensions=["pdf"]), validators.validate_publication_size])
+   revision_log = models.IntegerField(null=False, blank=False, default=0)
+   show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Publikasi')
+
+   def __str__(self):
+      return f"{self.id} {self.title} | {self.catalog_no} | {self.publication_no}"

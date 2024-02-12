@@ -135,9 +135,11 @@ class BackendIndicatorForm(forms.ModelForm):
             'col_group_id',
             'row_group_id',
             'time_period_id',
+            'time_period_id',
             'unit_id',
             'decimal_point',
             'stat_category',
+            'level_data',
             'show_state',
         ]
 
@@ -180,6 +182,9 @@ class BackendIndicatorForm(forms.ModelForm):
             ),
             'stat_category': forms.Select(
                 attrs = attrs_input | {'class' : 'form-select', 'id': 'stat_category'}
+            ),
+            'level_data': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id': 'level_data'}
             ),
             'show_state': forms.Select(
                 attrs = attrs_input | {'class' : 'form-select', 'id': 'show_state'}
@@ -379,7 +384,6 @@ class BackendVideoGraphicForm(forms.ModelForm):
         }
     
 
-
 class BackendDataRequestsForm(forms.ModelForm):
 
     class Meta:
@@ -426,3 +430,52 @@ class BackendDataRequestsForm(forms.ModelForm):
             )
         }
 
+
+class BackendPublicationsForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendPublicationsModel
+
+        fields = [
+            'title',
+            'catalog_no',
+            'publication_no',
+            'issn',
+            'release',
+            'abstract',
+            'file',
+            'show_state',
+        ]
+
+        attrs_input = {
+            'class' : 'form-control',
+            'required': 'required',
+            'placeholder': '...'
+        }
+
+        widgets = {
+            'title': forms.TextInput(
+                attrs = attrs_input | {'id' : 'title'}
+            ),
+            'catalog_no': forms.TextInput(
+                attrs = attrs_input | {'id' : 'catalog_no'}
+            ),
+            'publication_no': forms.TextInput(
+                attrs = attrs_input | {'id' : 'publication_no'}
+            ),
+            'issn': forms.TextInput(
+                attrs =  {'class' : 'form-control' , 'id' : 'issn'}
+            ),
+            'release': forms.DateInput(
+                attrs = attrs_input | {'id' : 'release'}
+            ),
+            'abstract': forms.TextInput(
+                attrs = attrs_input | {'id' : 'abstract'}
+            ),
+            'file': forms.FileInput(
+                attrs = attrs_input | {'id' : 'file'}
+            ),
+            'show_state': forms.Select(
+                attrs = attrs_input | {'class' : 'form-select', 'id' : 'show_state'}
+            )
+        }
