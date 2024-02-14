@@ -22,11 +22,42 @@
         <link href="{% static 'app-design/assets/css/app-dark.min.css' %}" rel="stylesheet" type="text/css" id="dark-style">
         
         {% block css-extender %}
+
+        <style>
+            datalist {
+                position: absolute;
+                margin-top:10px;
+                width: 25em!important;
+                max-height: 18em;
+                border: 1px solid #DFDFDF;
+                padding-top:10px;
+                background-color: #fff;
+                overflow-x: hidden;
+                overflow-y: auto;
+                scrollbar-color: #DFDFDF #fff;
+                scrollbar-width: thin;
+                z-index: 10;
+              }
+              
+              datalist option {
+                font-color:#F0F2F5;
+                font-size: 0.9em;
+                padding: 0.4em 3em;
+                cursor: pointer;
+              }
+              
+              /* option active styles */
+              datalist option:hover, datalist option:focus {
+                background-color: #F8F8F8;
+                outline: 0 none;
+              }
+        </style>
         {% endblock css-extender %}
 
     </head>
 
     <body class="loading" data-layout="topnav" data-layout-config='{"layoutBoxed":false,"darkMode":false,"showRightSidebarOnStart": true}'>
+
 
         <!-- Pre-loader -->
         <div id="preloader">
@@ -58,7 +89,7 @@
                     
                         <!-- start page title -->
 
-                        <div class="row" style="padding-top:120px;padding-bottom:90px">
+                        <div class="row mb-2" style="padding-top:120px;padding-bottom:90px">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="text-center">
@@ -74,10 +105,33 @@
                                 <div class="col-lg-12 d-flex justify-content-center">
                                     <div class="app-search dropdown ml-5">
                                         <form>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:550px;height:50px">
-                                                <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
-                                                <button class="btn btn-primary btn-sm rounded" style="margin-left:15px" id="button-top-search">Cari Data</button>
+                                            <div class="row gy-2 gx-2 align-items-center">
+                                                <div class="col-auto p-0">
+                                                    <input class="form-control border" list="browserdata" id="browser" name="browser" placeholder="Semua Data" autocomplete="off" style="width:150px;height:55px;background-color:#ffffff;padding-left:22px">
+                                                    <datalist id="browserdata">
+                                                        <span style="font-size: 0.9em;font-weight:bold; padding: 0.4em 1.5em;">All</span>
+                                                        <br>
+                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> Kependudukan</span>
+                                                        <option>Kemiskinan</option>
+                                                        <option>Ketenagakerjaan</option>
+                                                        <option>Petumbuhan Ekonomi Menurut Pengeluaran</option>
+                                                        <option>Garis Kemiskinan</option>
+                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> Kependudukan</span>
+                                                        <option>Kemiskinan</option>
+                                                        <option>Ketenagakerjaan</option>
+                                                        <option>Petumbuhan Ekonomi Menurut Pengeluaran</option>
+                                                        <option>Garis Kemiskinan</option>
+                                                    </datalist>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control border" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:500px;height:55px;background-color:#ffffff">
+                                                        <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto p-0">
+                                                    <button class="btn btn-primary rounded" style="margin-left:15px; height:47px" id="button-top-search">Cari Data</button>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
@@ -85,16 +139,10 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-12 py-5">
-                                <div class="row pb-3 align-items-center">
+                        <div class="row py-3 bg-light-lighten border-top border-bottom border-light">
+                            <div class="col-12">
+                                <div class="row align-items-center">
                                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                                        <ol class="carousel-indicators" style="margin-bottom: -30px;">
-                                            <li data-bs-target="#carouselExampleControls" data-bs-slide-to="0" class="active bg-primary-lighten"></li>
-                                            <li data-bs-target="#carouselExampleControls" data-bs-slide-to="1" class="bg-primary-lighten"></li>
-                                            <li data-bs-target="#carouselExampleControls" data-bs-slide-to="2" class="bg-primary-lighten"></li>
-                                            <li data-bs-target="#carouselExampleControls" data-bs-slide-to="3" class="bg-primary-lighten"></li>
-                                        </ol>
                                         <div class="carousel-inner" role="listbox">
                                             <div class="carousel-item active" style="background-color:none">
                                                 <div class="row">
@@ -388,7 +436,7 @@
                                 <div class="card py-3" style="border-radius:20px">
                                     <div class="card-body" >
                                         <div class="text-center">
-                                            <h2>1.520</h2>
+                                            <h2 class="text-info">1.520</h2>
                                             <p class="text-muted mb-0" style="font-size: 25px;">Elemen Data</p>
                                         </div>
                                     </div>
@@ -398,7 +446,7 @@
                                 <div class="card py-3" style="border-radius:20px">
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <h2>1.520</h2>
+                                            <h2 class="text-info">1.520</h2>
                                             <p class="text-muted mb-0" style="font-size: 25px;">OPD/Instansi</p>
                                         </div>
                                     </div>
@@ -408,7 +456,7 @@
                                 <div class="card py-3" style="border-radius:20px">
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <h2>1.520</h2>
+                                            <h2 class="text-info">1.520</h2>
                                             <p class="text-muted mb-0" style="font-size: 25px;">Kategori</p>
                                         </div>
                                     </div>
@@ -418,7 +466,7 @@
                                 <div class="card py-3" style="border-radius:20px">
                                     <div class="card-body">
                                         <div class="text-center">
-                                            <h2>1.520</h2>
+                                            <h2 class="text-info">1.520</h2>
                                             <p class="text-muted mb-0" style="font-size: 25px;">Jumlah Pengunjung</p>
                                         </div>
                                     </div>
@@ -435,86 +483,18 @@
                             </div>
                         </div>
 
-                        <div class="row px-1 py-5">
-                            {% for i in '123456'|make_list %}
-                                <div class="col-xxl-2 col-lg-6">
-                                    <div class="card cta-box bg-primary text-white" style="border-radius:20px">
-                                        <div class="card-body">
-                                            <div class="text-center">
-                                                <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="50" alt="Generic placeholder image">
-                                                <h3 class="m-0 fw-normal cta-box-title"><b>Kemiskinan</b></h3>
-                                            </div>
-                                        </div>
-                                        <!-- end card-body -->
-                                    </div>
-                                </div>
-                            {% endfor %}
 
-
-                            {% for i in '123456'|make_list %}
-                                <div class="col-xxl-2 col-lg-6">
-                                    <div class="card cta-box bg-primary text-white" style="border-radius:20px">
-                                        <div class="card-body">
-                                            <div class="text-center">
-                                                <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="50" alt="Generic placeholder image">
-                                                <h3 class="m-0 fw-normal cta-box-title"><b>Kemiskinan</b></h3>
-                                            </div>
-                                        </div>
-                                        <!-- end card-body -->
-                                    </div>
-                                </div>
-                            {% endfor %}
-
-
-                        </div>
 
                         <div class="row pt-4">
                             <div class="col-lg-12">
                                 <div class="text-left">
                                     <h3>Pintasan Utama <span class="text-warning">__________________</span></h3>
-                                    <h2 class="text-muted mt-3">Akses Data Strategis Kab. Muna</h2>
+                                    <h2 class="text-muted mt-3">Akses Data Muna Dalam Angka</h2>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row py-5">
-                            <div class="col-lg-4 py-2">
-                                <div class="card cta-box bg-primary text-white" style="border-radius:30px">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-100 overflow-hidden">
-                                                <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
-                                                <h3 class="m-0 fw-normal cta-box-title">Data <b>Strategis</b> Kabupaten Muna <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
-                                            </div>
-                                            <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
-                                        </div>
-        
-                                        <br>
-                                        <br>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
-                                    </div>
-                                    <!-- end card-body -->
-                                </div>
-                            </div>
-        
-                            <div class="col-lg-4 py-2">
-                                <div class="card cta-box bg-primary text-white" style="border-radius:30px">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-100 overflow-hidden">
-                                                <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
-                                                <h3 class="m-0 fw-normal cta-box-title">Data <b>Strategis</b> Kabupaten Muna <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
-                                            </div>
-                                            <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
-                                        </div>
-        
-                                        <br>
-                                        <br>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
-                                    </div>
-                                    <!-- end card-body -->
-                                </div>
-                            </div>
 
                             <div class="col-lg-4 py-2">
                                 <div class="card cta-box bg-primary text-white" style="border-radius:30px">
@@ -533,6 +513,45 @@
                                     <!-- end card-body -->
                                 </div>
                             </div>
+
+                            <div class="col-lg-4 py-2">
+                                <div class="card cta-box bg-primary text-white" style="border-radius:30px">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="w-100 overflow-hidden">
+                                                <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
+                                                <h3 class="m-0 fw-normal cta-box-title">Big Data <b>Analytics</b> Kabupaten Muna <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
+                                            </div>
+                                            <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
+                                        </div>
+        
+                                        <br>
+                                        <br>
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
+                                    </div>
+                                    <!-- end card-body -->
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 py-2">
+                                <div class="card cta-box bg-primary text-white" style="border-radius:30px">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="w-100 overflow-hidden">
+                                                <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
+                                                <h3 class="m-0 fw-normal cta-box-title">Permohonan Data <b>Statistik</b> <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
+                                            </div>
+                                            <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
+                                        </div>
+        
+                                        <br>
+                                        <br>
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
+                                    </div>
+                                    <!-- end card-body -->
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="row">
@@ -993,7 +1012,7 @@
                             </div>
                         </div>
 
-                        <div class="row d-none">
+                        <div class="row">
                             <div class="col-12">
                                 <div class="page-title-box">
                                     <h3 class="page-title">Layanan Satu Data Muna </h3>
@@ -1002,7 +1021,7 @@
                         </div>
                         <!-- end page title -->
 
-                        <div class="row mb-4 d-none">
+                        <div class="row mb-4">
                             <div class="col-12">
                                 <ul class="nav nav-tabs nav-bordered mb-3">
                                     <li class="nav-item">
@@ -1643,98 +1662,6 @@
         </div>
         <!-- END wrapper -->
 
-        <!-- Right Sidebar -->
-        <div class="end-bar">
-
-            <div class="rightbar-title">
-                <a href="javascript:void(0);" class="end-bar-toggle float-end">
-                    <i class="dripicons-cross noti-icon"></i>
-                </a>
-                <h5 class="m-0">Settings</h5>
-            </div>
-
-            <div class="rightbar-content h-100" data-simplebar="">
-
-                <div class="p-3">
-                    <div class="alert alert-warning" role="alert">
-                        <strong>Customize </strong> the overall color scheme, sidebar menu, etc.
-                    </div>
-
-                    <!-- Settings -->
-                    <h5 class="mt-3">Color Scheme</h5>
-                    <hr class="mt-1">
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="light" id="light-mode-check" checked="">
-                        <label class="form-check-label" for="light-mode-check">Light Mode</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="dark" id="dark-mode-check">
-                        <label class="form-check-label" for="dark-mode-check">Dark Mode</label>
-                    </div>
-       
-
-                    <!-- Width -->
-                    <h5 class="mt-4">Width</h5>
-                    <hr class="mt-1">
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="width" value="fluid" id="fluid-check" checked="">
-                        <label class="form-check-label" for="fluid-check">Fluid</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="width" value="boxed" id="boxed-check">
-                        <label class="form-check-label" for="boxed-check">Boxed</label>
-                    </div>
-        
-
-                    <!-- Left Sidebar-->
-                    <h5 class="mt-4">Left Sidebar</h5>
-                    <hr class="mt-1">
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="theme" value="default" id="default-check">
-                        <label class="form-check-label" for="default-check">Default</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="theme" value="light" id="light-check" checked="">
-                        <label class="form-check-label" for="light-check">Light</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" name="theme" value="dark" id="dark-check">
-                        <label class="form-check-label" for="dark-check">Dark</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="compact" value="fixed" id="fixed-check" checked="">
-                        <label class="form-check-label" for="fixed-check">Fixed</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="compact" value="condensed" id="condensed-check">
-                        <label class="form-check-label" for="condensed-check">Condensed</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="compact" value="scrollable" id="scrollable-check">
-                        <label class="form-check-label" for="scrollable-check">Scrollable</label>
-                    </div>
-
-                    <div class="d-grid mt-4">
-                        <button class="btn btn-primary" id="resetBtn">Reset to Default</button>
-            
-                        <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" class="btn btn-danger mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase Now</a>
-                    </div>
-                </div> <!-- end padding-->
-
-            </div>
-        </div>
-
-        <div class="rightbar-overlay"></div>
-        <!-- /End-bar -->
-
         <script src="{% static 'app-design/assets/js/vendor.min.js' %}"></script>
         <script src="{% static 'app-design/assets/js/app.min.js' %}"></script>
 
@@ -1748,7 +1675,7 @@
         <script src="{% static 'app-design/assets/js/pages/demo.dashboard.js' %}"></script>
 
         {% block js-extender %}
-
+        <script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script>
         <script>
             function filterStatisticTables(e){
                 if ($('#col-filter-statistics').hasClass('d-none')){
@@ -1776,6 +1703,8 @@
                     $('#col-filter-statistics-dev').addClass('d-none')
                 }
             }
+            
+
         </script>
         {% endblock js-extender %}
 
