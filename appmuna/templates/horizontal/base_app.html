@@ -24,6 +24,33 @@
         {% block css-extender %}
 
         <style>
+
+                /* width */
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+            
+            /* Track */
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background: #948ff4; 
+            }
+            
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #524f88; 
+            }
+
+            input, input::placeholder {
+                font-size: 13px;
+            }
+
             datalist {
                 position: absolute;
                 margin-top:10px;
@@ -56,7 +83,7 @@
 
     </head>
 
-    <body class="loading" data-layout="topnav" data-layout-config='{"layoutBoxed":false,"darkMode":false,"showRightSidebarOnStart": true}'>
+    <body class="loading" data-layout-config='{"layoutBoxed":false,"darkMode":false,"showRightSidebarOnStart": true}'>
 
 
         <!-- Pre-loader -->
@@ -66,1601 +93,151 @@
             </div>
         </div>
         <!-- End Preloader-->
-        
-        <!-- Begin page -->
-        <div class="wrapper">
 
-            <!-- ============================================================== -->
-            <!-- Start Page Content here -->
-            <!-- ============================================================== -->
-            <div class="content-page">
-                <div class="content">
-                    {% block navbar %}
-                        {% include "horizontal/navbar.html" %}
-                    {% endblock navbar %}
+        <!-- NAVBAR START -->
+        <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark">
+            <div class="container">
 
+                <!-- logo -->
+                <a href="index.html" class="navbar-brand me-lg-5">
+                    <img src="{% static 'customs/images/bps_kab_muna_dark.png' %}" alt="" class="logo-dark" height="45">
+                </a>
 
-                    {% block topnav %}
-                        {% comment %} {% include "topnav.html" %} {% endcomment %}
-                    {% endblock topnav %}
-                    
-                    <!-- Start Content-->
-                    <div class="container-fluid">
-                    
-                        <!-- start page title -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="mdi mdi-menu"></i>
+                </button>
 
-                        <div class="row mb-2" style="padding-top:120px;padding-bottom:90px">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="text-center">
-                                        <h1 class="mt-0"><i class="mdi mdi-heart-multiple-outline"></i></h1>
-                                        <h3>Telusuri Data<span class="text-primary"> Statistik Kabupaten Muna</span></h3>
-                                        <p class="text-muted mt-2">Data yang dikhususkan untuk keperluan penyusunan dan penilaian kinerja pembangunan pemerintah Kab. Muna
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-            
-                            <div class="row pt-4 align-items-center">
-                                <div class="col-lg-12 d-flex justify-content-center">
-                                    <div class="app-search dropdown ml-5">
-                                        <form>
-                                            <div class="row gy-2 gx-2 align-items-center">
-                                                <div class="col-auto p-0">
-                                                    <input class="form-control border" list="browserdata" id="browser" name="browser" placeholder="Semua Data" autocomplete="off" style="width:150px;height:55px;background-color:#ffffff;padding-left:22px">
-                                                    <datalist id="browserdata">
-                                                        <span style="font-size: 0.9em;font-weight:bold; padding: 0.4em 1.5em;">All</span>
-                                                        <br>
-                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> Kependudukan</span>
-                                                        <option>Kemiskinan</option>
-                                                        <option>Ketenagakerjaan</option>
-                                                        <option>Petumbuhan Ekonomi Menurut Pengeluaran</option>
-                                                        <option>Garis Kemiskinan</option>
-                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> Kependudukan</span>
-                                                        <option>Kemiskinan</option>
-                                                        <option>Ketenagakerjaan</option>
-                                                        <option>Petumbuhan Ekonomi Menurut Pengeluaran</option>
-                                                        <option>Garis Kemiskinan</option>
-                                                    </datalist>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control border" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:500px;height:55px;background-color:#ffffff">
-                                                        <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-auto p-0">
-                                                    <button class="btn btn-primary rounded" style="margin-left:15px; height:47px" id="button-top-search">Cari Data</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <!-- menus -->
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
 
-                        <div class="row py-3 bg-light-lighten border-top border-bottom border-light">
-                            <div class="col-12">
-                                <div class="row align-items-center">
-                                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                                        <div class="carousel-inner" role="listbox">
-                                            <div class="carousel-item active" style="background-color:none">
-                                                <div class="row">
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:20px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                                                <h3 class="mt-3 mb-3">36,254</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                                                    <span class="text-nowrap">Since last month</span>  
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:20px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                                                <h3 class="mt-3 mb-3">5,543</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:20px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                                                <h3 class="mt-3 mb-3">$6,254</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-pulse widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                                                <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                </div>
-                                            </div>
-                                            <div class="carousel-item">
-                                                <div class="row">
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                                                <h3 class="mt-3 mb-3">36,254</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                                                    <span class="text-nowrap">Since last month</span>  
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                                                <h3 class="mt-3 mb-3">5,543</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                                                <h3 class="mt-3 mb-3">$6,254</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-pulse widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                                                <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                </div>
-                                            </div>
-                                            <div class="carousel-item">
-                                                <div class="row">
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                                                <h3 class="mt-3 mb-3">36,254</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                                                    <span class="text-nowrap">Since last month</span>  
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                                                <h3 class="mt-3 mb-3">5,543</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                                                <h3 class="mt-3 mb-3">$6,254</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-pulse widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                                                <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                </div>
-                                            </div>
-                                            <div class="carousel-item">
-                                                <div class="row">
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                                                <h3 class="mt-3 mb-3">36,254</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                                                    <span class="text-nowrap">Since last month</span>  
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                                                <h3 class="mt-3 mb-3">5,543</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                                                <h3 class="mt-3 mb-3">$6,254</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                    <div class="col-md-6 col-lg-3">
-                                                        <div class="card widget-flat py-2" style="border-radius:30px">
-                                                            <div class="card-body">
-                                                                <div class="float-end">
-                                                                    <i class="mdi mdi-pulse widget-icon"></i>
-                                                                </div>
-                                                                <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                                                <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                                                <p class="mb-0 text-muted">
-                                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                                                    <span class="text-nowrap">Since last month</span>
-                                                                </p>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col-->
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev" style="margin-left: -130px;">
-                                            <div class="avatar-sm m-auto">
-                                                <span class="avatar-title bg-primary-lighten rounded-circle">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Previous</span>
-                                                </span>
-                                            </div>
-                                        </a>
-                                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next" style="margin-right: -130px;">
-                                            <div class="avatar-sm m-auto">
-                                                <span class="avatar-title bg-primary-lighten rounded-circle">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                    <span class="visually-hidden">Next</span>
-                                                </span>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row py-4">
-                            <div class="col-lg-12">
-                                <div class="text-left">
-                                    <h2>Portal Satu Data Muna <span class="text-warning">__________________</span></h2>
-                                    <h1 class="text-primary mt-3">Statistik Satu Data Tingkat Kabupaten Muna</h1>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- left menu -->
+                    <ul class="navbar-nav me-auto align-items-center">
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link active" href="">Beranda</a>
+                        </li>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="">Data Strategis</a>
+                        </li>
 
-                        <div class="row py-4">
-                            <div class="col-xxl-3 col-lg-6">
-                                <div class="card py-3" style="border-radius:20px">
-                                    <div class="card-body" >
-                                        <div class="text-center">
-                                            <h2 class="text-info">1.520</h2>
-                                            <p class="text-muted mb-0" style="font-size: 25px;">Elemen Data</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xxl-3 col-lg-6">
-                                <div class="card py-3" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="text-center">
-                                            <h2 class="text-info">1.520</h2>
-                                            <p class="text-muted mb-0" style="font-size: 25px;">OPD/Instansi</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xxl-3 col-lg-6">
-                                <div class="card py-3" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="text-center">
-                                            <h2 class="text-info">1.520</h2>
-                                            <p class="text-muted mb-0" style="font-size: 25px;">Kategori</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xxl-3 col-lg-6">
-                                <div class="card py-3" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="text-center">
-                                            <h2 class="text-info">1.520</h2>
-                                            <p class="text-muted mb-0" style="font-size: 25px;">Jumlah Pengunjung</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="">Data Pembangunan</a>
+                        </li>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="">Tabel Dinamis</a>
+                        </li>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="#media-statistik">Media Statistik</a>
+                        </li>
+                        <li class="nav-item mx-lg-1">
+                            <a class="nav-link" href="#layanan-statistik">Layanan Statistik</a>
+                        </li>
+                    </ul>
 
-                        <div class="row pt-4">
-                            <div class="col-lg-12">
-                                <div class="text-left">
-                                    <h3>Topik Data <span class="text-warning">_________</span></h3>
-                                    <h2 class="text-muted mt-3">Telusuri Data Menurut Subjek Statistik</h2>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- right menu -->
+                    <ul class="navbar-nav ms-auto align-items-center">
 
-
-
-                        <div class="row pt-4">
-                            <div class="col-lg-12">
-                                <div class="text-left">
-                                    <h3>Pintasan Utama <span class="text-warning">__________________</span></h3>
-                                    <h2 class="text-muted mt-3">Akses Data Muna Dalam Angka</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row py-5">
-
-                            <div class="col-lg-4 py-2">
-                                <div class="card cta-box bg-primary text-white" style="border-radius:30px">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-100 overflow-hidden">
-                                                <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
-                                                <h3 class="m-0 fw-normal cta-box-title">Tabel <b>Statistik</b> Kabupaten Muna <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
-                                            </div>
-                                            <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
-                                        </div>
-                                        <br>
-                                        <br>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
-                                    </div>
-                                    <!-- end card-body -->
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 py-2">
-                                <div class="card cta-box bg-primary text-white" style="border-radius:30px">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-100 overflow-hidden">
-                                                <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
-                                                <h3 class="m-0 fw-normal cta-box-title">Big Data <b>Analytics</b> Kabupaten Muna <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
-                                            </div>
-                                            <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
-                                        </div>
-        
-                                        <br>
-                                        <br>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
-                                    </div>
-                                    <!-- end card-body -->
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 py-2">
-                                <div class="card cta-box bg-primary text-white" style="border-radius:30px">
-                                    <div class="card-body">
-                                        <div class="d-flex align-items-center">
-                                            <div class="w-100 overflow-hidden">
-                                                <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
-                                                <h3 class="m-0 fw-normal cta-box-title">Permohonan Data <b>Statistik</b> <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
-                                            </div>
-                                            <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
-                                        </div>
-        
-                                        <br>
-                                        <br>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
-                                    </div>
-                                    <!-- end card-body -->
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="text-left">
-                                    <h2>Publikasi Statistik</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row py-3 align-items-center">
-                            <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
-                                <ol class="carousel-indicators" style="margin-bottom: -30px;">
-                                    <li data-bs-target="#carouselControls1" data-bs-slide-to="0" class="active bg-primary-lighten"></li>
-                                    <li data-bs-target="#carouselControls1" data-bs-slide-to="1" class="bg-primary-lighten"></li>
-                                    <li data-bs-target="#carouselControls1" data-bs-slide-to="2" class="bg-primary-lighten"></li>
-                                    <li data-bs-target="#carouselControls1" data-bs-slide-to="3" class="bg-primary-lighten"></li>
-                                </ol>
-                                <div class="carousel-inner" role="listbox">
-                                    <div class="carousel-item active">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="carousel-control-prev" href="#carouselControls1" role="button" data-bs-slide="prev" style="margin-left: -130px;">
-                                    <div class="avatar-sm m-auto">
-                                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </span>
-                                    </div>
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item me-0">
+                                <form action="{% url 'auth:logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <a type="submit" class="nav-link d-lg-none">Bank Data</a>
+                                    <button type="submit" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Halo, Rifki Gustiawan !" title="">
+                                        <i class="mdi mdi-logout me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>   
+                        {% else %}
+                            <li class="nav-item me-0">
+                                <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" target="_blank" class="nav-link d-lg-none">Login Sekarang</a>
+                                <a href="../../product/hyper-responsive-admin-dashboard-template/index.htm" target="_blank" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex">
+                                    <i class="mdi mdi-login me-2"></i> Login Sekarang
                                 </a>
-                                <a class="carousel-control-next" href="#carouselControls1" role="button" data-bs-slide="next" style="margin-right: -130px;">
-                                    <div class="avatar-sm m-auto">
-                                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="text-left">
-                                    <h2>Infografis Statistik</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row py-3 align-items-center">
-                            <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
-                                <ol class="carousel-indicators" style="margin-bottom: -30px;">
-                                    <li data-bs-target="#carouselControls1" data-bs-slide-to="0" class="active bg-primary-lighten"></li>
-                                    <li data-bs-target="#carouselControls1" data-bs-slide-to="1" class="bg-primary-lighten"></li>
-                                    <li data-bs-target="#carouselControls1" data-bs-slide-to="2" class="bg-primary-lighten"></li>
-                                    <li data-bs-target="#carouselControls1" data-bs-slide-to="3" class="bg-primary-lighten"></li>
-                                </ol>
-                                <div class="carousel-inner" role="listbox">
-                                    <div class="carousel-item active">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                    </div>
-                                    <div class="carousel-item">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                            <div class="col-md-6 col-lg-3">
-                                                <div class="card">
-                                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                                    <div class="card-body">
-                                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                        <p class="card-text">
-                                                            Some quick example text to build on the card up the bulk of the card's content.
-                                                        </p>
-                                                    </div> <!-- end card-body -->
-                                                </div> <!-- end card -->
-                                            </div> <!-- end col-->
-                                        </div>
-                                    </div>
-                                </div>
-                                <a class="carousel-control-prev" href="#carouselControls1" role="button" data-bs-slide="prev" style="margin-left: -130px;">
-                                    <div class="avatar-sm m-auto">
-                                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Previous</span>
-                                        </span>
-                                    </div>
-                                </a>
-                                <a class="carousel-control-next" href="#carouselControls1" role="button" data-bs-slide="next" style="margin-right: -130px;">
-                                    <div class="avatar-sm m-auto">
-                                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="visually-hidden">Next</span>
-                                        </span>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box">
-                                    <h3 class="page-title">Layanan Satu Data Muna </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end page title -->
-
-                        <div class="row mb-4">
-                            <div class="col-12">
-                                <ul class="nav nav-tabs nav-bordered mb-3">
-                                    <li class="nav-item">
-                                        <a href="#home-b1" data-bs-toggle="tab" aria-expanded="show active" class="nav-link active">
-                                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                            <span class="d-none d-md-block"> Tabel Statistik </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#profile-b1" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                            <span class="d-none d-md-block">Indikator Kinerja Pembangunan</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#settings-b1" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
-                                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                                            <span class="d-none d-md-block">Indikator Data Strategis</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                
-                                <div class="tab-content">
-                                    <div class="tab-pane show active" id="home-b1">
-                                        <div class="card cta-box overflow-hidden text-white bg-primary">
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center">
-                                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
-                                                    <div>
-                                                        <h5 class="m-0 fw-normal">Data Indikator Pembangunan Kabupaten Muna</h5>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-sm-3 mb-sm-0 d-none" id="col-filter-statistics">
-                                                <div class="card">
-                                        
-                                                    <div class="card-body">
-                                                        <h4 class="card-title">Filter Indikator</h4>
-                                                        <hr>
-                                                        <label for="status-select" class="mb-2">Subjek Statistik</label>
-                                                        <div class="border p-2">
-                                                            <div data-simplebar style="max-height: 150px;">
-                                                                {% for i in '123456789'|make_list %}
-                                                                <li class="d-flex justify-content-between align-items-start font-14">
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input type="checkbox" class="form-check-input" id="customCheck3">
-                                                                        <label class="form-check-label" for="customCheck3">
-                                                                            &ensp; Kemiskinan
-                                                                        </label>
-                                                                    </div>
-    
-                                                                    <span class="badge bg-primary rounded-pill mr-4">14</span>
-                                                                </li>
-                                                                {% endfor %}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="my-3">
-                                                            <label for="status-select" class="me-2">Karakteristik Data</label>
-                                                            <div class="border p-2">
-                                                                <div data-simplebar style="max-height: 150px;">
-                                                                    {% for i in '123456789'|make_list %}
-                                                                    <li class="d-flex justify-content-between align-items-start font-14">
-                                                                        <div class="form-check form-check-inline">
-                                                                            <input type="checkbox" class="form-check-input" id="customCheck3">
-                                                                            <label class="form-check-label" for="customCheck3">
-                                                                                &ensp; Jenis Kelamin
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                    {% endfor %}
-                                                                </div>
-                                                            </div>
-                         
-                                                        </div>
-
-                                                        <div class="my-3">
-                                                            <label for="status-select" class="me-2">Kategori Statistik</label>
-                                                            
-                                                            <div class="mt-1">
-                                                                <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                                    <label class="form-check-label" for="customCheck1">Dasar</label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                                    <label class="form-check-label" for="customCheck2">Sektoral</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="my-3">
-                                                            <label for="status-select" class="me-2">Periode Data</label>
-                                                            <div class="mt-1">
-                                                                <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                                    <label class="form-check-label" for="customCheck1">Tahunan</label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                                    <label class="form-check-label" for="customCheck2">Triwulanan</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="my-3">
-                                                            <button type="button" class="btn btn-danger mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Reset Filter </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> <!-- end col-->
-                                        
-                                            <div class="col-sm-12" id="col-table-statistics">
-
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row mb-2">
-                                                                    <div class="col-xl-7">
-                                                                        <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
-                                                                            <div class="col-auto">
-                                                                                <label for="inputPassword2" class="visually-hidden">Search</label>
-                                                                            </div>
-                                                                            <input type="search" class="form-control" id="inputPassword2" placeholder="Telusuri Data Statistik..." style="width:60%">
-                                                                        </form>                            
-                                                                    </div>
-                                                                    <div class="col-xl-5">
-                                                                        <div class="text-xl-end mt-xl-0 mt-2">
-                                                                            <button type="button" class="btn btn-danger mb-2 me-2" onclick="filterStatisticTables(this)"><i class="mdi mdi-basket me-1"></i> Filter Data </button>
-                                                                            <button type="button" class="btn btn-primary mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Download Data </button>
-                                                                        </div>
-                                                                    </div><!-- end col-->
-                                                                </div>
-                                        
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-hover table-centered mb-0 nowrap w-100">
-                                                                        <thead class="table-light">
-                                                                            <tr>
-                                                                                <th style="width: 20px;">
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                                                                    </div>
-                                                                                </th>
-                                                                                <th>No</th>
-                                                                                <th>Judul Indikator</th>
-                                                                                <th>Kategori Statistik</th>
-                                                                                <th>Update Terbaru</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            {% for i in '1234'|make_list %}
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                                                        <label class="form-check-label" for="customCheck2">&nbsp;</label>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td>{{i}}</td>
-                                                                                <td><a href="apps-ecommerce-orders-details.html" class="text-body fw-normal">Persentase Penduduk Miskin Kabupaten Muna Menurut Kelompok Umur Tahun 2015-2023</a> </td>
-                                                                                <td>
-                                                                                    <h5><span class="badge badge-success-lighten"><i class="mdi mdi-coin"></i> Statistik Dasar</span></h5>
-                                                                                </td>
-                                                                                <td>
-                                                                                    August 05, 2018
-                                                                                </td>
-                                                                            </tr>
-                                                                            {% endfor %}
-
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col -->
-                                                </div>
-                                            </div> <!-- end col-->
-                                        </div>
-
-
-                                    </div>
-                                    <div class="tab-pane" id="profile-b1">
-                                        
-                                        <div class="card cta-box overflow-hidden text-white bg-primary">
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center">
-                                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
-                                                    <div>
-                                                        <h5 class="m-0 fw-normal">Data Indikator Pembangunan Kabupaten Muna <i class="mdi mdi-arrow-right"></i></h5>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-3 mb-2 mb-sm-0  d-none" id="col-filter-statistics-dev">
-                                                <div class="card">
-                                        
-                                                    <div class="card-body">
-                                                        <h4 class="card-title">Filter Indikator</h4>
-                                                        <hr>
-                                                        <label for="status-select" class="mb-2">Subjek Statistik</label>
-                                                        <div class="border p-2">
-                                                            <div data-simplebar style="max-height: 150px;">
-                                                                {% for i in '123456789'|make_list %}
-                                                                <li class="d-flex justify-content-between align-items-start font-14">
-                                                                    <div class="form-check form-check-inline">
-                                                                        <input type="checkbox" class="form-check-input" id="customCheck3">
-                                                                        <label class="form-check-label" for="customCheck3">
-                                                                            &ensp; Kemiskinan
-                                                                        </label>
-                                                                    </div>
-    
-                                                                    <span class="badge bg-primary rounded-pill mr-4">14</span>
-                                                                </li>
-                                                                {% endfor %}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="my-3">
-                                                            <label for="status-select" class="me-2">Karakteristik Data</label>
-                                                            <div class="border p-2">
-                                                                <div data-simplebar style="max-height: 150px;">
-                                                                    {% for i in '123456789'|make_list %}
-                                                                    <li class="d-flex justify-content-between align-items-start font-14">
-                                                                        <div class="form-check form-check-inline">
-                                                                            <input type="checkbox" class="form-check-input" id="customCheck3">
-                                                                            <label class="form-check-label" for="customCheck3">
-                                                                                &ensp; Jenis Kelamin
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                    {% endfor %}
-                                                                </div>
-                                                            </div>
-                         
-                                                        </div>
-
-                                                        <div class="my-3">
-                                                            <label for="status-select" class="me-2">Kategori Statistik</label>
-                                                            
-                                                            <div class="mt-1">
-                                                                <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                                    <label class="form-check-label" for="customCheck1">Dasar</label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                                    <label class="form-check-label" for="customCheck2">Sektoral</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="my-3">
-                                                            <label for="status-select" class="me-2">Periode Data</label>
-                                                            <div class="mt-1">
-                                                                <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                                    <label class="form-check-label" for="customCheck1">Tahunan</label>
-                                                                </div>
-                                                                <div class="form-check">
-                                                                    <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                                    <label class="form-check-label" for="customCheck2">Triwulanan</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="my-3">
-                                                            <button type="button" class="btn btn-danger mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Reset Filter </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12" id="col-table-statistics-dev">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <div class="row mb-2">
-                                                                    <div class="col-xl-7">
-                                                                        <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
-                                                                            <div class="col-auto">
-                                                                                <label for="inputPassword2" class="visually-hidden">Search</label>
-                                                                                <input type="search" class="form-control" id="inputPassword2" placeholder="Telusuri Indikator ..." style="width:200%">
-                                                                            </div>
-                                                                        </form>                            
-                                                                    </div>
-                                                                    <div class="col-xl-5">
-                                                                        <div class="text-xl-end mt-xl-0 mt-2">
-                                                                            <button type="button" class="btn btn-danger mb-2 me-2" onclick="filterStatisticDev(this)"><i class="mdi mdi-basket me-1"></i> Filter Data </button>
-                                                                            <button type="button" class="btn btn-primary mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Download Data </button>
-                                                                        </div>
-                                                                    </div><!-- end col-->
-                                                                </div>
-                                        
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-hover table-centered mb-0 nowrap w-100">
-                                                                        <thead class="table-light">
-                                                                            <tr>
-                                                                                <th style="width: 20px;">
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                                                        <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                                                                    </div>
-                                                                                </th>
-                                                                                <th>No</th>
-                                                                                <th>Subjek</th>
-                                                                                <th>Judul Indikator</th>
-                                                                                <th>Periode Data</th>
-                                                                                <th>Kategori Statistik</th>
-                                                                                <th>Update Terbaru</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            {% for i in '1234'|make_list %}
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <div class="form-check">
-                                                                                        <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                                                        <label class="form-check-label" for="customCheck2">&nbsp;</label>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td>{{i}}</td>
-                                                                                <td>Kemiskinan</td>
-                                                                                <td><a href="apps-ecommerce-orders-details.html" class="text-body fw-normal">Persentase Penduduk Miskin Kabupaten Muna Menurut Kelompok Umur Tahun 2015-2023</a> </td>
-                                                                                <td>Tahunan</td>
-                                                                                <td>
-                                                                                    <h5><span class="badge badge-success-lighten"><i class="mdi mdi-coin"></i> Statistik Dasar</span></h5>
-                                                                                </td>
-                                                                                <td>
-                                                                                    August 05, 2018
-                                                                                </td>
-                                                                            </tr>
-                                                                            {% endfor %}
-        
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div> <!-- end card-body-->
-                                                        </div> <!-- end card-->
-                                                    </div> <!-- end col -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="settings-b1">
-                                        <div class="card cta-box overflow-hidden text-white bg-primary">
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center">
-                                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
-                                                    <div>
-                                                        <h5 class="m-0 fw-normal">Data-data Strategis Kabupaten Muna <i class="mdi mdi-arrow-right"></i></h5>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row mb-2">
-                                                            <div class="col-xl-9">
-                                                                <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
-                                                                    <div class="col-auto">
-                                                                        <label for="inputPassword2" class="visually-hidden">Search</label>
-                                                                        <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <div class="d-flex align-items-center">
-                                                                            <label for="status-select" class="me-2">Subjek</label>
-                                                                            <select class="form-select" id="status-select">
-                                                                                <option selected="">Kemiskinan</option>
-                                                                                <option value="1">Paid</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-auto">
-                                                                        <div class="d-flex align-items-center">
-                                                                            <label for="status-select" class="me-2">Periode</label>
-                                                                            <select class="form-select" id="status-select">
-                                                                                <option selected="">Tahunan</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>                            
-                                                            </div>
-                                                            <div class="col-xl-3">
-                                                                <div class="text-xl-end mt-xl-0 mt-2">
-                                                                    <button type="button" class="btn btn-primary mb-2 me-2"><i class="mdi mdi-basket me-1"></i> Download Data </button>
-                                                                </div>
-                                                            </div><!-- end col-->
-                                                        </div>
-                                
-                                                        <div class="table-responsive">
-                                                            <table class="table table-hover table-centered mb-0 nowrap w-100">
-                                                                <thead class="table-light">
-                                                                    <tr>
-                                                                        <th style="width: 20px;">
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox" class="form-check-input" id="customCheck1">
-                                                                                <label class="form-check-label" for="customCheck1">&nbsp;</label>
-                                                                            </div>
-                                                                        </th>
-                                                                        <th>No</th>
-                                                                        <th>Subjek</th>
-                                                                        <th>Judul Indikator</th>
-                                                                        <th>Periode Data</th>
-                                                                        <th>Kategori Statistik</th>
-                                                                        <th>Update Terbaru</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    {% for i in '1234'|make_list %}
-                                                                    <tr>
-                                                                        <td>
-                                                                            <div class="form-check">
-                                                                                <input type="checkbox" class="form-check-input" id="customCheck2">
-                                                                                <label class="form-check-label" for="customCheck2">&nbsp;</label>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td>{{i}}</td>
-                                                                        <td>Kemiskinan</td>
-                                                                        <td><a href="apps-ecommerce-orders-details.html" class="text-body fw-normal">Persentase Penduduk Miskin Kabupaten Muna Menurut Kelompok Umur Tahun 2015-2023</a> </td>
-                                                                        <td>Tahunan</td>
-                                                                        <td>
-                                                                            <h5><span class="badge badge-success-lighten"><i class="mdi mdi-coin"></i> Statistik Dasar</span></h5>
-                                                                        </td>
-                                                                        <td>
-                                                                            August 05, 2018
-                                                                        </td>
-                                                                    </tr>
-                                                                    {% endfor %}
-
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div> <!-- end card-body-->
-                                                </div> <!-- end card-->
-                                            </div> <!-- end col -->
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row pt-5">
-                            <div class="col-lg-12">
-                                <div class="text-left">
-                                    <h2>Berita dan Media Statistik Kab Muna</h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row py-3">
-                            <div class="col-12">
-                                <ul class="nav nav-pills bg-nav-pills nav-justified mb-3" style="border-radius:20px;">
-                                    <li class="nav-item">
-                                        <a href="#brs" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active" style="border-radius:20px;">
-                                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                            <span class="d-none d-md-block">Berita Statistik</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#publikasi" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                            <span class="d-none d-md-block">Publikasi Statistik</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#infograph" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                                            <span class="d-none d-md-block">Infografis</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#videograph" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                                            <span class="d-none d-md-block">Videografis</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                
-                                <div class="tab-content pt-2">
-                                    <div class="tab-pane show active" id="brs">
-                                        {% for i in '0123'|make_list %}
-                                            <a href="#" class="list-group-item list-group-item-action" style="border-radius:20px; margin-bottom:15px;border:none">
-                                                <div class="row g-0 align-items-center">
-                                                    <div class="col-md-1">
-                                                        <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
-                                                    </div>
-                                                    <div class="col-md-11">
-                                                        <div class="d-flex w-100 justify-content-between">
-                                                            <h5 class="mb-1">List group item heading</h5>
-                                                            <small>3 days ago</small>
-                                                        </div>
-                                                        <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                                        <small class="text-muted">Donec id elit non mi porta.</small>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        {% endfor %}
-                                        
-                                        <div class="mt-4">
-                                            <a href="#" class="btn btn-primary btn-rounded btn-sm"> Lihat lebih banyak <i class="mdi mdi-arrow-right"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="publikasi">
-
-                                        <div class="row">
-                                            {% for i in '012345678'|make_list %}
-                                                <div class="col-xxl-4 col-lg-6">
-                                                    <a href="#" class="list-group-item list-group-item-action mb-1" style="border:none; border-radius:20px">
-                                                        <div class="row g-0 align-items-center">
-                                                            <div class="col-sm-4">
-                                                                <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
-                                                            </div>
-                                                            <div class="col-sm-8">
-                                                                <div class="d-flex w-100 justify-content-between">
-                                                                    <h5 class="mb-1">Indeks Kemahalan Konstruksi Kabupaten Muna 2023</h5>
-                                                                </div>
-                                                                <p class="mb-1">29 Desember 2023</p>
-                                                                <small class="text-muted">BPS Kabupaten Muna</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <a href="#"> Lihat lebih banyak <i class="mdi mdi-arrow-right"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="infograph">
-                                        <div class="row">
-                                            {% for i in '012345678'|make_list %}
-                                                <div class="col-xxl-4 col-lg-6">
-                                                    <a href="#" class="list-group-item list-group-item-action mb-1" style="border:none; border-radius:20px">
-                                                        <div class="row g-0 align-items-center">
-                                                            <div class="col-sm-4">
-                                                                <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
-                                                            </div>
-                                                            <div class="col-sm-8">
-                                                                <div class="d-flex w-100 justify-content-between">
-                                                                    <h5 class="mb-1">Indeks Kemahalan Konstruksi Kabupaten Muna 2023</h5>
-                                                                </div>
-                                                                <p class="mb-1">29 Desember 2023</p>
-                                                                <small class="text-muted">BPS Kabupaten Muna</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <a href="#"> Lihat lebih banyak <i class="mdi mdi-arrow-right"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="videograph">
-                                        {% comment %} Pas diklik videonya, munculin tampilkan videonya di atasnya {% endcomment %}
-                                        <div class="row">
-                                            {% for i in '012345678'|make_list %}
-                                                <div class="col-xxl-4 col-lg-6">
-                                                    <a href="#" class="list-group-item list-group-item-action mb-1" style="border:none; border-radius:20px">
-                                                        <div class="row g-0 align-items-center">
-                                                            <div class="col-sm-4">
-                                                                <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
-                                                            </div>
-                                                            <div class="col-sm-8">
-                                                                <div class="d-flex w-100 justify-content-between">
-                                                                    <h5 class="mb-1">Indeks Kemahalan Konstruksi Kabupaten Muna 2023</h5>
-                                                                </div>
-                                                                <p class="mb-1">29 Desember 2023</p>
-                                                                <small class="text-muted">BPS Kabupaten Muna</small>
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <a href="#"> Lihat lebih banyak <i class="mdi mdi-arrow-right"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-
-
-                    </div>
-                    <!-- container -->
+                            </li>
+                        {% endif %}
+                    </ul>
 
                 </div>
-                <!-- content -->
+            </div>
+        </nav>
+        <!-- NAVBAR END -->
 
-                <!-- Footer Start -->
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <script>document.write(new Date().getFullYear())</script> © Hyper - Coderthemes.com
-                            </div>
-                            <div class="col-md-6">
-                                <div class="text-md-end footer-links d-none d-md-block">
-                                    <a href="javascript: void(0);">About</a>
-                                    <a href="javascript: void(0);">Support</a>
-                                    <a href="javascript: void(0);">Contact Us</a>
-                                </div>
-                            </div>
+        {% block content %}
+        
+        {% endblock content %}
+
+        <!-- START FOOTER -->
+        <footer class="bg-dark py-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        
+                        <a href="https://munakab.bps.go.id/"><img src="{% static 'customs/images/bps_kab_muna_dark.png' %}" alt="" class="logo-dark" height="45"></a>
+                       
+                        <p class="text-muted mt-4">BPS Kabupaten Muna
+                            <br> Jl. Jati No.24, Butung-Butung, Kec. Katobu, 
+                            <br> Kabupaten Muna, Sulawesi Tenggara 93611.</p>
+
+                        <ul class="social-list list-inline mt-3">
+                            <li class="list-inline-item text-center">
+                                <a href="https://wa.me/6285720813630?text=Halo Admin, ada beberapa hal yang ingin kami tanyakan :)" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Whatsapp" title=""><i class="mdi mdi-whatsapp"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="https://www.instagram.com/bpskabmuna/" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Instagram" title=""><i class="mdi mdi-instagram"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="https://web.facebook.com/bpskabupatenmuna" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Facebook" title=""><i class="mdi mdi-facebook"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="https://www.youtube.com/channel/UC2n0NObcNhRcXJqIiH8sewg" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Youtube" title=""><i class="mdi mdi-youtube-subscription"></i></a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-light">Instansi</h5>
+
+                        <ul class="list-unstyled ps-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="https://munakab.bps.go.id/" class="text-muted">Tentang Kami</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Hubungi Kami</a></li>
+                        </ul>
+
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-light">Menu</h5>
+
+                        <ul class="list-unstyled ps-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Data Strategis</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Data Kinerja Pembangunan</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Tabel Statistik</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Berita Statistik</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Permohonan Data</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-light">Tautan Lainnya</h5>
+
+                        <ul class="list-unstyled ps-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Jadwal Rilis Data</a></li>
+                            <li class="mt-2"><a href="https://munakab.go.id/" class="text-muted">Pemda Kab. Muna</a></li>
+                            <li class="mt-2"><a href="https://munabarat.go.id/main/" class="text-muted">Pemda Kab. Muna Barat</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mt-5">
+                            <p class="text-muted mt-4 text-center mb-0">© <script>document.write(new Date().getFullYear())</script> made with <span class="text-danger">&hearts;</span> by BPS Kabupaten Muna</p>
                         </div>
                     </div>
-                </footer>
-                <!-- end Footer -->
-
+                </div>
             </div>
+        </footer>
+        <!-- END FOOTER -->
 
-            <!-- ============================================================== -->
-            <!-- End Page content -->
-            <!-- ============================================================== -->
-
-
-        </div>
-        <!-- END wrapper -->
 
         <script src="{% static 'app-design/assets/js/vendor.min.js' %}"></script>
         <script src="{% static 'app-design/assets/js/app.min.js' %}"></script>

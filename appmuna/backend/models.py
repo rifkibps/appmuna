@@ -11,7 +11,6 @@ class BackendSubjectsModel(models.Model):
         verbose_name_plural = 'Master Subject'   
 
    groups = (
-   
        ('1', 'Sosial dan Kependudukan'),
        ('2', 'Ekonomi dan Perdagangan'),
        ('3', 'Pertanian dan Pertambangan')

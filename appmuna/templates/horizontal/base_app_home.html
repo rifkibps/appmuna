@@ -25,23 +25,45 @@
 
         <style>
 
+                /* width */
+            ::-webkit-scrollbar {
+                width: 10px;
+            }
+            
+            /* Track */
+            ::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+            
+            /* Handle */
+            ::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background: #bebbf8; 
+            }
+            
+            /* Handle on hover */
+            ::-webkit-scrollbar-thumb:hover {
+                background: #aba8df; 
+            }
+
             input, input::placeholder {
-                font-size: 14px;
+                font-size: 13px;
             }
 
             datalist {
                 position: absolute;
                 margin-top:10px;
                 width: 25em!important;
-                max-height: 18em;
+                max-height: 19em;
                 border: 1px solid #DFDFDF;
                 padding-top:10px;
+                padding-bottom:10px;
                 background-color: #fff;
                 overflow-x: hidden;
                 overflow-y: auto;
-                scrollbar-color: #DFDFDF #fff;
-                scrollbar-width: thin;
                 z-index: 10;
+                
               }
               
               datalist option {
@@ -98,16 +120,16 @@
                         </li>
 
                         <li class="nav-item mx-lg-1">
-                            <a class="nav-link" href="">Data Kinerja Pembangunan</a>
+                            <a class="nav-link" href="">Data Pembangunan</a>
                         </li>
                         <li class="nav-item mx-lg-1">
-                            <a class="nav-link" href="">Tabel Statistik</a>
+                            <a class="nav-link" href="">Tabel Dinamis</a>
                         </li>
                         <li class="nav-item mx-lg-1">
-                            <a class="nav-link" href="">Permohonan Data</a>
+                            <a class="nav-link" href="#media-statistik">Media Statistik</a>
                         </li>
                         <li class="nav-item mx-lg-1">
-                            <a class="nav-link" href="">Kontak</a>
+                            <a class="nav-link" href="#layanan-statistik">Layanan Statistik</a>
                         </li>
                     </ul>
 
@@ -143,7 +165,7 @@
         <section class="hero-section">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-md-6">
+                    <div class="col-md-6 mt-4">
                         <div class="">
                             <div>
                                 <span class="badge bg-danger rounded-pill">Baru</span>
@@ -152,7 +174,7 @@
                             <h2 class="text-white fw-normal mb-4 mt-3 hero-title">
                                 Telusuri Data Statistik Kabupaten Muna
                             </h2>
-                            <p class="pr-2 mb-5 font-16 text-white-50"><span class="text-white fw-normal">SDM</span> merupakan wujud sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia layanan data dan berbagai Dinas OPD selaku stakeholder penyedia data statistik sektoral.</p>
+                            <p class="pr-2 mb-4 font-16 text-white-50"><span class="text-white fw-normal">SDM</span> merupakan wujud sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia layanan data dan berbagai Dinas OPD selaku stakeholder penyedia data statistik sektoral.</p>
 
                             <div class="row align-items-center">
                                 <div class="col-lg-12 d-flex justify-content-center">
@@ -164,16 +186,14 @@
                                                     <datalist id="browserdata">
                                                         <span style="font-size: 0.9em;font-weight:bold; padding: 0.4em 1.5em;">All</span>
                                                         <br>
-                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> Kependudukan</span>
-                                                        <option>Kemiskinan</option>
-                                                        <option>Ketenagakerjaan</option>
-                                                        <option>Petumbuhan Ekonomi Menurut Pengeluaran</option>
-                                                        <option>Garis Kemiskinan</option>
-                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> Kependudukan</span>
-                                                        <option>Kemiskinan</option>
-                                                        <option>Ketenagakerjaan</option>
-                                                        <option>Petumbuhan Ekonomi Menurut Pengeluaran</option>
-                                                        <option>Garis Kemiskinan</option>
+                                                        
+                                                        {% for dt in subjects %}
+                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> {{dt.groups}} </span>
+                                                            {% for dt_item in dt.items %}
+                                                                <option value="{{dt_item.id}}">{{dt_item.item}}</option>
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                        
                                                     </datalist>
                                                 </div>
                                                 <div class="col-auto">
@@ -193,7 +213,7 @@
                           
                         </div>
                     </div>
-                    <div class="col-md-5 offset-md-1">
+                    <div class="col-md-4 offset-md-2">
                         <div class="text-md-end mt-1">
                             <img src="{% static 'app-design/assets/images/startup.svg' %}" alt="" class="img-fluid">
                         </div>
@@ -203,15 +223,15 @@
         </section>
         <!-- END HERO -->
 
-        <section class="" style="margin-top:-55px">
+        <section class="pb-5" style="margin-top:-45px">
             <div class="container">
-                <div class="row pb-3 align-items-center">
+                <div class="row align-items-center">
                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner" role="listbox">
                             <div class="carousel-item active">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px;">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-account-multiple widget-icon"></i>
@@ -226,7 +246,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-cart-plus widget-icon"></i>
@@ -241,7 +261,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-currency-usd widget-icon"></i>
@@ -256,7 +276,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-pulse widget-icon"></i>
@@ -275,7 +295,7 @@
                             <div class="carousel-item">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-account-multiple widget-icon"></i>
@@ -290,7 +310,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-cart-plus widget-icon"></i>
@@ -305,7 +325,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-currency-usd widget-icon"></i>
@@ -320,7 +340,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-pulse widget-icon"></i>
@@ -339,7 +359,7 @@
                             <div class="carousel-item">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-account-multiple widget-icon"></i>
@@ -354,7 +374,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-cart-plus widget-icon"></i>
@@ -369,7 +389,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-currency-usd widget-icon"></i>
@@ -384,7 +404,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-pulse widget-icon"></i>
@@ -403,7 +423,7 @@
                             <div class="carousel-item">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-account-multiple widget-icon"></i>
@@ -418,7 +438,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-cart-plus widget-icon"></i>
@@ -433,7 +453,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-currency-usd widget-icon"></i>
@@ -448,7 +468,7 @@
                                         </div> <!-- end card-->
                                     </div> <!-- end col-->
                                     <div class="col-md-6 col-lg-3">
-                                        <div class="card widget-flat py-2">
+                                        <div class="card widget-flat py-2" style="border-radius:20px">
                                             <div class="card-body">
                                                 <div class="float-end">
                                                     <i class="mdi mdi-pulse widget-icon"></i>
@@ -486,7 +506,7 @@
             </div>
         </section>
 
-        <section class="py-4 bg-light-lighten border-top border-bottom border-light">
+        <section class="py-3 bg-light-lighten border-top border-bottom border-light">
             <div class="container">
                 <div class="row py-4">
                     <div class="col-md-12">
@@ -502,7 +522,7 @@
                         <div class="card py-3" style="border-radius:20px">
                             <div class="card-body" >
                                 <div class="text-center">
-                                    <h3 class="text-primary">1.520</h3>
+                                    <h2 class="text-secondary">1.520</h2>
                                     <p class="text-muted mb-0" style="font-size: 20px;">Elemen Data</p>
                                 </div>
                             </div>
@@ -512,7 +532,7 @@
                         <div class="card py-3" style="border-radius:20px">
                             <div class="card-body">
                                 <div class="text-center">
-                                    <h3 class="text-primary">1.520</h3>
+                                    <h2 class="text-secondary">10</h2>
                                     <p class="text-muted mb-0" style="font-size: 20px;">OPD/Instansi</p>
                                 </div>
                             </div>
@@ -522,7 +542,7 @@
                         <div class="card py-3" style="border-radius:20px">
                             <div class="card-body">
                                 <div class="text-center">
-                                    <h3 class="text-primary">1.520</h3>
+                                    <h2 class="text-secondary">35</h2>
                                     <p class="text-muted mb-0" style="font-size: 20px;">Kategori</p>
                                 </div>
                             </div>
@@ -532,7 +552,7 @@
                         <div class="card py-3" style="border-radius:20px">
                             <div class="card-body">
                                 <div class="text-center">
-                                    <h3 class="text-primary">1.520</h3>
+                                    <h2 class="text-secondary">100.231</h2>
                                     <p class="text-muted mb-0" style="font-size: 20px;">Pengunjung</p>
                                 </div>
                             </div>
@@ -543,7 +563,7 @@
             </div>
         </section>
 
-        <section class="py-4">
+        <section class="py-3">
             <div class="container">
                 <div class="row pt-4">
                     <div class="col-lg-12">
@@ -553,42 +573,78 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-2 py-5 align-items-center px-1 py-5">
-                    {% for i in '123456'|make_list %}
+
+                <div class="row mt-2 py-5 align-items-center">
+                    <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
+                        <ol class="carousel-indicators" style="margin-bottom: -30px;">
+                            {% for card in cards %}
+                            <li data-bs-target="#carouselControls1" data-bs-slide-to="{{card.no}}" class="{% if card.no == 0 %}active{% endif %} bg-primary-lighten"></li>
+                            {% endfor %}
+                        </ol>
+                        <div class="carousel-inner" role="listbox">
+
+                            {% for card in cards %}
+                            <div class="carousel-item {% if card.no == 0 %}active{% endif %}">
+                                <div class="row">
+                                    {% for card_dt in card.items %}
+                                    <div class="col-md-6 col-lg-2">
+                                        <div class="card">
+                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">{{card_dt.item}}</a></h5>
+                                                <p class="card-text font-12">
+                                                    Kategori: <br>
+                                                    <b>{{card_dt.group}}</b>
+                                                </p>
+                                            </div> <!-- end card-body -->
+                                        </div> <!-- end card -->    
+                                    </div> <!-- end col-->
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselControls1" role="button" data-bs-slide="prev" style="margin-left: -130px;">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </span>
+                            </div>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselControls1" role="button" data-bs-slide="next" style="margin-right: -130px;">
+                            <div class="avatar-sm m-auto">
+                                <span class="avatar-title bg-primary-lighten rounded-circle">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row mt-2 py-5 align-items-center px-1 d-none">
+                    {% for dt in subjects %}
+                        {% for dt_item in dt.items %}
                         <div class="col-xl-2 col-lg-6">
-                            <div class="card cta-box bg-primary text-white" style="border-radius:20px">
-                                <div class="card-body">
+                            <div class="card cta-box bg-primary text-white" style="border-radius:20px;">
+                                <div class="card-body py-4">
                                     <div class="text-center">
                                         <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="50" alt="Generic placeholder image">
-                                        <h3 class="m-0 fw-normal cta-box-title"><b>Kemiskinan</b></h3>
+                                        <h3 class="m-0 fw-normal" style="font-size:20px"><b>{{dt_item.item}}</b></h3>
                                     </div>
                                 </div>
                                 <!-- end card-body -->
                             </div>
                         </div>
+                        {% endfor %}
                     {% endfor %}
-
-
-                    {% for i in '123456'|make_list %}
-                        <div class="col-xl-2 col-lg-6">
-                            <div class="card cta-box bg-primary text-white" style="border-radius:20px">
-                                <div class="card-body">
-                                    <div class="text-center">
-                                        <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="50" alt="Generic placeholder image">
-                                        <h3 class="m-0 fw-normal cta-box-title"><b>Kemiskinan</b></h3>
-                                    </div>
-                                </div>
-                                <!-- end card-body -->
-                            </div>
-                        </div>
-                    {% endfor %}
-
-
                 </div>
             </div>
         </section>
 
-        <section class="py-4 bg-light-lighten border-top border-bottom border-light">
+        <section class="py-3 bg-light-lighten border-top border-bottom border-light">
             <div class="container">
                 <div class="row pt-4">
                     <div class="col-lg-12">
@@ -659,8 +715,7 @@
             </div>
         </section>
 
-
-        <section class="py-5">
+        <section class="py-4">
             <div class="container">
                 
                 <div class="row mb-3">
@@ -1123,7 +1178,7 @@
             </div>
         </section>
 
-        <section class="py-5 bg-light-lighten border-top border-bottom border-light">
+        <section class="py-4 bg-light-lighten border-top border-bottom border-light" id="media-statistik">
             <div class="container">
                 <div class="row mb-3">
                     <div class="col-lg-12">
@@ -1257,8 +1312,7 @@
             </div>
         </section>
         
-
-        <section class="py-5">
+        <section class="py-5" id="layanan-statistik">
             <div class="container">
                 <div class="row mb-3">
                     <div class="col-lg-12">
@@ -1347,7 +1401,7 @@
             
                                             <div class="row mt-2">
                                                 <div class="col-12 text-end">
-                                                    <button class="btn btn-primary">Kirim Permohonan <i class="mdi mdi-telegram ms-1"></i> </button>
+                                                    <button class="btn btn-primary" style="height:47px">Kirim Permohonan <i class="mdi mdi-telegram ms-1"></i> </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -1467,16 +1521,16 @@
 
                         <ul class="social-list list-inline mt-3">
                             <li class="list-inline-item text-center">
-                                <a href="https://wa.me/6285720813630?text=Halo Admin, ada beberapa hal yang ingin kami tanyakan :)" class="social-list-item border-success text-success" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Whatsapp" title=""><i class="mdi mdi-whatsapp"></i></a>
+                                <a href="https://wa.me/6285720813630?text=Halo Admin, ada beberapa hal yang ingin kami tanyakan :)" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Whatsapp" title=""><i class="mdi mdi-whatsapp"></i></a>
                             </li>
                             <li class="list-inline-item text-center">
-                                <a href="https://www.instagram.com/bpskabmuna/" class="social-list-item border-danger text-danger" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Instagram" title=""><i class="mdi mdi-instagram"></i></a>
+                                <a href="https://www.instagram.com/bpskabmuna/" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Instagram" title=""><i class="mdi mdi-instagram"></i></a>
                             </li>
                             <li class="list-inline-item text-center">
                                 <a href="https://web.facebook.com/bpskabupatenmuna" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Facebook" title=""><i class="mdi mdi-facebook"></i></a>
                             </li>
                             <li class="list-inline-item text-center">
-                                <a href="https://www.youtube.com/channel/UC2n0NObcNhRcXJqIiH8sewg" class="social-list-item border-danger text-danger" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Youtube" title=""><i class="mdi mdi-youtube-subscription"></i></a>
+                                <a href="https://www.youtube.com/channel/UC2n0NObcNhRcXJqIiH8sewg" class="social-list-item border-primary text-primary" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Youtube" title=""><i class="mdi mdi-youtube-subscription"></i></a>
                             </li>
                         </ul>
 
