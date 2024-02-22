@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import View
 from backend import models
 
-import math
+from app.helpers import split_list
 from pprint import pprint
 
 class HomeAppClassView(View):
@@ -32,37 +32,37 @@ class HomeAppClassView(View):
                     }
                 )
         
-        
         card_data_pages = []
 
-        def partition(lst, size):
-            for i in range(0, len(lst) // size):
-                yield lst[i :: size]
+        card_data = split_list(subjects, 12)
 
-        card_data = [subjects[x::12] for x in range(len(subjects)//12)]
-        pprint(card_data)
         for idx, val in enumerate(card_data):
-            print(idx)
             dt = []
-
             for dt_val in val:
-                print(dt_val.name)
-                # dt.append({
-                #     'group' : dt_val.get_subject_group_display(),
-                #     'item' : dt_val.name
-                # })
+                dt.append({
+                    'group' : dt_val.get_subject_group_display(),
+                    'item' : dt_val.name,
+                    'id' : dt_val.id
+                })
             
-            # card_data_pages.append({
-            #     'no' : idx,
-            #     'items': dt
-            # })
+            card_data_pages.append({
+                'no' : idx,
+                'items': dt
+            })
           
+        pubs = models.BackendPublicationsModel.objects.order_by('release', 'title')[:16]
+
+        pubs_data_card = []
+
+        pubs_data = split_list(pubs, 4)
+
+
         context = {
             'title' : 'SDM | Satu Data Muna',
             'subjects' : subjs_data,
-            'cards' : card_data_pages
+            'cards' : card_data_pages,
+            'pubs' : pubs
         }
-
 
         return render(request, 'app/index.html', context)
 
