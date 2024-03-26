@@ -168,7 +168,7 @@
                     <div class="col-md-6 mt-4">
                         <div class="">
                             <div>
-                                <span class="badge bg-danger rounded-pill">Baru</span>
+                                <span class="badge bg-danger rounded-pill">Baru</span> 
                                 <span class="text-white-50 ms-1">Selamat datang di portal Satu Data Muna</span>
                             </div>
                             <h2 class="text-white fw-normal mb-4 mt-3 hero-title">
@@ -188,10 +188,13 @@
                                                         <br>
                                                         
                                                         {% for dt in subjects %}
-                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> {{dt.groups}} </span>
-                                                            {% for dt_item in dt.items %}
-                                                                <option value="{{dt_item.id}}">{{dt_item.item}}</option>
-                                                            {% endfor %}
+                                                        
+                                                            {% if dt.items|length > 0 %}
+                                                                <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> {{dt.groups}} </span><br>
+                                                                    {% for dt_item in dt.items %}
+                                                                        <option value="{{dt_item.item}}">{{dt_item.item}}</option>
+                                                                    {% endfor %}
+                                                            {% endif %}
                                                         {% endfor %}
                                                         
                                                     </datalist>
@@ -584,7 +587,7 @@
                         <div class="carousel-inner" role="listbox">
 
                             {% for card in cards %}
-                            <div class="carousel-item {% if card.no == 0 %}active{% endif %}">
+                            <div class="carousel-item {% if card.no == 0 %}active{% endif %}" data-bs-interval="">
                                 <div class="row">
                                     {% for card_dt in card.items %}
                                     <div class="col-md-6 col-lg-2">
@@ -604,22 +607,7 @@
                             {% endfor %}
 
                         </div>
-                        <a class="carousel-control-prev" href="#carouselControls1" role="button" data-bs-slide="prev" style="margin-left: -130px;">
-                            <div class="avatar-sm m-auto">
-                                <span class="avatar-title bg-primary-lighten rounded-circle">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </span>
-                            </div>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselControls1" role="button" data-bs-slide="next" style="margin-right: -130px;">
-                            <div class="avatar-sm m-auto">
-                                <span class="avatar-title bg-primary-lighten rounded-circle">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </span>
-                            </div>
-                        </a>
+ 
                     </div>
                 </div>
 
@@ -653,7 +641,142 @@
                         </div>
                     </div>
                 </div>
-                <div class="row py-5">
+
+                <div class="row py-3">
+                    <div class="col-12">
+                        
+                        <div class="tab-content pt-2">
+                            <div class="tab-pane show active" id="brs">
+                                <div class="row py-4">
+                                    <div class="col-12">
+                
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-centered mb-0 table-xxl">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data Statistik</th>
+                                                        <th>Kategori Statistik</th>
+                                                        <th>Jenis Data</th>
+                                                        <th>Tanggal Rilis</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    {% if stats_data|length > 0 %}
+                                                        {% for dt in stats_data  %}
+                                                            <tr>
+                                                                <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
+                                                                <td>{{dt.subject_id.name}}</td>
+                                                                <td>{{dt.get_stat_category_display}}</td>
+                                                                <td>{{ dt.created_at|date:"d M Y" }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <tr><td colspan="4"><i>Data belum tersedia</i></td></tr>
+                                                    {% endif %}
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="publikasi">
+
+                                <div class="row py-4">
+                                    <div class="col-12">
+                
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-centered mb-0 table-xxl">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data Statistik</th>
+                                                        <th>Kategori Statistik</th>
+                                                        <th>Jenis Data</th>
+                                                        <th>Tanggal Rilis</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    {% if stats_data_ikm|length > 0 %}
+                                                        {% for dt in stats_data_ikm  %}
+                                                            <tr>
+                                                                <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
+                                                                <td>{{dt.subject_id.name}}</td>
+                                                                <td>{{dt.get_stat_category_display}}</td>
+                                                                <td>{{ dt.created_at|date:"d M Y" }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <tr><td colspan="4"><i>Data belum tersedia</i></td></tr>
+                                                    {% endif %}
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="infograph">
+                                <div class="row py-4">
+                                    <div class="col-12">
+                
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-centered mb-0 table-xxl">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data Statistik</th>
+                                                        <th>Kategori Statistik</th>
+                                                        <th>Jenis Data</th>
+                                                        <th>Tanggal Rilis</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% if stats_data_str|length > 0 %}
+                                                    {% for dt in stats_data_str  %}
+                                                            <tr>
+                                                                <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
+                                                                <td>{{dt.subject_id.name}}</td>
+                                                                <td>{{dt.get_stat_category_display}}</td>
+                                                                <td>{{ dt.created_at|date:"d M Y" }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <tr><td colspan="4"><i>Data belum tersedia</i></td></tr>
+                                                    {% endif %}
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <ul class="nav nav-pills bg-nav-pills nav-justified mt-3 mb-5" style="border-radius:20px; font-size:13px">
+                            <li class="nav-item">
+                                <a href="#brs" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active" style="border-radius:20px;">
+                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                    <span class="d-none d-md-block">Tabel Statistik</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#publikasi" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
+                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                    <span class="d-none d-md-block">Indikator Kinerja Pembangunan</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#infograph" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
+                                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                    <span class="d-none d-md-block">Indikator Data Strategis</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                {% comment %} <div class="row py-5">
                     <div class="col-lg-4">
                         <div class="card cta-box bg-primary text-white" style="border-radius:30px">
                             <div class="card-body">
@@ -709,8 +832,7 @@
                             <!-- end card-body -->
                         </div>
                     </div>
-
-                </div>
+                </div> {% endcomment %}
             </div>
         </section>
 
@@ -1493,11 +1615,6 @@
                                     {% endfor %}
                                 </div>
 
-                                {% for i in '012345678'|make_list %}
-
-                                {% endfor %}
-
-
                             </div>
                         </div>
                     </div>
@@ -1594,38 +1711,7 @@
 
         {% block js-extender %}
         <script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script>
-        <script>
-            function filterStatisticTables(e){
-                if ($('#col-filter-statistics').hasClass('d-none')){
-                    
-                    $('#col-filter-statistics').removeClass('d-none')
-
-                    $('#col-table-statistics').removeClass('col-sm-12')
-                    $('#col-table-statistics').addClass('col-sm-9')
-                }else{
-                    $('#col-table-statistics').removeClass('col-sm-9')
-                    $('#col-table-statistics').addClass('col-sm-12')
-                    $('#col-filter-statistics').addClass('d-none')
-                }
-            }
-
-            function filterStatisticDev(e){
-                if ($('#col-filter-statistics-dev').hasClass('d-none')){
-                    $('#col-table-statistics-dev').removeClass('col-sm-12')
-                    $('#col-table-statistics-dev').addClass('col-sm-9')
-                    $('#col-filter-statistics-dev').removeClass('d-none')
-                    $("#col-filter-statistics-dev").show(2500);
-                }else{
-                    $('#col-table-statistics-dev').removeClass('col-sm-9')
-                    $('#col-table-statistics-dev').addClass('col-sm-12')
-                    $('#col-filter-statistics-dev').addClass('d-none')
-                }
-            }
-            
-
-        </script>
         {% endblock js-extender %}
-
 
     </body>
 </html>

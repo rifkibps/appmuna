@@ -57,11 +57,20 @@ class HomeAppClassView(View):
         pubs_data = split_list(pubs, 4)
 
 
+        stats_data = models.BackendIndicatorsModel.objects.order_by('created_at')[:4]
+        stats_data_str = models.BackendIndicatorsModel.objects.filter(level_data = '1').order_by('created_at')[:4]
+        stats_data_ikm = models.BackendIndicatorsModel.objects.filter(level_data = '2').order_by('created_at')[:4]
+
+        print(stats_data.count())
         context = {
             'title' : 'SDM | Satu Data Muna',
             'subjects' : subjs_data,
             'cards' : card_data_pages,
-            'pubs' : pubs
+            'pubs' : pubs,
+
+            'stats_data' : stats_data,
+            'stats_data_str' : stats_data_str,
+            'stats_data_ikm' : stats_data_ikm,
         }
 
         return render(request, 'app/index.html', context)
