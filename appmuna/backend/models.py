@@ -304,6 +304,46 @@ class BackendStatsNewsModel(models.Model):
       return f"{self.subject_id.name} | {self.title} | {self.created_at.strftime('%d/%m/%Y')}"
    
 
+class BackendDataConsultModel(models.Model):
+
+   class Meta:
+      verbose_name = 'Konsultasi Data' 
+      verbose_name_plural = 'Konsultasi Data'
+
+   state = (
+      ('0', 'Belum Diproses'),
+      ('1', 'Ya'),
+      ('2', 'Tidak')
+   )
+   
+   name =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Nama')
+   contact =  models.CharField(max_length=13, null=False, blank=False, verbose_name='Nomor Telp')
+   email =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Email Pemohon')
+   subject = models.CharField(max_length=512, null=False, blank=False, verbose_name='Subjek Pesan')
+   message = models.TextField(null=False, blank=False, verbose_name='Pesan')
+   created_at = models.DateField(auto_now_add = True, editable=False)
+   state_solved = models.CharField(max_length=1, choices = state, default="0", null=False, blank=False, verbose_name='Status Pesan')
+   
+   def __str__(self):
+      return f"{self.id}. {self.name} ({self.email}) - {self.created_at.strftime('%d/%m/%Y')}"
+
+class BackendDataConsultResponsModel(models.Model):
+
+   class Meta:
+      verbose_name = 'Renspons Konsultasi Data' 
+      verbose_name_plural = 'Renspons Konsultasi Data'
+
+   adm_state = (
+      ('1', 'Ya'),
+      ('2', 'Tidak')
+   )
+
+   data_consult = models.ForeignKey(BackendDataConsultModel, on_delete=models.CASCADE, null=False, related_name='data_consult_respons', verbose_name='Data Consult Issue')
+   message = models.TextField(null=False, blank=False, verbose_name='Feedback Pesan')
+   is_from_admin = models.CharField(max_length=1, choices = adm_state, default="2", null=False, blank=False, verbose_name='Is from admin?')
+   created_at = models.DateField(auto_now_add = True, editable=False)
+
+
 class BackendDataRequestsModel(models.Model):
     
    class Meta:

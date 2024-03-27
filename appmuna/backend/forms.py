@@ -430,6 +430,31 @@ class BackendDataRequestsForm(forms.ModelForm):
             )
         }
 
+class BackendDataConsultForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendDataConsultModel
+
+        fields = [
+            'name',
+            'contact',
+            'email',
+            'subject',
+            'message',
+        ]
+
+
+class BackendDataConsultResponsForm(forms.ModelForm):
+
+    class Meta:
+        model = models.BackendDataConsultResponsModel
+
+        fields = [
+            'data_consult',
+            'message',
+            'is_from_admin',
+        ]
+        
 
 class BackendPublicationsForm(forms.ModelForm):
 

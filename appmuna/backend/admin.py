@@ -45,3 +45,6 @@ admin.site.register(models.BackendStatsNewsModel)
 admin.site.register(models.BackendDataRequestsModel)
 admin.site.register(models.BackendPublicationsModel)
 
+
+admin.site.register(models.BackendDataConsultModel)
+

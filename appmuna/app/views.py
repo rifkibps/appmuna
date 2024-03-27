@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.views import View
-from backend import models
+from backend import models, forms
 
 from app.helpers import split_list
 from pprint import pprint
+
+from django.http import JsonResponse
 
 class HomeAppClassView(View):
 
@@ -62,7 +64,7 @@ class HomeAppClassView(View):
                 dt.append({
                     'title' : dt_val.title,
                     'thumbnail' : dt_val.thumbnail,
-                    'desc' : f'{' '.join(abstract[:10])} ...', # Maks 71 chars
+                    'desc' : f"{' '.join(abstract[:10])} ...",
                     'id' : dt_val.id
                 })
             
@@ -83,7 +85,7 @@ class HomeAppClassView(View):
                 dt.append({
                     'title' : dt_val.title,
                     'thumbnail' : dt_val.thumbnail,
-                    'desc' : f'{' '.join(desc[:10])} ...', # Maks 71 chars
+                    'desc' : f"{' '.join(desc[:10])} ...", # Maks 71 chars
                     'id' : dt_val.id
                 })
             
@@ -98,7 +100,7 @@ class HomeAppClassView(View):
         stats_news = models.BackendStatsNewsModel.objects.order_by('-created_at').values()[:4]
         for val in stats_news:
             content = list(val['content'].split(" ")) 
-            val['content']  =  f'{' '.join(content[:20])} ...'
+            val['content']  =  f"{' '.join(content[:20])} ..."
 
         stats_data = models.BackendIndicatorsModel.objects.order_by('created_at')[:4]
         stats_data_str = models.BackendIndicatorsModel.objects.filter(level_data = '1').order_by('created_at')[:4]
@@ -125,3 +127,21 @@ class HomeAppClassView(View):
 class DashboardAppClassView(View):
     print('hello world')
     print('Ini perubahan dari master')
+
+class HomeDataConsultClassView(View):
+
+    def post(self, request):
+
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if is_ajax:
+            if request.method == 'POST':
+
+                form = forms.BackendDataConsultForm(request.POST)
+
+                if form.is_valid():
+                    form.save()
+                    return JsonResponse({"status": 'success'}, status=200)
+                else:
+                    return JsonResponse({"status": 'failed', "error": form.errors}, status=400)
+
+        return JsonResponse({'status': 'Invalid request'}, status=400)

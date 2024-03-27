@@ -999,7 +999,7 @@
                             <div class="tab-pane" id="infograph">
                                 <div class="row">
                                     {% for info_dt in infographs_data %}
-                                        <div class="col-xxl-3 col-lg-6">
+                                        <div class="col-xl-3 col-lg-6">
                                             <div class="demo-box text-center">
                                                 <img src="/media/{{info_dt.thumbnail}}" alt="{{info_dt.title}}" class="img-fluid shadow-sm rounded">
                                                 <h5 class="mt-3 f-17">{{info_dt.title}}</h5>
@@ -1020,7 +1020,7 @@
                                 {% comment %} Pas diklik videonya, munculin tampilkan videonya di atasnya {% endcomment %}
                                 <div class="row">
                                     {% for dt_vidgraph in videographs_data %}
-                                        <div class="col-xxl-4 col-lg-6">
+                                        <div class="col-xl-3 col-lg-6">
                                             <div class="demo-box text-center mt-3 mt-lg-0">
                                                 <img src="/media/{{dt_vidgraph.thumbnail}}" alt="{{dt_vidgraph.title}}" class="img-fluid shadow-sm rounded">
                                                 <h5 class="mt-3 f-17">{{dt_vidgraph.title}}</h5>
@@ -1059,19 +1059,13 @@
                             <li class="nav-item">
                                 <a href="#req_data" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active" style="border-radius:20px;">
                                     <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Permohonan Data</span>
+                                    <span class="d-none d-md-block">Konsultasi Statistik</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="#q_n_a" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
                                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
                                     <span class="d-none d-md-block">Konsultasi Data</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#cp" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Contact Person</span>
                                 </a>
                             </li>
                         </ul>
@@ -1089,34 +1083,32 @@
             
                                 <div class="row align-items-center">
                                     <div class="col-md-4">
-                                        <p class="text-muted"><span class="fw-bold">Customer Support:</span><br> <span class="d-block mt-1">+1 234 56 7894</span></p>
-                                        <p class="text-muted mt-4"><span class="fw-bold">Email Address:</span><br> <span class="d-block mt-1">info@gmail.com</span></p>
-                                        <p class="text-muted mt-4"><span class="fw-bold">Office Address:</span><br> <span class="d-block mt-1">4461 Cedar Street Moro, AR 72368</span></p>
-                                        <p class="text-muted mt-4"><span class="fw-bold">Office Time:</span><br> <span class="d-block mt-1">9:00AM To 6:00PM</span></p>
+                                        <p class="text-muted"><span class="fw-bold">Narahubung:</span><br> <span class="d-block mt-1">+62 877 6655 4028</span></p>
+                                        <p class="text-muted mt-4"><span class="fw-bold">Alamat Email:</span><br> <span class="d-block mt-1">Rifkigst.bps@gmail.com</span></p>
+                                        <p class="text-muted mt-4"><span class="fw-bold">Alamat Kantor:</span><br> <span class="d-block mt-1">Kab. Muna, Sulawesi Tenggara</span></p>
+                                        <p class="text-muted mt-4"><span class="fw-bold">Waktu Kerja:</span><br> <span class="d-block mt-1">10:00 to 15:00 WITA</span></p>
                                     </div>
             
                                     <div class="col-md-8">
-                                        <form>
+                                        <form action="{% url 'app:data-consult-app' %}" method="post">
+                                            {% csrf_token %}
                                             <div class="row mt-4">
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-5">
                                                     <div class="mb-2">
-                                                        <label for="fullname" class="form-label">Your Name</label>
-                                                        <input class="form-control form-control-light" type="text" id="fullname" placeholder="Name...">
+                                                        <label for="name" class="form-label">Nama Lengkap</label>
+                                                        <input class="form-control form-control-light" type="text" id="name" name="name" placeholder="Nama Pemohon...">
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-4">
                                                     <div class="mb-2">
-                                                        <label for="emailaddress" class="form-label">Your Email</label>
-                                                        <input class="form-control form-control-light" type="email" required="" id="emailaddress" placeholder="Enter you email...">
+                                                        <label for="email" class="form-label">Email</label>
+                                                        <input class="form-control form-control-light" type="email" required="" id="email" name="email" placeholder="Alamat Email...">
                                                     </div>
                                                 </div>
-                                            </div>
-            
-                                            <div class="row mt-1">
-                                                <div class="col-lg-12">
+                                                <div class="col-lg-3">
                                                     <div class="mb-2">
-                                                        <label for="subject" class="form-label">Your Subject</label>
-                                                        <input class="form-control form-control-light" type="text" id="subject" placeholder="Enter subject...">
+                                                        <label for="contact" class="form-label">No. Telp</label>
+                                                        <input class="form-control form-control-light" type="text" required="" id="contact" name="contact" placeholder="No. Telp...">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1124,15 +1116,24 @@
                                             <div class="row mt-1">
                                                 <div class="col-lg-12">
                                                     <div class="mb-2">
-                                                        <label for="comments" class="form-label">Message</label>
-                                                        <textarea id="comments" rows="4" class="form-control form-control-light" placeholder="Type your message here..."></textarea>
+                                                        <label for="subject" class="form-label">Subjek</label>
+                                                        <input class="form-control form-control-light" type="text" id="subject" name="subject" placeholder="Subjek/Judul Permohonan...">
+                                                    </div>
+                                                </div>
+                                            </div>
+            
+                                            <div class="row mt-1">
+                                                <div class="col-lg-12">
+                                                    <div class="mb-2">
+                                                        <label for="message" class="form-label">Pesan</label>
+                                                        <textarea id="message" rows="4" class="form-control form-control-light" name="message" placeholder="Tuliskan pesan..."></textarea>
                                                     </div>
                                                 </div>
                                             </div>
             
                                             <div class="row mt-2">
-                                                <div class="col-12 text-end">
-                                                    <button class="btn btn-primary" style="height:47px">Kirim Permohonan <i class="mdi mdi-telegram ms-1"></i> </button>
+                                                <div class="col-lg-12 text-end">
+                                                    <button class="btn" >Kirim Pesan </button>
                                                 </div>
                                             </div>
                                         </form>
@@ -1200,32 +1201,7 @@
                                     <!--/col-lg-5-->
                                 </div>
                             </div>
-                            <div class="tab-pane" id="cp">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="text-left">
-                                            <p class="text-muted mt-2">Silahkan isi formulir berikut apabila terdapat hal yang ingin ditanyakan.
-                                            Tim kami akan segera menghubungi anda melalui Email atau WhatsApp.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-2">
-                                    {% for i in '0123'|make_list %}
-                                        <div class="col-xxl-4 col-lg-6">
-                                            <a href="#" class="list-group-item list-group-item-action" style="border-radius:20px; margin-bottom:15px;border:none;height:100px">
-                                                <div class="py-1 px-2 d-flex align-items-start">
-                                                    <img class="me-2 rounded-circle" src="{% static 'app-design/assets/images/users/avatar-2.jpg' %}" width="50" alt="Generic placeholder image">
-                                                    <div class="px-2">
-                                                        <h5 class="mt-0 mb-1">Soren Drouin<small class="fw-normal ms-3">18 Jan 2019 11:28 pm</small></h5>
-                                                        <span class="font-13">Completed "Design new idea"...</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    {% endfor %}
-                                </div>
 
-                            </div>
                         </div>
                     </div>
                 </div>
