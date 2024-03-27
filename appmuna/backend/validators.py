@@ -34,5 +34,5 @@ def validate_file_size(value):
     # 250MB - 214958080
     # 500MB - 429916160
     
-    if filesize > 2621440:
+    if filesize > 5242880:
         raise ValidationError("You cannot upload file more than 2.5Mb")

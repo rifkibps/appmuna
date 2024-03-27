@@ -50,24 +50,71 @@ class HomeAppClassView(View):
                 'items': dt
             })
           
-        pubs = models.BackendPublicationsModel.objects.order_by('release', 'title')[:16]
-
+        pubs = models.BackendPublicationsModel.objects.order_by('-release', 'title')
         pubs_data_card = []
+        pubs_data = split_list(pubs[:16], 4)
 
-        pubs_data = split_list(pubs, 4)
+        for idx, val in enumerate(pubs_data):
+            dt = []
+            for dt_val in val:
 
+                abstract = list(dt_val.abstract.split(" ")) 
+                dt.append({
+                    'title' : dt_val.title,
+                    'thumbnail' : dt_val.thumbnail,
+                    'desc' : f'{' '.join(abstract[:10])} ...', # Maks 71 chars
+                    'id' : dt_val.id
+                })
+            
+            pubs_data_card.append({
+                'no' : idx,
+                'items': dt
+            })
+          
+        infographics = models.BackendInfographicsModel.objects.order_by('-created_at')
+        infographs_data_card = []
+        infographs_data = split_list(infographics[:16], 4)
+
+        for idx, val in enumerate(infographs_data):
+            dt = []
+            for dt_val in val:
+
+                desc = list(dt_val.desc.split(" ")) 
+                dt.append({
+                    'title' : dt_val.title,
+                    'thumbnail' : dt_val.thumbnail,
+                    'desc' : f'{' '.join(desc[:10])} ...', # Maks 71 chars
+                    'id' : dt_val.id
+                })
+            
+            infographs_data_card.append({
+                'no' : idx,
+                'items': dt
+            })
+
+
+        videographs = models.BackendVideoGraphicsModel.objects.order_by('-created_at')
+
+        stats_news = models.BackendStatsNewsModel.objects.order_by('-created_at').values()[:4]
+        for val in stats_news:
+            content = list(val['content'].split(" ")) 
+            val['content']  =  f'{' '.join(content[:20])} ...'
 
         stats_data = models.BackendIndicatorsModel.objects.order_by('created_at')[:4]
         stats_data_str = models.BackendIndicatorsModel.objects.filter(level_data = '1').order_by('created_at')[:4]
         stats_data_ikm = models.BackendIndicatorsModel.objects.filter(level_data = '2').order_by('created_at')[:4]
 
-        print(stats_data.count())
         context = {
             'title' : 'SDM | Satu Data Muna',
             'subjects' : subjs_data,
             'cards' : card_data_pages,
-            'pubs' : pubs,
+            'pubs' : pubs_data_card,
+            'infographcs' : infographs_data_card,
 
+            'stats_news' : stats_news,
+            'pubs_data': pubs[:9],
+            'infographs_data' : infographics[:8],
+            'videographs_data' : videographs[:9],
             'stats_data' : stats_data,
             'stats_data_str' : stats_data_str,
             'stats_data_ikm' : stats_data_ikm,

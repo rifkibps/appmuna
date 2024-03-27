@@ -610,24 +610,6 @@
  
                     </div>
                 </div>
-
-                <div class="row mt-2 py-5 align-items-center px-1 d-none">
-                    {% for dt in subjects %}
-                        {% for dt_item in dt.items %}
-                        <div class="col-xl-2 col-lg-6">
-                            <div class="card cta-box bg-primary text-white" style="border-radius:20px;">
-                                <div class="card-body py-4">
-                                    <div class="text-center">
-                                        <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="50" alt="Generic placeholder image">
-                                        <h3 class="m-0 fw-normal" style="font-size:20px"><b>{{dt_item.item}}</b></h3>
-                                    </div>
-                                </div>
-                                <!-- end card-body -->
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% endfor %}
-                </div>
             </div>
         </section>
 
@@ -646,7 +628,7 @@
                     <div class="col-12">
                         
                         <div class="tab-content pt-2">
-                            <div class="tab-pane show active" id="brs">
+                            <div class="tab-pane show active" id="stats_table">
                                 <div class="row py-4">
                                     <div class="col-12">
                 
@@ -667,7 +649,7 @@
                                                             <tr>
                                                                 <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
                                                                 <td>{{dt.subject_id.name}}</td>
-                                                                <td>{{dt.get_stat_category_display}}</td>
+                                                                <td>Statistik {{dt.get_stat_category_display}}</td>
                                                                 <td>{{ dt.created_at|date:"d M Y" }}</td>
                                                             </tr>
                                                         {% endfor %}
@@ -677,10 +659,15 @@
 
                                             </table>
                                         </div>
+
+                                        {% if stats_data|length > 3 %}
+                                        <br>
+                                        <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="publikasi">
+                            <div class="tab-pane" id="ikm_table">
 
                                 <div class="row py-4">
                                     <div class="col-12">
@@ -702,7 +689,7 @@
                                                             <tr>
                                                                 <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
                                                                 <td>{{dt.subject_id.name}}</td>
-                                                                <td>{{dt.get_stat_category_display}}</td>
+                                                                <td>Statistik {{dt.get_stat_category_display}}</td>
                                                                 <td>{{ dt.created_at|date:"d M Y" }}</td>
                                                             </tr>
                                                         {% endfor %}
@@ -713,10 +700,15 @@
                                                 </tbody>
                                             </table>
                                         </div>
+
+                                        {% if stats_data_ikm|length > 3 %}
+                                        <br>
+                                        <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="infograph">
+                            <div class="tab-pane" id="ids_table">
                                 <div class="row py-4">
                                     <div class="col-12">
                 
@@ -736,7 +728,7 @@
                                                             <tr>
                                                                 <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
                                                                 <td>{{dt.subject_id.name}}</td>
-                                                                <td>{{dt.get_stat_category_display}}</td>
+                                                                <td>Statistik {{dt.get_stat_category_display}}</td>
                                                                 <td>{{ dt.created_at|date:"d M Y" }}</td>
                                                             </tr>
                                                         {% endfor %}
@@ -747,6 +739,10 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        {% if stats_data_str|length > 3 %}
+                                        <br>
+                                        <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -754,19 +750,19 @@
 
                         <ul class="nav nav-pills bg-nav-pills nav-justified mt-3 mb-5" style="border-radius:20px; font-size:13px">
                             <li class="nav-item">
-                                <a href="#brs" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active" style="border-radius:20px;">
+                                <a href="#stats_table" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active" style="border-radius:20px;">
                                     <i class="mdi mdi-home-variant d-md-none d-block"></i>
                                     <span class="d-none d-md-block">Tabel Statistik</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#publikasi" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
+                                <a href="#ikm_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
                                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
                                     <span class="d-none d-md-block">Indikator Kinerja Pembangunan</span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#infograph" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
+                                <a href="#ids_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
                                     <i class="mdi mdi-settings-outline d-md-none d-block"></i>
                                     <span class="d-none d-md-block">Indikator Data Strategis</span>
                                 </a>
@@ -775,64 +771,6 @@
                     </div>
                 </div>
 
-
-                {% comment %} <div class="row py-5">
-                    <div class="col-lg-4">
-                        <div class="card cta-box bg-primary text-white" style="border-radius:30px">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="w-100 overflow-hidden">
-                                        <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
-                                        <h3 class="m-0 fw-normal cta-box-title">Tabel <b>Statistik</b> <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
-                                    </div>
-                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
-                                </div>
-                                <br>
-                                <br>
-                                <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
-                            </div>
-                            <!-- end card-body -->
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <div class="card cta-box bg-primary text-white" style="border-radius:30px">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="w-100 overflow-hidden">
-                                        <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
-                                        <h3 class="m-0 fw-normal cta-box-title">Big Data <b>Analytics</b> <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
-                                    </div>
-                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
-                                </div>
-
-                                <br>
-                                <br>
-                                <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
-                            </div>
-                            <!-- end card-body -->
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <div class="card cta-box bg-primary text-white" style="border-radius:30px">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center">
-                                    <div class="w-100 overflow-hidden">
-                                        <h2 class="mt-0"><i class="mdi mdi-bullhorn-outline"></i></h2>
-                                        <h3 class="m-0 fw-normal cta-box-title">Metadata <b> Statistik </b> <i class="mdi mdi-arrow-right-bold-outline"></i></h3>
-                                    </div>
-                                    <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="120" alt="Generic placeholder image">
-                                </div>
-
-                                <br>
-                                <br>
-                                <a href="javascript:void(0);" class="btn btn-sm btn-light btn-rounded">Mulai Aplikasi <i class="mdi mdi-arrow-right"></i></a>
-                            </div>
-                            <!-- end card-body -->
-                        </div>
-                    </div>
-                </div> {% endcomment %}
             </div>
         </section>
 
@@ -848,208 +786,38 @@
                 </div>
 
                 <div class="row pb-3 align-items-center">
-                    <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
+                    <div id="carouselControls2" class="carousel slide" data-bs-ride="carousel">
                         <ol class="carousel-indicators" style="margin-bottom: -30px;">
-                            <li data-bs-target="#carouselControls1" data-bs-slide-to="0" class="active bg-primary-lighten"></li>
-                            <li data-bs-target="#carouselControls1" data-bs-slide-to="1" class="bg-primary-lighten"></li>
-                            <li data-bs-target="#carouselControls1" data-bs-slide-to="2" class="bg-primary-lighten"></li>
-                            <li data-bs-target="#carouselControls1" data-bs-slide-to="3" class="bg-primary-lighten"></li>
+
+                            {% for pub in pubs %}
+                            <li data-bs-target="#carouselControls2" data-bs-slide-to="{{pub.no}}" class="{% if pub.no == 0 %}active{% endif %} bg-primary-lighten"></li>
+                            {% endfor %}
                         </ol>
                         <div class="carousel-inner" role="listbox">
-                            <div class="carousel-item active">
+
+                            
+                            {% for pub in pubs %}
+                            <div class="carousel-item {% if pub.no == 0 %}active{% endif %}" data-bs-interval="">
                                 <div class="row">
+                                    {% for pub_dt in pub.items %}
                                     <div class="col-md-6 col-lg-3">
                                         <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <img src="/media/{{pub_dt.thumbnail}}" class="card-img-top" alt="..." height="430">
                                             <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">{{pub_dt.title}}</a></h5>
                                                 <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                    {{pub_dt.desc}}
                                                 </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
+                                            </div> <!-- end card-body -->   
+                                        </div> <!-- end card -->    
                                     </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
+                                    {% endfor %}
                                 </div>
                             </div>
-                            <div class="carousel-item">
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                </div>
-                            </div>
+                            {% endfor %}
+
                         </div>
-                        <a class="carousel-control-prev" href="#carouselControls1" role="button" data-bs-slide="prev" style="margin-left: -130px;">
+                        <a class="carousel-control-prev" href="#carouselControls2" role="button" data-bs-slide="prev" style="margin-left: -130px;">
                             <div class="avatar-sm m-auto">
                                 <span class="avatar-title bg-primary-lighten rounded-circle">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -1057,7 +825,7 @@
                                 </span>
                             </div>
                         </a>
-                        <a class="carousel-control-next" href="#carouselControls1" role="button" data-bs-slide="next" style="margin-right: -130px;">
+                        <a class="carousel-control-next" href="#carouselControls2" role="button" data-bs-slide="next" style="margin-right: -130px;">
                             <div class="avatar-sm m-auto">
                                 <span class="avatar-title bg-primary-lighten rounded-circle">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -1077,208 +845,39 @@
                 </div>
 
                 <div class="row pb-3 align-items-center">
-                    <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
+                    <div id="carouselControls3" class="carousel slide" data-bs-ride="carousel">
                         <ol class="carousel-indicators" style="margin-bottom: -30px;">
-                            <li data-bs-target="#carouselControls1" data-bs-slide-to="0" class="active bg-primary-lighten"></li>
-                            <li data-bs-target="#carouselControls1" data-bs-slide-to="1" class="bg-primary-lighten"></li>
-                            <li data-bs-target="#carouselControls1" data-bs-slide-to="2" class="bg-primary-lighten"></li>
-                            <li data-bs-target="#carouselControls1" data-bs-slide-to="3" class="bg-primary-lighten"></li>
+
+                            
+                            {% for infograph in infographcs %}
+                            <li data-bs-target="#carouselControls3" data-bs-slide-to="{{infograph.no}}" class="{% if infograph.no == 0 %}active{% endif %} bg-primary-lighten"></li>
+                            {% endfor %}
+
                         </ol>
                         <div class="carousel-inner" role="listbox">
-                            <div class="carousel-item active">
+
+                            {% for infograph in infographcs %}
+                            <div class="carousel-item {% if infograph.no == 0 %}active{% endif %}" data-bs-interval="">
                                 <div class="row">
+                                    {% for infograph_dt in infograph.items %}
                                     <div class="col-md-6 col-lg-3">
                                         <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+                                            <img src="/media/{{infograph_dt.thumbnail}}" class="card-img-top" alt="..." height="430">
                                             <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
+                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">{{infograph_dt.title}}</a></h5>
                                                 <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
+                                                    {{infograph_dt.desc}}
                                                 </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
+                                            </div> <!-- end card-body -->   
+                                        </div> <!-- end card -->    
                                     </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
+                                    {% endfor %}
                                 </div>
                             </div>
-                            <div class="carousel-item">
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="row">
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                    <div class="col-md-6 col-lg-3">
-                                        <div class="card">
-                                            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                            <div class="card-body">
-                                                <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                                                <p class="card-text">
-                                                    Some quick example text to build on the card up the bulk of the card's content.
-                                                </p>
-                                            </div> <!-- end card-body -->
-                                        </div> <!-- end card -->
-                                    </div> <!-- end col-->
-                                </div>
-                            </div>
+                            {% endfor %}
+
                         </div>
-                        <a class="carousel-control-prev" href="#carouselControls1" role="button" data-bs-slide="prev" style="margin-left: -130px;">
+                        <a class="carousel-control-prev" href="#carouselControls3" role="button" data-bs-slide="prev" style="margin-left: -130px;">
                             <div class="avatar-sm m-auto">
                                 <span class="avatar-title bg-primary-lighten rounded-circle">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -1286,7 +885,7 @@
                                 </span>
                             </div>
                         </a>
-                        <a class="carousel-control-next" href="#carouselControls1" role="button" data-bs-slide="next" style="margin-right: -130px;">
+                        <a class="carousel-control-next" href="#carouselControls3" role="button" data-bs-slide="next" style="margin-right: -130px;">
                             <div class="avatar-sm m-auto">
                                 <span class="avatar-title bg-primary-lighten rounded-circle">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -1299,7 +898,7 @@
             </div>
         </section>
 
-        <section class="py-4 bg-light-lighten border-top border-bottom border-light" id="media-statistik">
+        <section class="pt-5 pb-3 bg-light-lighten border-top border-bottom border-light" id="media-statistik">
             <div class="container">
                 <div class="row mb-3">
                     <div class="col-lg-12">
@@ -1338,47 +937,52 @@
                             </li>
                         </ul>
                         
-                        <div class="tab-content pt-2">
+                        <div class="tab-content pt-3">
                             <div class="tab-pane show active" id="brs">
-                                {% for i in '0123'|make_list %}
-                                    <a href="#" class="list-group-item list-group-item-action" style="border-radius:20px; margin-bottom:15px;border:none">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-md-1">
-                                                <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
-                                            </div>
-                                            <div class="col-md-11">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <h5 class="mb-1">List group item heading</h5>
-                                                    <small>3 days ago</small>
-                                                </div>
-                                                <p class="mb-1">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-                                                <small class="text-muted">Donec id elit non mi porta.</small>
-                                            </div>
+
+                                {% for dt_stat in stats_news %}
+                                <a href="#" class="list-group-item list-group-item-action" style="border-radius:20px; margin-bottom:15px;border:none">
+                                    <div class="row g-0 align-items-center">
+                                        <div class="col-sm-1">
+                                            <img class="ms-2 rounded" src="/media/{{dt_stat.thumbnail}}" width="55" alt="{{dt_stat.title}}">
                                         </div>
-                                    </a>
+                                        <div class="col-sm-11">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h5 class="mb-1">{{dt_stat.title}}</h5>
+                                                <small>{{dt_stat.created_at|date:"d M Y"}}</small>
+                                            </div>
+                                            <p class="mb-1">{{dt_stat.content}}</p>
+                                            <small class="text-muted">{{dt_stat.author}}</small>
+                                        </div>
+                                    </div>
+                                </a>
                                 {% endfor %}
+
                                 
-                                <div class="mt-4">
-                                    <a href="#" class="btn btn-primary btn-rounded btn-sm"> Lihat lebih banyak <i class="mdi mdi-arrow-right"></i>
-                                    </a>
-                                </div>
+                                {% if stats_news|length > 3 %}
+                                    <div class="mt-3">
+                                        <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
+                                    </div>
+                                {% endif %}
+
                             </div>
                             <div class="tab-pane" id="publikasi">
 
                                 <div class="row">
-                                    {% for i in '012345678'|make_list %}
+                                    
+                                    {% for dt_pub in pubs_data %}
                                         <div class="col-xxl-4 col-lg-6">
                                             <a href="#" class="list-group-item list-group-item-action mb-2" style="border:none; border-radius:20px">
                                                 <div class="row g-0 align-items-center">
                                                     <div class="col-sm-4">
-                                                        <img class="ms-3" src="{% static 'app-design/assets/images/email-campaign.svg' %}" width="50" alt="Generic placeholder image">
+                                                        <img class="ms-1 rounded" src="/media/{{dt_pub.thumbnail}}" width="80" alt="Generic placeholder image">
                                                     </div>
                                                     <div class="col-sm-8">
                                                         <div class="d-flex w-100 justify-content-between">
-                                                            <h5 class="mb-1">Indeks Kemahalan Konstruksi Kabupaten Muna 2023</h5>
+                                                            <h5 class="mb-1">{{dt_pub.title}}</h5>
                                                         </div>
-                                                        <p class="mb-1">29 Desember 2023</p>
-                                                        <small class="text-muted">BPS Kabupaten Muna</small>
+                                                        <p class="mb-1">{{dt_pub.release|date:"d M Y"}}</p>
+                                                        <small class="text-muted">No. Publikasi / Katalog: {{dt_pub.publication_no}}/{{dt_pub.catalog_no}}</small>
                                                     </div>
                                                 </div>
                                             </a>
@@ -1386,45 +990,51 @@
                                     {% endfor %}
                                 </div>
 
-                                <div class="mt-4">
-                                    <a href="#"> Lihat lebih banyak <i class="mdi mdi-arrow-right"></i>
-                                    </a>
-                                </div>
+                                {% if pubs_data|length > 8 %}
+                                    <div class="mt-3">
+                                        <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="tab-pane" id="infograph">
                                 <div class="row">
-                                    {% for i in '012345678'|make_list %}
-                                        <div class="col-xxl-4 col-lg-6">
+                                    {% for info_dt in infographs_data %}
+                                        <div class="col-xxl-3 col-lg-6">
                                             <div class="demo-box text-center">
-                                                <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                                                <h5 class="mt-3 f-17">Vertical Layout</h5>
+                                                <img src="/media/{{info_dt.thumbnail}}" alt="{{info_dt.title}}" class="img-fluid shadow-sm rounded">
+                                                <h5 class="mt-3 f-17">{{info_dt.title}}</h5>
                                             </div>
                                         </div>
                                     {% endfor %}
                                 </div>
 
-                                <div class="mt-4">
-                                    <a href="#"> Lihat lebih banyak <i class="mdi mdi-arrow-right"></i>
-                                    </a>
-                                </div>
+
+                                {% if infographs_data|length > 11 %}
+                                    <div class="mt-3">
+                                        <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
+                                    </div>
+                                {% endif %}
+
                             </div>
                             <div class="tab-pane" id="videograph">
                                 {% comment %} Pas diklik videonya, munculin tampilkan videonya di atasnya {% endcomment %}
                                 <div class="row">
-                                    {% for i in '012345678'|make_list %}
+                                    {% for dt_vidgraph in videographs_data %}
                                         <div class="col-xxl-4 col-lg-6">
                                             <div class="demo-box text-center mt-3 mt-lg-0">
-                                                <img src="{% static 'app-design/assets/images/layouts/layout-4.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                                                <h5 class="mt-3 f-17">Semi Dark Layout</h5>
+                                                <img src="/media/{{dt_vidgraph.thumbnail}}" alt="{{dt_vidgraph.title}}" class="img-fluid shadow-sm rounded">
+                                                <h5 class="mt-3 f-17">{{dt_vidgraph.title}}</h5>
                                             </div>
                                         </div>
                                     {% endfor %}
                                 </div>
 
-                                <div class="mt-4">
-                                    <a href="#"> Lihat lebih banyak <i class="mdi mdi-arrow-right"></i>
-                                    </a>
-                                </div>
+                                {% if videographs_data|length > 8 %}
+                                    <div class="mt-3">
+                                        <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
+                                    </div>
+                                {% endif %}
+
                             </div>
                         </div>
                     </div>
@@ -1455,7 +1065,7 @@
                             <li class="nav-item">
                                 <a href="#q_n_a" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
                                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Q&A Prosedur Permohonan Data</span>
+                                    <span class="d-none d-md-block">Konsultasi Data</span>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -1471,7 +1081,7 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="text-left">
-                                            <p class="text-muted mt-2">Silahkan isi formulir berikut apabila terdapat hal yang ingin ditanyakan.
+                                            <p class="text-muted mt-2">Silahkan isi formulir berikut apabila ada hal yang perlu ditanyakan.
                                             Tim kami akan segera menghubungi anda melalui Email atau WhatsApp.</p>
                                         </div>
                                     </div>
