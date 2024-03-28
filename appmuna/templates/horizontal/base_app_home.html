@@ -14,6 +14,8 @@
 
         <!-- third party css -->
         <link href="{% static 'app-design/assets/css/vendor/jquery-jvectormap-1.2.2.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'app-design/assets/css/vendor/dataTables.bootstrap5.css' %}" rel="stylesheet" type="text/css">
+        <link href="{% static 'app-design/assets/css/vendor/responsive.bootstrap5.css' %}" rel="stylesheet" type="text/css">
         <!-- third party css end -->
 
         <!-- App css -->
@@ -1065,7 +1067,7 @@
                             <li class="nav-item">
                                 <a href="#q_n_a" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
                                     <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                                    <span class="d-none d-md-block">Konsultasi Data</span>
+                                    <span class="d-none d-md-block">Cek Ketersediaan Data</span>
                                 </a>
                             </li>
                         </ul>
@@ -1076,7 +1078,8 @@
                                     <div class="col-lg-12">
                                         <div class="text-left">
                                             <p class="text-muted mt-2">Silahkan isi formulir berikut apabila ada hal yang perlu ditanyakan.
-                                            Tim kami akan segera menghubungi anda melalui Email atau WhatsApp.</p>
+                                            Tim kami akan segera membalas anda dengan segera. Anda dapat melihat status konsultasi pada <a href="#">Menu Aduan</a>.
+                                    </p>
                                         </div>
                                     </div>
                                 </div>
@@ -1141,64 +1144,42 @@
                                 </div>
                             </div>
                             <div class="tab-pane" id="q_n_a">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="text-left">
-                                            <p class="text-muted mt-2">Silahkan isi formulir berikut apabila terdapat hal yang ingin ditanyakan.
-                                            Tim kami akan segera menghubungi anda melalui Email atau WhatsApp.</p>
+
+                                <div class="row align-items-center mt-3">
+                                    <div class="col-lg-12 d-flex justify-content-center">
+                                        <div class="app-search dropdown ml-5">
+                                            <div class="row gy-2 gx-2 align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" placeholder="Telusuri Ketersediaan Data ..." id="search_data" autocomplete="off" style="width:450px;height:45px;border-radius:5px">
+                                                        <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto mt-2 px-0">
+                                                    <button class="btn btn-primary rounded" style="height:45px" id="button-search_data" fdprocessedid="hdtwr9">Temukan Data</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mt-4">
-                                    <div class="col-lg-5 offset-lg-1 px-0">
-                                        <!-- Question/Answer -->
-                                        <div>
-                                            <div class="faq-question-q-box">Q.</div>
-                                            <h4 class="faq-question text-body">Can I use this template for my client?</h4>
-                                            <p class="faq-answer mb-4 pb-1 text-muted">Yup, the marketplace license allows you to use this theme
-                                                in any end products.
-                                                For more information on licenses, please refere <a href="../../licenses/index.htm" target="_blank">here</a>.</p>
-                                        </div>
-                
-                                        <!-- Question/Answer -->
-                                        <div>
-                                            <div class="faq-question-q-box">Q.</div>
-                                            <h4 class="faq-question text-body">How do I get help with the theme?</h4>
-                                            <p class="faq-answer mb-4 pb-1 text-muted">Use our dedicated support email (support@coderthemes.com) to send your issues or feedback. We are here to help anytime.</p>
-                                        </div>
-                                        
-                                        <div>
-                                            <div class="faq-question-q-box">Q.</div>
-                                            <h4 class="faq-question text-body">How do I get help with the theme?</h4>
-                                            <p class="faq-answer mb-4 pb-1 text-muted">Use our dedicated support email (support@coderthemes.com) to send your issues or feedback. We are here to help anytime.</p>
-                                        </div>
+
+                                <div class="row" style="margin-top:50px">
+                                    <div class="col-12 table-responsive">
+                                        <table class="table table-hover table-centered mb-0 w-100 dt-responsive nowrap" id="data_table_check">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 5px!important;">No</th>
+                                                    <th style="width:400px!important;">Data Statistik</th>
+                                                    <th>Kategori Statistik</th>
+                                                    <th>Ketersedian Tahun</th>
+                                                    <th>Periode Data</th>
+                                                    <th>Tanggal Rilis</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="text-muted">
+                                            </tbody>
+                                        </table>
                                     </div>
-                                    <!--/col-lg-5 -->
-                
-                                    <div class="col-lg-5">
-                                        <!-- Question/Answer -->
-                                        <div>
-                                            <div class="faq-question-q-box">Q.</div>
-                                            <h4 class="faq-question text-body">Can this theme work with Wordpress?</h4>
-                                            <p class="faq-answer mb-4 pb-1 text-muted">No. This is a HTML template. It won't directly with
-                                                wordpress, though you can convert this into wordpress compatible theme.</p>
-                                        </div>
-                
-                                        <!-- Question/Answer -->
-                                        <div>
-                                            <div class="faq-question-q-box">Q.</div>
-                                            <h4 class="faq-question text-body">Will you regularly give updates of Hyper?</h4>
-                                            <p class="faq-answer mb-4 pb-1 text-muted">Yes, We will update the Hyper regularly. All the
-                                                future updates would be available without any cost.</p>
-                                        </div>
-                                        <div>
-                                            <div class="faq-question-q-box">Q.</div>
-                                            <h4 class="faq-question text-body">Will you regularly give updates of Hyper?</h4>
-                                            <p class="faq-answer mb-4 pb-1 text-muted">Yes, We will update the Hyper regularly. All the
-                                                future updates would be available without any cost.</p>
-                                        </div>
-                                    </div>
-                                    <!--/col-lg-5-->
                                 </div>
                             </div>
 
@@ -1240,17 +1221,14 @@
 
                     <div class="col-lg-2 mt-3 mt-lg-0">
                         <h5 class="text-light">Instansi</h5>
-
                         <ul class="list-unstyled ps-0 mb-0 mt-3">
                             <li class="mt-2"><a href="https://munakab.bps.go.id/" class="text-muted">Tentang Kami</a></li>
                             <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Hubungi Kami</a></li>
                         </ul>
-
                     </div>
 
                     <div class="col-lg-2 mt-3 mt-lg-0">
                         <h5 class="text-light">Menu</h5>
-
                         <ul class="list-unstyled ps-0 mb-0 mt-3">
                             <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Data Strategis</a></li>
                             <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Data Kinerja Pembangunan</a></li>
@@ -1262,7 +1240,6 @@
 
                     <div class="col-lg-2 mt-3 mt-lg-0">
                         <h5 class="text-light">Tautan Lainnya</h5>
-
                         <ul class="list-unstyled ps-0 mb-0 mt-3">
                             <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Jadwal Rilis Data</a></li>
                             <li class="mt-2"><a href="https://munakab.go.id/" class="text-muted">Pemda Kab. Muna</a></li>
@@ -1287,7 +1264,6 @@
         <script src="{% static 'app-design/assets/js/app.min.js' %}"></script>
 
         <!-- third party js -->
-        <script src="{% static 'app-design/assets/js/vendor/apexcharts.min.js' %}"></script>
         <script src="{% static 'app-design/assets/js/vendor/jquery-jvectormap-1.2.2.min.js' %}"></script>
         <script src="{% static 'app-design/assets/js/vendor/jquery-jvectormap-world-mill-en.js' %}"></script>
         <!-- third party js ends -->
@@ -1297,6 +1273,59 @@
 
         {% block js-extender %}
         <script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script>
+        <script src="{% static 'app-design/assets/js/vendor/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'app-design/assets/js/vendor/dataTables.bootstrap5.js' %}"></script>
+        <script src="{% static 'app-design/assets/js/vendor/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'app-design/assets/js/vendor/responsive.bootstrap5.min.js' %}"></script>
+
+        <script>
+            var table = $("#data_table_check").DataTable(
+              {
+                info: false,
+                searching:false,
+                lengthChange:false,
+                fixedColumns: true,
+                pageLength: 5,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": "{% url 'app:data-tracing-app' %}",
+                    "headers": {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRFToken": '{{csrf_token}}',
+                    },
+                    "type": "POST",
+                    "data": function (d){
+                        return $.extend({}, d, {
+                            "search_data": $('#search_data').val(),
+                        })
+                    },
+                },
+                columns :[
+                    {"data" : 'no'},
+                    {"data" : 'indicator_id__name'},
+                    {"data" : 'indicator_id__subject_id__name'},
+                    {"data" : 'year'},
+                    {"data" : 'indicator_id__time_period_id__name'},
+                    {"data" : 'created_at'},
+                ],
+                language: {
+                    paginate: {
+                    previous: "<i class='mdi mdi-chevron-left'>",
+                    next: "<i class='mdi mdi-chevron-right'>",
+                    },
+                },
+                drawCallback: function () {
+                    $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+                },
+              }
+            );
+
+            $('#button-search_data').on("click", function (){
+                table.draw()
+            })
+
+        </script>
         {% endblock js-extender %}
 
     </body>
