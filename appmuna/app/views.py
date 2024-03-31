@@ -228,7 +228,6 @@ class HomeDataTraceClassView(LoginRequiredMixin, View):
             obj_dt = models.BackendContentIndicatorsModel.objects.filter(indicator_id = obj['indicator_id'], year=obj['year'], item_period=obj['item_period']).first()
             obj_period = models.BackendPeriodNameItemsModel.objects.filter(pk = obj_dt.item_period).first()
 
-            print(obj_period.item_period)
             data.append(
             {
                 'no': [x for x in id_def_data if obj_dt.indicator_id.id == x[1] and obj_dt.year == x[2] and obj_dt.item_period == x[3]][0][0],
@@ -246,6 +245,14 @@ class HomeDataTraceClassView(LoginRequiredMixin, View):
             'data': data,
         }
 
+class SearchEngineClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Kemiskinan | Telusuri Data'
+        }
+
+        return render(request, 'app/search_app.html', context)
 
 
 class DashboardAppClassView(View):
