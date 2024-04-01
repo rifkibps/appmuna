@@ -254,6 +254,15 @@ class SearchEngineClassView(View):
 
         return render(request, 'app/search_app.html', context)
 
+class StatisticsTablesClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Kemiskinan | Tabel Statistik'
+        }
+
+        return render(request, 'app/statistics.html', context)
+    
 
 class DashboardAppClassView(View):
     print('hello world')

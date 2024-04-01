@@ -8,6 +8,8 @@ urlpatterns = [
     path('app/data-consult', views.HomeDataConsultClassView.as_view(), name='data-consult-app'),
     path('app/data-tracing', views.HomeDataTraceClassView.as_view(), name='data-tracing-app'),
 
+
+    path('app/statistics', views.StatisticsTablesClassView.as_view(), name='statistics-app'),
     path('app/search', views.SearchEngineClassView.as_view(), name='search-app')
     
 ]
