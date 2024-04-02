@@ -12,6 +12,7 @@
 
 {% block main-content %}
 <!-- START HERO -->
+{% comment %} 630 {% endcomment %}
 <section class="hero-section" style="height:630px">
     <div class="container">
         <div class="row align-items-center" id="search-content">
@@ -52,19 +53,14 @@
             </div>
         </div>
 
-        <div class="row align-items-center" style="margin-top:-200px; position: relative;">
-            <div class="col-md-12" id="col-expand" style="position: relative; justify-content: flex-end; display: flex; bottom:-253px;">
-                <button class="btn bg-white" style="width:100px; height:40px; font-size:12px; border-radius:100px" id="expandButton">Expand <i class="mdi mdi-arrow-up-down"></i></button>
-            </div>
-        </div>
     </div>
 </section>
 <!-- END HERO -->
-
-{% comment %} tambah 150px {% endcomment %}
 <section class="pt-3 pb-5 bg-white" id="main-content" style="margin-top:-50px;"> 
     <div class="container">
-
+        <div class="row justify-content-end">
+            <button class="btn bg-white"  style="width:100px; height:40px; font-size:12px; border-radius:20px; margin-top:-45px; padding: 8px 0px 8px 5px; z-index:10; margin-right:10px!important;" id="expandButton">Expand <i class="mdi mdi-arrow-up-down"></i></button>
+        </div>
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box">
@@ -227,33 +223,30 @@
     </div>
 </section>
 
+{% endblock main-content %}
 
 
 {% block js-extender %}
 <script>
 
-    $( window ).resize(function() {
+    $( window).resize(function(){
         if($(this).width() <= 768){
             $("#search-content").addClass('d-none')
             $(".hero-section").removeAttr('style')
             $("#main-content").css('margin-top', '-200px')
             $("#expandButton").addClass('d-none')
             $("#top-search-mitra").css('width', '200px')
-            
-        }else if($(this).width() > 768 && $(this).width() <= 1440){
-            $("#expandButton").addClass('d-none')
-            $("#top-search-mitra").css('width', '300px')
         }else{
             $("#search-content").removeClass('d-none')
             $(".hero-section").css('height', '630px')    
             $("#main-content").css('margin-top', '-50px')
             $("#expandButton").removeClass('d-none')
+            $("#top-search-mitra").css('width', '400px')
         }
     });
 
 
     $("#expandButton").on('click', function (event){
-
         if ($('#main-content').css('margin-top') == '-50px'){
             $("#search-content").addClass('d-none')
             $(".hero-section").removeAttr('style')
@@ -269,4 +262,3 @@
 
 </script>
 {% endblock js-extender %}
-{% endblock main-content %}
