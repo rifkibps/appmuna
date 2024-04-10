@@ -10,6 +10,8 @@ urlpatterns = [
 
 
     path('app/statistics', views.StatisticsTablesClassView.as_view(), name='statistics-app'),
+    path('app/statistics/preview', views.StatisticDetailTableClassView.as_view(), name='statistics-app'),
+    
     path('app/search', views.SearchEngineClassView.as_view(), name='search-app')
     
 ]

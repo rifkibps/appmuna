@@ -12,7 +12,8 @@
 
 {% block main-content %}
 <!-- START HERO -->
-{% comment %} 630 {% endcomment %}
+
+
 <section class="hero-section" style="height:630px">
     <div class="container">
         <div class="row align-items-center" id="search-content">
@@ -55,9 +56,10 @@
 
     </div>
 </section>
+
 <!-- END HERO -->
-<section class="pt-3 pb-5 bg-white" id="main-content" style="margin-top:-50px;"> 
-    <div class="container">
+<section class="py-3 bg-white" id="main-content" style="margin-top:-50px;"> 
+    <div class="container " >
         <div class="row justify-content-end">
             <button class="btn bg-white"  style="width:100px; height:40px; font-size:12px; border-radius:20px; margin-top:-45px; padding: 8px 0px 8px 5px; z-index:10; margin-right:10px!important;" id="expandButton">Expand <i class="mdi mdi-arrow-up-down"></i></button>
         </div>
@@ -66,9 +68,8 @@
                 <div class="page-title-box">
                     <div class="page-title-left">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Konten Aplikasi</a></li>
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Statistik</a></li>
-                            <li class="breadcrumb-item active">Angka Harapan Hidup (AHH) Menurut Provinsi dan Jenis Kelamin (menggunakan UHH hasil SP2020 LF), 2022-2023
+                            <li class="breadcrumb-item"><a href="javascript: void(0);" style="color:#003C80">Beranda</a></li>
+                            <li class="breadcrumb-item active text-truncate"><a href="javascript: void(0);" style="color:#003C80">Tabel Statistik</a></li>
                             </li>
                         </ol>
                     </div>
@@ -76,153 +77,278 @@
             </div>
         </div>
 
-        <div class="row py-4">
+        <div class="row py-2">
             <div class="col-12">
-                <div class="row">
-                    <div class="col-lg-3">
-                            <div class="card">
-                                <div id="external-events" class="card-body">
-                                    <div class="external-event bg-info-lighten text-info" data-class="bg-info">
-                                        Detail Tabel/Indikator
-                                    </div>
-                                    <div class="mt-3 d-none d-xl-block">
-                                        <h5 class="text-left">Nama Tabel:</h5>
-                                        <p class="text-left">{{data_indicator.name}}</p>
-                                        <h5 class="text-left">Subjek:</h5>
-                                        <p class="text-left">{{data_indicator.subject_id.name}}</p>
-                                        <h5 class="text-left">Subjek CSA:</h5>
-                                        <p class="text-left">{{subject_csa}}</p>
-                                        <h5 class="text-left">Deskripsi:</h5>
-                                        <p style="text-align: justify;">{{data_indicator.desc}}</p>
-                                    </div>
-                                    
-                                    <div class="mt-3 d-none d-xl-block">
-                                        <h5 class="text-left">Kelompok Karakteristik {% if d_form %}({{col_group_name}}){% endif %}</h5>
-                                        <ul class="ps-3">
-                                            {% if col_groups|length > 0 %}
-                                                {% for dt  in col_groups %}
-                                                    <li class="text-left text-muted">
-                                                        {% if dt.item_char %}
-                                                        {{dt.item_char}}
-                                                        {% else %}
-                                                        {{dt}}
-                                                        {% endif %}
-                                                    </li>
-                                                {% endfor %}
-                                            {% endif %}
-                                        </ul>
-                                    </div>
-            
-                                    <div class="mt-3 d-none d-xl-block">
-                                        <h5 class="text-left">Kelompok Judul Baris {% if d_form %}({{row_group_name}}){% endif %}</h5>
-                                        <ul class="px-1" style="list-style:none">
-                                            {% for dt  in rows_groups %}
-                                                <li class="text-left text-muted">{{dt.order_num}}.&emsp;{{dt.item_row}}</li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
-            
-                                    <div class="mt-3 d-none d-xl-block">
-                                        <h5 class="text-left">Periode Data:</h5>
-                                        <p class="text-left">{{data_indicator.time_period_id.name}}</p>
-                                        <h5 class="text-left">Satuan:</h5>
-                                        <p class="text-left">{{data_indicator.unit_id.name}}</p>
-                                        <h5 class="text-left">Kategori Statistik:</h5>
-                                        <p class="text-left"><span class="badge bg-primary">{{data_indicator.get_stat_category_display}}</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                    </div> <!-- end col-->
-        
-                    <div class="col-lg-9">
-                        <div class="card">
-                            <div class="card-body px-3 mt-4 mt-lg-0">
-                                <div class="row mb-3">
-                                    <div class="col-sm-6 align-items-start">
-                                        <button class="btn btn-primary btn-sm btn-rounded font-14" disabled> Tahun 2024 </button>
-                                        <button class="btn btn-primary btn-sm btn-rounded font-14" disabled> Triwulan 1 </button>
-                                    </div>
-                                    <div class="col-sm-6 d-flex justify-content-end">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-primary btn-rounded font-14"><i class="mdi mdi-share-variant-outline"></i> Bagikan</button>
-                                            <button class="btn btn-primary btn-sm btn-rounded dropdown-toggle font-14" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="mdi mdi-download"></i> Unduh Data
-                                            </button>
-                                            <div class="dropdown-menu font-14" aria-labelledby="dropdownMenuButton" style="border-radius:10px">
-                                                <a class="dropdown-item" href="#">XLSX</a>
-                                                <a class="dropdown-item" href="#">CSV</a>
-                                                <a class="dropdown-item" href="#">PDF</a>
-                                            </div>
-                                        </div>
-
-                                    </div>    
-                                </div>
-                                <div class="mb-3">
-                                    <h3 class="font-weight-bold"><strong>Angka Harapan Hidup (AHH) Menurut Provinsi dan Jenis Kelamin (menggunakan UHH hasil SP2020 LF), 2022-2023</strong></h3>
-                                </div>
-                                
-                                <div class="mt-3">
-                                    <p class="font-weight-light font-13">Terakhir diperbarui: 12 Maret 2024</p>
-                                  
-                                </div>
-        
-                                <form method="POST" action="{% url 'backend:backend-content-input-submit' %}" class="needs-validation" id="content-form-submit" novalidate="">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="indicator_id" id="indicator_id" value="{{data_indicator.id}}">
-                                    <input type="hidden" name="year" id="year" value="{{current_year}}">
-                                    <input type="hidden" name="item_period" id="item_period" value="{{period.id}}">
-                                    <div class="table-responsive">
-                                        <table class="table table-sm table-striped table-bordered table-hover table-centered nowrap w-100 mb-1">
-                                            <thead class="bg-primary-lighten">
-                                                <tr>
-                                                    <th rowspan="2" class="text-center">No</th>
-                                                    <th rowspan="2" class="text-center">Kelompok</th>
-                                                    <th class="text-center" colspan="3">Karakteristik Kemiskinan</th>
-                                                </tr>
-                                                <tr>
-                                                    <th class="text-center">Laki-laki</th>
-                                                    <th class="text-center">Perempuan</th>
-                                                    <th class="text-center">Laki-laki + Perempuan</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for i in '123456789'  %}
-                                                <tr >
-                                                    <td class="text-center">{{forloop.counter}}</td>
-                                                    <td>Buton</td>
-                                                    <td class="text-center">1.200</td>
-                                                    <td class="text-center">4.100</td>
-                                                    <td class="text-center">3.100</td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                        
-                                    <h5 class="font-weight-light font-13"><i>{{data_indicator.footer_desc}}</i></h5>
-        
-                                    {% if d_form %}
-                                    <div class="mt-3 mb-4">
-                                        {% if status_update %}
-                                            <button class="btn btn-rounded btn-primary mt-3 d-none" type="submit" id="button_submit_form">Perbarui Data Tabel</button>
-                                        {% else %}
-                                            <button class="btn btn-rounded btn-primary mt-3" type="submit">Simpan Data Tabel</button>
-                                        {% endif %}
-                                    </div>
-                                    {% endif %}
-                                </form>
-                            </div>
-                        </div>
-                    </div> <!-- end col -->
-        
-                </div> <!-- end row -->
-        
+                <div class="mb-2">
+                    <h3 class="font-weight-bold" style="color:#003C80"><strong>Sosial dan Kependudukan</strong></h3>
+                    <br>
+                    <p>
+                        Revolusi Mental merupakan Gerakan untuk mengubah cara pandang, cara piker, sikap, perilaku, dan cara kerja bangsa Indonesia, yang mengacu pada nilai-nilai integritas, etos kerja, gotong royong, berlandaskan Pancasila sehingga bangsa Indonesia menjadi negara yang maju, modern, makmur, sejahtera, dan bermartabat. Revolusi Mental memiliki tiga tujuan. Pertama, untuk membangkitkan kesadaran dan membangun sikap optimistik dalam menatap masa depan Indonesia sebagai negara dengan kekuatan besar untuk berprestasi tinggi dan produktif sehingga menjadi bangsa yang maju dan modern. Kedua, untuk mengubah cara pandang, cara pikir, sikap, perilaku, dan cara kerja yang berorientasi pada kemajuan dan kemodernan sehingga Indonesia menjadi bangsa yang besar dan berdaya saing sehingga mampu berkompetisi dengan bangsa-bangsa lain. Ketiga, untuk mewujudkan Indonesia yang berdaulat dalam politik, berdikari dalam ekonomi, dan berkepribadian dalam kebudayaan melalui pembentukan manusia Indonesia baru yang unggul.
+                    </p>
+                </div>
             </div>
-            <!-- end col-12 -->
-        </div> <!-- end row -->
+        </div>
+        
     </div>
 </section>
 
+
+<section class="pt-2 pb-4" >
+    <div class="container " >
+        <div class="row p-2">
+            <div class="col-lg-3">
+                <h4 class="p-2" ><i class="mdi mdi-arch"></i> Subjek Statistik</h4>
+
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="card-widgets">
+                            <a data-bs-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-chevron-double-right"></i></a>
+                        </div>
+                        <h5 class="card-title mb-0" style="color:#003C80">Sosial dan Kependudukan</h5>
+                                        
+                        <div id="cardCollpase1" class="collapse pt-3 show">
+                            <ul style="padding-left:0px!important;font-size:15px">
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary fw-bold" style="color:#003C80!important">Tenaga Kerja <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Penge... <span class="badge badge-primary-lighten float-end ms-2">20</span></a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Sosial Budaya <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Pendidikan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Perumahan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kesehatan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> <!-- end card-->
+
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="card-widgets">
+                            <a data-bs-toggle="collapse" href="#cardCollpase2" role="button" aria-expanded="false" aria-controls="cardCollpase2"><i class="mdi mdi-chevron-double-right"></i></a>
+                        </div>
+                        <h5 class="card-title mb-0" style="color:#003C80">Ekonomi dan Perdagangan</h5>
+                                        
+                        <div id="cardCollpase2" class="collapse pt-3">
+                            <ul style="padding-left:10px!important">
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Pengeluaran</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Tenaga Kerja</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Sosial Budaya</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Pendidikan</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Perumahan</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kesehatan</a></p></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> <!-- end card-->
+          
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="card-widgets">
+                            <a data-bs-toggle="collapse" href="#cardCollpase3" role="button" aria-expanded="false" aria-controls="cardCollpase3"><i class="mdi mdi-chevron-double-right"></i></a>
+                        </div>
+                        <h5 class="card-title mb-0" style="color:#003C80">Pertanian dan Pertambangan</h5>
+                                        
+                        <div id="cardCollpase3" class="collapse pt-3">
+                            <ul style="padding-left:10px!important">
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Pengeluaran</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Tenaga Kerja</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Sosial Budaya</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Pendidikan</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Perumahan</a></p></li>
+                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kesehatan</a></p></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> <!-- end card-->
+
+            </div>
+    
+            <div class="col-lg-9 px-4">
+                <ul class="nav nav-tabs nav-bordered mb-4" >
+                    <li class="nav-item mx-1">
+                        <a href="#stats" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active">
+                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
+                            <span class="d-none d-md-block" style="font-weight:300;">Statistik <i class="mdi mdi-file-table-box-multiple-outline"></i></span>
+                        </a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a href="#pubs" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                            <span class="d-none d-md-block" style="font-weight:300;">Publikasi <i class="mdi mdi-book-open-page-variant-outline"></i></span>
+                        </a>
+                    </li>
+    
+                    <li class="nav-item mx-1">
+                        <a href="#brs" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                            <span class="d-none d-md-block" style="font-weight:300;">BRS <i class="mdi mdi-newspaper-variant-multiple"></i></span>
+                        </a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a href="#infographs" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
+                            <span class="d-none d-md-block" style="font-weight:300;">Infografis <i class="mdi mdi-chart-bar"></i></span>
+                        </a>
+                    </li>
+                    <li class="nav-item mx-1 dropdown">
+                        <div class="input-group" style="padding-top:7px">
+                            <input type="text" class="form-control" placeholder="Telusuri data statistik ..." autocomplete="off" style="width:220px;height:35px;background-color:#ffffff;border-radius:5px;font-size:14px">
+                            <span class="mdi mdi-magnify search-icon" style="margin-top:5px;margin-left:-25px!important; z-index:10"></span>
+                        </div>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="stats">
+                        <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Data Statistik</th>
+                                    <th class="text-center">Periode Data</th>
+                                    <th class="text-center">Update Terakhir</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                             
+                            </thead>
+                            <tbody>
+                                {% for i in '1234567'  %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td>Kemiskinan Kab. Muna Tahun 2024</td>
+                                    <td class="text-center">Tahunan</td>
+                                    <td class="text-center">28 Mar 2024</td>
+    
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                            <i class="mdi mdi-chevron-right"></i>
+                                        </button>
+                                        <div class="dropdown-menu" style="font-size:14px;">
+                                            <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
+                                            <a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a> 
+                                        </div>
+                                    </td>
+    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="pubs">
+                        <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Publikasi Statistik</th>
+                                    <th class="text-center">Tanggal Rilis</th>
+                                    <th>Sumber</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                             
+                            </thead>
+                            <tbody>
+                                {% for i in '1234567'  %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td>Kemiskinan Kab. Muna Tahun 2024</td>
+                                    <td class="text-center">28 Mar 2024</td>
+                                    <td class="text-center">BPS Kab Muna</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                            <i class="mdi mdi-chevron-right"></i>
+                                        </button>
+                                        <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
+                                            <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
+                                            <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
+                                        </div>
+                                    </td>
+    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="brs">
+                        <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Berita Statistik</th>
+                                    <th class="text-center">Tanggal Rilis</th>
+                                    <th>Sumber</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                             
+                            </thead>
+                            <tbody>
+                                {% for i in '1234567'  %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td>Kemiskinan Kab. Muna Tahun 2024</td>
+                                    <td class="text-center">28 Mar 2024</td>
+                                    <td class="text-center">BPS Kab Muna</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                            <i class="mdi mdi-chevron-right"></i>
+                                        </button>
+                                        <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
+                                            <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
+                                            <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
+                                        </div>
+                                    </td>
+    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="infographs">
+                        <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Infografis</th>
+                                    <th class="text-center">Tanggal Rilis</th>
+                                    <th class="text-center">Sumber</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                             
+                            </thead>
+                            <tbody>
+                                {% for i in '1234567'  %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td>Kemiskinan Kab. Muna Tahun 2024</td>
+                                    <td class="text-center">28 Mar 2024</td>
+                                    <td class="text-center">BPS Kab Muna</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                            <i class="mdi mdi-chevron-right"></i>
+                                        </button>
+                                        <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
+                                            <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
+                                            <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
+                                        </div>
+                                    </td>
+    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock main-content %}
 
 

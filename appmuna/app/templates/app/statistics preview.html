@@ -1,0 +1,696 @@
+{% extends 'horizontal/home_app.html' %}
+
+{% load static %}
+
+
+{% block css-extender %}
+<link href="{% static 'app-design/assets/css/vendor/jstree.min.css' %}" rel="stylesheet" type="text/css">
+
+<style>
+
+    input::placeholder {
+        font-size: 13px;
+        color:black
+    }
+
+    datalist {
+        border-radius:10px;
+        position: absolute;
+        margin-top:10px;
+        width: 17em!important;
+        max-height: 20em;
+        border: 1px solid #DFDFDF;
+        padding-top:10px;
+        padding-bottom:10px;
+        background-color: #fff;
+        overflow-x: hidden;
+        overflow-y: auto;
+        z-index: 10;
+        
+      }
+      
+      datalist option {
+        font-color:#F0F2F5;
+        font-size: 0.9em;
+        padding: 0.4em 1.2em;
+        cursor: pointer;
+      }
+      
+      /* option active styles */
+      datalist option:hover, datalist option:focus {
+        background-color: #F8F8F8;
+        outline: 0 none;
+      }
+
+      .pagination li.active > a {
+        background-color: #003C80!important;
+      }
+</style>
+{% endblock css-extender %}
+
+
+
+{% block main-content %}
+<!-- START HERO -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6 mt-4">
+                <div class="">
+                    <div>
+                        <span class="badge bg-danger rounded-pill">Baru</span> 
+                        <span class="text-white-50 ms-1">Selamat datang di portal Satu Data Muna</span>
+                    </div>
+                    <h3 class="text-white fw-normal my-3 hero-title">
+                        Telusuri Data Statistik Kabupaten Muna
+                    </h3>
+                    <p class="pr-2 mb-3 font-15 text-white-50"><span class="text-white fw-normal">SDM</span> merupakan wujud sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia layanan data.</p>
+
+                    <div class="row align-items-start">
+                        <div class="col-lg-12 d-flex justify-content-start">
+                            <div class="app-search dropdown">
+                                <form>
+                                    <div class="row gy-2 gx-2">
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:400px;height:50px;background-color:#ffffff;border-radius:5px">
+                                                <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                                                <button class="btn btn-danger rounded" style="height:48px;margin-left:8px" id="button-top-search">Telusuri Data</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 offset-md-2">
+                <div class="text-md-end mt-1">
+                    <img src="{% static 'app-design/assets/images/startup.svg' %}" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END HERO -->
+
+
+<section class="pt-1 pb-5 bg-white" style="margin-top:-50px;">
+    <div class="container">
+        <div class="row py-4">
+            <div class="col-lg-3" style="padding:20x 0px 20px 0px; ">
+                <div class="row" style="padding:0px 25px 25px 35px">
+                    <div class="col-sm-12">
+                        <h4>Subjek Statistik</h4>
+                        <select class="form-select my-1 rounded bg-primary-lighten" style="font-size:14px;">
+                            <optgroup label="Theropods">
+                                <option>Pilih Subjek</option>
+                                <option>Velociraptor</option>
+                                <option>Deinonychus</option>
+                              </optgroup>
+                              <optgroup label="Sauropods">
+                                <option>Diplodocus</option>
+                                <option>Saltasaurus</option>
+                                <option>Apatosaurus</option>
+                              </optgroup>
+                        </select> 
+                        <select class="form-select bg-primary-lighten" style="font-size:14px;">
+                            <optgroup label="Sauropods">
+                                <option selected>Pilih Indikator</option>
+                                <option>Diplodocus</option>
+                                <option>Saltasaurus</option>
+                                <option>Apatosaurus</option>
+                              </optgroup>
+                        </select> 
+                    </div>
+                </div>
+                <div class="card" id="datasetCard" style="border-radius:20px;background-color:#fff;box-shadow:none">
+                    <div class="card-body" style="padding:25px 25px 25px 35px">
+                        <h4>Informasi Dataset</h4>
+                    
+                        <div class="mt-3 mb-3">
+                            <h5>Nama Indikator: </h5>
+                            <div class="mt-1">
+                                <p>Garis Kemiskinan menurut Kabupaten/Kota di Provinsi Sulawesi Tenggara</p>
+                            </div>
+                        </div>
+        
+                        <div class="mb-3">
+                            <h5>Kategori Statistik: </h5>
+                            <div class="mt-1">
+                                <p>Statistik Dasar</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h5>Periode Data: </h5>
+                            <div class="mt-1">
+                                <p>Triwulanan</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h5>Satuan Data: </h5>
+                            <div class="mt-1">
+                                <p>Rupiah (Rp)</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h5>Data Tersedia: </h5>
+                            <div class="mt-1">
+                                <div id="jstree-1">
+                                    <ul>
+                                        <li data-jstree='{"opened" : true }'>
+                                            2022
+                                            <ul>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="#" class="jstree-clicked">Triwulan I</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan II</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan III</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan IV</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            2023
+                                            <ul>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan I</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan II</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan III</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan IV</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            2024
+                                            <ul>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan I</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan II</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan III</a>
+                                                </li>
+                                                <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                    <a href="http://www.coderthemes.com">Triwulan IV</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+ 
+                <div class="card d-none" id="TableCard" style="border-radius:20px;background-color:#fff;box-shadow:none">
+                    <div class="card-body" style="padding:25px 25px 25px 35px">
+                        <h4 style="color:#003C80">
+                            Pilih Dataset
+                        </h4>
+                        <div class="mt-3 mb-3">
+                            <h5>Periode: </h5>
+
+                            <ul class="detailPeriod" style="list-style:none;padding-left:5px;">
+                                <li class="yearPeriod">
+                                    <i class="mdi mdi-chevron-right"></i>
+                                    <span>2024</span>
+
+                                    <ul class="d-none" style="list-style:none;padding-left:20px;">
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <label for="">Triwulan I</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <label for="">Triwulan II</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <label for="">Triwulan III</label>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <label for="">Triwulan IV</label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="yearPeriod">
+                                    <i class="mdi mdi-chevron-right"></i>
+                                    <span>2023</span>
+                                    <ul class="d-none" style="list-style:none;padding-left:20px;">
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <span for="">Triwulan I</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <span for="">Triwulan I</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <span for="">Triwulan I</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <span for="">Triwulan I</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="yearPeriod">
+                                    <i class="mdi mdi-chevron-right"></i>
+                                    <span>2022</span>
+                                    <ul class="d-none" style="list-style:none;padding-left:20px;">
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <span for="">Triwulan I</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <span for="">Triwulan II</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <span for="">Triwulan III</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" id="customCheck">
+                                                <span for="">Triwulan III</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+        
+                        <div class="mb-3">
+                            <h5>Grafik: </h5>
+                            <div class="mt-1">
+                                <ul class="detailPeriod" style="list-style:none;padding-left:5px;">
+                                    <li>
+                                        <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                        <i class="mdi mdi-chart-bar"></i>
+                                        <label for="">Bar Chart</label>
+                                    
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                        <i class="mdi mdi-chart-line"></i>
+                                        <label>Line Chart</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                        <i class="mdi mdi-chart-pie"></i>
+                                        <label>Pie Chart</label>
+                                        
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h5>Statistik: </h5>
+                            <div class="mt-1">
+                                <input type="checkbox" class="form-check-input" id="customCheck1">&ensp;
+                                <i class="mdi mdi mdi-chart-timeline-variant-shimmer"></i>
+                                <label>Deskriptif</label>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h5>File Output: </h5>
+                            <div class="mt-1">
+                                <ul class="detailPeriod" style="list-style:none;padding-left:5px;">
+                                    <li>
+                                        <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                        <i class="mdi mdi-file-excel"></i>
+                                        <label for="">Excel</label>
+                                    
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                        <i class="mdi mdi-file-code"></i>
+                                        <label>Csv</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                        <i class="mdi mdi-file-pdf"></i>
+                                        <label>Pdf</label>
+                                    </li>
+                                    <li>
+                                        <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                        <i class="mdi mdi-file-chart"></i>
+                                        <label>Report Deskriptif</label>
+                                    </li>
+                                </ul>
+                                <br>
+                                <button class="btn btn-primary btn-sm">Unduh Data</button>
+                            </div>
+                        </div>
+                       
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+            <div class="col-lg-9 px-4">
+                <ul class="nav nav-tabs nav-bordered mb-4" >
+                    <li class="nav-item mx-1">
+                        <a href="#home1" id="DatasetNav"  data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active">
+                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                            <span class="d-none d-md-block" style="font-weight:300;">Dataset<i class="mdi mdi-apps"></i></span>
+                        </a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a href="#dinamicTable" id="TableNav" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
+                            <span class="d-none d-md-block" style="font-weight:300;">Tabel Statistik <i class="mdi mdi-file-table-box-multiple-outline"></i></span>
+                        </a>
+                    </li>
+                    <li class="nav-item mx-1">
+                        <a href="#ikm_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                            <span class="d-none d-md-block" style="font-weight:300;">Visualisasi Data <i class="mdi mdi-book-open-page-variant-outline"></i></span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item mx-1">
+                        <a href="#ids_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                            <span class="d-none d-md-block" style="font-weight:300;">Visualisasi Data <i class="mdi mdi-newspaper-variant-multiple"></i></span>
+                        </a>
+                    </li>
+                   
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane show active" id="home1">
+                        <div class="card" style="border-radius:20px;background-color:#fff;box-shadow:none">
+                            <div class="card-body px-2 pt-1 pb-2">
+                                <span class="badge bg-primary rounded-pill font-11" style="padding:4px 11px 4px 11px!important">Indikator Kemiskinan</span> 
+                                
+                                <h4 class="mt-2">Garis Kemiskinan menurut Kabupaten/Kota di Provinsi Sulawesi Tenggara</h4>
+                                
+                                <div class="my-3">
+                                    <h5>Deskripsi Data: </h5>
+                                    <div class="mt-1">
+                                        <p>Revolusi Mental merupakan Gerakan untuk mengubah cara pandang, cara piker, sikap, perilaku, dan cara kerja bangsa Indonesia, yang mengacu pada nilai-nilai integritas, etos kerja, gotong royong, berlandaskan Pancasila sehingga bangsa Indonesia menjadi negara yang maju, modern, makmur, sejahtera, dan bermartabat.
+                                        </p>
+                                    </div>
+                                </div>
+                
+                                <div class="mb-3">
+                                    <h5>Karakteristik Indikator: </h5>
+                                    <div class="mt-1">
+                                        <ul>
+                                            <li>Kelompok Baris: Persentase Kemiskinan Menurut Jenis Kelamin</li>
+                                            <li>Kelompok Kolom: Kabupaten/Kota di Sulawesi Tenggara</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <h5>Sumber: </h5>
+                                    <div class="mt-1">
+                                        <p>Badan Pusat Statistik (BPS) Kab. Muna 2024</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <h5>Terakhir Diperbarui: </h5>
+                                    <div class="mt-1">
+                                        <p>Selasa, 12 April 2024</p>
+                                    </div>
+                                </div>
+                               
+                            </div> <!-- end card-body-->
+                        </div> <!-- end card-->
+                        
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4 class="mb-2">Data and Resources</h4>
+                                {% for i in '1234' %}
+                                <a href="#" class="list-group-item list-group-item-action pt-0 pb-0" style="border-radius:10px; border:none">
+                                    <div class="row g-0 align-items-center font-12">
+                                        <div class="col-sm-1">
+                                            <img class="rounded" src="{% static 'customs\images\excel2.png' %}" width="50" alt="{{dt_stat.title}}">
+                                        </div>
+                                        <div class="col-sm-11 px-1">
+                                            <div class="d-flex justify-content-between ">
+                                                <h5 class="mb-1 font-15" style="color:#003C80">Garis Kemiskinan menurut Kabupaten/Kota di Prov. Sulawesi Tenggara Tahun 2024 Triwulan {{i}}
+                                                </h5>
+                                            </div>
+
+                                            <ul class="px-0 mt-1" style="list-style:none;">
+                                                <li class="d-inline" title="Release Date"><span class="badge bg-success rounded-pill font-10" style="padding:5px 10px 5px 10px; ">Rilis 3 Februari 2023</span></li>&ensp; | &ensp;
+                                                <li class="d-inline"><span class="badge bg-primary rounded-pill font-10" style="padding:4px 8px 4px 8px; "><i class="mdi mdi-book-open-page-variant-outline"></i> XLSX </span></li>
+                                                <li class="d-inline"><span class="badge bg-primary rounded-pill font-10" style="padding:4px 8px 4px 8px; "><i class="mdi mdi-book-open-page-variant-outline"></i> CSV </span></li>
+                                                <li class="d-inline"><span class="badge bg-primary rounded-pill font-10" style="padding:4px 8px 5px 8px; "><i class="mdi mdi-book-open-page-variant-outline"></i> PDF </span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </a>
+                                {% endfor %}
+
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <nav>
+                                            <ul class="pagination pagination-rounded mb-0 d-flex justify-content-end font-14">
+                                                <li class="page-item">
+                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                        <i class="mdi mdi-chevron-left"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                <li class="page-item">
+                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                        <i class="mdi mdi-chevron-right"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="dinamicTable">
+                        <div class="card" style="box-shadow:none">
+                            <div class="card-body px-3 mt-4 mt-lg-0">
+                                <span class="badge bg-primary rounded-pill font-11" style="padding:4px 11px 4px 11px!important">Indikator Kemiskinan</span>
+                                <span class="badge bg-success rounded-pill font-11" style="padding:4px 11px 4px 11px!important">Statistik Dasar</span>
+
+                                <div class="mb-3">
+                                    <h4 class="font-weight-bold"><strong>Angka Harapan Hidup (AHH) Menurut Provinsi dan Jenis Kelamin (menggunakan UHH hasil SP2020 LF), 2022-2023</strong></h4>
+                                </div>
+                                
+                                <div class="mt-1">
+                                    <p class="font-weight-light font-13">Terakhir diperbarui: 12 Maret 2024</p>
+                                </div>
+        
+                                <div class="form-check form-switch mb-2">
+                                    <input type="checkbox" class="form-check-input" id="customSwitch1">
+                                    <label class="form-check-label font-14" for="customSwitch1">Bekukan Kolom</label>
+                                </div>
+
+                                <form method="POST" action="{% url 'backend:backend-content-input-submit' %}" class="needs-validation" id="content-form-submit" novalidate="">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="indicator_id" id="indicator_id" value="{{data_indicator.id}}">
+                                    <input type="hidden" name="year" id="year" value="{{current_year}}">
+                                    <input type="hidden" name="item_period" id="item_period" value="{{period.id}}">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-striped table-centered nowrap w-100 mb-1 font-14">
+                                            <thead class="bg-primary-lighten">
+                                                <tr>
+                                                    <th rowspan="2" class="text-center">No</th>
+                                                    <th rowspan="2" class="text-center">Kelompok</th>
+                                                    <th class="text-center" colspan="3">Karakteristik Kemiskinan</th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-center">Laki-laki</th>
+                                                    <th class="text-center">Perempuan</th>
+                                                    <th class="text-center">Laki-laki + Perempuan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in '123456789'  %}
+                                                <tr >
+                                                    <td class="text-center">{{forloop.counter}}</td>
+                                                    <td>Buton</td>
+                                                    <td class="text-center">1.200</td>
+                                                    <td class="text-center">4.100</td>
+                                                    <td class="text-center">3.100</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                        
+                                    <h5 class="font-weight-light font-13"><i>Sumber: BPS Kabupaten Muna</i></h5>
+        
+                                    {% if d_form %}
+                                    <div class="mt-3 mb-4">
+                                        {% if status_update %}
+                                            <button class="btn btn-rounded btn-primary mt-3 d-none" type="submit" id="button_submit_form">Perbarui Data Tabel</button>
+                                        {% else %}
+                                            <button class="btn btn-rounded btn-primary mt-3" type="submit">Simpan Data Tabel</button>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="card" style="box-shadow:none">
+                            <div class="card-body px-3 mt-4 mt-lg-0">
+                                <div class="mb-3">
+                                    <h4 class="font-weight-bold"><strong>Angka Harapan Hidup (AHH) Menurut Provinsi dan Jenis Kelamin (menggunakan UHH hasil SP2020 LF), 2022-2023</strong></h4>
+                                </div>
+                                
+                                <div class="mt-1">
+                                    <p class="font-weight-light font-13">Terakhir diperbarui: 12 Maret 2024</p>
+                                </div>
+        
+                                <div class="form-check form-switch mb-2">
+                                    <input type="checkbox" class="form-check-input" id="customSwitch1">
+                                    <label class="form-check-label font-14" for="customSwitch1">Bekukan Kolom</label>
+                                </div>
+
+                                <form method="POST" action="{% url 'backend:backend-content-input-submit' %}" class="needs-validation" id="content-form-submit" novalidate="">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="indicator_id" id="indicator_id" value="{{data_indicator.id}}">
+                                    <input type="hidden" name="year" id="year" value="{{current_year}}">
+                                    <input type="hidden" name="item_period" id="item_period" value="{{period.id}}">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-striped table-centered nowrap w-100 mb-1 font-14">
+                                            <thead class="bg-primary-lighten">
+                                                <tr>
+                                                    <th rowspan="2" class="text-center">No</th>
+                                                    <th rowspan="2" class="text-center">Kelompok</th>
+                                                    <th class="text-center" colspan="3">Karakteristik Kemiskinan</th>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-center">Laki-laki</th>
+                                                    <th class="text-center">Perempuan</th>
+                                                    <th class="text-center">Laki-laki + Perempuan</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in '123456789'  %}
+                                                <tr >
+                                                    <td class="text-center">{{forloop.counter}}</td>
+                                                    <td>Buton</td>
+                                                    <td class="text-center">1.200</td>
+                                                    <td class="text-center">4.100</td>
+                                                    <td class="text-center">3.100</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                        
+                                    <h5 class="font-weight-light font-13"><i>Sumber: BPS Kabupaten Muna</i></h5>
+        
+                                    {% if d_form %}
+                                    <div class="mt-3 mb-4">
+                                        {% if status_update %}
+                                            <button class="btn btn-rounded btn-primary mt-3 d-none" type="submit" id="button_submit_form">Perbarui Data Tabel</button>
+                                        {% else %}
+                                            <button class="btn btn-rounded btn-primary mt-3" type="submit">Simpan Data Tabel</button>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="settings1">
+                        <p>...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock main-content %}
+
+{% block js-extender %}
+
+<!-- jstree js -->
+
+<script src="{% static 'app-design/assets/js/vendor/jstree.min.js' %}"></script>
+<script src="{% static 'app-design/assets/js/pages/demo.jstree.js' %}"></script>
+
+<script>
+    $(".yearPeriod").on("click", function (e) {
+        var list_item = $(this).find('ul')
+        if (!list_item.hasClass("show")){
+            $('.yearPeriod').find('ul').not(list_item).removeClass('show').addClass('d-none');
+            list_item.removeClass("d-none")
+            list_item.addClass("show")
+        } 
+        
+    })
+
+    $("#DatasetNav").on("click", function (e) {
+        $("#TableCard").addClass("d-none")
+        $("#datasetCard").removeClass("d-none")
+         
+    })
+
+     
+    $("#TableNav").on("click", function (e) {
+        $("#datasetCard").addClass("d-none")
+        $("#TableCard").removeClass("d-none")
+    })
+
+</script>
+
+{% endblock js-extender %}
