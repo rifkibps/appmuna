@@ -7,6 +7,41 @@
 <link href="{% static 'app-design/assets/css/vendor/jstree.min.css' %}" rel="stylesheet" type="text/css">
 
 <style>
+
+    #content-table thead {
+        position: sticky;
+        top: 0;
+        background-color:#003C80!important;
+        z-index:10
+      }
+    
+    .sticky-col-head{
+        position: -webkit-sticky;
+        position: sticky;
+        background-color:#003C80!important;
+    }
+
+    .sticky-col {
+        position: -webkit-sticky;
+        position: sticky;
+      }
+      
+    .first-col {
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+        left: 0px;
+    }
+      
+    .second-col {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+        left: 104px; /* you have to count the first-col width => your border width */
+    }
+
+
+
     #expandButton:focus {     
         box-shadow:none;    
     }
@@ -84,9 +119,7 @@
 
             <div class="col-lg-9">
                 <div class="mb-2">
-
                     <h3 class="font-weight-bold" style="color:#003C80"><strong>Garis Kemiskinan menurut Kabupaten/Kota di Provinsi Sulawesi Tenggara, Rupiah (Rp)</strong></h3>
-                
                 </div>
 
                 <div class="mb-3 mt-4">
@@ -125,8 +158,7 @@
    
             <div class="col-lg-3">
                 <div class="card" id="datasetCard" style="background-color:#fff; box-shadow:none">
-                    <div class="card-body" style="padding:100px 25px 0px 35px">
-                    
+                    <div class="card-body" style="padding:90px 25px 0px 35px">
                         <div class="mb-3">
                             <h5>Kategori Statistik: </h5>
                             <div class="mt-1">
@@ -216,107 +248,195 @@
     <div class="container">
         <div class="row py-4">
             <div class="col-lg-3" style="padding:20x 0px 20px 0px; ">
-                <h4 class="p-2" ><i class="mdi mdi-arch"></i> Pilih Dataset</h4>
-
-                <div class="card mb-2">
+                <h4 class="p-2 mb-1" ><i class="mdi mdi-arch"></i> Pilih Dataset</h4>
+                <div class="card mb-2 mt-3">
                     <div class="card-body">
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase" role="button" aria-expanded="false" aria-controls="cardCollpase"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Menu Dataset</h5>
+                        <h5 class="card-title mb-0" style="color:#003C80">Pengaturan Dataset</h5>
                                         
                         <div id="cardCollpase" class="collapse pt-3 show">
                             <div class="mb-3">
                                 <h5>Periode: </h5>
-    
-                                <ul class="detailPeriod" style="list-style:none;padding-left:5px;">
-                                    <li class="yearPeriod">
+                                <ul class="detailPeriod py-2" style="list-style:none;padding-left:5px;overflow-y: scroll; height:100px">
+                                    <li class="yearPeriod" style="cursor: pointer" >
                                         <i class="mdi mdi-chevron-right"></i>
-                                        <span>2024</span>
-    
-                                        <ul class="d-none" style="list-style:none;padding-left:20px;">
-                                            <li>
+                                        
+                                        <span style="font-weight:bold">Tahun 2024</span>
+                                        <ul class="d-none py-2" style="list-style:none;padding-left:20px;">
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <label for="">Triwulan I</label>
+                                                    <input type="checkbox" class="form-check-input border" id="customCheck" >
+                                                    <label for="" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> Triwulan I </label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <label for="">Triwulan II</label>
+                                                    <label for="" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> Triwulan II</label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <label for="">Triwulan III</label>
+                                                    <label for="" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> Triwulan III</label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <label for="">Triwulan IV</label>
+                                                    <label for="" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> Triwulan IV</label>
                                                 </div>
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="yearPeriod">
+                                    <li class="yearPeriod" style="cursor: pointer">
                                         <i class="mdi mdi-chevron-right"></i>
-                                        <span>2023</span>
-                                        <ul class="d-none" style="list-style:none;padding-left:20px;">
-                                            <li>
+                                        <span style="font-weight:bold"> Tahun 2023</span>
+                                        <ul class="d-none py-2" style="list-style:none;padding-left:20px;">
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <span for="">Triwulan I</span>
+                                                    <input type="checkbox" class="form-check-input border" id="customCheck" >
+                                                    <label for="" style="font-weight:normal"> Triwulan I</label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <span for="">Triwulan I</span>
+                                                    <label for="" style="font-weight:normal"> Triwulan II</label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <span for="">Triwulan I</span>
+                                                    <label for="" style="font-weight:normal"> Triwulan III</label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <span for="">Triwulan I</span>
+                                                    <label for="" style="font-weight:normal"> Triwulan IV</label>
                                                 </div>
                                             </li>
                                         </ul>
                                     </li>
-                                    <li class="yearPeriod">
+                                    <li class="yearPeriod" style="cursor: pointer">
                                         <i class="mdi mdi-chevron-right"></i>
-                                        <span>2022</span>
-                                        <ul class="d-none" style="list-style:none;padding-left:20px;">
-                                            <li>
+                                        <span style="font-weight:bold">Tahun 2022</span>
+                                        <ul class="d-none py-2" style="list-style:none;padding-left:20px;">
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <span for="">Triwulan I</span>
+                                                    <input type="checkbox" class="form-check-input border" id="customCheck" >
+                                                    <label for="" style="font-weight:normal"> Triwulan I</label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <span for="">Triwulan II</span>
+                                                    <label for="" style="font-weight:normal"> Triwulan II</label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <span for="">Triwulan III</span>
+                                                    <label for="" style="font-weight:normal"> Triwulan III</label>
                                                 </div>
                                             </li>
-                                            <li>
+                                            <li style="padding-bottom:2px">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input" id="customCheck">
-                                                    <span for="">Triwulan III</span>
+                                                    <label for="" style="font-weight:normal"> Triwulan IV</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="yearPeriod" style="cursor: pointer">
+                                        <i class="mdi mdi-chevron-right"></i>
+                                        <span style="font-weight:bold">Tahun 2021</span>
+                                        <ul class="d-none py-2" style="list-style:none;padding-left:20px;">
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input border" id="customCheck" >
+                                                    <label for="" style="font-weight:normal"> Triwulan I</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan II</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan III</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan IV</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="yearPeriod" style="cursor: pointer">
+                                        <i class="mdi mdi-chevron-right"></i>
+                                        <span style="font-weight:bold">Tahun 2020</span>
+                                        <ul class="d-none py-2" style="list-style:none;padding-left:20px;">
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input border" id="customCheck" >
+                                                    <label for="" style="font-weight:normal"> Triwulan I</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan II</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan III</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan IV</label>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="yearPeriod" style="cursor: pointer">
+                                        <i class="mdi mdi-chevron-right"></i>
+                                        <span style="font-weight:bold">Tahun 2019</span>
+                                        <ul class="d-none py-2" style="list-style:none;padding-left:20px;">
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input border" id="customCheck" >
+                                                    <label for="" style="font-weight:normal"> Triwulan I</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan II</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan III</label>
+                                                </div>
+                                            </li>
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    <input type="checkbox" class="form-check-input" id="customCheck">
+                                                    <label for="" style="font-weight:normal"> Triwulan IV</label>
                                                 </div>
                                             </li>
                                         </ul>
@@ -333,7 +453,6 @@
                                             <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
                                             <i class="mdi mdi-chart-bar"></i>
                                             <label for="">Bar Chart</label>
-                                        
                                         </li>
                                         <li>
                                             <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
@@ -356,7 +475,7 @@
                                 <div class="mt-1">
                                     <input type="checkbox" class="form-check-input" id="customCheck1">&ensp;
                                     <i class="mdi mdi mdi-chart-timeline-variant-shimmer"></i>
-                                    <label>Deskriptif</label>
+                                    <label for="">Deskriptif</label>
                                 </div>
                             </div>
                             
@@ -394,16 +513,14 @@
                     </div>
                 </div> <!-- end card-->
 
-                <h4 class="p-2" ><i class="mdi mdi-arch"></i> Subjek Statistik</h4>
-
+                <h4 class="mx-2 mt-5 mb-3" ><i class="mdi mdi-arch"></i> Subjek Statistik</h4>
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
                         <h5 class="card-title mb-0" style="color:#003C80">Sosial dan Kependudukan</h5>
-                                        
-                        <div id="cardCollpase1" class="collapse pt-3">
+                        <div id="cardCollpase1" class="collapse pt-3 show">
                             <ul style="padding-left:0px!important;font-size:15px">
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary fw-bold" style="color:#003C80!important">Tenaga Kerja <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Penge... <span class="badge badge-primary-lighten float-end ms-2">20</span></a></p></li>
@@ -491,12 +608,11 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="dinamicTable">
-                        <div class="card" style="box-shadow:none">
+                        <div class="card pb-3" style="box-shadow:none">
                             <div class="card-body px-3 mt-4 mt-lg-0">
                                 <div class="mb-3">
                                     <h4 class="font-weight-bold"><strong>Angka Harapan Hidup (AHH) Menurut Provinsi dan Jenis Kelamin (menggunakan UHH hasil SP2020 LF), 2022-2023</strong></h4>
                                 </div>
-                                
                                 <div class="mt-1">
                                     <p class="font-weight-light font-13">Terakhir diperbarui: 12 Maret 2024</p>
                                 </div>
@@ -511,25 +627,43 @@
                                     <input type="hidden" name="indicator_id" id="indicator_id" value="{{data_indicator.id}}">
                                     <input type="hidden" name="year" id="year" value="{{current_year}}">
                                     <input type="hidden" name="item_period" id="item_period" value="{{period.id}}">
-                                    <div class="table-responsive">
-                                        <table class="table table-sm table-striped table-centered nowrap w-100 mb-1 font-14">
-                                            <thead class="bg-primary-lighten">
+                                    <div class="table-responsive rounded" style="overflow-x: auto; overflow-y:schroll; height:550px">
+                                        <table class="table table-sm table-striped table-centered nowrap w-100 mb-1 font-14" id="content-table">
+                                            <thead style="background-color:#2262AB;color:white">
                                                 <tr>
-                                                    <th rowspan="2" class="text-center">No</th>
-                                                    <th rowspan="2" class="text-center">Kelompok</th>
-                                                    <th class="text-center" colspan="3">Karakteristik Kemiskinan</th>
+                                                    <th rowspan="2" class="text-center sticky-col-head first-col">No</th>
+                                                    <th rowspan="2" class="text-center sticky-col-head second-col">Kelompok</th>
+                                                    <th class="text-center" colspan="12">Karakteristik Kemiskinan</th>
                                                 </tr>
                                                 <tr>
+                                                    <th class="text-center">Laki-laki</th>
+                                                    <th class="text-center">Perempuan</th>
+                                                    <th class="text-center">Laki-laki + Perempuan</th>
+                                                    <th class="text-center">Laki-laki</th>
+                                                    <th class="text-center">Perempuan</th>
+                                                    <th class="text-center">Laki-laki + Perempuan</th>
+                                                    <th class="text-center">Laki-laki</th>
+                                                    <th class="text-center">Perempuan</th>
+                                                    <th class="text-center">Laki-laki + Perempuan</th>
                                                     <th class="text-center">Laki-laki</th>
                                                     <th class="text-center">Perempuan</th>
                                                     <th class="text-center">Laki-laki + Perempuan</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for i in '123456789'  %}
+                                                {% for i in '123456789123456789'  %}
                                                 <tr >
-                                                    <td class="text-center">{{forloop.counter}}</td>
-                                                    <td>Buton</td>
+                                                    <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
+                                                    <td class="sticky-col second-col">Buton</td>
+                                                    <td class="text-center">1.200</td>
+                                                    <td class="text-center">4.100</td>
+                                                    <td class="text-center">3.100</td>
+                                                    <td class="text-center">1.200</td>
+                                                    <td class="text-center">4.100</td>
+                                                    <td class="text-center">3.100</td>
+                                                    <td class="text-center">1.200</td>
+                                                    <td class="text-center">4.100</td>
+                                                    <td class="text-center">3.100</td>
                                                     <td class="text-center">1.200</td>
                                                     <td class="text-center">4.100</td>
                                                     <td class="text-center">3.100</td>
@@ -580,9 +714,12 @@
                                                 <tr>
                                                     <th rowspan="2" class="text-center">No</th>
                                                     <th rowspan="2" class="text-center">Kelompok</th>
-                                                    <th class="text-center" colspan="3">Karakteristik Kemiskinan</th>
+                                                    <th class="text-center" colspan="6">Karakteristik Kemiskinan</th>
                                                 </tr>
                                                 <tr>
+                                                    <th class="text-center">Laki-laki</th>
+                                                    <th class="text-center">Perempuan</th>
+                                                    <th class="text-center">Laki-laki + Perempuan</th>
                                                     <th class="text-center">Laki-laki</th>
                                                     <th class="text-center">Perempuan</th>
                                                     <th class="text-center">Laki-laki + Perempuan</th>
@@ -593,6 +730,9 @@
                                                 <tr >
                                                     <td class="text-center">{{forloop.counter}}</td>
                                                     <td>Buton</td>
+                                                    <td class="text-center">1.200</td>
+                                                    <td class="text-center">4.100</td>
+                                                    <td class="text-center">3.100</td>
                                                     <td class="text-center">1.200</td>
                                                     <td class="text-center">4.100</td>
                                                     <td class="text-center">3.100</td>
@@ -642,10 +782,12 @@
             $('.yearPeriod').find('ul').not(list_item).removeClass('show').addClass('d-none');
             list_item.removeClass("d-none")
             list_item.addClass("show")
-        } 
+        } else{
+            list_item.removeClass("show")
+            list_item.addClass("d-none")
+        }
         
     })
-
 
 </script>
 
