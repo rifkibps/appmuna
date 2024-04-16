@@ -587,7 +587,10 @@
                             </div>
                         </div>
 
-                        <div class="card" style="box-shadow:none">
+                        
+
+
+                        {% comment %} <div class="card" style="box-shadow:none">
                             <div class="card-body px-3 mt-4 mt-lg-0">
                                 <div class="mb-3">
                                     <h4 class="font-weight-bold"><strong>Angka Harapan Hidup (AHH) Menurut Provinsi dan Jenis Kelamin (menggunakan UHH hasil SP2020 LF), 2022-2023</strong></h4>
@@ -648,7 +651,7 @@
                                     {% endif %}
                                 </form>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                     <div class="tab-pane" id="settings1">
                         <p>...</p>
@@ -668,6 +671,7 @@
 <script src="{% static 'app-design/assets/js/vendor/jstree.min.js' %}"></script>
 <script src="{% static 'app-design/assets/js/pages/demo.jstree.js' %}"></script>
 
+        
 <script>
     $(".yearPeriod").on("click", function (e) {
         var list_item = $(this).find('ul')
