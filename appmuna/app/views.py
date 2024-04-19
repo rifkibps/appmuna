@@ -269,7 +269,7 @@ class StatisticDetailTableClassView(View):
             'title' : 'Kemiskinan | Tabel Statistik'
         }
 
-        return render(request, 'app/statistics copy.html', context) 
+        return render(request, 'app/statistics_preview.html', context) 
 
 class DashboardAppClassView(View):
     print('hello world')

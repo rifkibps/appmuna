@@ -297,13 +297,12 @@
     </div>
 </section>
 
-
 <section class="pt-2 pb-5">
     <div class="container">
         <div class="row py-4">
             <div class="col-lg-3" style="padding:20x 0px 20px 0px; ">
                 <h4 class="p-2 mb-1" ><i class="mdi mdi-arch"></i> Pilih Dataset</h4>
-                <div class="card mb-2 mt-3 d-none">
+                <div class="card mb-2 mt-3" id="dataset-card">
                     <div class="card-body">
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase" role="button" aria-expanded="false" aria-controls="cardCollpase"><i class="mdi mdi-chevron-double-right"></i></a>
@@ -567,7 +566,7 @@
                     </div>
                 </div> <!-- end card-->
 
-                <div class="card mb-2 mt-3">
+                <div class="card mb-2 mt-3 d-none" id="comparison-card">
                     <div class="card-body">
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase" role="button" aria-expanded="false" aria-controls="cardCollpase"><i class="mdi mdi-chevron-double-right"></i></a>
@@ -1052,14 +1051,14 @@
             </div>
             <div class="col-lg-9 px-4">
                 <ul class="nav nav-tabs nav-bordered mb-4" >
-                    <li class="nav-item mx-1">
+                    <li class="nav-item mx-1" onclick="show_comparison_panel('dataset')">
                         <a href="#dinamicTable" id="TableNav" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2 active">
                             <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
                             <span class="d-none d-md-block" style="font-weight:300;">Tabel Statistik <i class="mdi mdi-file-table-box-multiple-outline"></i></span>
                         </a>
                     </li>
-                    <li class="nav-item mx-1">
-                        <a href="#data_comparisons" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                    <li class="nav-item mx-1" onclick="show_comparison_panel('comp')">
+                        <a href="#data_comparisons" id="TableNav" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
                             <i class="mdi mdi-account-circle d-md-none d-block"></i>
                             <span class="d-none d-md-block" style="font-weight:300;">Perbandingan Data <i class="mdi mdi-book-open-page-variant-outline"></i></span>
                         </a>
@@ -1730,6 +1729,17 @@
 
 
 <script>
+
+    function show_comparison_panel(state){
+
+        if (state == 'comp'){
+            $("#comparison-card").removeClass('d-none')
+            $("#dataset-card").addClass('d-none')
+        }else{
+            $("#dataset-card").removeClass('d-none')
+            $("#comparison-card").addClass('d-none')
+        }
+    }
 
     new Chart('pie-chart', {
         type: 'doughnut',

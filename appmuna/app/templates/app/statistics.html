@@ -206,144 +206,161 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="stats">
-                        <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th>Data Statistik</th>
-                                    <th class="text-center">Periode Data</th>
-                                    <th class="text-center">Update Terakhir</th>
-                                    <th class="text-center"></th>
-                                </tr>
-                             
-                            </thead>
-                            <tbody>
-                                {% for i in '1234567'  %}
-                                <tr>
-                                    <td class="text-center">{{forloop.counter}}</td>
-                                    <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                    <td class="text-center">Tahunan</td>
-                                    <td class="text-center">28 Mar 2024</td>
-    
-                                    <td>
-                                        <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                            <i class="mdi mdi-chevron-right"></i>
-                                        </button>
-                                        <div class="dropdown-menu" style="font-size:14px;">
-                                            <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
-                                            <a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a> 
-                                        </div>
-                                    </td>
-    
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+
+                        <div class="card pb-3">
+                            <div class="card-body px-3 mt-4 mt-lg-0">
+                                <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th>Data Statistik</th>
+                                            <th class="text-center">Periode Data</th>
+                                            <th class="text-center">Update Terakhir</th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                     
+                                    </thead>
+                                    <tbody>
+                                        {% for i in '1234567'  %}
+                                        <tr>
+                                            <td class="text-center">{{forloop.counter}}</td>
+                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
+                                            <td class="text-center">Tahunan</td>
+                                            <td class="text-center">28 Mar 2024</td>
+            
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                    <i class="mdi mdi-chevron-right"></i>
+                                                </button>
+                                                <div class="dropdown-menu" style="font-size:14px;">
+                                                    <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
+                                                    <a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a> 
+                                                </div>
+                                            </td>
+            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
                     </div>
                     <div class="tab-pane" id="pubs">
-                        <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th>Publikasi Statistik</th>
-                                    <th class="text-center">Tanggal Rilis</th>
-                                    <th>Sumber</th>
-                                    <th class="text-center"></th>
-                                </tr>
-                             
-                            </thead>
-                            <tbody>
-                                {% for i in '1234567'  %}
-                                <tr>
-                                    <td class="text-center">{{forloop.counter}}</td>
-                                    <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                    <td class="text-center">28 Mar 2024</td>
-                                    <td class="text-center">BPS Kab Muna</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                            <i class="mdi mdi-chevron-right"></i>
-                                        </button>
-                                        <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                            <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                            <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                        </div>
-                                    </td>
-    
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div class="card pb-3">
+                            <div class="card-body px-3 mt-4 mt-lg-0">
+                                <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th>Publikasi Statistik</th>
+                                            <th class="text-center">Tanggal Rilis</th>
+                                            <th>Sumber</th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                     
+                                    </thead>
+                                    <tbody>
+                                        {% for i in '1234567'  %}
+                                        <tr>
+                                            <td class="text-center">{{forloop.counter}}</td>
+                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
+                                            <td class="text-center">28 Mar 2024</td>
+                                            <td class="text-center">BPS Kab Muna</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                    <i class="mdi mdi-chevron-right"></i>
+                                                </button>
+                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
+                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
+                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
+                                                </div>
+                                            </td>
+            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane" id="brs">
-                        <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th>Berita Statistik</th>
-                                    <th class="text-center">Tanggal Rilis</th>
-                                    <th>Sumber</th>
-                                    <th class="text-center"></th>
-                                </tr>
-                             
-                            </thead>
-                            <tbody>
-                                {% for i in '1234567'  %}
-                                <tr>
-                                    <td class="text-center">{{forloop.counter}}</td>
-                                    <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                    <td class="text-center">28 Mar 2024</td>
-                                    <td class="text-center">BPS Kab Muna</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                            <i class="mdi mdi-chevron-right"></i>
-                                        </button>
-                                        <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                            <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                            <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                        </div>
-                                    </td>
-    
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div class="card pb-3">
+                            <div class="card-body px-3 mt-4 mt-lg-0">
+                                <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th>Berita Statistik</th>
+                                            <th class="text-center">Tanggal Rilis</th>
+                                            <th>Sumber</th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                     
+                                    </thead>
+                                    <tbody>
+                                        {% for i in '1234567'  %}
+                                        <tr>
+                                            <td class="text-center">{{forloop.counter}}</td>
+                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
+                                            <td class="text-center">28 Mar 2024</td>
+                                            <td class="text-center">BPS Kab Muna</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                    <i class="mdi mdi-chevron-right"></i>
+                                                </button>
+                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
+                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
+                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
+                                                </div>
+                                            </td>
+            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane" id="infographs">
-                        <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th>Infografis</th>
-                                    <th class="text-center">Tanggal Rilis</th>
-                                    <th class="text-center">Sumber</th>
-                                    <th class="text-center"></th>
-                                </tr>
-                             
-                            </thead>
-                            <tbody>
-                                {% for i in '1234567'  %}
-                                <tr>
-                                    <td class="text-center">{{forloop.counter}}</td>
-                                    <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                    <td class="text-center">28 Mar 2024</td>
-                                    <td class="text-center">BPS Kab Muna</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                            <i class="mdi mdi-chevron-right"></i>
-                                        </button>
-                                        <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                            <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                            <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                        </div>
-                                    </td>
-    
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                        <div class="card pb-3">
+                            <div class="card-body px-3 mt-4 mt-lg-0">
+                                <table class="table table-sm table-hover table-centered nowrap w-100 mb-5">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th>Infografis</th>
+                                            <th class="text-center">Tanggal Rilis</th>
+                                            <th class="text-center">Sumber</th>
+                                            <th class="text-center"></th>
+                                        </tr>
+                                     
+                                    </thead>
+                                    <tbody>
+                                        {% for i in '1234567'  %}
+                                        <tr>
+                                            <td class="text-center">{{forloop.counter}}</td>
+                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
+                                            <td class="text-center">28 Mar 2024</td>
+                                            <td class="text-center">BPS Kab Muna</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                    <i class="mdi mdi-chevron-right"></i>
+                                                </button>
+                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
+                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
+                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
+                                                </div>
+                                            </td>
+            
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
                 
             </div>
         </div>
