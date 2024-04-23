@@ -269,7 +269,17 @@ class StatisticDetailTableClassView(View):
             'title' : 'Kemiskinan | Tabel Statistik'
         }
 
-        return render(request, 'app/statistics_preview.html', context) 
+        return render(request, 'app/statistics_preview.html', context)
+
+class DataRequestsClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Konsultasi Data Statistik'
+        }
+
+        return render(request, 'app/data_request.html', context) 
+
 
 class DashboardAppClassView(View):
     print('hello world')
