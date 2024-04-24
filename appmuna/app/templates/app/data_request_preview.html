@@ -1,0 +1,337 @@
+{% extends 'horizontal/home_app.html' %}
+
+{% load static %}
+
+{% block css-extender %}
+
+{% endblock css-extender %}
+
+{% block main-content %}
+<!-- START HERO -->
+
+
+<section class="hero-section bg-white" style="padding-top:24px" >
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-left">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);" style="color:#003C80">Beranda</a></li>
+                            <li class="breadcrumb-item active text-truncate"><a href="javascript: void(0);" style="color:#003C80">Layanan Statistik</a></li>
+                            </li>
+                            <li class="breadcrumb-item active text-truncate"><a href="javascript: void(0);" style="color:#003C80">Konsultasi Statistik</a></li>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="{% url 'app:data-request-app' %}" class="btn btn-sm btn-danger"><i class="mdi mdi-chevron-double-left" ></i></a>
+            </div>
+        </div>
+
+        <div class="row my-4">
+            <!-- start chat users-->
+            <div class="col-xxl-3 col-xl-6">
+                <h4 class="p-2" ><i class="mdi mdi-arch"></i> Layanan Statistik</h4>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <ul class="nav nav-tabs nav-bordered">
+                            <li class="nav-item">
+                                <a href="#allUsers" data-bs-toggle="tab" aria-expanded="false" class="nav-link active py-2">
+                                    Semua
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#favUsers" data-bs-toggle="tab" aria-expanded="true" class="nav-link py-2">
+                                    Diproses
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#friendUsers" data-bs-toggle="tab" aria-expanded="true" class="nav-link py-2">
+                                    Selesai
+                                </a>
+                            </li>
+                        </ul> <!-- end nav-->
+                        <div class="tab-content">
+                            <div class="tab-pane show active p-3" id="newpost">
+
+                                <!-- start search box -->
+                                <div class="app-search">
+                                    <form>
+                                        <div class="mb-2 position-relative">
+                                            <input type="text" class="form-control" placeholder="People, groups & messages...">
+                                            <span class="mdi mdi-magnify search-icon"></span>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- end search box -->
+
+                                <!-- users -->
+                                <div class="row">
+                                    <div class="col">
+                                        <div data-simplebar="" style="max-height: 550px">
+                                            {% for i in '1234567' %}
+                                                <a href="javascript:void(0);" class="text-body">
+                                                    <div class="d-flex align-items-start mt-1 p-2">
+                                                        <div class="w-100 overflow-hidden">
+                                                            <h5 class="mt-0 mb-0 font-14">
+                                                                <span class="float-end text-muted font-12">4:30am</span>
+                                                                Brandon Smith
+                                                            </h5>
+                                                            <p class="mt-1 mb-0 text-muted font-14">
+                                                                <span class="w-25 float-end text-end"><span class="badge badge-success-lighten">Selesai</span></span>
+                                                                <span class="w-75">How are you today?</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            {% endfor %}
+                                        </div> <!-- end slimscroll-->
+                                    </div> <!-- End col -->
+                                </div>
+                                <!-- end users -->
+                            </div> <!-- end Tab Pane-->
+                        </div> <!-- end tab content-->
+                    </div> <!-- end card-body-->
+                </div> <!-- end card-->
+            </div>
+            <!-- end chat users-->
+
+            <!-- chat area -->
+            <div class="col-xxl-9 col-xl-12">
+                <div class="card mt-5">
+
+                    <div class="card-body">
+                        <h4 class="font-weight-bold" style="color:#003C80">
+                            <strong>Rifki Gustiawan | <i class="mdi mdi-email"></i> rifki.gusti@bps.go.id | <i class="mdi mdi-phone-dial"></i> 085720813630</strong>
+                        </h4>
+
+                        <div class="mt-3 mb-2">
+                            <span class="badge bg-success">Selesai</span>
+                            <br>
+                            <small>Diajukan pada 12 April 2024</small>
+                            
+                            <div class="mt-3">
+                                <h5>Judul/Topik :</h5>
+                                <p>
+                                    Permintaan Data Citra Satelit di Tingkat Kecamatan di Kabupaten Muna 2024
+                                </p>
+                            </div>
+                                                    
+                            <div class="mt-3">
+                                <h5>Deskripsi :</h5>
+                                <p>
+                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nulla est dolores sapiente aperiam impedit veniam voluptatem fugit architecto, ducimus, itaque quo quam. Explicabo dicta optio voluptatum eaque, ullam voluptas recusandae!
+                                </p>
+                            </div>
+                          
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="conversation-list" data-simplebar="" style="max-height: 500px">
+                            <li class="clearfix">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" class="rounded" alt="Administrator">
+                                    <i>12:23</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Administrator</i>
+                                        <p>
+                                            Hello!
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li class="clearfix odd">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" class="rounded" alt="Nur Muhammad">
+                                    <i>10:01</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Nur Muhammad</i>
+                                        <p>
+                                            Hi, How are you? What about our next meeting?
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li class="clearfix">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" class="rounded" alt="Administrator">
+                                    <i>10:01</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Administrator</i>
+                                        <p>
+                                            Yeah everything is fine
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li class="clearfix odd">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" class="rounded" alt="Nur Muhammad">
+                                    <i>10:02</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Nur Muhammad</i>
+                                        <p>
+                                            Wow that's great
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li class="clearfix">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" class="rounded" alt="Administrator">
+                                    <i>10:02</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Administrator</i>
+                                        <p>
+                                            Let's have it today if you are free
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li class="clearfix odd">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" alt="Nur Muhammad" class="rounded">
+                                    <i>10:03</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Nur Muhammad</i>
+                                        <p>
+                                            Sure thing! let me know if 2pm works for you
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li class="clearfix">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" class="rounded" alt="Administrator">
+                                    <i>10:04</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Administrator</i>
+                                        <p>
+                                            Sorry, I have another meeting scheduled at 2pm. Can we have it
+                                            at 3pm instead?
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li class="clearfix">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" class="rounded" alt="Administrator">
+                                    <i>10:04</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Administrator</i>
+                                        <p>
+                                            We can also discuss about the presentation talk format if you have some extra mins
+                                        </p>
+                                    </div>
+
+                                    <div class="card mt-2 mb-1 shadow-none border text-start">
+                                        <div class="p-2">
+                                            <div class="row align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="avatar-sm">
+                                                        <span class="avatar-title rounded">
+                                                            .ZIP
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col ps-0">
+                                                    <a href="javascript:void(0);" class="text-muted fw-bold">Hyper-admin-design.zip</a>
+                                                    <p class="mb-0">2.3 MB</p>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <!-- Button -->
+                                                    <a href="javascript:void(0);" class="btn btn-link btn-lg text-muted">
+                                                        <i class="dripicons-download"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </li>
+                            <li class="clearfix odd">
+                                <div class="chat-avatar">
+                                    <img src="{% static 'customs/images/default-profile.png' %}" class="rounded" alt="Nur Muhammad">
+                                    <i>10:05</i>
+                                </div>
+                                <div class="conversation-text">
+                                    <div class="ctext-wrap">
+                                        <i>Nur Muhammad</i>
+                                        <p>
+                                            3pm it is. Sure, let's discuss about presentation format, it would be great to finalize today. 
+                                            I am attaching the last year format and assets here...
+                                        </p>
+                                    </div>
+
+                                </div>
+                               
+                            </li>
+                        </ul>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="mt-2 bg-light p-3 rounded">
+                                    <form class="needs-validation" novalidate="" name="chat-form" id="chat-form">
+                                        <div class="row">
+                                            <div class="col mb-2 mb-sm-0">
+                                                <input type="text" class="form-control border-0" placeholder="Enter your text" required="">
+                                                <div class="invalid-feedback">
+                                                    Please enter your messsage
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-auto">
+                                                <div class="btn-group">
+                                                    <div class="d-grid">
+                                                        <button type="submit" class="btn btn-success chat-send"><i class='uil uil-message'></i></button>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- end col -->
+                                        </div> <!-- end row-->
+                                    </form>
+                                </div> 
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end row -->
+                    </div> <!-- end card-body -->
+                </div> <!-- end card -->
+            </div>
+            <!-- end chat area-->
+
+        </div> <!-- end row-->
+    </div>
+</section>
+
+
+{% endblock main-content %}

@@ -10,14 +10,7 @@
 <!-- START HERO -->
 
 
-<section class="hero-section">
-    <div class="container">
-
-    </div>
-</section>
-
-<!-- END HERO -->
-<section class="py-3 bg-white" id="main-content" style="margin-top:-200px;">
+<section class="hero-section bg-white" style="padding-top:24px" >
     <div class="container" >
         <div class="row">
             <div class="col-12">
@@ -25,7 +18,7 @@
                     <div class="page-title-left">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);" style="color:#003C80">Beranda</a></li>
-                            <li class="breadcrumb-item active text-truncate"><a href="javascript: void(0);" style="color:#003C80">Tabel Statistik</a></li>
+                            <li class="breadcrumb-item active text-truncate"><a href="javascript: void(0);" style="color:#003C80">Layanan Statistik</a></li>
                             </li>
                         </ol>
                     </div>
@@ -38,315 +31,907 @@
                 <h4 class="p-2" ><i class="mdi mdi-arch"></i> Layanan Statistik</h4>
                 <div class="card mb-2">
                     <div class="card-body">
-                        <div class="card-widgets">
-                            <a data-bs-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-chevron-double-right"></i></a>
-                        </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Sosial dan Kependudukan</h5>
+           
+                        <h5 class="card-title mb-0" style="color:#003C80">Pilih Layanan Statistik</h5>
                                         
                         <div id="cardCollpase1" class="collapse pt-3 show">
                             <ul style="padding-left:0px!important;font-size:15px">
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary fw-bold" style="color:#003C80!important">Tenaga Kerja <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Penge... <span class="badge badge-primary-lighten float-end ms-2">20</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Sosial Budaya <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Pendidikan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Perumahan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kesehatan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+                                <li class="mb-1" style="list-style:none;">
+                                    <a href="javascript:void(0)" class="text-secondary list-apps fw-bold" data-app="consult" onclick="choose_service(this);" style="color:#003C80!important"> <i class="mdi mdi-phone"></i>&ensp;Konsultasi Data </a>
+                                    
+                                    <ul class="mt-1 mb-2 d-none">
+                                        <li style="list-style:none;margin-left:-10px"><a href="javascript:void(0)" class="text-danger" data-bs-toggle="modal" data-bs-target="#start-consult"><i class="mdi mdi-plus-circle"></i> Mulai Konsultasi</a></li>
+                                    </ul>
+                                </li>
+                                <li style="list-style:none;">
+                                    <a href="javascript:void(0)" class="text-secondary list-apps" data-app="request" onclick="choose_service(this);"><i class="mdi mdi-email-multiple"></i>&ensp;Permohonan Data </a>
+                                    <ul class="mt-1 mb-2 d-none">
+                                        <li style="list-style:none;margin-left:-10px"><a href="javascript:void(0)" class="text-danger" data-bs-toggle="modal" data-bs-target="#start-request"><i class="mdi mdi-plus-circle"></i> Ajukan Permohonan</a></li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div> <!-- end card-->
-
             </div>
     
-            <div class="col-lg-9 px-4">
-                <ul class="nav nav-tabs nav-bordered mb-4" >
-                    <li class="nav-item mx-1">
-                        <a href="#stats" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
-                            <span class="d-none d-md-block" style="font-weight:300;">Permohonan Data Statistik <i class="mdi mdi-file-table-box-multiple-outline"></i></span>
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1">
-                        <a href="#pubs" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                            <span class="d-none d-md-block" style="font-weight:300;">Konsultasi Statistik <i class="mdi mdi-book-open-page-variant-outline"></i></span>
-                        </a>
-                    </li>
+            <div class="col-lg-9 px-4" style="z-index:1!important">
+                <div class="consult-menu">
+                    <ul class="nav nav-tabs nav-bordered mb-4" >
+                        <li class="nav-item mx-1">
+                            <a href="#data-consult" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
+                                <span class="d-none d-md-block" style="font-weight:300;"> Menunggu Konfirmasi PIC &ensp;<span class="badge bg-primary text-dark">20</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a href="#data-consult-processed" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
+                                <span class="d-none d-md-block" style="font-weight:300;"> Diproses &ensp;<span class="badge bg-info text-dark">20</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a href="#data-consult-finish" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                                <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                <span class="d-none d-md-block" style="font-weight:300;"> Selesai &ensp;<span class="badge bg-success text-dark">20</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a href="#data-consult-cancelled" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                                <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                <span class="d-none d-md-block" style="font-weight:300;"> Dibatalkan &ensp;<span class="badge bg-danger text-dark">20</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="data-consult">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-phone-plus-outline"></i> Layanan Konsultasi Statistik</strong></h5>
+                                    </div>
     
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="stats">
-                        <div class="card pb-3">
-                            <div class="card-body p-3">
-                                <div class="mb-3 px-1">
-                                    <h5 class="font-weight-bold"><strong><i class="mdi mdi-file-table-box-multiple-outline"></i> Indikator Statistik</strong></h5>
-                                </div>
-
-                                <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 ">
-                                    <thead >
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Data Statistik</th>
-                                            <th class="text-center">Periode Data</th>
-                                            <th class="text-center">Update Terakhir</th>
-                                            <th class="text-center"></th>
-                                        </tr>
-                                     
-                                    </thead>
-                                    <tbody>
-                                        {% for i in '1234567'  %}
-                                        <tr>
-                                            <td class="text-center">{{forloop.counter}}</td>
-                                            <td><a href="#" class="text-secondary">Kemiskinan Kab. Muna Tahun 2024</a></td>
-                                            <td class="text-center">Tahunan</td>
-                                            <td class="text-center">28 Mar 2024</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </button>
-                                                <div class="dropdown-menu" style="font-size:14px;">
-                                                    <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
-                                                    <a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a> 
-                                                </div>
-                                            </td>
-            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <nav>
-                                            <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                        <i class="mdi mdi-chevron-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pengirim</th>
+                                                <th>Subjek Pesan</th>
+                                                <th class="text-center">Tanggal Dibuat</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                         
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | (rifki.gusti@bps.go.id)</td>
+                                                <td>Permintaan Data Citra Satelit Periode Januari - Februari 2024</td>
+                                                <td class="text-center">28 Mar 2024</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                                         <i class="mdi mdi-chevron-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-tooltip-edit"></i>&ensp;Edit Pesan</a> 
+                                                        <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-delete"></i>&ensp;Batalkan Pesan</a>
+                                                    </div>
+                                                </td>
+                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                    </div>
-                    <div class="tab-pane" id="pubs">
-                        <div class="card pb-3">
-                            <div class="card-body p-3">
-                                <div class="mb-3 px-1">
-                                    <h5 class="font-weight-bold"><strong><i class="mdi mdi-book-open-page-variant-outline"></i> Publikasi Statistik</strong></h5>
-                                </div>
-
-                                <table class="table table-sm table-striped table-bordered table-centered nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Publikasi Statistik</th>
-                                            <th class="text-center">Tanggal Rilis</th>
-                                            <th class="text-center">Sumber</th>
-                                            <th class="text-center"></th>
-                                        </tr>
-                                     
-                                    </thead>
-                                    <tbody>
-                                        {% for i in '1234567'  %}
-                                        <tr>
-                                            <td class="text-center">{{forloop.counter}}</td>
-                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                            <td class="text-center">28 Mar 2024</td>
-                                            <td class="text-center">BPS Kab Muna</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </button>
-                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                                </div>
-                                            </td>
-            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <nav>
-                                            <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                        <i class="mdi mdi-chevron-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                        <div class="tab-pane" id="data-consult-processed">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-phone-plus-outline"></i> Layanan Konsultasi Statistik</strong></h5>
+                                    </div>
+    
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pengirim</th>
+                                                <th>Subjek Pesan</th>
+                                                <th class="text-center">Tanggal Dibuat</th>
+                                                <th class="text-center">Tanggal Diproses</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                         
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | (rifki.gusti@bps.go.id)</td>
+                                                <td>Permintaan Data Citra Satelit Periode Januari - Februari 2024</td>
+                                                <td class="text-center">28 Mar 2024</td>
+                                                <td class="text-center">20 Mei 2024</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                                         <i class="mdi mdi-chevron-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="{% url 'app:data-request-preview' %}"><i class="mdi mdi-phone-message"></i>&ensp;Lihat Percakapan</a> 
+                                                        <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-delete"></i>&ensp;Batalkan Pesan</a>
+                                                    </div>
+                                                </td>
+                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane" id="brs">
-                        <div class="card pb-3">
-                            <div class="card-body p-3">
-                                <div class="mb-3 px-1">
-                                    <h5 class="font-weight-bold"><strong><i class="mdi mdi-newspaper-variant-multiple"></i> Berita Resmi Statistik</strong></h5>
-                                </div>
-
-                                <table class="table table-sm table-striped table-bordered table-centered nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Berita Statistik</th>
-                                            <th class="text-center">Tanggal Rilis</th>
-                                            <th class="text-center">Sumber</th>
-                                            <th class="text-center"></th>
-                                        </tr>
-                                     
-                                    </thead>
-                                    <tbody>
-                                        {% for i in '1234567'  %}
-                                        <tr>
-                                            <td class="text-center">{{forloop.counter}}</td>
-                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                            <td class="text-center">28 Mar 2024</td>
-                                            <td class="text-center">BPS Kab Muna</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </button>
-                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                                </div>
-                                            </td>
-            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <nav>
-                                            <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                        <i class="mdi mdi-chevron-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                        <div class="tab-pane" id="data-consult-finish">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-phone-plus-outline"></i> Layanan Konsultasi Statistik</strong></h5>
+                                    </div>
+    
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pengirim</th>
+                                                <th>Subjek Pesan</th>
+                                                <th class="text-center">Tanggal Dibuat</th>
+                                                <th class="text-center">Tanggal Selesai</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | (rifki.gusti@bps.go.id)</td>
+                                                <td>Permintaan Data Citra Satelit Periode Januari - Februari 2024</td>
+                                                <td class="text-center">28 Mar 2024</td>
+                                                <td class="text-center">25 Apr 2024</td>
+                                                
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                                         <i class="mdi mdi-chevron-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-phone-message"></i>&ensp;Lihat Percakapan</a> 
+                                                    </div>
+                                                </td>
+                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="tab-pane" id="infographs">
-                        <div class="card pb-3">
-                            <div class="card-body p-3">
-                                <div class="mb-3 px-1">
-                                    <h5 class="font-weight-bold"><strong><i class="mdi mdi-chart-bar"></i> Infografis Statistik</strong></h5>
-                                </div>
-                                <table class="table table-sm table-striped table-centered table-bordered nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Infografis</th>
-                                            <th class="text-center">Tanggal Rilis</th>
-                                            <th class="text-center">Sumber</th>
-                                            <th class="text-center"></th>
-                                        </tr>
-                                     
-                                    </thead>
-                                    <tbody>
-                                        {% for i in '1234567'  %}
-                                        <tr>
-                                            <td class="text-center">{{forloop.counter}}</td>
-                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                            <td class="text-center">28 Mar 2024</td>
-                                            <td class="text-center">BPS Kab Muna</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </button>
-                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                                </div>
-                                            </td>
-            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <nav>
-                                            <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                        <i class="mdi mdi-chevron-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                        <div class="tab-pane" id="data-consult-cancelled">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-phone-plus-outline"></i> Layanan Konsultasi Statistik</strong></h5>
+                                    </div>
+    
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pengirim</th>
+                                                <th>Subjek Pesan</th>
+                                                <th class="text-center">Tanggal Dibuat</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | (rifki.gusti@bps.go.id)</td>
+                                                <td>Permintaan Data Citra Satelit Periode Januari - Februari 2024</td>
+                                                <td class="text-center">28 Mar 2024</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                                                         <i class="mdi mdi-chevron-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-tooltip-edit"></i>&ensp;Edit Pesan</a> 
+                                                    </div>
+                                                </td>
+                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="data-request-menu d-none">
+                    <ul class="nav nav-tabs nav-bordered mb-4" >
+                        <li class="nav-item mx-1">
+                            <a href="#data-request" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
+                                <span class="d-none d-md-block" style="font-weight:300;"> Menunggu Konfirmasi PIC &ensp;<span class="badge bg-primary text-dark">20</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a href="#data-request-processed" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
+                                <span class="d-none d-md-block" style="font-weight:300;"> Diproses &ensp;<span class="badge bg-info text-dark">20</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a href="#data-request-acc" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
+                                <span class="d-none d-md-block" style="font-weight:300;"> Disetujui &ensp;<span class="badge bg-success text-dark">20</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a href="#data-request-reject" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                                <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                <span class="d-none d-md-block" style="font-weight:300;"> Ditolak &ensp;<span class="badge bg-danger text-dark">20</span></span>
+                            </a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a href="#data-request-cancelled" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
+                                <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                <span class="d-none d-md-block" style="font-weight:300;"> Dibatalkan &ensp;<span class="badge bg-danger text-dark">20</span></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="data-request">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-email-edit"></i> Permohonan Data Statistik</strong></h5>
+                                    </div>
+    
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pemohon</th>
+                                                <th>Institusi</th>
+                                                <th>Subjek Permohonan</th>
+                                                <th class="text-center">Tgl. Permohonan</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                         
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | rifki.gust@bps.go.id</td>
+                                                <td>BPS Kab. Muna</td>
+                                                <td>Permintaan Data Citra Satelit Di Tingkat Administratif Kab. Muna Prov. Sulawesi Tenggara</td>
+                                                <td>25 Feb 2024</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                        <i class="mdi mdi-chevron-right"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-tooltip-edit"></i>&ensp;Edit Permohonan</a> 
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-folder-download"></i>&ensp;Unduh Berkas Persetujuan</a>
+                                                        <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-delete"></i>&ensp;Batalkan Permohonan</a>
+                                                    </div>
+                                                </td>
                 
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="tab-pane" id="data-request-processed">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-email-edit"></i> Permohonan Data Statistik</strong></h5>
+                                    </div>
+    
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pemohon</th>
+                                                <th>Institusi</th>
+                                                <th>Subjek Permohonan</th>
+                                                <th class="text-center">Tgl. Permohonan</th>
+                                                <th class="text-center">Tgl. Diproses</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                         
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | rifki.gust@bps.go.id</td>
+                                                <td>BPS Kab. Muna</td>
+                                                <td>Permintaan Data Citra Satelit Di Tingkat Administratif Kab. Muna Prov. Sulawesi Tenggara</td>
+                                                <td>25 Feb 2024</td>
+                                                <td>12 Mar 2024</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                        <i class="mdi mdi-chevron-right"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-phone-message"></i>&ensp;Lihat Percakapan</a>
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-folder-download"></i>&ensp;Unduh Berkas Persetujuan</a>
+                                                        <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-delete"></i>&ensp;Batalkan Permohonan</a>
+                                                    </div>
+                                                </td>
+                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="data-request-acc">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-email-edit"></i> Permohonan Data Statistik</strong></h5>
+                                    </div>
+    
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pemohon</th>
+                                                <th>Institusi</th>
+                                                <th>Subjek Permohonan</th>
+                                                <th class="text-center">Tgl. Permohonan</th>
+                                                <th class="text-center">Tgl. Diproses</th>
+                                                <th class="text-center">Tgl. Disetujui</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                         
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | rifki.gust@bps.go.id</td>
+                                                <td>BPS Kab. Muna</td>
+                                                <td>Permintaan Data Citra Satelit Di Tingkat Administratif Kab. Muna Prov. Sulawesi Tenggara</td>
+                                                <td>25 Feb 2024</td>
+                                                <td>12 Mar 2024</td>
+                                                <td>20 Mar 2024</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                        <i class="mdi mdi-chevron-right"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-phone-message"></i>&ensp;Lihat Percakapan</a>
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-folder-download"></i>&ensp;Unduh Berkas Persetujuan</a>
+                                                        <a class="dropdown-item text-success fw-bold" href="#"><i class="mdi mdi-progress-download"></i>&ensp;Unduh Data (Tersedia)</a>
+                                                    </div>
+                                                </td>
+                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="data-request-reject">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-email-edit"></i> Permohonan Data Statistik</strong></h5>
+                                    </div>
+    
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pemohon</th>
+                                                <th>Institusi</th>
+                                                <th>Subjek Permohonan</th>
+                                                <th class="text-center">Tgl. Permohonan</th>
+                                                <th class="text-center">Tgl. Diproses</th>
+                                                <th class="text-center">Tgl. Ditolak</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                         
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | rifki.gust@bps.go.id</td>
+                                                <td>BPS Kab. Muna</td>
+                                                <td>Permintaan Data Citra Satelit Di Tingkat Administratif Kab. Muna Prov. Sulawesi Tenggara</td>
+                                                <td>25 Feb 2024</td>
+                                                <td>12 Mar 2024</td>
+                                                <td>25 Mar 2024</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                        <i class="mdi mdi-chevron-right"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-phone-message"></i>&ensp;Lihat Percakapan</a>
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-folder-download"></i>&ensp;Unduh Berkas Persetujuan</a>
+                                                    </div>
+                                                </td>
+                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="data-request-cancelled">
+                            <div class="card pb-3">
+                                <div class="card-body p-3">
+                                    <div class="mb-3 px-1">
+                                        <h5 class="font-weight-bold"><strong><i class="mdi mdi-email-edit"></i> Permohonan Data Statistik</strong></h5>
+                                    </div>
+    
+                                    <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 font-14">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-center">No</th>
+                                                <th>Nama Pemohon</th>
+                                                <th>Institusi</th>
+                                                <th>Subjek Permohonan</th>
+                                                <th class="text-center">Tgl. Permohonan</th>
+                                                <th class="text-center">Tgl. Dibatalkan</th>
+                                                <th class="text-center"></th>
+                                            </tr>
+                                         
+                                        </thead>
+                                        <tbody>
+                                            {% for i in '1234567'  %}
+                                            <tr>
+                                                <td class="text-center">{{forloop.counter}}</td>
+                                                <td>Rifki Gustiawan | rifki.gust@bps.go.id</td>
+                                                <td>BPS Kab. Muna</td>
+                                                <td>Permintaan Data Citra Satelit Di Tingkat Administratif Kab. Muna Prov. Sulawesi Tenggara</td>
+                                                <td>25 Feb 2024</td>
+                                                <td>25 Mar 2024</td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                                        <i class="mdi mdi-chevron-right"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" style="font-size:14px;">
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-tooltip-edit"></i> Edit Permohonan</a>
+                                                        <a class="dropdown-item" href="#"><i class="mdi mdi-folder-download"></i>&ensp;Unduh Berkas Persetujuan</a>
+                                                    </div>
+                                                </td>
+                
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+    
+                                    <div class="row mt-4">
+                                        <div class="col-12">
+                                            <nav>
+                                                <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                            <i class="mdi mdi-chevron-left"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                                    <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                                    <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                            <i class="mdi mdi-chevron-right"></i>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="start-consult" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Formulir Konsultasi Statistik</h5>
+                    <button type="button" class="btn-close" style="font-size:10px" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div> <!-- end modal header -->
+                <div class="modal-body px-3">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="text-left">
+                                <p class="text-muted mt-2">Silahkan isikan formulir berikut dengan lengkap dan detail. Tim kami akan berusaha membalas anda dengan segera.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <p class="text-muted"><span class="fw-bold">Narahubung:</span><br> <span class="d-block mt-1">+62 877 6655 4028</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Alamat Email:</span><br> <span class="d-block mt-1">Rifkigst.bps@gmail.com</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Alamat Kantor:</span><br> <span class="d-block mt-1">Kab. Muna, Sulawesi Tenggara</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Waktu Kerja:</span><br> <span class="d-block mt-1">10:00 to 15:00 WITA</span></p>
+                        </div>
+
+                        <div class="col-md-8" style="margin-top:-35px!important">
+                            <form action="{% url 'app:data-consult-app' %}" method="post">
+                                {% csrf_token %}
+                                <div class="row mt-4">
+                                    <div class="col-lg-5">
+                                        <div class="mb-2">
+                                            <label for="name" class="form-label">Nama Lengkap</label>
+                                            <input class="form-control form-control-light" type="text" id="name" name="name" placeholder="Nama Pemohon...">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-2">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input class="form-control form-control-light" type="email" required="" id="email" name="email" placeholder="Alamat Email...">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div class="mb-2">
+                                            <label for="contact" class="form-label">No. Telp</label>
+                                            <input class="form-control form-control-light" type="text" required="" id="contact" name="contact" placeholder="No. Telp...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-lg-12">
+                                        <div class="mb-2">
+                                            <label for="subject" class="form-label">Subjek</label>
+                                            <input class="form-control form-control-light" type="text" id="subject" name="subject" placeholder="Subjek/Judul Permohonan...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-lg-12">
+                                        <div class="mb-2">
+                                            <label for="message" class="form-label">Pesan</label>
+                                            <textarea id="message" rows="4" class="form-control form-control-light" name="message" placeholder="Tuliskan pesan..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 mb-1">
+                        <div class="col d-flex justify-content-end">
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>&ensp;
+                            <button type="button" class="btn btn-sm btn-primary">Kirim Pesan</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end modal content-->
+        </div> <!-- end modal dialog-->
+    </div><!-- /.modal -->
+
+
+    <div class="modal fade" id="start-request" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Formulir Permohonan Data Statistik</h5>
+                    <button type="button" class="btn-close" style="font-size:10px" data-bs-dismiss="modal" aria-hidden="true"></button>
+                </div> <!-- end modal header -->
+                <div class="modal-body px-3">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="text-left">
+                                <p class="text-muted mt-2">Silahkan isikan formulir berikut dengan lengkap dan detail. Tim kami akan berusaha membalas anda dengan segera.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <p class="text-muted"><span class="fw-bold">Narahubung:</span><br> <span class="d-block mt-1">+62 877 6655 4028</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Alamat Email:</span><br> <span class="d-block mt-1">Rifkigst.bps@gmail.com</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Alamat Kantor:</span><br> <span class="d-block mt-1">Kab. Muna, Sulawesi Tenggara</span></p>
+                            <p class="text-muted mt-4"><span class="fw-bold">Waktu Kerja:</span><br> <span class="d-block mt-1">10:00 to 15:00 WITA</span></p>
+                        </div>
+
+                        <div class="col-md-8" style="margin-top:-35px!important">
+                            <form action="{% url 'app:data-consult-app' %}" method="post">
+                                {% csrf_token %}
+                                <div class="row mt-4">
+                                    <div class="col-lg-4">
+                                        <div class="mb-2">
+                                            <label for="name" class="form-label">Nama Lengkap</label>
+                                            <input class="form-control form-control-light" type="text" id="name" name="name" placeholder="Nama Pemohon...">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-2">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input class="form-control form-control-light" type="email" required="" id="email" name="email" placeholder="Alamat Email...">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-2">
+                                            <label for="contact" class="form-label">No. Telp</label>
+                                            <input class="form-control form-control-light" type="text" required="" id="contact" name="contact" placeholder="No. Telp...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-lg-12">
+                                        <div class="mb-2">
+                                            <label for="subject" class="form-label">Institusi/Instansi/Lembaga</label>
+                                            <input class="form-control form-control-light" type="text" id="subject" name="subject" placeholder="Instansi Pemohon...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-lg-12">
+                                        <div class="mb-2">
+                                            <label for="subject" class="form-label">Subjek</label>
+                                            <input class="form-control form-control-light" type="text" id="subject" name="subject" placeholder="Subjek/Judul Permohonan...">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-lg-12">
+                                        <div class="mb-2">
+                                            <label for="message" class="form-label">Deskripsi Data</label>
+                                            <textarea id="message" rows="4" class="form-control form-control-light" name="message" placeholder="Tuliskan pesan..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-1">
+                                    <div class="col-lg-12">
+                                        <div class="mb-2">
+                                            <label for="subject" class="form-label">Surat Permohonan</label>
+                                            <input class="form-control form-control-sm" type="file" id="subject" placeholder="Subjek/Judul Permohonan..." style="width:250px">
+
+                                            <small>Harap lengkapi surat permohonan data sesuai dengan format yang telah tersedia.<br><a href="#"><i class="mdi mdi-progress-download"></i> Unduh template</a></small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2 mb-1">
+                        <div class="col d-flex justify-content-end">
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>&ensp;
+                            <button type="button" class="btn btn-sm btn-primary">Kirim Permohonan</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- end modal content-->
+        </div> <!-- end modal dialog-->
+    </div><!-- /.modal -->
 </section>
 
 
@@ -354,4 +939,36 @@
 
 
 {% block js-extender %}
+<script>
+    
+function choose_service(e){
+
+    $('.list-apps').removeClass('fw-bold')
+    $('.list-apps').removeAttr('style')
+    $(e).addClass('fw-bold')
+    $(e).attr('style', 'color:#003C80!important')
+    
+    var list_app_add = $(e).next()
+    var dt = $(e).attr('data-app')
+
+    if (list_app_add.hasClass('d-none')){
+        list_app_add.removeClass('d-none')
+    }else{
+        list_app_add.addClass('d-none')
+    }
+
+    if (dt == 'request'){
+        $('.consult-menu').addClass('d-none')
+        $('.data-request-menu').removeClass('d-none')
+        
+    }else{
+        $('.consult-menu').removeClass('d-none')
+        $('.data-request-menu').addClass('d-none')
+    }
+
+
+}
+
+
+</script>
 {% endblock js-extender %}

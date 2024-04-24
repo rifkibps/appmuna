@@ -312,8 +312,9 @@ class BackendDataConsultModel(models.Model):
 
    state = (
       ('0', 'Belum Diproses'),
-      ('1', 'Ya'),
-      ('2', 'Tidak')
+      ('1', 'Sedang Diproses'),
+      ('2', 'Selesai'),
+      ('3', 'Dibatalkan'),
    )
    
    name =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Nama')
@@ -351,13 +352,16 @@ class BackendDataRequestsModel(models.Model):
       verbose_name_plural = 'Permohonan Data'
    
    state = (
-      ('1', 'Disetujui'),
-      ('2', 'Data Tidak/Belum Tersedia'),
-      ('3', 'Menunggu Konfirmasi PIC')
+      ('1', 'Menunggu Konfirmasi PIC'),
+      ('2', 'Diproses'),
+      ('3', 'Disetujui'),
+      ('4', 'Ditolak'),
+      ('5', 'Dibatalkan')
     )
 
    name_person =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Nama Pemohon')
    contact_person =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Kontak Pemohon')
+   email_person =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Email Pemohon')
    agency_person = models.CharField(max_length=128, null=False, blank=False, verbose_name='Instansi Pemohon')
 
    subject_request =  models.CharField(max_length=128, null=False, blank=False, verbose_name='Judul Permohonan Data')

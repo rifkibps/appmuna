@@ -11,7 +11,8 @@ urlpatterns = [
 
     path('app/statistics', views.StatisticsTablesClassView.as_view(), name='statistics-app'),
     path('app/statistics/preview', views.StatisticDetailTableClassView.as_view(), name='statistics-app'),
-    path('app/data-request', views.DataRequestsClassView.as_view(), name='data-request-app'),
+    path('app/service', views.DataRequestsClassView.as_view(), name='data-request-app'),
+    path('app/service/consult-data/preview', views.DataRequestPreviewClassView.as_view(), name='data-request-preview'),
     
     
     path('app/search', views.SearchEngineClassView.as_view(), name='search-app')

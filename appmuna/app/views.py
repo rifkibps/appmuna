@@ -281,6 +281,15 @@ class DataRequestsClassView(View):
         return render(request, 'app/data_request.html', context) 
 
 
+class DataRequestPreviewClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Konsultasi Data Statistik'
+        }
+
+        return render(request, 'app/data_request_preview.html', context) 
+    
 class DashboardAppClassView(View):
     print('hello world')
     print('Ini perubahan dari master')
