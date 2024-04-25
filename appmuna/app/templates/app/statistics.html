@@ -57,13 +57,15 @@
                     <div class="row align-items-start">
                         <div class="col-lg-12 d-flex justify-content-start">
                             <div class="app-search dropdown">
-                                <form>
+                                <form> 
                                     <div class="row gy-2 gx-2">
                                         <div class="col-12">
                                             <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:400px;height:50px;background-color:#ffffff;border-radius:5px">
-                                                <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
-                                                <button class="btn btn-danger rounded" style="height:48px;margin-left:8px" id="button-top-search">Telusuri Data</button>
+                                                <form action="{% url 'app:search-app' %}" method="get">
+                                                    <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:400px;height:50px;background-color:#ffffff;border-radius:5px">
+                                                    <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                                                    <button class="btn btn-danger rounded" style="height:48px;margin-left:8px" id="button-top-search">Telusuri Data</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -253,7 +255,7 @@
                                         {% for i in '1234567'  %}
                                         <tr>
                                             <td class="text-center">{{forloop.counter}}</td>
-                                            <td><a href="#" class="text-secondary">Kemiskinan Kab. Muna Tahun 2024</a></td>
+                                            <td><a href="{% url 'app:statistics-app-preview' %}" class="text-secondary">Kemiskinan Kab. Muna Tahun 2024</a></td>
                                             <td class="text-center">Tahunan</td>
                                             <td class="text-center">28 Mar 2024</td>
                                             <td class="text-center">
@@ -261,7 +263,7 @@
                                                     <i class="mdi mdi-chevron-right"></i>
                                                 </button>
                                                 <div class="dropdown-menu" style="font-size:14px;">
-                                                    <a class="dropdown-item pb-0" href="#"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
+                                                    <a class="dropdown-item pb-0" href="{% url 'app:statistics-app-preview' %}"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
                                                     <a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a> 
                                                 </div>
                                             </td>

@@ -10,10 +10,13 @@ urlpatterns = [
 
 
     path('app/statistics', views.StatisticsTablesClassView.as_view(), name='statistics-app'),
-    path('app/statistics/preview', views.StatisticDetailTableClassView.as_view(), name='statistics-app'),
+    path('app/statistics/preview', views.StatisticDetailTableClassView.as_view(), name='statistics-app-preview'),
     path('app/service', views.DataRequestsClassView.as_view(), name='data-request-app'),
     path('app/service/consult-data/preview', views.DataRequestPreviewClassView.as_view(), name='data-request-preview'),
     
+
+    path('app/media/publications', views.PublicationClassView.as_view(), name='publications'),
+    path('app/media/publications/preview', views.PublicationPreviewClassView.as_view(), name='publication-preview'),
     
     path('app/search', views.SearchEngineClassView.as_view(), name='search-app')
     

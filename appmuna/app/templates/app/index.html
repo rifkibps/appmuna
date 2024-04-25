@@ -60,35 +60,35 @@
                     <div class="row align-items-center">
                         <div class="col-lg-12 d-flex justify-content-center">
                             <div class="app-search dropdown ml-5">
-                                <form>
+                                <form action="{% url 'app:search-app' %}"  method="get">
                                     <div class="row gy-2 gx-2 align-items-center">
-                                        <div class="col-auto px-0">
-                                            <input class="form-control" list="browserdata" id="browser" name="browser" placeholder="Filter Data" autocomplete="off" style="width:120px;height:50px;background-color:#ffffff;padding-left:20px; border: 0; border-radius:5px">
-                                            <datalist id="browserdata">
-                                                <span style="font-size: 0.9em;font-weight:bold; padding: 0.4em 1.5em;">All</span>
-                                                <br>
-                                                
-                                                {% for dt in subjects %}
-                                                
-                                                    {% if dt.items|length > 0 %}
-                                                        <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> {{dt.groups}} </span><br>
-                                                            {% for dt_item in dt.items %}
-                                                                <option value="{{dt_item.item}}">{{dt_item.item}}</option>
-                                                            {% endfor %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                                
-                                            </datalist>
-                                        </div>
-                                        <div class="col-auto">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:420px;height:50px;background-color:#ffffff;border-radius:5px">
-                                                <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                                            <div class="col-auto px-0">
+                                                <input class="form-control" list="browserdata" id="browser" name="browser" placeholder="Filter Data" autocomplete="off" style="width:120px;height:50px;background-color:#ffffff;padding-left:20px; border: 0; border-radius:5px">
+                                                <datalist id="browserdata">
+                                                    <span style="font-size: 0.9em;font-weight:bold; padding: 0.4em 1.5em;">All</span>
+                                                    <br>
+                                                    
+                                                    {% for dt in subjects %}
+                                                    
+                                                        {% if dt.items|length > 0 %}
+                                                            <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> {{dt.groups}} </span><br>
+                                                                {% for dt_item in dt.items %}
+                                                                    <option value="{{dt_item.item}}">{{dt_item.item}}</option>
+                                                                {% endfor %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    
+                                                </datalist>
                                             </div>
-                                        </div>
-                                        <div class="col-auto mt-2 px-0">
-                                            <button class="btn btn-danger rounded" style="height:47px" id="button-top-search">Telusuri Data</button>
-                                        </div>
+                                            <div class="col-auto">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:420px;height:50px;background-color:#ffffff;border-radius:5px">
+                                                    <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto mt-2 px-0">
+                                                <button class="btn btn-danger rounded" type="submit" style="height:47px" id="button-top-search">Telusuri Data</button>
+                                            </div>
                                     </div>
                                 </form>
                             </div>

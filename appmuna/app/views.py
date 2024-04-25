@@ -293,3 +293,22 @@ class DataRequestPreviewClassView(View):
 class DashboardAppClassView(View):
     print('hello world')
     print('Ini perubahan dari master')
+
+
+class PublicationClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Publikasi Data Statistik'
+        }
+
+        return render(request, 'app/publications.html', context) 
+    
+class PublicationPreviewClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Publikasi Data Statistik'
+        }
+
+        return render(request, 'app/publication_preview.html', context) 

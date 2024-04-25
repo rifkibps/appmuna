@@ -74,8 +74,14 @@
       ::-webkit-scrollbar-thumb:hover {
         background: #dbdbdb;
       }
+
+      .dropdown:hover>.dropdown-menu {
+        display: block;
+      }
+
     </style>
-    {% block css-extender %} {% endblock css-extender %}
+    {% block css-extender %}
+    {% endblock css-extender %}
   </head>
 
   <body
@@ -105,7 +111,7 @@
     <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark">
       <div class="container">
         <!-- logo -->
-        <a href="index.html" class="navbar-brand me-lg-5">
+        <a href="{% url 'home:homepage' %}" class="navbar-brand me-lg-5">
           <img
             src="{% static 'customs/images/bps_kab_muna_dark.png' %}"
             alt=""
@@ -127,27 +133,29 @@
         </button>
 
         <!-- menus -->
+        
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <!-- left menu -->
           <ul class="navbar-nav me-auto align-items-center">
             <li class="nav-item mx-lg-1">
-              <a class="nav-link active" href="">Beranda</a>
+              <a class="nav-link active" href="{% url 'app:home-app' %}">Beranda</a>
             </li>
             <li class="nav-item mx-lg-1">
-              <a class="nav-link" href="">Data Strategis</a>
+              <a class="nav-link" href="{% url 'app:statistics-app' %}">Data Statistik</a>
             </li>
-
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layouts" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Media Statistik<div class="arrow-down"></div>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="topnav-layouts">
+                  <a href="{% url 'app:publications' %}" class="dropdown-item">Berita Statistik</a>
+                  <a href="#" class="dropdown-item">Publikasi Statistik</a>
+                  <a href="#" class="dropdown-item">Infografis</a>
+                  <a href="#" class="dropdown-item">Videografis</a>
+              </div>
+          </li>
             <li class="nav-item mx-lg-1">
-              <a class="nav-link" href="">Data Pembangunan</a>
-            </li>
-            <li class="nav-item mx-lg-1">
-              <a class="nav-link" href="">Tabel Dinamis</a>
-            </li>
-            <li class="nav-item mx-lg-1">
-              <a class="nav-link" href="#media-statistik">Media</a>
-            </li>
-            <li class="nav-item mx-lg-1">
-              <a class="nav-link" href="#layanan-statistik">Layanan Statistik</a>
+              <a class="nav-link" href="{% url 'app:data-request-app' %}">Layanan Statistik</a>
             </li>
           </ul>
 

@@ -41,7 +41,7 @@
                     <!-- left menu -->
                     <ul class="navbar-nav me-auto align-items-center">
                         <li class="nav-item mx-lg-1">
-                            <a class="nav-link active" href="">Beranda</a>
+                            <a class="nav-link active" href="{% url 'home:homepage' %}">Beranda</a>
                         </li>
                         <li class="nav-item mx-lg-1">
                             <a class="nav-link" href="">Data Strategis</a>
@@ -105,7 +105,7 @@
 
                             <p class="mb-4 font-16 text-white-50"><span class="text-white fw-normal">SDM</span> merupakan wujud sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia layanan data dan berbagai Dinas OPD selaku stakeholder penyedia data statistik sektoral.</p>
 
-                            <a href="" target="_blank" class="btn btn-danger">Kunjungi Aplikasi <i class="mdi mdi-arrow-right ms-1"></i></a>
+                            <a href="{% url 'app:home-app' %}" class="btn btn-danger">Kunjungi Aplikasi <i class="mdi mdi-arrow-right ms-1"></i></a>
                         </div>
                     </div>
                     <div class="col-md-5 offset-md-2">

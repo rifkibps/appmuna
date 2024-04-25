@@ -1,0 +1,226 @@
+{% extends 'horizontal/home_app.html' %}
+
+{% load static %}
+
+{% block css-extender %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.1.392/pdf_viewer.min.css"></script>
+<style>
+    #expandButton:focus {     
+        box-shadow:none;    
+    }
+</style>
+{% endblock css-extender %}
+
+{% block main-content %}
+<!-- START HERO -->
+
+
+<section class="hero-section" style="height:630px">
+    <div class="container">
+        <div class="row align-items-center" id="search-content">
+            <div class="col-md-6 mt-4">
+                <div class="">
+                    <div>
+                        <span class="badge bg-danger rounded-pill">Baru</span> 
+                        <span class="text-white-50 ms-1">Selamat datang di portal Satu Data Muna</span>
+                    </div>
+                    <h3 class="text-white fw-normal my-3 hero-title">
+                        Telusuri Data Statistik Kabupaten Muna
+                    </h3>
+                    <p class="pr-2 mb-3 font-15 text-white-50"><span class="text-white fw-normal">SDM</span> merupakan wujud sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia layanan data.</p>
+
+                    <div class="row align-items-start">
+                        <div class="col-lg-12 d-flex justify-content-start">
+                            <div class="app-search dropdown">
+                                <form> 
+                                    <div class="row gy-2 gx-2">
+                                        <div class="col-12">
+                                            <div class="input-group">
+                                                <form action="{% url 'app:search-app' %}" method="get">
+                                                    <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:400px;height:50px;background-color:#ffffff;border-radius:5px">
+                                                    <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                                                    <button class="btn btn-danger rounded" style="height:48px;margin-left:8px" id="button-top-search">Telusuri Data</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 offset-md-2">
+                <div class="text-md-end mt-1">
+                    <img src="{% static 'app-design/assets/images/startup.svg' %}" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- END HERO -->
+<section class="py-3 bg-white" id="main-content" style="margin-top:-50px;">
+    <div class="container" >
+        <div class="row justify-content-end">
+            <button class="btn bg-white"  style="width:100px; height:40px; font-size:12px; border-radius:20px; margin-top:-45px; padding: 8px 0px 8px 5px; z-index:10; margin-right:10px!important;" id="expandButton">Expand <i class="mdi mdi-arrow-up-down"></i></button>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-left">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);" style="color:#003C80">Beranda</a></li>
+                            <li class="breadcrumb-item active text-truncate"><a href="javascript: void(0);" style="color:#003C80">Publikasi Statistik</a></li>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row py-2">
+            <div class="col-12">
+                <div class="mb-2">
+                    <h3 class="font-weight-bold" style="color:#003C80"><strong>Publikasi Statistik</strong></h3>
+                    <br>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus pariatur architecto temporibus doloribus eveniet repudiandae, tempore sint aspernatur, assumenda voluptas expedita voluptatibus, dolor quidem ducimus animi. Debitis laudantium dolores expedita.
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<section class="pt-2 mb-5" >
+    <div class="container " >
+        <div class="card d-block mb-2 mt-2">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-3">
+                    <img class="card-img" src="/media/thumbnail-publications/Thumbnail-1_-_Copy.png" alt="Generic placeholder image">
+                </div>
+                <div class="col-md-9 px-2">
+                    <div class="card-body">
+                        <h3 class="card-title">Kabupaten Muna Dalam Angka 2024</h3>
+
+                        <div class="row my-3">
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-primary" style="margin-right:3px!important" data-bs-toggle="popover" title="" data-bs-content="Tautan berhasil disalin." id="clipboard-btn" data-bs-original-title="Berhasil !"><i class="mdi mdi-clipboard-file"></i> </button>
+                                <button type="button" class="btn btn-success" style="margin-right:3px!important"><i class="mdi mdi-file-pdf"></i> </button>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <small>No Katalog: B.189/7402/02/2024</small><br>
+                            <small>No Publikasi: B.189/7402/02/2024</small><br>
+                            <small>No ISSN: 7402/02/2024</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <h5>Abstrak:</h5>
+                            <p style="text-align:justify">
+                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Numquam quam ratione maiores optio quia dolorum! Perferendis cum deserunt, impedit aspernatur iusto odit, dolore voluptatem dignissimos, laudantium deleniti delectus sunt? Nam.
+                            </p>
+                        </div>
+
+                        <div class="mb-3">
+                            <h5>Tanggal Rilis:</h5>
+                            <p style="text-align:justify">
+                                25 Maret 2024
+                            </p>
+                        </div>
+
+                        <div class="mb-3">
+                            <h5>Revisi Ke:</h5>
+                            <p style="text-align:justify">
+                                6 (Terakhir diperbarui 25 Maret 2024)
+                            </p>
+                        </div>
+
+                    </div> <!-- end card-body-->
+                </div> <!-- end col -->
+            </div> <!-- end row-->
+        </div>
+        <div class="row p-2">    
+            <div class="col-lg-9">
+                <div class="mt-5">
+                    <h4 style="color:#003C80">Preview Publikasi</h4>
+                    <div class="card bg-dark">
+                        <div class="card-body p-1">
+                            <embed src="{% static 'customs/file.pdf' %}" style="width: 100%;height: 900px;border: none;"></embed>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-lg-3">
+                <div class="mt-5">
+                    <h4 style="color:#003C80">Publikasi Terkait</h4>
+
+                    {% for i in '01234' %}
+    
+                    <a href="{% url 'app:publication-preview' %}" class="list-group-item list-group-item-action pt-1 pb-0 mb-2" style="border-radius:10px; border:none">
+                        <div class="row g-0 align-items-center">
+                            <div class="col-sm-5">
+                                <img class="ms-1 rounded" src="/media/thumbnail-publications/Thumbnail-1_-_Copy.png" width="85" alt="Generic placeholder image">
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1 fw-normal" style="color:#003C80">Kemiskinan di Kabupaten Muna Tahun 2023 Meningkat 2% dibanding tahun sebelumnya</h5>
+                                </div>
+
+                                <ul class="px-0 mt-1" style="list-style:none;">
+                                    <li class="d-inline" title="Release Date"><span class="badge rounded-pill font-10" style="background-color:#003C80; padding:5px 10px 5px 10px;">Rilis 3 Feb 2023</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+</section>
+{% endblock main-content %}
+
+
+{% block js-extender %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.1.392/pdf.min.mjs"></script>
+<script>
+
+    $( window).resize(function(){
+        if($(this).width() <= 768){
+            $("#search-content").addClass('d-none')
+            $(".hero-section").removeAttr('style')
+            $("#main-content").css('margin-top', '-200px')
+            $("#expandButton").addClass('d-none')
+            $("#top-search-mitra").css('width', '200px')
+        }else{
+            $("#search-content").removeClass('d-none')
+            $(".hero-section").css('height', '630px')    
+            $("#main-content").css('margin-top', '-50px')
+            $("#expandButton").removeClass('d-none')
+            $("#top-search-mitra").css('width', '400px')
+        }
+    });
+
+
+    $("#expandButton").on('click', function (event){
+        if ($('#main-content').css('margin-top') == '-50px'){
+            $("#search-content").addClass('d-none')
+            $(".hero-section").removeAttr('style')
+            $("#main-content").css('margin-top', '-200px')
+            $(this).parent().css({'bottom': '-98px'})
+        }else{
+            $(this).parent().css('bottom', '-253px')
+            $(".hero-section").css('height', '630px')    
+            $("#search-content").removeClass('d-none')
+            $("#main-content").css('margin-top', '-50px')
+        }
+    })
+
+</script>
+{% endblock js-extender %}
