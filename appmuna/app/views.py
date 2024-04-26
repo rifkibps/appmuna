@@ -303,7 +303,9 @@ class PublicationClassView(View):
         }
 
         return render(request, 'app/publications.html', context) 
-    
+
+
+
 class PublicationPreviewClassView(View):
 
     def get(self,request):
@@ -312,3 +314,42 @@ class PublicationPreviewClassView(View):
         }
 
         return render(request, 'app/publication_preview.html', context) 
+
+
+class InfographicsClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Infografis Statistik'
+        }
+
+        return render(request, 'app/infographics.html', context)
+
+class InfographicPreviewClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Publikasi Data Statistik'
+        }
+
+        return render(request, 'app/infographic_preview.html', context)
+    
+
+class VideographicsClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Videografis Statistik'
+        }
+
+        return render(request, 'app/videographics.html', context)
+
+
+class VideographicPreviewClassView(View):
+
+    def get(self,request):
+        context = {
+            'title' : 'Publikasi Data Statistik'
+        }
+
+        return render(request, 'app/videographic_preview.html', context)

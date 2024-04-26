@@ -14,9 +14,15 @@ urlpatterns = [
     path('app/service', views.DataRequestsClassView.as_view(), name='data-request-app'),
     path('app/service/consult-data/preview', views.DataRequestPreviewClassView.as_view(), name='data-request-preview'),
     
-
     path('app/media/publications', views.PublicationClassView.as_view(), name='publications'),
     path('app/media/publications/preview', views.PublicationPreviewClassView.as_view(), name='publication-preview'),
+    path('app/media/infographics', views.InfographicsClassView.as_view(), name='infographs'),
+    path('app/media/infographics/preview', views.InfographicPreviewClassView.as_view(), name='infograph-preview'),
+
+
+    path('app/media/videographics', views.VideographicsClassView.as_view(), name='videographics'),
+    path('app/media/videographic/preview', views.VideographicPreviewClassView.as_view(), name='videographic-preview'),
+
     
     path('app/search', views.SearchEngineClassView.as_view(), name='search-app')
     

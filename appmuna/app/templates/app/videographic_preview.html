@@ -72,7 +72,7 @@
                     <div class="page-title-left">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);" style="color:#003C80">Beranda</a></li>
-                            <li class="breadcrumb-item active text-truncate"><a href="javascript: void(0);" style="color:#003C80">Publikasi Statistik</a></li>
+                            <li class="breadcrumb-item active text-truncate"><a href="javascript: void(0);" style="color:#003C80">Videografis Statistik</a></li>
                             </li>
                         </ol>
                     </div>
@@ -83,7 +83,7 @@
         <div class="row py-2">
             <div class="col-12">
                 <div class="mb-2">
-                    <h3 class="font-weight-bold" style="color:#003C80"><strong>Publikasi Statistik</strong></h3>
+                    <h3 class="font-weight-bold" style="color:#003C80"><strong>Videografis Statistik</strong></h3>
                     <br>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus pariatur architecto temporibus doloribus eveniet repudiandae, tempore sint aspernatur, assumenda voluptas expedita voluptatibus, dolor quidem ducimus animi. Debitis laudantium dolores expedita.
                 </div>
@@ -91,7 +91,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <a href="{% url 'app:publications' %}" class="btn btn-sm btn-danger"><i class="mdi mdi-chevron-double-left"></i></a>
+                <a href="{% url 'app:videographics' %}" class="btn btn-sm btn-danger"><i class="mdi mdi-chevron-double-left"></i></a>
             </div>
         </div>
     </div>
@@ -117,13 +117,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <small>No Katalog: B.189/7402/02/2024</small><br>
-                            <small>No Publikasi: B.189/7402/02/2024</small><br>
-                            <small>No ISSN: 7402/02/2024</small>
-                        </div>
-
-                        <div class="mb-3">
-                            <h5>Abstrak:</h5>
+                            <h5>Deskripsi:</h5>
                             <p style="text-align:justify">
                                 Lorem ipsum dolor sit amet consectetur, adipisicing elit. Numquam quam ratione maiores optio quia dolorum! Perferendis cum deserunt, impedit aspernatur iusto odit, dolore voluptatem dignissimos, laudantium deleniti delectus sunt? Nam.
                             </p>
@@ -137,6 +131,13 @@
                         </div>
 
                         <div class="mb-3">
+                            <h5>Perubahan Terakhir:</h5>
+                            <p style="text-align:justify">
+                                30 Februari 2024
+                            </p>
+                        </div>
+
+                        <div class="mb-3">
                             <h5>Sumber:</h5>
                             <p style="text-align:justify">
                                 Badan Pusat Statistik Kab. Muna
@@ -144,9 +145,9 @@
                         </div>
 
                         <div class="mb-3">
-                            <h5>Revisi Ke:</h5>
+                            <h5>Jumlah Kunjungan:</h5>
                             <p style="text-align:justify">
-                                6 (Terakhir diperbarui 25 Maret 2024)
+                                1026
                             </p>
                         </div>
 
@@ -155,43 +156,42 @@
             </div> <!-- end row-->
         </div>
         <div class="row p-2">    
-            <div class="col-lg-9">
+            <div class="col-lg-12">
                 <div class="mt-5">
-                    <h4 style="color:#003C80">Preview Publikasi</h4>
-                    <div class="card bg-dark">
-                        <div class="card-body p-1">
-                            <embed src="{% static 'customs/file.pdf' %}" style="width: 100%;height: 900px;border: none;"></embed>
-                        </div>
+                    <h4 style="color:#003C80">Preview Videografis</h4>
+                    <div class="card-body p-1">
+                        <iframe class="shadow-sm rounded" src="https://www.youtube.com/embed/TFNsobDZ9aI?autoplay=1" title="Perkembangan Pariwisata Januari 2024" frameborder="0" allowfullscreen="" style="width: 100%;height: 600px;border: none;"></iframe>
                     </div>
                 </div>
                 
             </div>
+        </div>
+
+        <div class="row mt-4 p-2">
+            <h4 class="mb-2" style="color:#003C80">Videografis Terkait</h4>
+            {% for i in '0123' %}
 
             <div class="col-lg-3">
-                <div class="mt-5">
-                    <h4 style="color:#003C80">Publikasi Terkait</h4>
-
-                    {% for i in '01234' %}
-    
-                    <a href="{% url 'app:publication-preview' %}" class="list-group-item list-group-item-action pt-1 pb-0 mb-2" style="border-radius:10px; border:none">
-                        <div class="row g-0 align-items-center">
-                            <div class="col-sm-5">
-                                <img class="ms-1 rounded" src="/media/thumbnail-publications/Thumbnail-1_-_Copy.png" width="85" alt="Generic placeholder image">
-                            </div>
-                            <div class="col-sm-7">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1 fw-normal" style="color:#003C80">Kemiskinan di Kabupaten Muna Tahun 2023 Meningkat 2% dibanding tahun sebelumnya</h5>
-                                </div>
-
-                                <ul class="px-0 mt-1" style="list-style:none;">
-                                    <li class="d-inline" title="Release Date"><span class="badge rounded-pill font-10" style="background-color:#003C80; padding:5px 10px 5px 10px;">Rilis 3 Feb 2023</span></li>
-                                </ul>
-                            </div>
+                <a href="{% url 'app:publication-preview' %}" class="list-group-item list-group-item-action pt-1 pb-0 mb-2" style="border-radius:10px; border:none">
+                    <div class="row g-0 align-items-center">
+                        <div class="col-sm-5">
+                            <img class="ms-1 rounded" src="/media/thumbnail-publications/Thumbnail-1_-_Copy.png" width="85" alt="Generic placeholder image">
                         </div>
-                    </a>
-                    {% endfor %}
-                </div>
+                        <div class="col-sm-7">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1 fw-normal" style="color:#003C80">Kemiskinan di Kabupaten Muna Tahun 2023 Meningkat 2%</h5>
+                            </div>
+
+                            <ul class="px-0 mt-1" style="list-style:none;">
+                                <li class="d-inline" title="Release Date"><span class="badge rounded-pill font-10" style="background-color:#003C80; padding:5px 10px 5px 10px;">Rilis 3 Feb 2023</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+
             </div>
+
+            {% endfor %}
         </div>
     </div>
  

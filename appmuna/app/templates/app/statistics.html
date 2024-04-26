@@ -108,7 +108,7 @@
         <div class="row py-2">
             <div class="col-12">
                 <div class="mb-2">
-                    <h3 class="font-weight-bold" style="color:#003C80"><strong>Sosial dan Kependudukan</strong></h3>
+                    <h3 class="font-weight-bold" style="color:#003C80"><strong>Tabel Statistik</strong></h3>
                     <br>
                     <p>
                         Revolusi Mental merupakan Gerakan untuk mengubah cara pandang, cara piker, sikap, perilaku, dan cara kerja bangsa Indonesia, yang mengacu pada nilai-nilai integritas, etos kerja, gotong royong, berlandaskan Pancasila sehingga bangsa Indonesia menjadi negara yang maju, modern, makmur, sejahtera, dan bermartabat. Revolusi Mental memiliki tiga tujuan. Pertama, untuk membangkitkan kesadaran dan membangun sikap optimistik dalam menatap masa depan Indonesia sebagai negara dengan kekuatan besar untuk berprestasi tinggi dan produktif sehingga menjadi bangsa yang maju dan modern. Kedua, untuk mengubah cara pandang, cara pikir, sikap, perilaku, dan cara kerja yang berorientasi pada kemajuan dan kemodernan sehingga Indonesia menjadi bangsa yang besar dan berdaya saing sehingga mampu berkompetisi dengan bangsa-bangsa lain. Ketiga, untuk mewujudkan Indonesia yang berdaulat dalam politik, berdikari dalam ekonomi, dan berkepribadian dalam kebudayaan melalui pembentukan manusia Indonesia baru yang unggul.
@@ -126,18 +126,21 @@
         <div class="row p-2">
             <div class="col-lg-3">
                 <h4 class="p-2" ><i class="mdi mdi-arch"></i> Subjek Statistik</h4>
-                <button class="btn btn-primary my-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">Pilih Jenis Data</button>
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Sosial dan Kependudukan</h5>
+
+                        <div class="d-flex align-items-start">
+                            <img class="me-3 rounded-circle" src="{% static 'app-design/assets/images/users/avatar-2.jpg' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">Sosial dan Kependudukan</h5>
+                        </div>
                                         
                         <div id="cardCollpase1" class="collapse pt-3 show">
                             <ul style="padding-left:0px!important;font-size:15px">
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary fw-bold" style="color:#003C80!important">Tenaga Kerja <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Penge... <span class="badge badge-primary-lighten float-end ms-2">20</span></a></p></li>
+                                <li class="rounded bg-primary px-2 pt-1 mb-1" style="list-style:none;line-height:45px"><p><a href="javascript:void(0)" class="text-white fw-bold">Tenaga Kerja <span class="badge bg-white text-primary float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
@@ -155,7 +158,12 @@
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase2" role="button" aria-expanded="false" aria-controls="cardCollpase2"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Ekonomi dan Perdagangan</h5>
+
+                        <div class="d-flex align-items-start">
+                            <img class="me-3 rounded-circle" src="{% static 'app-design/assets/images/users/avatar-2.jpg' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">Ekonomi dan Perdagangan</h5>
+                        </div>
+                        
                                         
                         <div id="cardCollpase2" class="collapse pt-3">
                             <ul style="padding-left:10px!important">
@@ -178,7 +186,12 @@
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase3" role="button" aria-expanded="false" aria-controls="cardCollpase3"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Pertanian dan Pertambangan</h5>
+
+                        <div class="d-flex align-items-start">
+                            <img class="me-3 rounded-circle" src="{% static 'app-design/assets/images/users/avatar-2.jpg' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">Pertanian dan Pertambangan</h5>
+                        </div>
+                        
                                         
                         <div id="cardCollpase3" class="collapse pt-3">
                             <ul style="padding-left:10px!important">
@@ -198,380 +211,79 @@
 
             </div>
     
-            <div class="col-lg-9 px-4">
-                <ul class="nav nav-tabs nav-bordered mb-4" >
-                    <li class="nav-item mx-1">
-                        <a href="#stats" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
-                            <span class="d-none d-md-block" style="font-weight:300;">Statistik <i class="mdi mdi-file-table-box-multiple-outline"></i></span>
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1">
-                        <a href="#pubs" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                            <span class="d-none d-md-block" style="font-weight:300;">Publikasi <i class="mdi mdi-book-open-page-variant-outline"></i></span>
-                        </a>
-                    </li>
+            <div class="col-lg-9 px-4 mt-5">
+                <div class="card pb-3">
+                    <div class="card-body px-3 pt-3 pb-0">
+                        <div class="mb-3 px-1">
+                            <h5 class="font-weight-bold"><strong><i class="mdi mdi-file-table-box-multiple-outline"></i> Indikator Statistik</strong></h5>
+                        </div>
+
+                        <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 ">
+                            <thead >
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Subjek</th>
+                                    <th>Data Statistik</th>
+                                    <th>Kategori Statistik</th>
+                                    <th class="text-center">Periode Data</th>
+                                    <th class="text-center">Update Terakhir</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                             
+                            </thead>
+                            <tbody>
+                                {% for i in '1234567'  %}
+                                <tr>
+                                    <td class="text-center">{{forloop.counter}}</td>
+                                    <td class="text-center">Kemiskinan</td>
+                                    <td><a href="{% url 'app:statistics-app-preview' %}" class="text-secondary">Kemiskinan Kab. Muna Tahun 2024</a></td>
+                                    <td>Statistik Dasar</td>
+                                    <td class="text-center">Tahunan</td>
+                                    <td class="text-center">28 Mar 2024</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                            <i class="mdi mdi-chevron-right"></i>
+                                        </button>
+                                        <div class="dropdown-menu" style="font-size:14px;">
+                                            <a class="dropdown-item pb-0" href="{% url 'app:statistics-app-preview' %}"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
+                                            <a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a> 
+                                        </div>
+                                    </td>
     
-                    <li class="nav-item mx-1">
-                        <a href="#brs" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                            <span class="d-none d-md-block" style="font-weight:300;">BRS <i class="mdi mdi-newspaper-variant-multiple"></i></span>
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1">
-                        <a href="#infographs" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
-                            <span class="d-none d-md-block" style="font-weight:300;">Infografis <i class="mdi mdi-chart-bar"></i></span>
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1 dropdown">
-                        <div class="input-group" style="padding-top:7px">
-                            <input type="text" class="form-control" placeholder="Telusuri data statistik ..." autocomplete="off" style="width:220px;height:35px;background-color:#ffffff;border-radius:5px;font-size:14px">
-                            <span class="mdi mdi-magnify search-icon" style="margin-top:5px;margin-left:-25px!important; z-index:10"></span>
-                        </div>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane show active" id="stats">
-                        <div class="card pb-3">
-                            <div class="card-body p-3">
-                                <div class="mb-3 px-1">
-                                    <h5 class="font-weight-bold"><strong><i class="mdi mdi-file-table-box-multiple-outline"></i> Indikator Statistik</strong></h5>
-                                </div>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
 
-                                <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 ">
-                                    <thead >
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Data Statistik</th>
-                                            <th class="text-center">Periode Data</th>
-                                            <th class="text-center">Update Terakhir</th>
-                                            <th class="text-center"></th>
-                                        </tr>
-                                     
-                                    </thead>
-                                    <tbody>
-                                        {% for i in '1234567'  %}
-                                        <tr>
-                                            <td class="text-center">{{forloop.counter}}</td>
-                                            <td><a href="{% url 'app:statistics-app-preview' %}" class="text-secondary">Kemiskinan Kab. Muna Tahun 2024</a></td>
-                                            <td class="text-center">Tahunan</td>
-                                            <td class="text-center">28 Mar 2024</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </button>
-                                                <div class="dropdown-menu" style="font-size:14px;">
-                                                    <a class="dropdown-item pb-0" href="{% url 'app:statistics-app-preview' %}"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
-                                                    <a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a> 
-                                                </div>
-                                            </td>
-            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <nav>
-                                            <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                        <i class="mdi mdi-chevron-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                                        <i class="mdi mdi-chevron-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    </div>
-                    <div class="tab-pane" id="pubs">
-                        <div class="card pb-3">
-                            <div class="card-body p-3">
-                                <div class="mb-3 px-1">
-                                    <h5 class="font-weight-bold"><strong><i class="mdi mdi-book-open-page-variant-outline"></i> Publikasi Statistik</strong></h5>
-                                </div>
-
-                                <table class="table table-sm table-striped table-bordered table-centered nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Publikasi Statistik</th>
-                                            <th class="text-center">Tanggal Rilis</th>
-                                            <th class="text-center">Sumber</th>
-                                            <th class="text-center"></th>
-                                        </tr>
-                                     
-                                    </thead>
-                                    <tbody>
-                                        {% for i in '1234567'  %}
-                                        <tr>
-                                            <td class="text-center">{{forloop.counter}}</td>
-                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                            <td class="text-center">28 Mar 2024</td>
-                                            <td class="text-center">BPS Kab Muna</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </button>
-                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                                </div>
-                                            </td>
-            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <nav>
-                                            <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                        <i class="mdi mdi-chevron-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                                        <i class="mdi mdi-chevron-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="brs">
-                        <div class="card pb-3">
-                            <div class="card-body p-3">
-                                <div class="mb-3 px-1">
-                                    <h5 class="font-weight-bold"><strong><i class="mdi mdi-newspaper-variant-multiple"></i> Berita Resmi Statistik</strong></h5>
-                                </div>
-
-                                <table class="table table-sm table-striped table-bordered table-centered nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Berita Statistik</th>
-                                            <th class="text-center">Tanggal Rilis</th>
-                                            <th class="text-center">Sumber</th>
-                                            <th class="text-center"></th>
-                                        </tr>
-                                     
-                                    </thead>
-                                    <tbody>
-                                        {% for i in '1234567'  %}
-                                        <tr>
-                                            <td class="text-center">{{forloop.counter}}</td>
-                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                            <td class="text-center">28 Mar 2024</td>
-                                            <td class="text-center">BPS Kab Muna</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </button>
-                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                                </div>
-                                            </td>
-            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <nav>
-                                            <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                        <i class="mdi mdi-chevron-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                                        <i class="mdi mdi-chevron-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="infographs">
-                        <div class="card pb-3">
-                            <div class="card-body p-3">
-                                <div class="mb-3 px-1">
-                                    <h5 class="font-weight-bold"><strong><i class="mdi mdi-chart-bar"></i> Infografis Statistik</strong></h5>
-                                </div>
-                                <table class="table table-sm table-striped table-centered table-bordered nowrap w-100">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">No</th>
-                                            <th>Infografis</th>
-                                            <th class="text-center">Tanggal Rilis</th>
-                                            <th class="text-center">Sumber</th>
-                                            <th class="text-center"></th>
-                                        </tr>
-                                     
-                                    </thead>
-                                    <tbody>
-                                        {% for i in '1234567'  %}
-                                        <tr>
-                                            <td class="text-center">{{forloop.counter}}</td>
-                                            <td>Kemiskinan Kab. Muna Tahun 2024</td>
-                                            <td class="text-center">28 Mar 2024</td>
-                                            <td class="text-center">BPS Kab Muna</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                                    <i class="mdi mdi-chevron-right"></i>
-                                                </button>
-                                                <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                                                    <a class="dropdown-item pb-0" href="#">Preview <i class="mdi mdi-youtube-subscription"></i></a>
-                                                    <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                                                </div>
-                                            </td>
-            
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-
-                                <div class="row mt-4">
-                                    <div class="col-12">
-                                        <nav>
-                                            <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                        <i class="mdi mdi-chevron-left"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                                <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                                <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                                        <i class="mdi mdi-chevron-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                </div>
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <nav>
+                                    <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
+                                        <li class="page-item">
+                                            <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                                                <i class="mdi mdi-chevron-left"></i>
+                                            </a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
+                                        <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
+                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
+                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                                                <i class="mdi mdi-chevron-right"></i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
 
-    <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
-        <div class="offcanvas-body small d-flex justify-content-center">
-            <div class="row py-3">
-                <div class="col-md-3">
-                    <div class="card cta-box bg-primary text-white app-stat-active" id="table-statistic-app" style="height:180px; width:200px">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <h5 class="m-0 fw-normal">Tabel Statistik</h5>
-
-                                <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="100" alt="Generic placeholder image">
-
-                            </div>
-                        </div>
-                        <!-- end card-body -->
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <hr class="text-center fw-bold" style="width:110px;height:5px;border-radius:20px; margin-top:-5px; color:#0417F3!important">
-                    </div>
-                    <!-- end card-->
-                </div>
-                <div class="col-md-3">
-                    <div class="card cta-box bg-danger text-white" id="table-dev-app" style="height:180px; width:200px">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <h5 class="m-0 fw-normal">Indikator Pembangunan</h5>
-
-                                <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="100" alt="Generic placeholder image">
-
-                            </div>
-                        </div>
-                        <!-- end card-body -->
-                    </div>
-                    <!-- end card-->
-                    
-                </div>
-                <div class="col-md-3">
-                    <div class="card cta-box bg-success text-white" id="table-str-app" style="height:180px; width:200px">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <h5 class="m-0 fw-normal">Indikator Strategis</h5>
-
-                                <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="100" alt="Generic placeholder image">
-
-                            </div>
-                        </div>
-                        <!-- end card-body -->
-                    </div>
-                    <!-- end card-->
-
-                  
-                </div>
-                <div class="col-md-3">
-                    <div class="card cta-box bg-info text-white" id="table-bigdata-app" style="height:180px; width:200px">
-                        <div class="card-body">
-                            <div class="text-center">
-                                <h5 class="m-0 fw-normal">Big Data Analysis</h5>
-
-                                <img class="my-3" src="{% static 'app-design/assets/images/report.svg' %}" width="100" alt="Generic placeholder image">
-
-                            </div>
-                        </div>
-                        <!-- end card-body -->
-                    </div>
-                    <!-- end card-->
-
-                </div>
-            </div>
-        </div>
-    </div>
 </section>
 {% endblock main-content %}
 

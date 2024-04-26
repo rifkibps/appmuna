@@ -140,8 +140,15 @@
             <li class="nav-item mx-lg-1">
               <a class="nav-link active" href="{% url 'app:home-app' %}">Beranda</a>
             </li>
-            <li class="nav-item mx-lg-1">
-              <a class="nav-link" href="{% url 'app:statistics-app' %}">Data Statistik</a>
+            <li class="nav-item dropdown mx-lg-1">
+              <a class="nav-link dropdown-toggle arrow-none" href="#" id="stats-data" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Data Statistik<div class="arrow-down"></div>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="stats-data">
+                  <a href="{% url 'app:statistics-app' %}" class="dropdown-item">Tabel Statistik</a>
+                  <a href="{% url 'app:publications' %}" class="dropdown-item">Indikator Pembangunan</a>
+                  <a href="{% url 'app:infographs' %}" class="dropdown-item">Indikator Strategis</a>
+              </div>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layouts" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -149,11 +156,15 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="topnav-layouts">
                   <a href="{% url 'app:publications' %}" class="dropdown-item">Berita Statistik</a>
-                  <a href="#" class="dropdown-item">Publikasi Statistik</a>
-                  <a href="#" class="dropdown-item">Infografis</a>
-                  <a href="#" class="dropdown-item">Videografis</a>
+                  <a href="{% url 'app:publications' %}" class="dropdown-item">Publikasi Statistik</a>
+                  <a href="{% url 'app:infographs' %}" class="dropdown-item">Infografis</a>
+                  <a href="{% url 'app:videographics' %}" class="dropdown-item">Videografis</a>
               </div>
           </li>
+
+            <li class="nav-item mx-lg-1">
+              <a class="nav-link" href="{% url 'app:data-request-app' %}">Big Data Analitycs</a>
+            </li>
             <li class="nav-item mx-lg-1">
               <a class="nav-link" href="{% url 'app:data-request-app' %}">Layanan Statistik</a>
             </li>
