@@ -1641,6 +1641,7 @@ class BackendContentInputClassView(LoginRequiredMixin,View):
             context['col_groups'] = ['Tidak tersedia']
             context['col_group_name'] = ''
             context['range'] = range(1, 4)
+            
             if data_indicator.col_group_id is not None:
                 data_chars = models.BackendCharacteristicItemsModel.objects.filter(char_id = data_indicator.col_group_id).order_by('id')
                 context['col_groups'] = data_chars.values()

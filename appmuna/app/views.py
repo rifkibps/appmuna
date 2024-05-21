@@ -402,10 +402,113 @@ class StatisticDetailTableClassView(View):
 
             model = models.BackendIndicatorsModel.objects.filter(pk=indicator_id)
             if model.exists():
+                model = model.first()
+                model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
+                model_data_period = model_data.values('year', 'item_period').distinct()
+                
+                # List Periods
+                list_periods = []
+                for dt in model_data_period:
+
+                    check_exist = next((index for (index, d) in enumerate(list_periods) if d["year"] == dt['year']), None)
+                    if check_exist is None:
+                        list_periods.append({
+                            "year"    : dt['year'],
+                            "periods" : [
+                                {
+                                    'id' : dt["item_period"],
+                                    'name' : models.BackendPeriodsModel.objects.filter(pk=dt["item_period"]).first().name
+                                }
+                            ]
+                        })
+                    else:
+                        list_periods[check_exist]['periods'].append(
+                            {
+                                'id' : dt["item_period"],
+                                'name' : models.BackendPeriodsModel.objects.filter(pk=dt["item_period"]).first().name
+                            }
+                        )
+
+                # Subjects
+                model_sbj = models.BackendSubjectsModel.objects.filter(show_state = '1').order_by('subject_group', 'name')
+
+                subjectItems = []
+                for item in model_sbj:
+
+                        qry = models.BackendContentIndicatorsModel.objects.values('indicator_id','indicator_id__subject_id').filter(indicator_id__subject_id = str(item.pk)).distinct()
+
+                        check_exist = next((index for (index, d) in enumerate(subjectItems) if d["groups"] == item.get_subject_group_display()), None)
+                        if check_exist is None:
+                            subjectItems.append({
+                                "groups"    : item.get_subject_group_display(),
+                                "items"     : [
+                                    {
+                                        'id' : item.id,
+                                        'name' : item.name if len(item.name) <= 20 else f'{item.name[:20]}...',
+                                        'count' : qry.count() if qry.exists() else 0
+                                    }
+                                ]
+                            })
+                        else:
+                            subjectItems[check_exist]['items'].append(
+                                {
+                                    'id' : item.id,
+                                    'name' : item.name if len(item.name) <= 20 else f'{item.name[:20]}...',
+                                    'count' : qry.count() if qry.exists() else 0
+                                }
+                            )
+
+                # Content Data
+                data_contents = model_data.values()
+
+                if model.col_group_id:
+                    pass
+                else:
+                    pass
+                print(model_data_period)
+                print(list_periods)
+
+                data_content_table = []
+
+                for dt in data_contents:
+
+                    if len(dt['item_char']) > 0:
+                        content_data = {
+                            dt["item_row"] : {
+                                dt["item_char"] : {
+                                    'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                                    'id' : dt['id']
+                                }
+                            }
+                        }
+                    else:
+                        content_data = {
+                            dt["item_row"] : {
+                                'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                                'id' : dt['id']
+                            }
+                        }
+                    data_content_table.append(content_data)
+
+                # Rows Data
+                data_rows = models.BackendRowsItemsModel.objects.filter(row_id = model.row_group_id).order_by('order_num')
+
+                # Cols Data
+                col_groups = ['Tidak Tersedia']
+                if model.col_group_id is not None:
+                    data_chars = models.BackendCharacteristicItemsModel.objects.filter(char_id = model.col_group_id).order_by('id')
+                    col_groups = data_chars.values()
+            
                 context = {
                     'title' : 'Kemiskinan | Tabel Statistik',
-                    'table' : model.first()
+                    'table' : model,
+                    'rows_groups' : data_rows.values(),
+                    'col_groups': col_groups,
+                    'line_height_filter': 80*model_data_period.count(),
+                    'periods' : list_periods,
+                    'subjects' : subjectItems
                 }
+
                 return render(request, 'app/statistics_preview.html', context)
             else:
                 return redirect('app:statistics-app')
@@ -426,8 +529,9 @@ class DataRequestsClassView(View):
 class DataRequestPreviewClassView(View):
 
     def get(self,request):
+        
         context = {
-            'title' : 'Konsultasi Data Statistik'
+            'title' : 'Konsultasi Data Statistik',
         }
 
         return render(request, 'app/data_request_preview.html', context) 
