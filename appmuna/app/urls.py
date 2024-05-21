@@ -8,9 +8,14 @@ urlpatterns = [
     path('app/data-consult', views.HomeDataConsultClassView.as_view(), name='data-consult-app'),
     path('app/data-tracing', views.HomeDataTraceClassView.as_view(), name='data-tracing-app'),
 
-
     path('app/statistics', views.StatisticsTablesClassView.as_view(), name='statistics-app'),
+    path('app/statistics/data', views.StatisticsDataTablesClassView.as_view(), name='statistics-app-data'),
+
     path('app/statistics/preview', views.StatisticDetailTableClassView.as_view(), name='statistics-app-preview'),
+    path('app/development-data', views.DevelopmenDataClassView.as_view(), name='dev-app'),
+    path('app/strategic-data', views.StrategicDataClassView.as_view(), name='strategic-app'),
+    
+
     path('app/service', views.DataRequestsClassView.as_view(), name='data-request-app'),
     path('app/service/consult-data/preview', views.DataRequestPreviewClassView.as_view(), name='data-request-preview'),
     

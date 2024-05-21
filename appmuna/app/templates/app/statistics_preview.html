@@ -83,7 +83,7 @@
 <!-- START HERO -->
 
 
-<section class="hero-section" style="height:630px">
+<section class="hero-section" >
     <div class="container">
         <div class="row align-items-center" id="search-content">
             <div class="col-md-6 mt-4">
@@ -122,15 +122,20 @@
                 </div>
             </div>
         </div>
-
     </div>
 </section>
 
 <!-- END HERO -->
-<section class="py-3 bg-white" id="main-content" style="margin-top:-50px;"> 
+<section class="py-4 bg-white" id="main-content" style="margin-top:-50px;"> 
     <div class="container " >
         <div class="row justify-content-end">
             <button class="btn bg-white"  style="width:100px; height:40px; font-size:12px; border-radius:20px; margin-top:-45px; padding: 8px 0px 8px 5px; z-index:10; margin-right:10px!important;" id="expandButton">Expand <i class="mdi mdi-arrow-up-down"></i></button>
+        </div>
+     
+        <div class="row">
+            <div class="mb-3">
+                <a class="btn btn-primary btn-primary px-2" href="{% url 'app:statistics-app' %}"><i class="mdi mdi-chevron-left"></i> Kembali</a>
+            </div>
         </div>
         <div class="row">
             <div class="col-12">
@@ -149,14 +154,16 @@
         <div class="row pt-2">
 
             <div class="col-lg-9">
+
                 <div class="mb-2">
-                    <h3 class="font-weight-bold" style="color:#003C80"><strong>Garis Kemiskinan menurut Kabupaten/Kota di Provinsi Sulawesi Tenggara, Rupiah (Rp)</strong></h3>
+                    <h3 class="font-weight-bold" style="color:#003C80"><strong>{{table.name}}, ({{table.unit_id.name}})</strong></h3>
                 </div>
 
                 <div class="mb-3 mt-4">
                     <h5>Konsep Data: </h5>
                     <div class="mt-1">
-                        <p>Revolusi Mental merupakan Gerakan untuk mengubah cara pandang, cara piker, sikap, perilaku, dan cara kerja bangsa Indonesia, yang mengacu pada nilai-nilai integritas, etos kerja, gotong royong, berlandaskan Pancasila sehingga bangsa Indonesia menjadi negara yang maju, modern, makmur, sejahtera, dan bermartabat.
+                        <p>
+                            {{table.desc}}
                         </p>
                     </div>
                 </div>
@@ -180,7 +187,7 @@
                 <div class="mb-3">
                     <h5>Satuan/Ukuran: </h5>
                     <div class="mt-1">
-                        <p> Rupiah (Rp) </p>
+                        <p> {{table.unit_id.name}} </p>
                     </div>
                 </div>
 
@@ -188,8 +195,8 @@
                     <h5>Karakteristik Indikator: </h5>
                     <div class="mt-1">
                         <ul>
-                            <li>Kelompok Baris: Persentase Kemiskinan Menurut Jenis Kelamin</li>
-                            <li>Kelompok Kolom: Kabupaten/Kota di Sulawesi Tenggara</li>
+                            <li>Kelompok Baris: {{table.row_group_id.name}}</li>
+                            <li>Kelompok Kolom: {% if table.col_group_id %} {{table.col_group_id.name}} {% else %} Series {{table.time_period_id.name}} {% endif %}</li>
                         </ul>
                     </div>
                 </div>
@@ -197,7 +204,7 @@
                 <div class="mb-3">
                     <h5>Sumber: </h5>
                     <div class="mt-1">
-                        <p>Badan Pusat Statistik (BPS) Kab. Muna 2024</p>
+                        <p>{{table.footer_desc}}</p>
                     </div>
                 </div>
 
@@ -209,14 +216,14 @@
                         <div class="mb-3">
                             <h5>Kategori Statistik: </h5>
                             <div class="mt-1">
-                                <span class="badge bg-primary">Statistik Dasar</span>
+                                <span class="badge bg-primary">{{table.get_stat_category_display}}</span>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <h5>Periode Data: </h5>
                             <div class="mt-1">
-                                <p>Triwulanan</p>
+                                <p>{{table.time_period_id.name}}</p>
                             </div>
                         </div>
 
@@ -297,11 +304,11 @@
                 <h4 class="p-2 mb-1" ><i class="mdi mdi-arch"></i> Pilih Dataset</h4>
                 <div class="card mb-2 mt-3" id="dataset-card">
                     <div class="card-body">
-                        <div class="card-widgets">
-                            <a data-bs-toggle="collapse" href="#cardCollpase" role="button" aria-expanded="false" aria-controls="cardCollpase"><i class="mdi mdi-chevron-double-right"></i></a>
+                        <div class="d-flex align-items-center ">
+                            <img class="me-2" src="{% static 'customs/images/conf-data.png' %}" width="30" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">Pengaturan Dataset</h5>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Pengaturan Dataset</h5>
-                                        
+
                         <div id="cardCollpase" class="collapse pt-3 show">
                             <div class="mb-3">
                                 <h5>Periode: </h5>
@@ -561,11 +568,10 @@
 
                 <div class="card mb-2 mt-3 d-none" id="comparison-card">
                     <div class="card-body">
-                        <div class="card-widgets">
-                            <a data-bs-toggle="collapse" href="#cardCollpase" role="button" aria-expanded="false" aria-controls="cardCollpase"><i class="mdi mdi-chevron-double-right"></i></a>
+                        <div class="d-flex align-items-center ">
+                            <img class="me-2 rounded-circle" src="{% static 'customs/images/compare2.png' %}" width="35" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">Bandingkan Dataset</h5>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Bandingkan 2 Dataset</h5>
-                                        
                         <div id="cardCollpase" class="collapse pt-3 show">
                             <div class="mb-3">
                                 <h5>Periode Awal: </h5>
@@ -967,17 +973,22 @@
                     </div>
                 </div> <!-- end card-->
 
-                <h4 class="mx-2 mt-5 mb-3" ><i class="mdi mdi-arch"></i> Subjek Statistik</h4>
+                <h4 class="p-2" ><i class="mdi mdi-arch"></i> Subjek Statistik</h4>
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Sosial dan Kependudukan</h5>
+
+                        <div class="d-flex align-items-start">
+                            <img class="me-3 rounded-circle" src="{% static 'customs/images/social.png' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">Sosial dan Kependudukan</h5>
+                        </div>
+                                        
                         <div id="cardCollpase1" class="collapse pt-3 show">
                             <ul style="padding-left:0px!important;font-size:15px">
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary fw-bold" style="color:#003C80!important">Tenaga Kerja <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Penge... <span class="badge badge-primary-lighten float-end ms-2">20</span></a></p></li>
+                                <li class="rounded bg-primary px-2 pt-1 mb-1" style="list-style:none;line-height:45px"><p><a href="javascript:void(0)" class="text-white fw-bold">Tenaga Kerja <span class="badge bg-white text-primary float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
                                 <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
@@ -995,7 +1006,12 @@
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase2" role="button" aria-expanded="false" aria-controls="cardCollpase2"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Ekonomi dan Perdagangan</h5>
+
+                        <div class="d-flex align-items-start">
+                            <img class="me-3 rounded-circle" src="{% static 'customs/images/economics.png' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">Ekonomi dan Perdagangan</h5>
+                        </div>
+                        
                                         
                         <div id="cardCollpase2" class="collapse pt-3">
                             <ul style="padding-left:10px!important">
@@ -1018,7 +1034,12 @@
                         <div class="card-widgets">
                             <a data-bs-toggle="collapse" href="#cardCollpase3" role="button" aria-expanded="false" aria-controls="cardCollpase3"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
-                        <h5 class="card-title mb-0" style="color:#003C80">Pertanian dan Pertambangan</h5>
+
+                        <div class="d-flex align-items-start">
+                            <img class="me-3 rounded-circle" src="{% static 'customs/images/farm.png' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">Pertanian dan Pertambangan</h5>
+                        </div>
+                        
                                         
                         <div id="cardCollpase3" class="collapse pt-3">
                             <ul style="padding-left:10px!important">
@@ -1413,8 +1434,8 @@
                                 <div class="row my-1">
                                     <div class="col-sm-6">
                                         <div class="form-check form-switch mb-2">
-                                            <input type="checkbox" class="form-check-input" id="customSwitch1">
-                                            <label class="form-check-label font-14" for="customSwitch1">Bekukan Kolom</label>
+                                            <input type="checkbox" class="form-check-input" id="customSwitch1" onchange="showData()">
+                                            <label class="form-check-label font-14" for="customSwitch1">Tampilkan Data Pembanding</label>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 d-flex justify-content-end" style="padding-right:18px!important">
@@ -1430,29 +1451,32 @@
                                                 <tr>
                                                     <th rowspan="2" class="text-center sticky-col header-col first-col">No</th>
                                                     <th rowspan="2" class="sticky-col header-col second-col">Kelompok</th>
-                                                    <th class="text-center" colspan="3">Hasil Perbandingan (Triwulan I 2023 - Triwulan II 2023)</th>
-                                                    <th class="text-center" colspan="3">Karakteristik Kemiskinan (Triwulan I, 2023)</th>
-                                                    <th class="text-center" colspan="3">Karakteristik Kemiskinan (Triwulan II, 2023)</th>
+                                                    <th class="text-center" colspan="3">Perbandingan (Triwulan I 2023 - Triwulan II 2023)</th>
+                                                    <th class="text-center compare-item d-none" colspan="3">Karakteristik Kemiskinan (Triwulan I, 2023)</th>
+                                                    <th class="text-center compare-item d-none" colspan="3">Karakteristik Kemiskinan (Triwulan II, 2023)</th>
                                                 </tr>
                                                 <tr>
                                                     <th class="text-center">Laki-laki</th>
                                                     <th class="text-center">Perempuan</th>
                                                     <th class="text-center">Laki-laki + Perempuan</th>
 
-                                                    <th class="text-center">Laki-laki</th>
-                                                    <th class="text-center">Perempuan</th>
-                                                    <th class="text-center">Laki-laki + Perempuan</th>
+                                                    <th class="text-center compare-item d-none">Laki-laki</th>
+                                                    <th class="text-center compare-item d-none">Perempuan</th>
+                                                    <th class="text-center compare-item d-none">Laki-laki + Perempuan</th>
 
-                                                    <th class="text-center">Laki-laki</th>
-                                                    <th class="text-center">Perempuan</th>
-                                                    <th class="text-center">Laki-laki + Perempuan</th>
+                                                    <th class="text-center compare-item d-none">Laki-laki</th>
+                                                    <th class="text-center compare-item d-none">Perempuan</th>
+                                                    <th class="text-center compare-item d-none">Laki-laki + Perempuan</th>
                                                 </tr>
 
                                                 <tr>
                                                     <th class="sticky-col text-center header-col first-col font-12">(1)</th>
                                                     <th class="sticky-col text-center header-col second-col font-12">(2)</th>
-                                                    {% for i in '345678911'  %}
+                                                    {% for i in '123'  %}
                                                     <th class="sticky-col text-center font-12">({{i}})</th>
+                                                    {% endfor %}
+                                                    {% for i in '123456'  %}
+                                                    <th class="sticky-col text-center font-12 compare-item d-none">({{i}})</th>
                                                     {% endfor %}
                                                 </tr>
                                             </thead>
@@ -1472,13 +1496,13 @@
                                                         <span class="text-success me-2 font-10">(<span class="mdi mdi-arrow-up-bold"></span>5.27%)</span>
                                                     </td>
 
-                                                    <td class="text-center">1.200</td>
-                                                    <td class="text-center">4.100</td>
-                                                    <td class="text-center">3.100</td>
+                                                    <td class="text-center compare-item d-none">1.200</td>
+                                                    <td class="text-center compare-item d-none">4.100</td>
+                                                    <td class="text-center compare-item d-none">3.100</td>
 
-                                                    <td class="text-center">1.200</td>
-                                                    <td class="text-center">4.100</td>
-                                                    <td class="text-center">3.100</td>
+                                                    <td class="text-center compare-item d-none">1.200</td>
+                                                    <td class="text-center compare-item d-none">4.100</td>
+                                                    <td class="text-center compare-item d-none">3.100</td>
                                                     
                                                     
 
@@ -1661,7 +1685,6 @@
     </div>
 </section>
 
-
 {% endblock main-content %}
 
 
@@ -1674,8 +1697,50 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script src="{% static 'app-design/assets/js/pages/demo.dashboard-projects.js' %}"></script>
 
+<script>
+
+    $( window).resize(function(){
+        if($(this).width() <= 768){
+            $("#search-content").addClass('d-none')
+            $(".hero-section").removeAttr('style')
+            $("#main-content").css('margin-top', '-200px')
+            $("#expandButton").addClass('d-none')
+            $("#top-search-mitra").css('width', '200px')
+        }else{
+            $("#search-content").removeClass('d-none')
+            $(".hero-section").css('height', '630px')    
+            $("#main-content").css('margin-top', '-50px')
+            $("#expandButton").removeClass('d-none')
+            $("#top-search-mitra").css('width', '400px')
+        }
+    });
+
+
+    $("#expandButton").on('click', function (event){
+        if ($('#main-content').css('margin-top') == '-50px'){
+            $("#search-content").addClass('d-none')
+            $(".hero-section").removeAttr('style')
+            $("#main-content").css('margin-top', '-200px')
+            $(this).parent().css({'bottom': '-98px'})
+        }else{
+            $(this).parent().css('bottom', '-253px')
+            $(".hero-section").css('height', '630px')    
+            $("#search-content").removeClass('d-none')
+            $("#main-content").css('margin-top', '-50px')
+        }
+    })
+
+</script>
 
 <script>
+
+    function showData(){
+        if ($('.compare-item').hasClass('d-none')){
+            $('.compare-item').removeClass('d-none')
+        }else{
+            $('.compare-item').addClass('d-none')
+        }
+    }
 
     function show_comparison_panel(state){
 

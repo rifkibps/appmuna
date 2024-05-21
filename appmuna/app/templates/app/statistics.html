@@ -4,10 +4,15 @@
 
 {% block css-extender %}
 <style>
+
+    .bottom-wrapper {
+        margin-top: 1.5em;
+        font-size:13px;
+    }
+
     #expandButton:focus {     
         box-shadow:none;    
     }
-
 
     .app-stat-active, #table-statistic-app:hover {
         box-shadow: 0 0 20px #5561F2;
@@ -86,7 +91,7 @@
 </section>
 
 <!-- END HERO -->
-<section class="py-3 bg-white" id="main-content" style="margin-top:-50px;">
+<section class="py-4 bg-white" id="main-content" style="margin-top:-50px;">
     <div class="container" >
         <div class="row justify-content-end">
             <button class="btn bg-white"  style="width:100px; height:40px; font-size:12px; border-radius:20px; margin-top:-45px; padding: 8px 0px 8px 5px; z-index:10; margin-right:10px!important;" id="expandButton">Expand <i class="mdi mdi-arrow-up-down"></i></button>
@@ -126,28 +131,24 @@
         <div class="row p-2">
             <div class="col-lg-3">
                 <h4 class="p-2" ><i class="mdi mdi-arch"></i> Subjek Statistik</h4>
+
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="card-widgets">
-                            <a data-bs-toggle="collapse" href="#cardCollpase1" role="button" aria-expanded="false" aria-controls="cardCollpase1"><i class="mdi mdi-chevron-double-right"></i></a>
+                            <a data-bs-toggle="collapse" href="#cardCollpase" role="button" aria-expanded="false" aria-controls="cardCollpase"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
 
                         <div class="d-flex align-items-start">
-                            <img class="me-3 rounded-circle" src="{% static 'app-design/assets/images/users/avatar-2.jpg' %}" width="40" alt="Generic placeholder image">
-                            <h5 class="card-title mb-0" style="color:#003C80">Sosial dan Kependudukan</h5>
+                            <img class="me-3 rounded-circle" src="{% static 'customs/images/social.png' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">{{subjects.0.groups}}</h5>
                         </div>
                                         
-                        <div id="cardCollpase1" class="collapse pt-3 show">
+                        <div id="cardCollpase" class="collapse pt-3 show">
                             <ul style="padding-left:0px!important;font-size:15px">
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Penge... <span class="badge badge-primary-lighten float-end ms-2">20</span></a></p></li>
-                                <li class="rounded bg-primary px-2 pt-1 mb-1" style="list-style:none;line-height:45px"><p><a href="javascript:void(0)" class="text-white fw-bold">Tenaga Kerja <span class="badge bg-white text-primary float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Sosial Budaya <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Pendidikan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Perumahan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kesehatan <span class="badge badge-primary-lighten float-end ms-2">200</span></a></p></li>
+
+                                {% for item in subjects.0.items %}
+                                    <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary subject-filter" data-subj="{{item.id}}"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -160,22 +161,15 @@
                         </div>
 
                         <div class="d-flex align-items-start">
-                            <img class="me-3 rounded-circle" src="{% static 'app-design/assets/images/users/avatar-2.jpg' %}" width="40" alt="Generic placeholder image">
-                            <h5 class="card-title mb-0" style="color:#003C80">Ekonomi dan Perdagangan</h5>
+                            <img class="me-3 rounded-circle" src="{% static 'customs/images/economics.png' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">{{subjects.1.groups}}</h5>
                         </div>
-                        
                                         
                         <div id="cardCollpase2" class="collapse pt-3">
                             <ul style="padding-left:10px!important">
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Pengeluaran</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Tenaga Kerja</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Sosial Budaya</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Pendidikan</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Perumahan</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kesehatan</a></p></li>
+                                {% for item in subjects.1.items %}
+                                    <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
+                                {% endfor %}
                             </ul>
                         </div>
                     </div>
@@ -188,95 +182,55 @@
                         </div>
 
                         <div class="d-flex align-items-start">
-                            <img class="me-3 rounded-circle" src="{% static 'app-design/assets/images/users/avatar-2.jpg' %}" width="40" alt="Generic placeholder image">
-                            <h5 class="card-title mb-0" style="color:#003C80">Pertanian dan Pertambangan</h5>
+                            <img class="me-3 rounded-circle" src="{% static 'customs/images/farm.png' %}" width="40" alt="Generic placeholder image">
+                            <h5 class="card-title mb-0" style="color:#003C80">{{subjects.2.groups}}</h5>
                         </div>
                         
                                         
                         <div id="cardCollpase3" class="collapse pt-3">
                             <ul style="padding-left:10px!important">
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Konsumsi dan Pengeluaran</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Tenaga Kerja</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kependudukan</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kemiskinan</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Indeks Pembangunan Manusia</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Sosial Budaya</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Pendidikan</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Perumahan</a></p></li>
-                                <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary">Kesehatan</a></p></li>
+
+                                {% for item in subjects.2.items %}
+                                    <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
+                                {% endfor %}
+ 
                             </ul>
                         </div>
                     </div>
-                </div> <!-- end card-->
-
+                </div> 
             </div>
     
             <div class="col-lg-9 px-4 mt-5">
                 <div class="card pb-3">
-                    <div class="card-body px-3 pt-3 pb-0">
-                        <div class="mb-3 px-1">
-                            <h5 class="font-weight-bold"><strong><i class="mdi mdi-file-table-box-multiple-outline"></i> Indikator Statistik</strong></h5>
+                    <div class="card-body px-3 pt-2 pb-0">
+                        <div class="mb-3">
+                            <h4 class="font-weight-bold"><strong>Indikator Statistik</strong></h4>
                         </div>
-
-                        <table class="table table-sm table-striped table-bordered table-centered nowrap w-100 ">
-                            <thead >
-                                <tr>
-                                    <th class="text-center">No</th>
-                                    <th>Subjek</th>
-                                    <th>Data Statistik</th>
-                                    <th>Kategori Statistik</th>
-                                    <th class="text-center">Periode Data</th>
-                                    <th class="text-center">Update Terakhir</th>
-                                    <th class="text-center"></th>
-                                </tr>
-                             
-                            </thead>
-                            <tbody>
-                                {% for i in '1234567'  %}
-                                <tr>
-                                    <td class="text-center">{{forloop.counter}}</td>
-                                    <td class="text-center">Kemiskinan</td>
-                                    <td><a href="{% url 'app:statistics-app-preview' %}" class="text-secondary">Kemiskinan Kab. Muna Tahun 2024</a></td>
-                                    <td>Statistik Dasar</td>
-                                    <td class="text-center">Tahunan</td>
-                                    <td class="text-center">28 Mar 2024</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-primary btn-rounded" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
-                                            <i class="mdi mdi-chevron-right"></i>
-                                        </button>
-                                        <div class="dropdown-menu" style="font-size:14px;">
-                                            <a class="dropdown-item pb-0" href="{% url 'app:statistics-app-preview' %}"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a>
-                                            <a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a> 
-                                        </div>
-                                    </td>
-    
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <nav>
-                                    <ul class="pagination pagination-rounded mb-0 justify-content-end font-14">
-                                        <li class="page-item">
-                                            <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                <i class="mdi mdi-chevron-left"></i>
-                                            </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                        <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                                <i class="mdi mdi-chevron-right"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
+                        <div class="row mb-1">
+                            <div class="col-6">
+                                <button type="button" class="btn btn-primary" style="margin-right:3px!important" id="refresh"><i class="mdi mdi-filter-off"></i> </button>
+                                <button type="button" class="btn btn-success" style="margin-right:3px!important"><i class="mdi mdi mdi-file-excel"></i> </button>
+                                <button type="button" class="btn btn-info" style="margin-right:3px!important"><i class="mdi mdi-file-pdf"></i> </button>
                             </div>
+                            <div class="col-6 d-flex justify-content-end">
+                                <input type="text" class="form-control form-control-sm" id="search-box" placeholder="Cari data ..." style="width:250px">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-centered nowrap w-100 font-14" id="statistics-table">
+                                <thead >
+                                    <tr>
+                                        <th class="text-center">No</th>
+                                        <th>Data Statistik</th>
+                                        <th class="text-center">Periode Data</th>
+                                        <th class="text-center">Update Terakhir</th>
+                                        <th class="text-center"></th>
+                                    </tr>
+                                 
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -289,6 +243,7 @@
 
 
 {% block js-extender %}
+
 <script>
 
     $( window).resize(function(){
@@ -322,5 +277,124 @@
         }
     })
 
+</script>
+
+<script>
+    var subj_filter 
+    var table = $("#statistics-table").DataTable({
+        info:false,
+        searching: false,
+        lengthChange: false,
+        processing: true,
+        serverSide: true,
+        fixedColumns: true,
+        pageLength: 7,
+        ajax: {
+            "url": "{% url 'app:statistics-app-data' %}",
+            "headers": {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRFToken": '{{csrf_token}}',
+            },
+            "type": "POST",
+            "data": function (d){
+                return $.extend({}, d, {
+                    "search-box": $('#search-box').val(),
+                    "subject":subj_filter,
+                })
+            },
+        },
+        columns :[
+            {"data": 'no'},
+            {"data": 'indicator_id__name'},
+            {"data" : 'indicator_id__time_period_id__name'},
+            {"data" : 'indicator_id__updated_at'},
+            {"data" : 'actions'},
+        ],
+        order: [[1, 'asc']],
+        columnDefs: [
+         {
+            'targets': [4], /* column index */
+            'orderable': !1, /* true or false */             
+        },
+        { targets: [0,2,3,4], className: 'text-center' }
+        ],
+        
+        dom: 'lfrti<"bottom-wrapper"p>',
+        language: {
+            paginate: {
+            previous: "<i class='mdi mdi-chevron-left'>",
+            next: "<i class='mdi mdi-chevron-right'>",
+            },
+        },
+        drawCallback: function () {
+            $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+          },
+    });
+
+    $("#refresh").on("click", function (){
+        subj_filter = null
+        $('#search-box').val('')
+        removeBadgeStyle()
+        table.draw()
+    })
+
+    $('#search-box').on("input", function (){
+        table.draw()
+    })
+
+    $( window).resize(function(){
+        if($(this).width() <= 768){
+            $("#search-content").addClass('d-none')
+            $(".hero-section").removeAttr('style')
+            $("#main-content").css('margin-top', '-200px')
+            $("#expandButton").addClass('d-none')
+            $("#top-search-mitra").css('width', '200px')
+        }else{
+            $("#search-content").removeClass('d-none')
+            $(".hero-section").css('height', '630px')    
+            $("#main-content").css('margin-top', '-50px')
+            $("#expandButton").removeClass('d-none')
+            $("#top-search-mitra").css('width', '400px')
+        }
+    });
+
+    $("#expandButton").on('click', function (event){
+        if ($('#main-content').css('margin-top') == '-50px'){
+            $("#search-content").addClass('d-none')
+            $(".hero-section").removeAttr('style')
+            $("#main-content").css('margin-top', '-200px')
+            $(this).parent().css({'bottom': '-98px'})
+        }else{
+            $(this).parent().css('bottom', '-253px')
+            $(".hero-section").css('height', '630px')    
+            $("#search-content").removeClass('d-none')
+            $("#main-content").css('margin-top', '-50px')
+        }
+    })
+
+</script>
+
+<script>
+
+    function removeBadgeStyle(){
+        $('.subject-filter').attr('class', 'text-secondary subject-filter')
+        $('.subject-filter').parent().parent().removeAttr('class', 'rounded bg-primary px-2 pt-1 mb-1 ')
+        $('.subject-filter').parent().parent().css('line-height','')
+        $('.subject-filter').children().removeClass('bg-white text-primary')
+        $('.subject-filter').children().addClass('badge-primary-lighten')
+    }
+
+    $('.subject-filter').on('click', function (event){
+        subj_filter = $(this).attr('data-subj')
+        removeBadgeStyle()
+
+        $(this).attr('class', 'text-white fw-bold subject-filter')
+        $(this).parent().parent().attr('class', 'rounded bg-primary px-2 pt-1 mb-1 ')
+        $(this).parent().parent().css('line-height','45px')
+        $(this).children().removeClass('badge-primary-lighten')
+        $(this).children().addClass('bg-white text-primary')
+        
+        table.draw()
+    })
 </script>
 {% endblock js-extender %}

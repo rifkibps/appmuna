@@ -1,293 +1,515 @@
-{% extends 'horizontal/home_app.html' %}
+{% extends 'horizontal/home_app.html' %} {% load static %} {% block css-extender
+%}
 
-{% load static %}
-
-
-{% block css-extender %}
-
-<link href="assets/css/vendor/jstree.min.css" rel="stylesheet" type="text/css">
-
+<link
+  href="assets/css/vendor/jstree.min.css"
+  rel="stylesheet"
+  type="text/css"
+/>
 
 <style>
+  input::placeholder {
+    font-size: 13px;
+    color: black;
+  }
 
-    input::placeholder {
-        font-size: 13px;
-        color:black
-    }
+  datalist {
+    border-radius: 10px;
+    position: absolute;
+    margin-top: 10px;
+    width: 17em !important;
+    max-height: 20em;
+    border: 1px solid #dfdfdf;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #fff;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 10;
+  }
 
-    datalist {
-        border-radius:10px;
-        position: absolute;
-        margin-top:10px;
-        width: 17em!important;
-        max-height: 20em;
-        border: 1px solid #DFDFDF;
-        padding-top:10px;
-        padding-bottom:10px;
-        background-color: #fff;
-        overflow-x: hidden;
-        overflow-y: auto;
-        z-index: 10;
-        
-      }
-      
-      datalist option {
-        font-color:#F0F2F5;
-        font-size: 0.9em;
-        padding: 0.4em 1.2em;
-        cursor: pointer;
-      }
-      
-      /* option active styles */
-      datalist option:hover, datalist option:focus {
-        background-color: #F8F8F8;
-        outline: 0 none;
-      }
+  datalist option {
+    font-color: #f0f2f5;
+    font-size: 0.9em;
+    padding: 0.4em 1.2em;
+    cursor: pointer;
+  }
 
-      .pagination li.active > a {
-        background-color: #003C80!important;
-      }
+  /* option active styles */
+  datalist option:hover,
+  datalist option:focus {
+    background-color: #f8f8f8;
+    outline: 0 none;
+  }
+
+  .pagination li.active > a {
+    background-color: #003c80 !important;
+  }
 </style>
-{% endblock css-extender %}
-
-
-
-{% block main-content %}
+{% endblock css-extender %} {% block main-content %}
 <!-- START HERO -->
 <section class="hero-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 mt-4">
-                <div class="">
-                    <div>
-                        <span class="badge bg-danger rounded-pill">Baru</span> 
-                        <span class="text-white-50 ms-1">Selamat datang di portal Satu Data Muna</span>
-                    </div>
-                    <h3 class="text-white fw-normal my-3 hero-title">
-                        Telusuri Data Statistik Kabupaten Muna
-                    </h3>
-                    <p class="pr-2 mb-3 font-15 text-white-50"><span class="text-white fw-normal">SDM</span> merupakan wujud sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia layanan data.</p>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6 mt-4">
+        <div class="">
+          <div>
+            <span class="badge bg-danger rounded-pill">Baru</span>
+            <span class="text-white-50 ms-1"
+              >Selamat datang di portal Satu Data Muna</span
+            >
+          </div>
+          <h3 class="text-white fw-normal my-3 hero-title">
+            Telusuri Data Statistik Kabupaten Muna
+          </h3>
+          <p class="pr-2 mb-3 font-15 text-white-50">
+            <span class="text-white fw-normal">SDM</span> merupakan wujud
+            sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia
+            layanan data.
+          </p>
 
-                    <div class="row align-items-start">
-                        <div class="col-lg-12 d-flex justify-content-start">
-                            <div class="app-search dropdown">
-                                <form>
-                                    <div class="row gy-2 gx-2">
-                                        <div class="col-12">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:400px;height:50px;background-color:#ffffff;border-radius:5px">
-                                                <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
-                                                <button class="btn btn-danger rounded" style="height:48px;margin-left:8px" id="button-top-search">Telusuri Data</button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+          <div class="row align-items-start">
+            <div class="col-lg-12 d-flex justify-content-start">
+              <div class="app-search dropdown">
+                <form>
+                  <div class="row gy-2 gx-2">
+                    <div class="col-12">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Telusuri data statistik ..."
+                          id="top-search-mitra"
+                          autocomplete="off"
+                          style="
+                            width: 400px;
+                            height: 50px;
+                            background-color: #ffffff;
+                            border-radius: 5px;
+                          "
+                        />
+                        <span
+                          class="mdi mdi-magnify search-icon"
+                          style="margin-top: 5px"
+                        ></span>
+                        <button
+                          class="btn btn-danger rounded"
+                          style="height: 48px; margin-left: 8px"
+                          id="button-top-search"
+                        >
+                          Telusuri Data
+                        </button>
+                      </div>
                     </div>
-                </div>
+                  </div>
+                </form>
+              </div>
             </div>
-            <div class="col-md-4 offset-md-2">
-                <div class="text-md-end mt-1">
-                    <img src="{% static 'app-design/assets/images/startup.svg' %}" alt="" class="img-fluid">
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+      <div class="col-md-4 offset-md-2">
+        <div class="text-md-end mt-1">
+          <img
+            src="{% static 'app-design/assets/images/startup.svg' %}"
+            alt=""
+            class="img-fluid"
+          />
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 <!-- END HERO -->
 
-
-<section class="pt-1 pb-5 bg-white" style="margin-top:-50px;">
-    <div class="container">
-        <div class="row py-4">
-            <div class="col-lg-2" style="padding:65px 0px 20px 0px;">
-                <div class="card" style="border-radius:20px;background-color:#FDFDFD;box-shadow:none">
-                    <div class="card-body" style="padding:25px 0px 25px 17px">
-                        <p style="color:#003C80">
-                            <b><i class="mdi mdi-filter-menu"></i> Filter Pencarian</b>
-                        </p>
-                        <div class="mt-3 mb-3">
-                            <label for="status-select" class="me-2" style="font-size:14px;">Stakeholder Data</label>
-                            <div class="mt-1">
-                                <input class="form-control" list="browserdata" id="browser" name="browser" placeholder="Filter Data" autocomplete="off" style="width:150px;height:37px;background-color:#ffffff;padding-left:12px; border: 0; border-radius:5px; font-size: 13px;">
-                                <datalist id="browserdata">
-                                    <span style="font-size: 0.9em;font-weight:bold; padding: 0.4em 1.2em;">All</span>
-                                    <br>
-                                    <option>BPS Kab. Muna</option>
-                                    <option>Dinas Peternakan Muna</option>
-                                    <option>Dinas Lingkungan Hidup</option>
-                                    <option>Dinas Pembangunan Muna Kab. Barat</option>
-                                    <option>Dinas Pendidikan Muna</option>
-                                </datalist>
-                            </div>
-                        </div>
-        
-                        <div class="mb-3">
-                            <label for="status-select" class="me-2" style="font-size:14px" >Periode Data</label>
-                            <div class="mt-1">
-                                <input class="form-control mb-1" id="example-date" type="date" name="date" style="width:150px;height:37px;background-color:#ffffff;padding-left:12px; border: 0; border-radius:5px; font-size: 13px;">
-                                <input class="form-control" id="example-date" type="date" name="date" style="width:150px;height:37px;background-color:#ffffff;padding-left:12px; border: 0; border-radius:5px; font-size: 13px;">
-                            </div>
-                        </div>
-                       
-                        <div class="mb-2">
-                        
-                            <div class="row align-items-center">
-                                <div class="col-auto pr-0">
-                                    <label class="form-check-label" for="autoSizingCheck" style="font-size:14.5px">Cari menurut judul</label>
-                                </div>
-                                <div class="col-auto px-0">
-                                    <div class="form-check form-switch">
-                                        <input type="checkbox" class="form-check-input" id="customSwitch1">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="me-2" style="font-size:14px;" >Urutkan Berdasarkan</label>
-                            <div class="mt-1">
-                                <div class="form-check">
-                                    <input type="radio" id="customRadio1" name="customRadio" class="form-check-input">
-                                    <label class="form-check-label" for="customRadio1" style="font-weight:500;font-size:14px">Terbaru</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" id="customRadio2" name="customRadio" class="form-check-input">
-                                    <label class="form-check-label" for="customRadio2" style="font-weight:500;font-size:14px">Relevansi</label>
-                                </div>
-                                <div class="form-check">
-                                    <input type="radio" id="customRadio3" name="customRadio" class="form-check-input">
-                                    <label class="form-check-label" for="customRadio3" style="font-weight:500;font-size:14px">Terunduh</label>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div> <!-- end card-body-->
-                </div> <!-- end card-->
-
-
-                <a href="#" class="list-group-item list-group-item-action pt-1 pb-0" style="border-radius:10px; border:none">
-
-                </a>
-
-
- 
+<section class="pt-1 pb-5 bg-white" style="margin-top: -50px">
+  <div class="container">
+    <div class="row py-4">
+      <div class="col-lg-2" style="padding: 65px 0px 20px 0px">
+        <div
+          class="card"
+          style="
+            border-radius: 20px;
+            background-color: #fdfdfd;
+            box-shadow: none;
+          "
+        >
+          <div class="card-body" style="padding: 25px 0px 25px 17px">
+            <p style="color: #003c80">
+              <b><i class="mdi mdi-filter-menu"></i> Filter Pencarian</b>
+            </p>
+            <div class="mt-3 mb-3">
+              <label for="status-select" class="me-2" style="font-size: 14px"
+                >Stakeholder Data</label
+              >
+              <div class="mt-1">
+                <input
+                  class="form-control"
+                  list="browserdata"
+                  id="browser"
+                  name="browser"
+                  placeholder="Filter Data"
+                  autocomplete="off"
+                  style="
+                    width: 150px;
+                    height: 37px;
+                    background-color: #ffffff;
+                    padding-left: 12px;
+                    border: 0;
+                    border-radius: 5px;
+                    font-size: 13px;
+                  "
+                />
+                <datalist id="browserdata">
+                  <span
+                    style="
+                      font-size: 0.9em;
+                      font-weight: bold;
+                      padding: 0.4em 1.2em;
+                    "
+                    >All</span
+                  >
+                  <br />
+                  <option>BPS Kab. Muna</option>
+                  <option>Dinas Peternakan Muna</option>
+                  <option>Dinas Lingkungan Hidup</option>
+                  <option>Dinas Pembangunan Muna Kab. Barat</option>
+                  <option>Dinas Pendidikan Muna</option>
+                </datalist>
+              </div>
             </div>
 
-            <div class="col-lg-10 px-4">
-                <ul class="nav nav-tabs nav-bordered mb-4" >
-                    <li class="nav-item mx-1">
-                        <a href="#home1" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active">
-                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                            <span class="d-none d-md-block" style="font-weight:300;">Semua <i class="mdi mdi-apps"></i></span>
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1">
-                        <a href="#ids_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
-                            <span class="d-none d-md-block" style="font-weight:300;">Statistik <i class="mdi mdi-file-table-box-multiple-outline"></i></span>
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1">
-                        <a href="#ikm_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                            <span class="d-none d-md-block" style="font-weight:300;">Publikasi <i class="mdi mdi-book-open-page-variant-outline"></i></span>
-                        </a>
-                    </li>
+            <div class="mb-3">
+              <label for="status-select" class="me-2" style="font-size: 14px"
+                >Periode Data</label
+              >
+              <div class="mt-1">
+                <input
+                  class="form-control mb-1"
+                  id="example-date"
+                  type="date"
+                  name="date"
+                  style="
+                    width: 150px;
+                    height: 37px;
+                    background-color: #ffffff;
+                    padding-left: 12px;
+                    border: 0;
+                    border-radius: 5px;
+                    font-size: 13px;
+                  "
+                />
+                <input
+                  class="form-control"
+                  id="example-date"
+                  type="date"
+                  name="date"
+                  style="
+                    width: 150px;
+                    height: 37px;
+                    background-color: #ffffff;
+                    padding-left: 12px;
+                    border: 0;
+                    border-radius: 5px;
+                    font-size: 13px;
+                  "
+                />
+              </div>
+            </div>
 
-                    <li class="nav-item mx-1">
-                        <a href="#ids_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                            <span class="d-none d-md-block" style="font-weight:300;">BRS <i class="mdi mdi-newspaper-variant-multiple"></i></span>
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1">
-                        <a href="#ids_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
-                            <span class="d-none d-md-block" style="font-weight:300;">Infografis <i class="mdi mdi-chart-bar"></i></span>
-                        </a>
-                    </li>
-                    <li class="nav-item mx-1 dropdown">
-                      
-                        <a class="nav-link py-2" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i> 
-                            <span class="d-none d-md-block" style="font-weight:300;">Lainnya <i class="mdi mdi-chevron-right"></i></span>
-                        </a>
-                        <div class="dropdown-menu" style="font-size:14px;border-radius:10px">
-                            <a class="dropdown-item pb-0" href="#">Videografis <i class="mdi mdi-youtube-subscription"></i></a>
-                            <a class="dropdown-item" href="#">Metadata Statistik <i class="mdi mdi-bookshelf"></i></a> 
-                        </div>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <p style="margin-left:20px;">Menampilkan 250 hasil pencarian dalam 0.016 detik.</p>
-
-                    <div class="tab-pane show active" id="home1">
-
-                        {% for i in '0123456789' %}
-                        
-                        <a href="#" class="list-group-item list-group-item-action pt-1 pb-0" style="border-radius:10px; border:none">
-                            <div class="row g-0 align-items-center">
-                                <div class="col-sm-12">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h5 class="mb-1" style="color:#003C80">Kemiskinan di Kabupaten Muna Tahun 2023 Meningkat 2% dibanding tahun sebelumnya</h5>
-                                    </div>
-                                    <p class="mb-1">Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing...</p>
-                                    <small class="text-muted mt-3 font-12">
-                                        <i class="text-truncate">https://www.bps.go.id/publication/2020/12/17/9f10788b8f1a27df234dcf2e/women-and-men-in-indonesia-2019.html/</i>
-                                    </small>
-
-                                    <ul class="px-0 mt-1" style="list-style:none;">
-                                        <li class="d-inline"><span class="badge rounded-pill font-12" style="background-color:#003C80; padding:5px 10px 5px 10px; "><i class="mdi mdi-book-open-page-variant-outline"></i> Publikasi</span></li>
-                                        <li class="d-inline" title="Release Date"><span class="badge rounded-pill font-12" style="background-color:#003C80; padding:5px 10px 5px 10px; ">Release 3 Februari 2023</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </a>
-                        {% endfor %}
-
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <nav>
-                                    <ul class="pagination pagination-rounded mb-0 justify-content-center font-14">
-                                        <li class="page-item">
-                                            <a class="page-link" href="javascript: void(0);" aria-label="Previous">
-                                                <i class="mdi mdi-chevron-left"></i>
-                                            </a>
-                                        </li>
-                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                                        <li class="page-item active"><a class="page-link" href="javascript: void(0);">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                                        <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
-                                        <li class="page-item">
-                                            <a class="page-link" href="javascript: void(0);" aria-label="Next">
-                                                <i class="mdi mdi-chevron-right"></i>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="tab-pane" id="profile1">
-                        <p>...</p>
-                    </div>
-                    <div class="tab-pane" id="settings1">
-                        <p>...</p>
-                    </div>
+            <div class="mb-2">
+              <div class="row align-items-center">
+                <div class="col-auto pr-0">
+                  <label
+                    class="form-check-label"
+                    for="autoSizingCheck"
+                    style="font-size: 14.5px"
+                    >Cari menurut judul</label
+                  >
                 </div>
-
-                
-
-                
+                <div class="col-auto px-0">
+                  <div class="form-check form-switch">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="customSwitch1"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
+
+            <div class="mb-3">
+              <label class="me-2" style="font-size: 14px"
+                >Urutkan Berdasarkan</label
+              >
+              <div class="mt-1">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    id="customRadio1"
+                    name="customRadio"
+                    class="form-check-input"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="customRadio1"
+                    style="font-weight: 500; font-size: 14px"
+                    >Terbaru</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    id="customRadio2"
+                    name="customRadio"
+                    class="form-check-input"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="customRadio2"
+                    style="font-weight: 500; font-size: 14px"
+                    >Relevansi</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    id="customRadio3"
+                    name="customRadio"
+                    class="form-check-input"
+                  />
+                  <label
+                    class="form-check-label"
+                    for="customRadio3"
+                    style="font-weight: 500; font-size: 14px"
+                    >Terunduh</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end card-body-->
         </div>
+        <!-- end card-->
+
+        <a
+          href="#"
+          class="list-group-item list-group-item-action pt-1 pb-0"
+          style="border-radius: 10px; border: none"
+        >
+        </a>
+      </div>
+
+      <div class="col-lg-10 px-4">
+        <ul class="nav nav-tabs nav-bordered mb-4">
+          <li class="nav-item mx-1">
+            <a
+              href="#home1"
+              data-bs-toggle="tab"
+              aria-expanded="show active"
+              class="nav-link py-2 active"
+            >
+              <i class="mdi mdi-home-variant d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Semua <i class="mdi mdi-apps"></i
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item mx-1">
+            <a
+              href="#ids_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Statistik
+                <i class="mdi mdi-file-table-box-multiple-outline"></i
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item mx-1">
+            <a
+              href="#ikm_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+            >
+              <i class="mdi mdi-account-circle d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Publikasi <i class="mdi mdi-book-open-page-variant-outline"></i
+              ></span>
+            </a>
+          </li>
+
+          <li class="nav-item mx-1">
+            <a
+              href="#ids_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >BRS <i class="mdi mdi-newspaper-variant-multiple"></i
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item mx-1">
+            <a
+              href="#ids_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Infografis <i class="mdi mdi-chart-bar"></i
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item mx-1 dropdown">
+            <a
+              class="nav-link py-2"
+              data-bs-toggle="dropdown"
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Lainnya <i class="mdi mdi-chevron-right"></i
+              ></span>
+            </a>
+            <div
+              class="dropdown-menu"
+              style="font-size: 14px; border-radius: 10px"
+            >
+              <a class="dropdown-item pb-0" href="#"
+                >Videografis <i class="mdi mdi-youtube-subscription"></i
+              ></a>
+              <a class="dropdown-item" href="#"
+                >Metadata Statistik <i class="mdi mdi-bookshelf"></i
+              ></a>
+            </div>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <p style="margin-left: 20px">
+            Menampilkan 250 hasil pencarian dalam 0.016 detik.
+          </p>
+
+          <div class="tab-pane show active" id="home1">
+            {% for i in '0123456789' %}
+
+            <a
+              href="#"
+              class="list-group-item list-group-item-action pt-1 pb-0"
+              style="border-radius: 10px; border: none"
+            >
+              <div class="row g-0 align-items-center">
+                <div class="col-sm-12">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1" style="color: #003c80">
+                      Kemiskinan di Kabupaten Muna Tahun 2023 Meningkat 2%
+                      dibanding tahun sebelumnya
+                    </h5>
+                  </div>
+                  <p class="mb-1">
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.Lorem Ipsum is simply dummy text of the
+                    printing...
+                  </p>
+                  <small class="text-muted mt-3 font-12">
+                    <i class="text-truncate"
+                      >https://www.bps.go.id/publication/2020/12/17/9f10788b8f1a27df234dcf2e/women-and-men-in-indonesia-2019.html/</i
+                    >
+                  </small>
+
+                  <ul class="px-0 mt-1" style="list-style: none">
+                    <li class="d-inline">
+                      <span
+                        class="badge rounded-pill font-12"
+                        style="
+                          background-color: #003c80;
+                          padding: 5px 10px 5px 10px;
+                        "
+                        ><i class="mdi mdi-book-open-page-variant-outline"></i>
+                        Publikasi</span
+                      >
+                    </li>
+                    <li class="d-inline" title="Release Date">
+                      <span
+                        class="badge rounded-pill font-12"
+                        style="
+                          background-color: #003c80;
+                          padding: 5px 10px 5px 10px;
+                        "
+                        >Release 3 Februari 2023</span
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+
+            <div class="row mt-4">
+              <div class="col-12">
+                <nav>
+                  <ul
+                    class="pagination pagination-rounded mb-0 justify-content-center font-14"
+                  >
+                    <li class="page-item">
+                      <a
+                        class="page-link"
+                        href="javascript: void(0);"
+                        aria-label="Previous"
+                      >
+                        <i class="mdi mdi-chevron-left"></i>
+                      </a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript: void(0);">1</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript: void(0);">2</a>
+                    </li>
+                    <li class="page-item active">
+                      <a class="page-link" href="javascript: void(0);">3</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript: void(0);">4</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="javascript: void(0);">5</a>
+                    </li>
+                    <li class="page-item">
+                      <a
+                        class="page-link"
+                        href="javascript: void(0);"
+                        aria-label="Next"
+                      >
+                        <i class="mdi mdi-chevron-right"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="profile1">
+            <p>...</p>
+          </div>
+          <div class="tab-pane" id="settings1">
+            <p>...</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 {% endblock main-content %}

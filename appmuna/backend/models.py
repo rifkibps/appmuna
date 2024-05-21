@@ -26,7 +26,7 @@ class BackendSubjectsModel(models.Model):
    show_state = models.CharField(max_length=1, null=False, blank=False, choices=status, verbose_name='Tampilkan Subject')
 
    def __str__(self):
-      return f"{self.get_subject_group_display()} | {self.name}"
+      return f"{self.pk}. {self.get_subject_group_display()} | {self.name}"
 
 # Characteristic Subject CSA Model
 class BackendSubjectsSCAModel(models.Model):
@@ -172,7 +172,7 @@ class BackendIndicatorsModel(models.Model):
    updated_at = models.DateField(auto_now = True, editable=False)
    
    def __str__(self):
-      return f"{self.subject_id.name} | {self.name}"
+      return f"{self.id}. {self.subject_id.name} | {self.name}"
 
 # Indikator Content Model
 class BackendContentIndicatorsModel(models.Model):

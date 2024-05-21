@@ -1,1136 +1,1662 @@
 {% extends 'horizontal/home_app.html' %}
-
 {% load static %}
-
-
-{% block css-extender %}
+{% block css-extender%}
 <style>
-    input, input::placeholder {
-        font-size: 13px;
-    }
+  input,
+  input::placeholder {
+    font-size: 13px;
+  }
 
-    datalist {
-        position: absolute;
-        margin-top:10px;
-        width: 25em!important;
-        max-height: 19em;
-        border: 1px solid #DFDFDF;
-        padding-top:10px;
-        padding-bottom:10px;
-        background-color: #fff;
-        overflow-x: hidden;
-        overflow-y: auto;
-        z-index: 10;
-        
-    }
-    
-    datalist option {
-        font-color:#F0F2F5;
-        font-size: 0.9em;
-        padding: 0.4em 3em;
-        cursor: pointer;
-    }
-    
-    /* option active styles */
-    datalist option:hover, datalist option:focus {
-        background-color: #F8F8F8;
-        outline: 0 none;
-    }
+  datalist {
+    position: absolute;
+    margin-top: 10px;
+    width: 25em !important;
+    max-height: 19em;
+    border: 1px solid #dfdfdf;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #fff;
+    overflow-x: hidden;
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  datalist option {
+    font-color: #f0f2f5;
+    font-size: 0.9em;
+    padding: 0.4em 3em;
+    cursor: pointer;
+  }
+
+  /* option active styles */
+  datalist option:hover,
+  datalist option:focus {
+    background-color: #f8f8f8;
+    outline: 0 none;
+  }
 </style>
 {% endblock css-extender %}
-
-
 {% block main-content %}
 
 <!-- START HERO -->
 <section class="hero-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 mt-4">
-                <div class="">
-                    <div>
-                        <span class="badge bg-danger rounded-pill">Baru</span> 
-                        <span class="text-white-50 ms-1">Selamat datang di portal Satu Data Muna</span>
-                    </div>
-                    <h2 class="text-white fw-normal mb-4 mt-3 hero-title">
-                        Telusuri Data Statistik Kabupaten Muna
-                    </h2>
-                    <p class="pr-2 mb-4 font-16 text-white-50"><span class="text-white fw-normal">SDM</span> merupakan wujud sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia layanan data dan berbagai Dinas OPD selaku stakeholder penyedia data statistik sektoral.</p>
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-6 mt-4">
+        <div class="">
+          <div>
+            <span class="badge bg-danger rounded-pill">Baru</span>
+            <span class="text-white-50 ms-1"
+              >Selamat datang di portal Satu Data Muna</span
+            >
+          </div>
+          <h2 class="text-white fw-normal mb-4 mt-3 hero-title">
+            Telusuri Data Statistik Kabupaten Muna
+          </h2>
+          <p class="pr-2 mb-4 font-16 text-white-50">
+            <span class="text-white fw-normal">SDM</span> merupakan wujud
+            sinergi dan kolaborasi bersama antara BPS Kab. Muna selaku penyedia
+            layanan data dan berbagai Dinas OPD selaku stakeholder penyedia data
+            statistik sektoral.
+          </p>
 
-                    <div class="row align-items-center">
-                        <div class="col-lg-12 d-flex justify-content-center">
-                            <div class="app-search dropdown ml-5">
-                                <form action="{% url 'app:search-app' %}"  method="get">
-                                    <div class="row gy-2 gx-2 align-items-center">
-                                            <div class="col-auto px-0">
-                                                <input class="form-control" list="browserdata" id="browser" name="browser" placeholder="Filter Data" autocomplete="off" style="width:120px;height:50px;background-color:#ffffff;padding-left:20px; border: 0; border-radius:5px">
-                                                <datalist id="browserdata">
-                                                    <span style="font-size: 0.9em;font-weight:bold; padding: 0.4em 1.5em;">All</span>
-                                                    <br>
-                                                    
-                                                    {% for dt in subjects %}
-                                                    
-                                                        {% if dt.items|length > 0 %}
-                                                            <span style="font-size: 0.9em;font-weight:bold;padding: 0.4em 1.5em;"> <span class="text-warning fw-bold" style="font-size:18px;"><i class="mdi mdi-minus"></i></span> {{dt.groups}} </span><br>
-                                                                {% for dt_item in dt.items %}
-                                                                    <option value="{{dt_item.item}}">{{dt_item.item}}</option>
-                                                                {% endfor %}
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                    
-                                                </datalist>
-                                            </div>
-                                            <div class="col-auto">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width:420px;height:50px;background-color:#ffffff;border-radius:5px">
-                                                    <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-auto mt-2 px-0">
-                                                <button class="btn btn-danger rounded" type="submit" style="height:47px" id="button-top-search">Telusuri Data</button>
-                                            </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+          <div class="row align-items-center">
+            <div class="col-lg-12 d-flex justify-content-center">
+              <div class="app-search dropdown ml-5">
+                <form action="{% url 'app:search-app' %}" method="get">
+                  <div class="row gy-2 gx-2 align-items-center">
+                    <div class="col-auto px-0">
+                      <input
+                        class="form-control"
+                        list="browserdata"
+                        id="browser"
+                        name="browser"
+                        placeholder="Filter Data"
+                        autocomplete="off"
+                        style="
+                          width: 120px;
+                          height: 50px;
+                          background-color: #ffffff;
+                          padding-left: 20px;
+                          border: 0;
+                          border-radius: 5px;
+                        "
+                      />
+                      <datalist id="browserdata">
+                        <span
+                          style="
+                            font-size: 0.9em;
+                            font-weight: bold;
+                            padding: 0.4em 1.5em;
+                          "
+                          >All</span
+                        >
+                        <br />
+
+                        {% for dt in subjects %} {% if dt.items|length > 0 %}
+                        <span
+                          style="
+                            font-size: 0.9em;
+                            font-weight: bold;
+                            padding: 0.4em 1.5em;
+                          "
+                        >
+                          <span
+                            class="text-warning fw-bold"
+                            style="font-size: 18px"
+                            ><i class="mdi mdi-minus"></i
+                          ></span>
+                          {{dt.groups}}
+                        </span>
+                        <br />
+                        {% for dt_item in dt.items %}
+                        <option value="{{dt_item.item}}">
+                          {{dt_item.item}}
+                        </option>
+                        {% endfor %} {% endif %} {% endfor %}
+                      </datalist>
                     </div>
-                    
-                </div>
+                    <div class="col-auto">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Telusuri data statistik ..."
+                          id="top-search-mitra"
+                          autocomplete="off"
+                          style="
+                            width: 420px;
+                            height: 50px;
+                            background-color: #ffffff;
+                            border-radius: 5px;
+                          "
+                        />
+                        <span
+                          class="mdi mdi-magnify search-icon"
+                          style="margin-top: 5px"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="col-auto mt-2 px-0">
+                      <button
+                        class="btn btn-danger rounded"
+                        type="submit"
+                        style="height: 47px"
+                        id="button-top-search"
+                      >
+                        Telusuri Data
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
-            <div class="col-md-4 offset-md-2">
-                <div class="text-md-end mt-1">
-                    <img src="{% static 'app-design/assets/images/startup.svg' %}" alt="" class="img-fluid">
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+      <div class="col-md-4 offset-md-2">
+        <div class="text-md-end mt-1">
+          <img
+            src="{% static 'app-design/assets/images/startup.svg' %}"
+            alt=""
+            class="img-fluid"
+          />
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 <!-- END HERO -->
 
-<section class="pb-5" style="margin-top:-45px">
-    <div class="container">
-        <div class="row align-items-center">
-            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner" role="listbox">
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px;">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-account-multiple widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                        <h3 class="mt-3 mb-3">36,254</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                            <span class="text-nowrap">Since last month</span>  
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-cart-plus widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                        <h3 class="mt-3 mb-3">5,543</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-currency-usd widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                        <h3 class="mt-3 mb-3">$6,254</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-pulse widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                        <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                        </div>
+<section class="pb-5" style="margin-top: -45px">
+  <div class="container">
+    <div class="row align-items-center">
+      <div
+        id="carouselExampleControls"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner" role="listbox">
+          <div class="carousel-item active">
+            <div class="row">
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-account-multiple widget-icon"></i>
                     </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-account-multiple widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                        <h3 class="mt-3 mb-3">36,254</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                            <span class="text-nowrap">Since last month</span>  
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-cart-plus widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                        <h3 class="mt-3 mb-3">5,543</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-currency-usd widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                        <h3 class="mt-3 mb-3">$6,254</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-pulse widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                        <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-account-multiple widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                        <h3 class="mt-3 mb-3">36,254</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                            <span class="text-nowrap">Since last month</span>  
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-cart-plus widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                        <h3 class="mt-3 mb-3">5,543</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-currency-usd widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                        <h3 class="mt-3 mb-3">$6,254</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-pulse widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                        <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-account-multiple widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Customers</h5>
-                                        <h3 class="mt-3 mb-3">36,254</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                                            <span class="text-nowrap">Since last month</span>  
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-cart-plus widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Number of Orders">Orders</h5>
-                                        <h3 class="mt-3 mb-3">5,543</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-currency-usd widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Average Revenue">Revenue</h5>
-                                        <h3 class="mt-3 mb-3">$6,254</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-danger me-2"><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card widget-flat py-2" style="border-radius:20px">
-                                    <div class="card-body">
-                                        <div class="float-end">
-                                            <i class="mdi mdi-pulse widget-icon"></i>
-                                        </div>
-                                        <h5 class="text-muted fw-normal mt-0" title="Growth">Growth</h5>
-                                        <h3 class="mt-3 mb-3">+ 30.56%</h3>
-                                        <p class="mb-0 text-muted">
-                                            <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span>
-                                            <span class="text-nowrap">Since last month</span>
-                                        </p>
-                                    </div> <!-- end card-body-->
-                                </div> <!-- end card-->
-                            </div> <!-- end col-->
-                        </div>
-                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Number of Customers"
+                    >
+                      Customers
+                    </h5>
+                    <h3 class="mt-3 mb-3">36,254</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-success me-2"
+                        ><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
                 </div>
-                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-bs-slide="prev" style="margin-left: -130px;">
-                    <div class="avatar-sm m-auto">
-                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </span>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-cart-plus widget-icon"></i>
                     </div>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-bs-slide="next" style="margin-right: -130px;">
-                    <div class="avatar-sm m-auto">
-                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </span>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Number of Orders"
+                    >
+                      Orders
+                    </h5>
+                    <h3 class="mt-3 mb-3">5,543</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-danger me-2"
+                        ><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-currency-usd widget-icon"></i>
                     </div>
-                </a>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Average Revenue"
+                    >
+                      Revenue
+                    </h5>
+                    <h3 class="mt-3 mb-3">$6,254</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-danger me-2"
+                        ><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-pulse widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted fw-normal mt-0" title="Growth">
+                      Growth
+                    </h5>
+                    <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-success me-2"
+                        ><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
             </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-account-multiple widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Number of Customers"
+                    >
+                      Customers
+                    </h5>
+                    <h3 class="mt-3 mb-3">36,254</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-success me-2"
+                        ><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-cart-plus widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Number of Orders"
+                    >
+                      Orders
+                    </h5>
+                    <h3 class="mt-3 mb-3">5,543</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-danger me-2"
+                        ><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-currency-usd widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Average Revenue"
+                    >
+                      Revenue
+                    </h5>
+                    <h3 class="mt-3 mb-3">$6,254</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-danger me-2"
+                        ><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-pulse widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted fw-normal mt-0" title="Growth">
+                      Growth
+                    </h5>
+                    <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-success me-2"
+                        ><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-account-multiple widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Number of Customers"
+                    >
+                      Customers
+                    </h5>
+                    <h3 class="mt-3 mb-3">36,254</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-success me-2"
+                        ><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-cart-plus widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Number of Orders"
+                    >
+                      Orders
+                    </h5>
+                    <h3 class="mt-3 mb-3">5,543</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-danger me-2"
+                        ><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-currency-usd widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Average Revenue"
+                    >
+                      Revenue
+                    </h5>
+                    <h3 class="mt-3 mb-3">$6,254</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-danger me-2"
+                        ><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-pulse widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted fw-normal mt-0" title="Growth">
+                      Growth
+                    </h5>
+                    <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-success me-2"
+                        ><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-account-multiple widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Number of Customers"
+                    >
+                      Customers
+                    </h5>
+                    <h3 class="mt-3 mb-3">36,254</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-success me-2"
+                        ><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-cart-plus widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Number of Orders"
+                    >
+                      Orders
+                    </h5>
+                    <h3 class="mt-3 mb-3">5,543</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-danger me-2"
+                        ><i class="mdi mdi-arrow-down-bold"></i> 1.08%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-currency-usd widget-icon"></i>
+                    </div>
+                    <h5
+                      class="text-muted fw-normal mt-0"
+                      title="Average Revenue"
+                    >
+                      Revenue
+                    </h5>
+                    <h3 class="mt-3 mb-3">$6,254</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-danger me-2"
+                        ><i class="mdi mdi-arrow-down-bold"></i> 7.00%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+              <div class="col-md-6 col-lg-3">
+                <div class="card widget-flat py-2" style="border-radius: 20px">
+                  <div class="card-body">
+                    <div class="float-end">
+                      <i class="mdi mdi-pulse widget-icon"></i>
+                    </div>
+                    <h5 class="text-muted fw-normal mt-0" title="Growth">
+                      Growth
+                    </h5>
+                    <h3 class="mt-3 mb-3">+ 30.56%</h3>
+                    <p class="mb-0 text-muted">
+                      <span class="text-success me-2"
+                        ><i class="mdi mdi-arrow-up-bold"></i> 4.87%</span
+                      >
+                      <span class="text-nowrap">Since last month</span>
+                    </p>
+                  </div>
+                  <!-- end card-body-->
+                </div>
+                <!-- end card-->
+              </div>
+              <!-- end col-->
+            </div>
+          </div>
         </div>
+        <a
+          class="carousel-control-prev"
+          href="#carouselExampleControls"
+          role="button"
+          data-bs-slide="prev"
+          style="margin-left: -130px"
+        >
+          <div class="avatar-sm m-auto">
+            <span class="avatar-title bg-primary-lighten rounded-circle">
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </span>
+          </div>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#carouselExampleControls"
+          role="button"
+          data-bs-slide="next"
+          style="margin-right: -130px"
+        >
+          <div class="avatar-sm m-auto">
+            <span class="avatar-title bg-primary-lighten rounded-circle">
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </span>
+          </div>
+        </a>
+      </div>
     </div>
+  </div>
 </section>
 
 <section class="py-3 bg-light-lighten border-top border-bottom border-light">
-    <div class="container">
-        <div class="row py-4">
-            <div class="col-md-12">
-                <div class="text-left">
-                    <h3>Portal Satu Data Muna <span class="text-warning">__________________</span></h3>
-                    <h2 class="text-primary mt-3">Statistik Satu Data Tingkat Kabupaten Muna</h2>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row py-4">
+      <div class="col-md-12">
+        <div class="text-left">
+          <h3>
+            Portal Satu Data Muna
+            <span class="text-warning">__________________</span>
+          </h3>
+          <h2 class="text-primary mt-3">
+            Statistik Satu Data Tingkat Kabupaten Muna
+          </h2>
         </div>
-
-        <div class="row py-4">
-            <div class="col-xl-3 col-lg-6">
-                <div class="card bg-primary py-3" style="border-radius:20px">
-                    <div class="card-body" >
-                        <div class="text-center text-white">
-                            <h2>1.520</h2>
-                            <p class="mb-0" style="font-size: 23px;">Elemen Data</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-                <div class="card bg-primary py-3" style="border-radius:20px">
-                    <div class="card-body">
-                        <div class="text-center text-white">
-                            <h2>10</h2>
-                            <p class="mb-0" style="font-size: 23px;">OPD/Instansi</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-                <div class="card bg-primary py-3" style="border-radius:20px">
-                    <div class="card-body">
-                        <div class="text-center text-white">
-                            <h2>35</h2>
-                            <p class="mb-0" style="font-size: 23px;">Kategori</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-lg-6">
-                <div class="card bg-primary py-3" style="border-radius:20px">
-                    <div class="card-body">
-                        <div class="text-center text-white">
-                            <h2>100.231</h2>
-                            <p class="mb-0" style="font-size: 23px;">Pengunjung</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+      </div>
     </div>
+
+    <div class="row py-4">
+      <div class="col-xl-3 col-lg-6">
+        <div class="card bg-primary py-3" style="border-radius: 20px">
+          <div class="card-body">
+            <div class="text-center text-white">
+              <h2>1.520</h2>
+              <p class="mb-0" style="font-size: 23px">Elemen Data</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6">
+        <div class="card bg-primary py-3" style="border-radius: 20px">
+          <div class="card-body">
+            <div class="text-center text-white">
+              <h2>10</h2>
+              <p class="mb-0" style="font-size: 23px">OPD/Instansi</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6">
+        <div class="card bg-primary py-3" style="border-radius: 20px">
+          <div class="card-body">
+            <div class="text-center text-white">
+              <h2>35</h2>
+              <p class="mb-0" style="font-size: 23px">Kategori</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-lg-6">
+        <div class="card bg-primary py-3" style="border-radius: 20px">
+          <div class="card-body">
+            <div class="text-center text-white">
+              <h2>100.231</h2>
+              <p class="mb-0" style="font-size: 23px">Pengunjung</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="py-3">
-    <div class="container">
-        <div class="row pt-4">
-            <div class="col-lg-12">
-                <div class="text-left">
-                    <h3>Topik Data <span class="text-warning">_________</span></h3>
-                    <h2 class="text-muted mt-3">Telusuri Data Menurut Subjek Statistik</h2>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row pt-4">
+      <div class="col-lg-12">
+        <div class="text-left">
+          <h3>Topik Data <span class="text-warning">_________</span></h3>
+          <h2 class="text-muted mt-3">
+            Telusuri Data Menurut Subjek Statistik
+          </h2>
         </div>
-
-        <div class="row mt-2 py-5 align-items-center">
-            <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
-                <ol class="carousel-indicators" style="margin-bottom: -30px;">
-                    {% for card in cards %}
-                    <li data-bs-target="#carouselControls1" data-bs-slide-to="{{card.no}}" class="{% if card.no == 0 %}active{% endif %} bg-primary-lighten"></li>
-                    {% endfor %}
-                </ol>
-                <div class="carousel-inner" role="listbox">
-
-                    {% for card in cards %}
-                    <div class="carousel-item {% if card.no == 0 %}active{% endif %}" data-bs-interval="">
-                        <div class="row">
-                            {% for card_dt in card.items %}
-                            <div class="col-md-6 col-lg-2">
-                                <div class="card">
-                                    <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">{{card_dt.item}}</a></h5>
-                                        <p class="card-text font-11">
-                                            <b>{{card_dt.group}}</b>
-                                        </p>
-                                    </div> <!-- end card-body -->
-                                </div> <!-- end card -->    
-                            </div> <!-- end col-->
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endfor %}
-
-                </div>
-
-            </div>
-        </div>
+      </div>
     </div>
+
+    <div class="row mt-2 py-5 align-items-center">
+      <div
+        id="carouselControls1"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <ol class="carousel-indicators" style="margin-bottom: -30px">
+          {% for card in cards %}
+          <li
+            data-bs-target="#carouselControls1"
+            data-bs-slide-to="{{card.no}}"
+            class="{% if card.no == 0 %}active{% endif %} bg-primary-lighten"
+          ></li>
+          {% endfor %}
+        </ol>
+        <div class="carousel-inner" role="listbox">
+          {% for card in cards %}
+          <div
+            class="carousel-item {% if card.no == 0 %}active{% endif %}"
+            data-bs-interval=""
+          >
+            <div class="row">
+              {% for card_dt in card.items %}
+              <div class="col-md-6 col-lg-2">
+                <div class="card">
+                  <img
+                    src="{% static 'app-design/assets/images/features-2.svg' %}"
+                    class="card-img-top"
+                    alt="..."
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <a href="#" class="text-primary stretched-link"
+                        >{{card_dt.item}}</a
+                      >
+                    </h5>
+                    <p class="card-text font-11">
+                      <b>{{card_dt.group}}</b>
+                    </p>
+                  </div>
+                  <!-- end card-body -->
+                </div>
+                <!-- end card -->
+              </div>
+              <!-- end col-->
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="py-3 bg-light-lighten border-top border-bottom border-light">
-    <div class="container">
-        <div class="row pt-4">
-            <div class="col-lg-12">
-                <div class="text-left">
-                    <h3>Pintasan Utama <span class="text-warning">__________________</span></h3>
-                    <h2 class="text-muted mt-3">Akses Data Muna Dalam Angka</h2>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row pt-4">
+      <div class="col-lg-12">
+        <div class="text-left">
+          <h3>
+            Pintasan Utama <span class="text-warning">__________________</span>
+          </h3>
+          <h2 class="text-muted mt-3">Akses Data Muna Dalam Angka</h2>
         </div>
-
-        <div class="row py-3">
-            <div class="col-12">
-                
-                <div class="tab-content pt-2">
-                    <div class="tab-pane show active" id="stats_table">
-                        <div class="row py-4">
-                            <div class="col-12">
-        
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-centered mb-0 table-xxl">
-                                        <thead>
-                                            <tr>
-                                                <th>Data Statistik</th>
-                                                <th>Kategori Statistik</th>
-                                                <th>Jenis Data</th>
-                                                <th>Tanggal Rilis</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            {% if stats_data|length > 0 %}
-                                                {% for dt in stats_data  %}
-                                                    <tr>
-                                                        <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
-                                                        <td>{{dt.subject_id.name}}</td>
-                                                        <td>Statistik {{dt.get_stat_category_display}}</td>
-                                                        <td>{{ dt.created_at|date:"d M Y" }}</td>
-                                                    </tr>
-                                                {% endfor %}
-                                            {% else %}
-                                                <tr><td colspan="4"><i>Data belum tersedia</i></td></tr>
-                                            {% endif %}
-
-                                    </table>
-                                </div>
-
-                                {% if stats_data|length > 3 %}
-                                <br>
-                                <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="ikm_table">
-
-                        <div class="row py-4">
-                            <div class="col-12">
-        
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-centered mb-0 table-xxl">
-                                        <thead>
-                                            <tr>
-                                                <th>Data Statistik</th>
-                                                <th>Kategori Statistik</th>
-                                                <th>Jenis Data</th>
-                                                <th>Tanggal Rilis</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            {% if stats_data_ikm|length > 0 %}
-                                                {% for dt in stats_data_ikm  %}
-                                                    <tr>
-                                                        <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
-                                                        <td>{{dt.subject_id.name}}</td>
-                                                        <td>Statistik {{dt.get_stat_category_display}}</td>
-                                                        <td>{{ dt.created_at|date:"d M Y" }}</td>
-                                                    </tr>
-                                                {% endfor %}
-                                            {% else %}
-                                                <tr><td colspan="4"><i>Data belum tersedia</i></td></tr>
-                                            {% endif %}
-
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                {% if stats_data_ikm|length > 3 %}
-                                <br>
-                                <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="ids_table">
-                        <div class="row py-4">
-                            <div class="col-12">
-        
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-centered mb-0 table-xxl">
-                                        <thead>
-                                            <tr>
-                                                <th>Data Statistik</th>
-                                                <th>Kategori Statistik</th>
-                                                <th>Jenis Data</th>
-                                                <th>Tanggal Rilis</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% if stats_data_str|length > 0 %}
-                                            {% for dt in stats_data_str  %}
-                                                    <tr>
-                                                        <td><a href="#" class="text-secondary">{{dt.name}}</a></td>
-                                                        <td>{{dt.subject_id.name}}</td>
-                                                        <td>Statistik {{dt.get_stat_category_display}}</td>
-                                                        <td>{{ dt.created_at|date:"d M Y" }}</td>
-                                                    </tr>
-                                                {% endfor %}
-                                            {% else %}
-                                                <tr><td colspan="4"><i>Data belum tersedia</i></td></tr>
-                                            {% endif %}
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {% if stats_data_str|length > 3 %}
-                                <br>
-                                <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <ul class="nav nav-pills bg-nav-pills nav-justified mt-3 mb-5" style="border-radius:20px; font-size:13px">
-                    <li class="nav-item">
-                        <a href="#stats_table" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active" style="border-radius:20px;">
-                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Tabel Statistik</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#ikm_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Indikator Kinerja Pembangunan</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#ids_table" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Indikator Data Strategis</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
+      </div>
     </div>
+
+    <div class="row py-3">
+      <div class="col-12">
+        <div class="tab-content pt-2">
+          <div class="tab-pane show active" id="stats_table">
+            <div class="row py-4">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table
+                    class="table table-hover table-centered mb-0 table-xxl"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Data Statistik</th>
+                        <th>Kategori Statistik</th>
+                        <th>Jenis Data</th>
+                        <th>Tanggal Rilis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if stats_data|length > 0 %} {% for dt in stats_data %}
+                      <tr>
+                        <td>
+                          <a href="#" class="text-secondary">{{dt.name}}</a>
+                        </td>
+                        <td>{{dt.subject_id.name}}</td>
+                        <td>Statistik {{dt.get_stat_category_display}}</td>
+                        <td>{{ dt.created_at|date:"d M Y" }}</td>
+                      </tr>
+                      {% endfor %} {% else %}
+                      <tr>
+                        <td colspan="4"><i>Data belum tersedia</i></td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+
+                {% if stats_data|length > 3 %}
+                <br />
+                <a href="#" class="btn"
+                  >Muat lebih banyak <i class="dripicons-chevron-right"></i
+                ></a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="ikm_table">
+            <div class="row py-4">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table
+                    class="table table-hover table-centered mb-0 table-xxl"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Data Statistik</th>
+                        <th>Kategori Statistik</th>
+                        <th>Jenis Data</th>
+                        <th>Tanggal Rilis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if stats_data_ikm|length > 0 %}
+                      {% for dt in stats_data_ikm %}
+                      <tr>
+                        <td>
+                          <a href="#" class="text-secondary">{{dt.name}}</a>
+                        </td>
+                        <td>{{dt.subject_id.name}}</td>
+                        <td>Statistik {{dt.get_stat_category_display}}</td>
+                        <td>{{ dt.created_at|date:"d M Y" }}</td>
+                      </tr>
+                      {% endfor %}
+                      {% else %}
+                      <tr>
+                        <td colspan="4"><i>Data belum tersedia</i></td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+
+                {% if stats_data_ikm|length > 3 %}
+                <br />
+                <a href="#" class="btn"
+                  >Muat lebih banyak <i class="dripicons-chevron-right"></i
+                ></a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="ids_table">
+            <div class="row py-4">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table
+                    class="table table-hover table-centered mb-0 table-xxl"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Data Statistik</th>
+                        <th>Kategori Statistik</th>
+                        <th>Jenis Data</th>
+                        <th>Tanggal Rilis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if stats_data_str|length > 0 %} 
+                      {% for dt in stats_data_str %}
+                      <tr>
+                        <td>
+                          <a href="#" class="text-secondary">{{dt.name}}</a>
+                        </td>
+                        <td>{{dt.subject_id.name}}</td>
+                        <td>Statistik {{dt.get_stat_category_display}}</td>
+                        <td>{{ dt.created_at|date:"d M Y" }}</td>
+                      </tr>
+                      {% endfor %}
+                      {% else %}
+                      <tr>
+                        <td colspan="4"><i>Data belum tersedia</i></td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+                {% if stats_data_str|length > 3 %}
+                <br />
+                <a href="#" class="btn"
+                  >Muat lebih banyak <i class="dripicons-chevron-right"></i
+                ></a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ul
+          class="nav nav-pills bg-nav-pills nav-justified mt-3 mb-5"
+          style="border-radius: 20px; font-size: 13px"
+        >
+          <li class="nav-item">
+            <a
+              href="#stats_table"
+              data-bs-toggle="tab"
+              aria-expanded="show active"
+              class="nav-link py-2 active"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-home-variant d-md-none d-block"></i>
+              <span class="d-none d-md-block">Tabel Statistik</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#ikm_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-account-circle d-md-none d-block"></i>
+              <span class="d-none d-md-block"
+                >Indikator Kinerja Pembangunan</span
+              >
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#ids_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block">Indikator Data Strategis</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="py-4">
-    <div class="container">
-        
-        <div class="row mb-3">
-            <div class="col-lg-12">
-                <div class="text-left">
-                    <h2>Publikasi Statistik</h2>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col-lg-12">
+        <div class="text-left">
+          <h2>Publikasi Statistik</h2>
         </div>
-
-        <div class="row pb-3 align-items-center">
-            <div id="carouselControls2" class="carousel slide" data-bs-ride="carousel">
-                <ol class="carousel-indicators" style="margin-bottom: -30px;">
-
-                    {% for pub in pubs %}
-                    <li data-bs-target="#carouselControls2" data-bs-slide-to="{{pub.no}}" class="{% if pub.no == 0 %}active{% endif %} bg-primary-lighten"></li>
-                    {% endfor %}
-                </ol>
-                <div class="carousel-inner" role="listbox">
-
-                    
-                    {% for pub in pubs %}
-                    <div class="carousel-item {% if pub.no == 0 %}active{% endif %}" data-bs-interval="">
-                        <div class="row">
-                            {% for pub_dt in pub.items %}
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card">
-                                    <img src="/media/{{pub_dt.thumbnail}}" class="card-img-top" alt="..." height="430">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">{{pub_dt.title}}</a></h5>
-                                        <p class="card-text">
-                                            {{pub_dt.desc}}
-                                        </p>
-                                    </div> <!-- end card-body -->   
-                                </div> <!-- end card -->    
-                            </div> <!-- end col-->
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endfor %}
-
-                </div>
-                <a class="carousel-control-prev" href="#carouselControls2" role="button" data-bs-slide="prev" style="margin-left: -130px;">
-                    <div class="avatar-sm m-auto">
-                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </span>
-                    </div>
-                </a>
-                <a class="carousel-control-next" href="#carouselControls2" role="button" data-bs-slide="next" style="margin-right: -130px;">
-                    <div class="avatar-sm m-auto">
-                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </span>
-                    </div>
-                </a>
-            </div>
-        </div>
-
-        <div class="row mb-3 mt-4">
-            <div class="col-lg-12">
-                <div class="text-left">
-                    <h2>Infografis Statistik</h2>
-                </div>
-            </div>
-        </div>
-
-        <div class="row pb-3 align-items-center">
-            <div id="carouselControls3" class="carousel slide" data-bs-ride="carousel">
-                <ol class="carousel-indicators" style="margin-bottom: -30px;">
-
-                    
-                    {% for infograph in infographcs %}
-                    <li data-bs-target="#carouselControls3" data-bs-slide-to="{{infograph.no}}" class="{% if infograph.no == 0 %}active{% endif %} bg-primary-lighten"></li>
-                    {% endfor %}
-
-                </ol>
-                <div class="carousel-inner" role="listbox">
-
-                    {% for infograph in infographcs %}
-                    <div class="carousel-item {% if infograph.no == 0 %}active{% endif %}" data-bs-interval="">
-                        <div class="row">
-                            {% for infograph_dt in infograph.items %}
-                            <div class="col-md-6 col-lg-3">
-                                <div class="card">
-                                    <img src="/media/{{infograph_dt.thumbnail}}" class="card-img-top" alt="..." height="430">
-                                    <div class="card-body">
-                                        <h5 class="card-title"><a href="#" class="text-primary stretched-link">{{infograph_dt.title}}</a></h5>
-                                        <p class="card-text">
-                                            {{infograph_dt.desc}}
-                                        </p>
-                                    </div> <!-- end card-body -->   
-                                </div> <!-- end card -->    
-                            </div> <!-- end col-->
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endfor %}
-
-                </div>
-                <a class="carousel-control-prev" href="#carouselControls3" role="button" data-bs-slide="prev" style="margin-left: -130px;">
-                    <div class="avatar-sm m-auto">
-                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </span>
-                    </div>
-                </a>
-                <a class="carousel-control-next" href="#carouselControls3" role="button" data-bs-slide="next" style="margin-right: -130px;">
-                    <div class="avatar-sm m-auto">
-                        <span class="avatar-title bg-primary-lighten rounded-circle">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </span>
-                    </div>
-                </a>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <div class="row pb-3 align-items-center">
+      <div
+        id="carouselControls2"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <ol class="carousel-indicators" style="margin-bottom: -30px">
+          {% for pub in pubs %}
+          <li
+            data-bs-target="#carouselControls2"
+            data-bs-slide-to="{{pub.no}}"
+            class="{% if pub.no == 0 %}active{% endif %} bg-primary-lighten"
+          ></li>
+          {% endfor %}
+        </ol>
+        <div class="carousel-inner" role="listbox">
+          {% for pub in pubs %}
+          <div
+            class="carousel-item {% if pub.no == 0 %}active{% endif %}"
+            data-bs-interval=""
+          >
+            <div class="row">
+              {% for pub_dt in pub.items %}
+              <div class="col-md-6 col-lg-3">
+                <div class="card">
+                  <img
+                    src="/media/{{pub_dt.thumbnail}}"
+                    class="card-img-top"
+                    alt="..."
+                    height="430"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <a href="#" class="text-primary stretched-link"
+                        >{{pub_dt.title}}</a
+                      >
+                    </h5>
+                    <p class="card-text">{{pub_dt.desc}}</p>
+                  </div>
+                  <!-- end card-body -->
+                </div>
+                <!-- end card -->
+              </div>
+              <!-- end col-->
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <a
+          class="carousel-control-prev"
+          href="#carouselControls2"
+          role="button"
+          data-bs-slide="prev"
+          style="margin-left: -130px"
+        >
+          <div class="avatar-sm m-auto">
+            <span class="avatar-title bg-primary-lighten rounded-circle">
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </span>
+          </div>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#carouselControls2"
+          role="button"
+          data-bs-slide="next"
+          style="margin-right: -130px"
+        >
+          <div class="avatar-sm m-auto">
+            <span class="avatar-title bg-primary-lighten rounded-circle">
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="row mb-3 mt-4">
+      <div class="col-lg-12">
+        <div class="text-left">
+          <h2>Infografis Statistik</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="row pb-3 align-items-center">
+      <div
+        id="carouselControls3"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <ol class="carousel-indicators" style="margin-bottom: -30px">
+          {% for infograph in infographcs %}
+          <li
+            data-bs-target="#carouselControls3"
+            data-bs-slide-to="{{infograph.no}}"
+            class="{% if infograph.no == 0 %}active{% endif %} bg-primary-lighten"
+          ></li>
+          {% endfor %}
+        </ol>
+        <div class="carousel-inner" role="listbox">
+          {% for infograph in infographcs %}
+          <div
+            class="carousel-item {% if infograph.no == 0 %}active{% endif %}"
+            data-bs-interval=""
+          >
+            <div class="row">
+              {% for infograph_dt in infograph.items %}
+              <div class="col-md-6 col-lg-3">
+                <div class="card">
+                  <img
+                    src="/media/{{infograph_dt.thumbnail}}"
+                    class="card-img-top"
+                    alt="..."
+                    height="430"
+                  />
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <a href="#" class="text-primary stretched-link"
+                        >{{infograph_dt.title}}</a
+                      >
+                    </h5>
+                    <p class="card-text">{{infograph_dt.desc}}</p>
+                  </div>
+                  <!-- end card-body -->
+                </div>
+                <!-- end card -->
+              </div>
+              <!-- end col-->
+              {% endfor %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <a
+          class="carousel-control-prev"
+          href="#carouselControls3"
+          role="button"
+          data-bs-slide="prev"
+          style="margin-left: -130px"
+        >
+          <div class="avatar-sm m-auto">
+            <span class="avatar-title bg-primary-lighten rounded-circle">
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </span>
+          </div>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#carouselControls3"
+          role="button"
+          data-bs-slide="next"
+          style="margin-right: -130px"
+        >
+          <div class="avatar-sm m-auto">
+            <span class="avatar-title bg-primary-lighten rounded-circle">
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="pt-5 pb-3 bg-light-lighten border-top border-bottom border-light" id="media-statistik">
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col-lg-12">
-                <div class="text-left">
-                    <h2>Berita dan Media Statistik Kab Muna</h2>
-                </div>
-            </div>
+<section
+  class="pt-5 pb-3 bg-light-lighten border-top border-bottom border-light"
+  id="media-statistik"
+>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col-lg-12">
+        <div class="text-left">
+          <h2>Berita dan Media Statistik Kab Muna</h2>
         </div>
-
-        <div class="row py-3">
-            <div class="col-12">
-                <ul class="nav nav-pills bg-nav-pills nav-justified mb-3" style="border-radius:20px;">
-                    <li class="nav-item">
-                        <a href="#brs" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active" style="border-radius:20px;">
-                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Berita Statistik</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#publikasi" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Publikasi Statistik</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#infograph" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Infografis</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#videograph" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                            <i class="mdi mdi-settings-outline d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Videografis</span>
-                        </a>
-                    </li>
-                </ul>
-                
-                <div class="tab-content pt-3">
-                    <div class="tab-pane show active" id="brs">
-
-                        {% for dt_stat in stats_news %}
-                        <a href="#" class="list-group-item list-group-item-action shadow-sm" style="border-radius:20px; margin-bottom:15px;border:none">
-                            <div class="row g-0 align-items-center">
-                                <div class="col-sm-1">
-                                    <img class="ms-2 rounded" src="/media/{{dt_stat.thumbnail}}" width="55" alt="{{dt_stat.title}}">
-                                </div>
-                                <div class="col-sm-11">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h5 class="mb-1">{{dt_stat.title}}</h5>
-                                        <small>{{dt_stat.created_at|date:"d M Y"}}</small>
-                                    </div>
-                                    <p class="mb-1">{{dt_stat.content}}</p>
-                                    <small class="text-muted">{{dt_stat.author}}</small>
-                                </div>
-                            </div>
-                        </a>
-                        {% endfor %}
-
-                        
-                        {% if stats_news|length > 3 %}
-                            <div class="mt-3">
-                                <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
-                            </div>
-                        {% endif %}
-
-                    </div>
-                    <div class="tab-pane" id="publikasi">
-
-                        <div class="row">
-                            
-                            {% for dt_pub in pubs_data %}
-                                <div class="col-xxl-4 col-lg-6">
-                                    <a href="#" class="list-group-item list-group-item-action mb-2 shadow-sm" style="border:none; border-radius:20px">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-sm-4">
-                                                <img class="ms-1 rounded" src="/media/{{dt_pub.thumbnail}}" width="80" alt="Generic placeholder image">
-                                            </div>
-                                            <div class="col-sm-8">
-                                                <div class="d-flex w-100 justify-content-between">
-                                                    <h5 class="mb-1">{{dt_pub.title}}</h5>
-                                                </div>
-                                                <p class="mb-1">{{dt_pub.release|date:"d M Y"}}</p>
-                                                <small class="text-muted">No. Publikasi / Katalog: {{dt_pub.publication_no}}/{{dt_pub.catalog_no}}</small>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        {% if pubs_data|length > 8 %}
-                            <div class="mt-3">
-                                <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div class="tab-pane" id="infograph">
-                        <div class="row">
-                            {% for info_dt in infographs_data %}
-                                <div class="col-xl-3 col-lg-6">
-                                    <div class="demo-box text-center">
-                                        <img src="/media/{{info_dt.thumbnail}}" alt="{{info_dt.title}}" class="img-fluid shadow-sm rounded">
-                                        <h5 class="mt-3 f-17">{{info_dt.title}}</h5>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-
-                        {% if infographs_data|length > 11 %}
-                            <div class="mt-3">
-                                <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
-                            </div>
-                        {% endif %}
-
-                    </div>
-                    <div class="tab-pane" id="videograph">
-                        {% comment %} Pas diklik videonya, munculin tampilkan videonya di atasnya {% endcomment %}
-                        <div class="row">
-                            {% for dt_vidgraph in videographs_data %}
-                                <div class="col-xl-4 col-lg-6">
-                                    <div class="demo-box text-center mt-3 mt-lg-0" data-bs-toggle="modal" data-bs-target="#bs-example-modal-lg">
-                                        <iframe class="shadow-sm rounded" width="410" height="250" src="{{dt_vidgraph.link}}?autoplay=1" title="{{dt_vidgraph.title}}" frameborder="0" allowfullscreen style="margin-bottom:-5px;"></iframe>
-                                        <h5 class="mt-3 f-17">{{dt_vidgraph.title}}</h5>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        {% if videographs_data|length > 8 %}
-                            <div class="mt-3">
-                                <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
-                            </div>
-                        {% endif %}
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        
+      </div>
     </div>
+
+    <div class="row py-3">
+      <div class="col-12">
+        <ul
+          class="nav nav-pills bg-nav-pills nav-justified mb-3"
+          style="border-radius: 20px"
+        >
+          <li class="nav-item">
+            <a
+              href="#brs"
+              data-bs-toggle="tab"
+              aria-expanded="show active"
+              class="nav-link py-2 active"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-home-variant d-md-none d-block"></i>
+              <span class="d-none d-md-block">Berita Statistik</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#publikasi"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-account-circle d-md-none d-block"></i>
+              <span class="d-none d-md-block">Publikasi Statistik</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#infograph"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block">Infografis</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#videograph"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block">Videografis</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content pt-3">
+          <div class="tab-pane show active" id="brs">
+            {% for dt_stat in stats_news %}
+            <a
+              href="#"
+              class="list-group-item list-group-item-action shadow-sm"
+              style="border-radius: 20px; margin-bottom: 15px; border: none"
+            >
+              <div class="row g-0 align-items-center">
+                <div class="col-sm-1">
+                  <img
+                    class="ms-2 rounded"
+                    src="/media/{{dt_stat.thumbnail}}"
+                    width="55"
+                    alt="{{dt_stat.title}}"
+                  />
+                </div>
+                <div class="col-sm-11">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{dt_stat.title}}</h5>
+                    <small>{{dt_stat.created_at|date:"d M Y"}}</small>
+                  </div>
+                  <p class="mb-1">{{dt_stat.content}}</p>
+                  <small class="text-muted">{{dt_stat.author}}</small>
+                </div>
+              </div>
+            </a>
+            {% endfor %} {% if stats_news|length > 3 %}
+            <div class="mt-3">
+              <a href="#" class="btn"
+                >Muat lebih banyak <i class="dripicons-chevron-right"></i
+              ></a>
+            </div>
+            {% endif %}
+          </div>
+          <div class="tab-pane" id="publikasi">
+            <div class="row">
+              {% for dt_pub in pubs_data %}
+              <div class="col-xxl-4 col-lg-6">
+                <a
+                  href="#"
+                  class="list-group-item list-group-item-action mb-2 shadow-sm"
+                  style="border: none; border-radius: 20px"
+                >
+                  <div class="row g-0 align-items-center">
+                    <div class="col-sm-4">
+                      <img
+                        class="ms-1 rounded"
+                        src="/media/{{dt_pub.thumbnail}}"
+                        width="80"
+                        alt="Generic placeholder image"
+                      />
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{dt_pub.title}}</h5>
+                      </div>
+                      <p class="mb-1">{{dt_pub.release|date:"d M Y"}}</p>
+                      <small class="text-muted"
+                        >No. Publikasi / Katalog:
+                        {{dt_pub.publication_no}}/{{dt_pub.catalog_no}}</small
+                      >
+                    </div>
+                  </div>
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if pubs_data|length > 8 %}
+            <div class="mt-3">
+              <a href="#" class="btn"
+                >Muat lebih banyak <i class="dripicons-chevron-right"></i
+              ></a>
+            </div>
+            {% endif %}
+          </div>
+          <div class="tab-pane" id="infograph">
+            <div class="row">
+              {% for info_dt in infographs_data %}
+              <div class="col-xl-3 col-lg-6">
+                <div class="demo-box text-center">
+                  <img
+                    src="/media/{{info_dt.thumbnail}}"
+                    alt="{{info_dt.title}}"
+                    class="img-fluid shadow-sm rounded"
+                  />
+                  <h5 class="mt-3 f-17">{{info_dt.title}}</h5>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if infographs_data|length > 11 %}
+            <div class="mt-3">
+              <a href="#" class="btn"
+                >Muat lebih banyak <i class="dripicons-chevron-right"></i
+              ></a>
+            </div>
+            {% endif %}
+          </div>
+          <div class="tab-pane" id="videograph">
+            {% comment %} Pas diklik videonya, munculin tampilkan videonya di
+            atasnya {% endcomment %}
+            <div class="row">
+              {% for dt_vidgraph in videographs_data %}
+              <div class="col-xl-4 col-lg-6">
+                <div
+                  class="demo-box text-center mt-3 mt-lg-0"
+                  data-bs-toggle="modal"
+                  data-bs-target="#bs-example-modal-lg"
+                >
+                  <iframe
+                    class="shadow-sm rounded"
+                    width="410"
+                    height="250"
+                    src="{{dt_vidgraph.link}}?autoplay=1"
+                    title="{{dt_vidgraph.title}}"
+                    frameborder="0"
+                    allowfullscreen
+                    style="margin-bottom: -5px"
+                  ></iframe>
+                  <h5 class="mt-3 f-17">{{dt_vidgraph.title}}</h5>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if videographs_data|length > 8 %}
+            <div class="mt-3">
+              <a href="#" class="btn"
+                >Muat lebih banyak <i class="dripicons-chevron-right"></i
+              ></a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section class="py-5" id="layanan-statistik">
-    <div class="container">
-        <div class="row mb-3">
-            <div class="col-lg-12">
-                <div class="text-left">
-                    <h2>Layanan Konsultasi Statistik</h2>
-                </div>
-            </div>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col-lg-12">
+        <div class="text-left">
+          <h2>Layanan Konsultasi Statistik</h2>
         </div>
-
-        <div class="row py-3">
-            <div class="col-12">
-                <ul class="nav nav-pills bg-nav-pills nav-justified mb-3" style="border-radius:20px;">
-                    <li class="nav-item">
-                        <a href="#req_data" data-bs-toggle="tab" aria-expanded="show active" class="nav-link py-2 active" style="border-radius:20px;">
-                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Konsultasi Statistik</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#q_n_a" data-bs-toggle="tab" aria-expanded="false" class="nav-link py-2" style="border-radius:20px;">
-                            <i class="mdi mdi-account-circle d-md-none d-block"></i>
-                            <span class="d-none d-md-block">Cek Ketersediaan Data</span>
-                        </a>
-                    </li>
-                </ul>
-                
-                <div class="tab-content pt-2">
-                    <div class="tab-pane show active" id="req_data">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="text-left">
-                                    <p class="text-muted mt-2">Silahkan isi formulir berikut apabila ada hal yang perlu ditanyakan.
-                                    Tim kami akan segera membalas anda dengan segera. Anda dapat melihat status konsultasi pada <a href="#">Menu Aduan</a>.
-                            </p>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <div class="row align-items-center">
-                            <div class="col-md-4">
-                                <p class="text-muted"><span class="fw-bold">Narahubung:</span><br> <span class="d-block mt-1">+62 877 6655 4028</span></p>
-                                <p class="text-muted mt-4"><span class="fw-bold">Alamat Email:</span><br> <span class="d-block mt-1">Rifkigst.bps@gmail.com</span></p>
-                                <p class="text-muted mt-4"><span class="fw-bold">Alamat Kantor:</span><br> <span class="d-block mt-1">Kab. Muna, Sulawesi Tenggara</span></p>
-                                <p class="text-muted mt-4"><span class="fw-bold">Waktu Kerja:</span><br> <span class="d-block mt-1">10:00 to 15:00 WITA</span></p>
-                            </div>
-    
-                            <div class="col-md-8">
-                                <form action="{% url 'app:data-consult-app' %}" method="post">
-                                    {% csrf_token %}
-                                    <div class="row mt-4">
-                                        <div class="col-lg-5">
-                                            <div class="mb-2">
-                                                <label for="name" class="form-label">Nama Lengkap</label>
-                                                <input class="form-control form-control-light" type="text" id="name" name="name" placeholder="Nama Pemohon...">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <div class="mb-2">
-                                                <label for="email" class="form-label">Email</label>
-                                                <input class="form-control form-control-light" type="email" required="" id="email" name="email" placeholder="Alamat Email...">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3">
-                                            <div class="mb-2">
-                                                <label for="contact" class="form-label">No. Telp</label>
-                                                <input class="form-control form-control-light" type="text" required="" id="contact" name="contact" placeholder="No. Telp...">
-                                            </div>
-                                        </div>
-                                    </div>
-    
-                                    <div class="row mt-1">
-                                        <div class="col-lg-12">
-                                            <div class="mb-2">
-                                                <label for="subject" class="form-label">Subjek</label>
-                                                <input class="form-control form-control-light" type="text" id="subject" name="subject" placeholder="Subjek/Judul Permohonan...">
-                                            </div>
-                                        </div>
-                                    </div>
-    
-                                    <div class="row mt-1">
-                                        <div class="col-lg-12">
-                                            <div class="mb-2">
-                                                <label for="message" class="form-label">Pesan</label>
-                                                <textarea id="message" rows="4" class="form-control form-control-light" name="message" placeholder="Tuliskan pesan..."></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-    
-                                    <div class="row mt-2">
-                                        <div class="col-lg-12 text-end">
-                                            <button class="btn" >Kirim Pesan </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="q_n_a">
-
-                        <div class="row align-items-center mt-3">
-                            <div class="col-lg-12 d-flex justify-content-center">
-                                <div class="app-search dropdown ml-5">
-                                    <div class="row gy-2 gx-2 align-items-center">
-                                        <div class="col-auto">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" placeholder="Telusuri Ketersediaan Data ..." id="search_data" autocomplete="off" style="width:450px;height:45px;border-radius:5px">
-                                                <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto mt-2 px-0">
-                                            <button class="btn btn-primary rounded ml-2" style="height:45px" id="button-search_data" fdprocessedid="hdtwr9">Cek Data</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row" style="margin-top:50px">
-                            <div class="col-12 table-responsive">
-                                <table class="table table-hover table-centered mb-0 w-100 dt-responsive nowrap" id="data_table_check">
-                                    <thead>
-                                        <tr>
-                                            <th style="width: 5px!important;">No</th>
-                                            <th style="width:400px!important;">Data Statistik</th>
-                                            <th>Kategori Statistik</th>
-                                            <th>Ketersedian Tahun</th>
-                                            <th>Periode Data</th>
-                                            <th>Tanggal Rilis</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="text-muted">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        
+      </div>
     </div>
+
+    <div class="row py-3">
+      <div class="col-12">
+        <ul
+          class="nav nav-pills bg-nav-pills nav-justified mb-3"
+          style="border-radius: 20px"
+        >
+          <li class="nav-item">
+            <a
+              href="#req_data"
+              data-bs-toggle="tab"
+              aria-expanded="show active"
+              class="nav-link py-2 active"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-home-variant d-md-none d-block"></i>
+              <span class="d-none d-md-block">Konsultasi Statistik</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#q_n_a"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-account-circle d-md-none d-block"></i>
+              <span class="d-none d-md-block">Cek Ketersediaan Data</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content pt-2">
+          <div class="tab-pane show active" id="req_data">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="text-left">
+                  <p class="text-muted mt-2">
+                    Silahkan isi formulir berikut apabila ada hal yang perlu
+                    ditanyakan. Tim kami akan segera membalas anda dengan
+                    segera. Anda dapat melihat status konsultasi pada
+                    <a href="#">Menu Aduan</a>.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row align-items-center">
+              <div class="col-md-4">
+                <p class="text-muted">
+                  <span class="fw-bold">Narahubung:</span><br />
+                  <span class="d-block mt-1">+62 877 6655 4028</span>
+                </p>
+                <p class="text-muted mt-4">
+                  <span class="fw-bold">Alamat Email:</span><br />
+                  <span class="d-block mt-1">Rifkigst.bps@gmail.com</span>
+                </p>
+                <p class="text-muted mt-4">
+                  <span class="fw-bold">Alamat Kantor:</span><br />
+                  <span class="d-block mt-1">Kab. Muna, Sulawesi Tenggara</span>
+                </p>
+                <p class="text-muted mt-4">
+                  <span class="fw-bold">Waktu Kerja:</span><br />
+                  <span class="d-block mt-1">10:00 to 15:00 WITA</span>
+                </p>
+              </div>
+
+              <div class="col-md-8">
+                <form action="{% url 'app:data-consult-app' %}" method="post">
+                  {% csrf_token %}
+                  <div class="row mt-4">
+                    <div class="col-lg-5">
+                      <div class="mb-2">
+                        <label for="name" class="form-label"
+                          >Nama Lengkap</label
+                        >
+                        <input
+                          class="form-control form-control-light"
+                          type="text"
+                          id="name"
+                          name="name"
+                          placeholder="Nama Pemohon..."
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="mb-2">
+                        <label for="email" class="form-label">Email</label>
+                        <input
+                          class="form-control form-control-light"
+                          type="email"
+                          required=""
+                          id="email"
+                          name="email"
+                          placeholder="Alamat Email..."
+                        />
+                      </div>
+                    </div>
+                    <div class="col-lg-3">
+                      <div class="mb-2">
+                        <label for="contact" class="form-label">No. Telp</label>
+                        <input
+                          class="form-control form-control-light"
+                          type="text"
+                          required=""
+                          id="contact"
+                          name="contact"
+                          placeholder="No. Telp..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mt-1">
+                    <div class="col-lg-12">
+                      <div class="mb-2">
+                        <label for="subject" class="form-label">Subjek</label>
+                        <input
+                          class="form-control form-control-light"
+                          type="text"
+                          id="subject"
+                          name="subject"
+                          placeholder="Subjek/Judul Permohonan..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mt-1">
+                    <div class="col-lg-12">
+                      <div class="mb-2">
+                        <label for="message" class="form-label">Pesan</label>
+                        <textarea
+                          id="message"
+                          rows="4"
+                          class="form-control form-control-light"
+                          name="message"
+                          placeholder="Tuliskan pesan..."
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mt-2">
+                    <div class="col-lg-12 text-end">
+                      <button class="btn">Kirim Pesan</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="q_n_a">
+            <div class="row align-items-center mt-3">
+              <div class="col-lg-12 d-flex justify-content-center">
+                <div class="app-search dropdown ml-5">
+                  <div class="row gy-2 gx-2 align-items-center">
+                    <div class="col-auto">
+                      <div class="input-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Telusuri Ketersediaan Data ..."
+                          id="search_data"
+                          autocomplete="off"
+                          style="width: 450px; height: 45px; border-radius: 5px"
+                        />
+                        <span
+                          class="mdi mdi-magnify search-icon"
+                          style="margin-top: 5px"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="col-auto mt-2 px-0">
+                      <button
+                        class="btn btn-primary rounded ml-2"
+                        style="height: 45px"
+                        id="button-search_data"
+                        fdprocessedid="hdtwr9"
+                      >
+                        Cek Data
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row" style="margin-top: 50px">
+              <div class="col-12 table-responsive">
+                <table
+                  class="table table-hover table-centered mb-0 w-100 dt-responsive nowrap"
+                  id="data_table_check"
+                >
+                  <thead>
+                    <tr>
+                      <th style="width: 5px !important">No</th>
+                      <th style="width: 400px !important">Data Statistik</th>
+                      <th>Kategori Statistik</th>
+                      <th>Ketersedian Tahun</th>
+                      <th>Periode Data</th>
+                      <th>Tanggal Rilis</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-muted"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Dark Filled Modal -->
-<div class="modal fade" id="bs-example-modal-lg" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-body text-center pt-2 px-0 pb-0 mb-0">
-                <h4 class="mb-2 text-secondary" id="myLargeModalLabel" style="font-size:18px;"><i>Luas Panen dan Produksi Jagung di Indonesia 2023</i></h4>
-                <iframe style="margin-bottom:-5px;" id="Geeks3" width="1136" height="580" src="https://www.youtube.com/embed/V5he1JXiQbg?autoplay=1" frameborder="0" allowfullscreen></iframe>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+<div
+  class="modal fade"
+  id="bs-example-modal-lg"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myLargeModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-body text-center pt-2 px-0 pb-0 mb-0">
+        <h4
+          class="mb-2 text-secondary"
+          id="myLargeModalLabel"
+          style="font-size: 18px"
+        >
+          <i>Luas Panen dan Produksi Jagung di Indonesia 2023</i>
+        </h4>
+        <iframe
+          style="margin-bottom: -5px"
+          id="Geeks3"
+          width="1136"
+          height="580"
+          src="https://www.youtube.com/embed/V5he1JXiQbg?autoplay=1"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 
-{% endblock main-content %}
-
-
-{% block js-extender %}
+{% endblock main-content %} {% block js-extender %}
 <script>
-    var table = $("#data_table_check").DataTable(
-      {
-        info: false,
-        searching:false,
-        lengthChange:false,
-        fixedColumns: true,
-        pageLength: 5,
-        processing: true,
-        serverSide: true,
-        ajax: {
-            "url": "{% url 'app:data-tracing-app' %}",
-            "headers": {
-                "X-Requested-With": "XMLHttpRequest",
-                "X-CSRFToken": '{{csrf_token}}',
-            },
-            "type": "POST",
-            "data": function (d){
-                return $.extend({}, d, {
-                    "search_data": $('#search_data').val(),
-                })
-            },
-        },
-        columns :[
-            {"data" : 'no'},
-            {"data" : 'indicator_id__name'},
-            {"data" : 'indicator_id__subject_id__name'},
-            {"data" : 'year'},
-            {"data" : 'indicator_id__time_period_id__name'},
-            {"data" : 'created_at'},
-        ],
-        language: {
-            paginate: {
-            previous: "<i class='mdi mdi-chevron-left'>",
-            next: "<i class='mdi mdi-chevron-right'>",
-            },
-        },
-        drawCallback: function () {
-            $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
-        },
-      }
-    );
+  var table = $("#data_table_check").DataTable({
+    info: false,
+    searching: false,
+    lengthChange: false,
+    fixedColumns: true,
+    pageLength: 5,
+    processing: true,
+    serverSide: true,
+    ajax: {
+      url: "{% url 'app:data-tracing-app' %}",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": "{{csrf_token}}",
+      },
+      type: "POST",
+      data: function (d) {
+        return $.extend({}, d, {
+          search_data: $("#search_data").val(),
+        });
+      },
+    },
+    columns: [
+      { data: "no" },
+      { data: "indicator_id__name" },
+      { data: "indicator_id__subject_id__name" },
+      { data: "year" },
+      { data: "indicator_id__time_period_id__name" },
+      { data: "created_at" },
+    ],
+    language: {
+      paginate: {
+        previous: "<i class='mdi mdi-chevron-left'>",
+        next: "<i class='mdi mdi-chevron-right'>",
+      },
+    },
+    drawCallback: function () {
+      $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+    },
+  });
 
-    $('#button-search_data').on("click", function (){
-        table.draw()
-    })
-
+  $("#button-search_data").on("click", function () {
+    table.draw();
+  });
 </script>
 {% endblock js-extender %}
