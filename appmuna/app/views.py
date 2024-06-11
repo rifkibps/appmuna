@@ -458,47 +458,113 @@ class StatisticDetailTableClassView(View):
                                 }
                             )
 
-                # Content Data
+                # Content Data'
                 data_contents = model_data.values()
+                data_content_table = []
+                # for dt in data_contents:
+                #     if model.col_group_id:
+                #         check_exist = next((index for (index, d) in enumerate(data_content_table) if d.get(dt["item_row"]) == dt["item_row"]), None)
+                #         if check_exist is None:
+                #             data_content_table.append({
+                #                 dt["item_row"] : [{
+                #                     dt["item_char"] : {
+                #                         'id' : dt['id'],
+                #                         'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                #                         }
+                #                     }]
+                #                 })
+                #         else:
+                #             data_content_table[check_exist].append(
+                #                 {
+                #                     dt["item_char"] : {
+                #                         'id' : dt['id'],
+                #                         'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                #                     }
+                #                 }
+                #             )
+                #     else:
+                #         if len(data_content_table) > 0:
+                #             keys = [i for idx in data_content_table for i in idx.keys()]
+                #             if str(dt["item_row"]) in keys:
+                #                 idx = keys.index(str(dt["item_row"]))
+                #                 data_content_table[idx][str(dt["item_row"])].append(
+                #                     {
+                #                         'id' : dt['id'],
+                #                         'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                #                     }
+                #                 )
+                #                 continue
+            
+                #         data_content_table.append(
+                #             {
+                #                 dt["item_row"] : [{'id' : dt['id'], 'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',}]
+                #             }
+                #         )
+                
+                print(data_contents)
+                for dt in data_contents:
+                    if model.col_group_id:
+                        check_exist = next((index for (index, d) in enumerate(data_content_table) if d.get(dt["item_row"]) == dt["item_row"]), None)
+                        if check_exist is None:
+                            data_content_table.append({
+                                dt["item_row"] : [{
+                                    dt["item_char"] : {
+                                        'id' : dt['id'],
+                                        'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                                        }
+                                    }]
+                                })
+                        else:
+                            data_content_table[check_exist].append(
+                                {
+                                    dt["item_char"] : {
+                                        'id' : dt['id'],
+                                        'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                                    }
+                                }
+                            )
+                    else:
+                        if len(data_content_table) > 0:
+                            keys = [i for idx in data_content_table for i in idx.keys()]
+                            if str(dt["item_row"]) in keys:
+                                idx = keys.index(str(dt["item_row"]))
+                                data_content_table[idx][str(dt["item_row"])].append(
+                                    {
+                                        'id' : dt['id'],
+                                        'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                                    }
+                                )
+                                continue
+            
+                        data_content_table.append(
+                            {
+                                dt["item_row"] : [
+                                    {dt['year'] : [{'prd_id' : dt['item_period'], 'row_item_id' : dt['item_row'], 'val' : dt['value'] }]}
+                                ]
+                      
+                                # dt["item_row"] : [{'id' : dt['id'], 'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',}]
+                            }
+                        )
+                
+                
+                print(data_content_table)
+                # Rows Datas
+                data_rows = models.BackendRowsItemsModel.objects.filter(row_id = model.row_group_id).order_by('order_num')
+
+                # Cols Data
+                col_groups = ['Tidak Tersedia']
+                if model.col_group_id:
+                    data_chars = models.BackendCharacteristicItemsModel.objects.filter(char_id = model.col_group_id).order_by('id')
+                    col_groups = data_chars.values()
+                else:
+                    pass
+
 
                 if model.col_group_id:
                     pass
                 else:
                     pass
-                print(model_data_period)
-                print(list_periods)
 
-                data_content_table = []
-
-                for dt in data_contents:
-
-                    if len(dt['item_char']) > 0:
-                        content_data = {
-                            dt["item_row"] : {
-                                dt["item_char"] : {
-                                    'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
-                                    'id' : dt['id']
-                                }
-                            }
-                        }
-                    else:
-                        content_data = {
-                            dt["item_row"] : {
-                                'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
-                                'id' : dt['id']
-                            }
-                        }
-                    data_content_table.append(content_data)
-
-                # Rows Data
-                data_rows = models.BackendRowsItemsModel.objects.filter(row_id = model.row_group_id).order_by('order_num')
-
-                # Cols Data
-                col_groups = ['Tidak Tersedia']
-                if model.col_group_id is not None:
-                    data_chars = models.BackendCharacteristicItemsModel.objects.filter(char_id = model.col_group_id).order_by('id')
-                    col_groups = data_chars.values()
-            
                 context = {
                     'title' : 'Kemiskinan | Tabel Statistik',
                     'table' : model,
