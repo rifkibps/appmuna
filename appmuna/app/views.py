@@ -411,13 +411,14 @@ class StatisticDetailTableClassView(View):
                 for dt in model_data_period:
 
                     check_exist = next((index for (index, d) in enumerate(list_periods) if d["year"] == dt['year']), None)
+         
                     if check_exist is None:
                         list_periods.append({
                             "year"    : dt['year'],
                             "periods" : [
                                 {
                                     'id' : dt["item_period"],
-                                    'name' : models.BackendPeriodsModel.objects.filter(pk=dt["item_period"]).first().name
+                                    'name' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period
                                 }
                             ]
                         })
@@ -425,7 +426,7 @@ class StatisticDetailTableClassView(View):
                         list_periods[check_exist]['periods'].append(
                             {
                                 'id' : dt["item_period"],
-                                'name' : models.BackendPeriodsModel.objects.filter(pk=dt["item_period"]).first().name
+                                'name' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period
                             }
                         )
 
@@ -458,121 +459,114 @@ class StatisticDetailTableClassView(View):
                                 }
                             )
 
-                # Content Data'
-                data_contents = model_data.values()
+                # Content Data
                 data_content_table = []
-                # for dt in data_contents:
-                #     if model.col_group_id:
-                #         check_exist = next((index for (index, d) in enumerate(data_content_table) if d.get(dt["item_row"]) == dt["item_row"]), None)
-                #         if check_exist is None:
-                #             data_content_table.append({
-                #                 dt["item_row"] : [{
-                #                     dt["item_char"] : {
-                #                         'id' : dt['id'],
-                #                         'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
-                #                         }
-                #                     }]
-                #                 })
-                #         else:
-                #             data_content_table[check_exist].append(
-                #                 {
-                #                     dt["item_char"] : {
-                #                         'id' : dt['id'],
-                #                         'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
-                #                     }
-                #                 }
-                #             )
-                #     else:
-                #         if len(data_content_table) > 0:
-                #             keys = [i for idx in data_content_table for i in idx.keys()]
-                #             if str(dt["item_row"]) in keys:
-                #                 idx = keys.index(str(dt["item_row"]))
-                #                 data_content_table[idx][str(dt["item_row"])].append(
-                #                     {
-                #                         'id' : dt['id'],
-                #                         'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
-                #                     }
-                #                 )
-                #                 continue
-            
-                #         data_content_table.append(
-                #             {
-                #                 dt["item_row"] : [{'id' : dt['id'], 'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',}]
-                #             }
-                #         )
-                
-                print(data_contents)
-                for dt in data_contents:
-                    if model.col_group_id:
-                        check_exist = next((index for (index, d) in enumerate(data_content_table) if d.get(dt["item_row"]) == dt["item_row"]), None)
-                        if check_exist is None:
-                            data_content_table.append({
-                                dt["item_row"] : [{
-                                    dt["item_char"] : {
-                                        'id' : dt['id'],
-                                        'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+
+                for dt in model_data.values():
+                    
+                    if len(data_content_table) > 0:
+
+                        check_exist = next((index for (index, d) in enumerate(data_content_table) if dt['item_row'] == d['row_id']), None)
+                        if check_exist is not None:
+                            check_year = next((index for (index, d) in enumerate(data_content_table[check_exist]['items']) if dt['year'] == d['year']), None)
+                            if check_year is not None: # Cek apakah tahun ada di dalam list? Jika Not None, cek ketersedian periode item
+                            
+                                check_item_period = next((index for (index, d) in enumerate(data_content_table[check_exist]['items'][check_year]['items']) if dt['item_period'] == d['item_period_id']), None)
+
+                                if check_item_period is not None:
+                                   
+                                    check_content_field = next((index for (index, d) in enumerate(data_content_table[check_exist]['items'][check_year]['items'][check_item_period]['items']) if dt['item_char'] == d['item_char_id']), None)
+                                    if check_item_period is None:
+                                        data_content_table[check_exist]['items'][check_year]['items'][check_item_period]['items'].append(
+                                            {
+                                                'item_char_id': dt['item_char'],
+                                                'item_char': models.BackendCharacteristicItemsModel.objects.filter(pk=dt['item_char']).first().item_char,
+                                                'id_content_field': dt['id'],
+                                                'value' : dt["value"]
+                                            }
+                                        )
+                                else:
+                                    data_content_table[check_exist]['items'][check_year]['items'].append(
+                                        {
+                                            'item_period_id' : dt["item_period"],
+                                            'item_period' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period,
+                                            'items': [
+                                                {
+                                                    'item_char_id': dt['item_char'],
+                                                    'item_char': models.BackendCharacteristicItemsModel.objects.filter(pk=dt['item_char']).first().item_char,
+                                                    'id_content_field': dt['id'],
+                                                    'value' : dt["value"]
+                                                }
+                                            ]
                                         }
-                                    }]
-                                })
-                        else:
-                            data_content_table[check_exist].append(
-                                {
-                                    dt["item_char"] : {
-                                        'id' : dt['id'],
-                                        'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
-                                    }
-                                }
-                            )
-                    else:
-                        if len(data_content_table) > 0:
-                            keys = [i for idx in data_content_table for i in idx.keys()]
-                            if str(dt["item_row"]) in keys:
-                                idx = keys.index(str(dt["item_row"]))
-                                data_content_table[idx][str(dt["item_row"])].append(
+                                    )
+                            else:
+                                data_content_table[check_exist]['items'].append(
                                     {
-                                        'id' : dt['id'],
-                                        'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',
+                                        'year' : dt["year"],
+                                        'items' : [
+                                            {
+                                                'item_period_id' : dt["item_period"],
+                                                'item_period' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period,
+                                                'items': [
+                                                    {
+                                                        'item_char_id': dt['item_char'],
+                                                        'item_char': models.BackendCharacteristicItemsModel.objects.filter(pk=dt['item_char']).first().item_char,
+                                                        'id_content_field': dt['id'],
+                                                        'value' : dt["value"]
+                                                    }
+                                                ]
+                                            }
+                                        ] 
                                     }
                                 )
-                                continue
-            
-                        data_content_table.append(
+
+                            continue
+
+                    content_data = {
+                        'row_id' : dt["item_row"],
+                        'row_name' : models.BackendRowsItemsModel.objects.filter(pk = dt["item_row"]).first().item_row,
+                        'items' : [
                             {
-                                dt["item_row"] : [
-                                    {dt['year'] : [{'prd_id' : dt['item_period'], 'row_item_id' : dt['item_row'], 'val' : dt['value'] }]}
-                                ]
-                      
-                                # dt["item_row"] : [{'id' : dt['id'], 'val': format(dt['value'], f'.{model.decimal_point}f') if dt['value'] else '',}]
+                                'year' : dt["year"],
+                                'items' : [
+                                    {
+                                        'item_period_id' : dt["item_period"],
+                                        'item_period' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period,
+                                        'items': [
+                                            {
+                                                'item_char_id': dt['item_char'],
+                                                'item_char': models.BackendCharacteristicItemsModel.objects.filter(pk=dt['item_char']).first().item_char,
+                                                'id_content_field': dt['id'],
+                                                'value' : dt["value"]
+                                            }
+                                        ]
+                                    }
+                                ] 
                             }
-                        )
+                        ]
+                    }
+                    data_content_table.append(content_data)
                 
-                
-                print(data_content_table)
-                # Rows Datas
-                data_rows = models.BackendRowsItemsModel.objects.filter(row_id = model.row_group_id).order_by('order_num')
+                # Rows Data
+                data_rows = models.BackendRowsItemsModel.objects.filter(row_id = model.row_group_id).order_by('order_num').values('id', 'item_row')
 
                 # Cols Data
                 col_groups = ['Tidak Tersedia']
-                if model.col_group_id:
+                if model.col_group_id is not None:
                     data_chars = models.BackendCharacteristicItemsModel.objects.filter(char_id = model.col_group_id).order_by('id')
-                    col_groups = data_chars.values()
-                else:
-                    pass
+                    col_groups = data_chars.values('id', 'item_char')
 
-
-                if model.col_group_id:
-                    pass
-                else:
-                    pass
-
+                pprint(data_content_table)
                 context = {
                     'title' : 'Kemiskinan | Tabel Statistik',
                     'table' : model,
-                    'rows_groups' : data_rows.values(),
+                    'rows_groups' : data_rows,
                     'col_groups': col_groups,
                     'line_height_filter': 80*model_data_period.count(),
                     'periods' : list_periods,
-                    'subjects' : subjectItems
+                    'subjects' : subjectItems,
+                    'data_contents' : data_content_table
                 }
 
                 return render(request, 'app/statistics_preview.html', context)

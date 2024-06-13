@@ -107,7 +107,7 @@ class BackendPeriodsModel(models.Model):
    name = models.CharField(max_length=256, null=False, blank=False, verbose_name='Nama Periode Waktu' )
 
    def __str__(self):
-      return f"{self.name}"
+      return f"{self.pk} | {self.name}"
    
 class BackendPeriodNameItemsModel(models.Model):
    
@@ -115,7 +115,7 @@ class BackendPeriodNameItemsModel(models.Model):
    item_period = models.CharField(max_length=256, null=False, blank=False, verbose_name='Item Periode Waktu' )
 
    def __str__(self):
-      return f"{self.period_id}-{self.item_period} {self.period_id.name} | {self.item_period}"
+      return f"{self.pk} | {self.period_id}-{self.item_period} {self.period_id.name} | {self.item_period}"
 
 
 # Unit Name Model

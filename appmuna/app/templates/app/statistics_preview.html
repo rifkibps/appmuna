@@ -1,4 +1,5 @@
 {% extends 'horizontal/home_app.html' %}
+{% load mathfilters %}
 
 {% load static %}
 
@@ -866,54 +867,52 @@
                                         <table class="table table-sm table-striped table-centered nowrap w-100 mb-1 font-14" id="content-table">
                                             <thead style="background-color:#2262AB;color:white">
                                                 <tr>
-                                                    <th rowspan="2" class="text-center sticky-col header-col first-col">No</th>
-                                                    <th rowspan="2" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
-                                                    
-
-                                                    {% comment %} Dilooping for {% endcomment %}
-
-                                                    {% if col_groups.0 != 'Tidak tersedia' %}
-                                                    <th class="text-center" colspan="{{ col_groups|length }}">{{table.col_group_id.name}}</th>
-                                                    {% else %}
-                                                    <td class="text-center" >{{current_year}}</td>
-                                                    {% endif %}
-
-                                                    <th class="text-center" colspan="12">Karakteristik Kemiskinan</th>
-                                                
-                                                
+                                                    <th rowspan="4" class="text-center sticky-col header-col first-col">No</th>
+                                                    <th rowspan="4" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
                                                 </tr>
+
+                                                {% for period in periods %}
+                                                    <tr>
+                                                        {% with num1=period.periods|length num2=col_groups|length %}
+                                                        <th colspan="{{ num1|mul:num2 }}" class="text-center">Tahun {{period.year}}</th>
+                                                        {% endwith %}
+                                                    </tr>
+                                                    <tr>
+                                                        {% for item_period in period.periods %}
+                                                            <th colspan="{{col_groups|length}}" class="text-center">{{ item_period.name }}</th>
+                                                        {% endfor %}
+                                                    </tr>
+                                                {% endfor %}
+
+
                                                 <tr>
-                                                    <th class="text-center">Laki-laki</th>
-                                                    <th class="text-center">Perempuan</th>
-                                                    <th class="text-center">Laki-laki + Perempuan</th>
-                                                    <th class="text-center">Laki-laki</th>
-                                                    <th class="text-center">Perempuan</th>
-                                                    <th class="text-center">Laki-laki + Perempuan</th>
-                                                    <th class="text-center">Laki-laki</th>
-                                                    <th class="text-center">Perempuan</th>
-                                                    <th class="text-center">Laki-laki + Perempuan</th>
-                                                    <th class="text-center">Laki-laki</th>
-                                                    <th class="text-center">Perempuan</th>
-                                                    <th class="text-center">Laki-laki + Perempuan</th>
+                                                    {% for period in periods %}
+                                                        {% for item_period in period.periods %}
+                                                            {% for col in col_groups %}
+                                                                <th class="text-center">{{ col.item_char }}</th>
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                  
                                                 </tr>
+                                                
                                             </thead>
                                             <tbody>
-                                                {% for i in '123456789123456789'  %}
-                                                <tr >
+
+                                                {% for dt_content in data_contents %}
+                                                <tr>
                                                     <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
-                                                    <td class="sticky-col second-col">Buton</td>
-                                                    <td class="text-center">1.200</td>
-                                                    <td class="text-center">4.100</td>
-                                                    <td class="text-center">3.100</td>
-                                                    <td class="text-center">1.200</td>
-                                                    <td class="text-center">4.100</td>
-                                                    <td class="text-center">3.100</td>
-                                                    <td class="text-center">1.200</td>
-                                                    <td class="text-center">4.100</td>
-                                                    <td class="text-center">3.100</td>
-                                                    <td class="text-center">1.200</td>
-                                                    <td class="text-center">4.100</td>
-                                                    <td class="text-center">3.100</td>
+                                                    <td class="sticky-col second-col">{{dt_content.row_name}}</td>
+
+                                                    {% for row_item in dt_content.items %}
+                                                        {% for year_item in row_item.items %}
+                                                            {% for period_item in year_item.items %}
+                                                                <td>
+                                                                    {{period_item.value}}
+                                                                </td>
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                    {% endfor %}
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>
