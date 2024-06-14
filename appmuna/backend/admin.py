@@ -29,6 +29,8 @@ class PeriodsItems(admin.ModelAdmin):
 
 
 admin.site.register(models.BackendIndicatorsModel)
+admin.site.register(models.BackendIndicatorsMeaningModel)
+
 admin.site.register(models.BackendSubjectsModel)
 admin.site.register(models.BackendSubjectsSCAModel)
 admin.site.register(models.BackendCharacteristicsModel, CharacteristicItems)

@@ -155,6 +155,13 @@ class BackendIndicatorsModel(models.Model):
       ('2', 'Indikator Pembangunan'),
    )
 
+   summarize_status = (
+      ('0', 'none'),
+      ('1', 'sum'),
+      ('2', 'avg'),
+   )
+
+
    subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_indicator', verbose_name='Subjek Statistik')
    subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_indicator', verbose_name='Subjek CSA')
    name =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Nama Indikator' )
@@ -165,6 +172,7 @@ class BackendIndicatorsModel(models.Model):
    time_period_id = models.ForeignKey(BackendPeriodsModel, on_delete=models.CASCADE, null=False, related_name='period_indicator', verbose_name='Periode Data')
    unit_id = models.ForeignKey(BackendUnitsModel, on_delete=models.CASCADE, null=True, blank=True, related_name='unit_indicator', verbose_name='Satuan')
    decimal_point = models.IntegerField(null=False, blank=False, default=2, verbose_name='Jumlah Desimal')
+   summarize_status = models.CharField(max_length=1, choices = summarize_status, default= '0',null=False, blank=False, verbose_name='Ringkasan Data')
    stat_category = models.CharField(max_length=1, choices = cats, null=False, blank=False, verbose_name='Kategori Statistik')
    show_state = models.CharField(max_length=1, choices = state, null=False, blank=False, verbose_name='Tampilkan Indikator')
    level_data = models.CharField(max_length=1, choices = level_choices, default= '0',null=False, blank=False, verbose_name='Level Data')
@@ -193,6 +201,22 @@ class BackendContentIndicatorsModel(models.Model):
    def __str__(self):
       return f"{self.indicator_id.name} | {self.year}"
    
+
+class BackendIndicatorsMeaningModel(models.Model):
+   class Meta:
+        verbose_name = 'Master Interpretasi Tabel'
+        verbose_name_plural = 'Master Interpretasi Tabel'  
+
+
+   indicator_id = models.ForeignKey(BackendIndicatorsModel, on_delete=models.PROTECT, null=False, related_name='meaning_indicator')
+   year = models.CharField(max_length=5, null=False, blank=False, verbose_name='Tahun Indikator')
+   item_period = models.CharField(max_length=255, null=False, blank=False, verbose_name='Periode Waktu')
+   context = models.TextField(null=False, blank=False, verbose_name = 'Interpretasi Data')
+   created_at = models.DateField(auto_now_add = True, editable=False)
+   updated_at = models.DateField(auto_now = True, editable=False)
+   
+   def __str__(self):
+      return f"{self.pk}. {self.indicator_id.name} | {self.year}" 
 
 class BackendContentStatisModel(models.Model):
       class Meta:
