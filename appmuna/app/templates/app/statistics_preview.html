@@ -1,5 +1,4 @@
 {% extends 'horizontal/home_app.html' %}
-{% load mathfilters %}
 
 {% load static %}
 
@@ -165,26 +164,10 @@
                 </div>
 
                 <div class="mb-3 mt-4">
-                    <h5>Konsep Data: </h5>
+                    <h5>Konsep dan Definisi: </h5>
                     <div class="mt-1">
                         <p>
                             {{table.desc}}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <h5>Definisi: </h5>
-                    <div class="mt-1">
-                        <p>Indeks yang disusun berdasarkan nilai pengeluaran petani untuk menghasilkan produksi pertanian termasuk didalamnya konsumsi rumah tangga
-                        </p>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <h5>Metode Perhitungan: </h5>
-                    <div class="mt-1">
-                        <p> Y = MX/1
                         </p>
                     </div>
                 </div>
@@ -285,7 +268,6 @@
                                 <ul class="detailPeriod py-2" style="list-style:none;padding-left:5px;overflow-y: scroll;">
 
                                     {% for period in periods %}
-                                    
                                     <li class="yearPeriod" style="cursor: pointer" >
                                         <i class="mdi mdi-chevron-right"></i>
                                         
@@ -295,17 +277,15 @@
                                             {% for item in period.periods %}
                                                 <li style="padding-bottom:2px">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input border" id="customCheck" >
-                                                        <label for="" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
+                                                        <input type="checkbox" class="form-check-input border" id="check_{{item.year}}_{{item.id}}" {{item.checked}} >
+                                                        <label for="check_{{item.year}}_{{item.id}}" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
                                                     </div>
                                                 </li>
                                             {% endfor %}
                                         </ul>
                                     </li>
-
                                     {% endfor %}
                                 </ul>
-    
                             </div>
             
                             <div class="mb-4">
@@ -313,32 +293,23 @@
                                 <div class="mt-1">
                                     <ul class="detailPeriod" style="list-style:none;padding-left:5px;">
                                         <li>
-                                            <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                            <input type="checkbox" class="form-check-input" id="customCheck" checked>&ensp;
                                             <i class="mdi mdi-chart-bar"></i>
                                             <label for="">Bar Chart</label>
                                         </li>
                                         <li>
-                                            <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                            <input type="checkbox" class="form-check-input" id="customCheck" checked>&ensp;
                                             <i class="mdi mdi-chart-line"></i>
                                             <label>Line Chart</label>
                                         </li>
                                         <li>
-                                            <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                            <input type="checkbox" class="form-check-input" id="customCheck" checked>&ensp;
                                             <i class="mdi mdi-chart-pie"></i>
                                             <label>Pie Chart</label>
                                             
                                         </li>
                                     </ul>
     
-                                </div>
-                            </div>
-    
-                            <div class="mb-3">
-                                <h5>Analisis: </h5>
-                                <div class="mt-1">
-                                    <input type="checkbox" class="form-check-input" id="customCheck1">&ensp;
-                                    <i class="mdi mdi mdi-chart-timeline-variant-shimmer"></i>
-                                    <label for="">Deskriptif</label>
                                 </div>
                             </div>
                             
@@ -729,7 +700,7 @@
                                 <div class="mt-1">
                                     <ul class="detailPeriod" style="list-style:none;padding-left:5px;">
                                         <li>
-                                            <input type="checkbox" class="form-check-input" id="customCheck">&ensp;
+                                            <input type="checkbox" class="form-check-input" id="customCheck" checked>&ensp;
                                             <i class="mdi mdi-chart-bar"></i>
                                             <label for="">Bar Chart</label>
                                         </li>
@@ -753,88 +724,6 @@
                     </div>
                 </div> <!-- end card-->
 
-                <h4 class="p-2" ><i class="mdi mdi-arch"></i> Subjek Statistik</h4>
-
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="card-widgets">
-                            <a data-bs-toggle="collapse" href="#cardCollpase" role="button" aria-expanded="false" aria-controls="cardCollpase"><i class="mdi mdi-chevron-double-right"></i></a>
-                        </div>
-
-                        <div class="d-flex align-items-start">
-                            <img class="me-3 rounded-circle" src="{% static 'customs/images/social.png' %}" width="40" alt="Generic placeholder image">
-                            <h5 class="card-title mb-0" style="color:#003C80">{{subjects.0.groups}}</h5>
-                        </div>
-                                        
-                        <div id="cardCollpase" class="collapse pt-3 show">
-                            <ul style="padding-left:0px!important;font-size:15px">
-                                {% for item in subjects.0.items %}
-                                    {% if table.subject_id_id == item.id %}
-                                        <li style="list-style: none; line-height: 45px;" class="rounded bg-primary px-2 pt-1 mb-1 "><p><a href="javascript:void(0)" class="text-white fw-bold subject-filter" data-subj="{{item.id}}"> {{item.name}} <span class="badge float-end ms-2 bg-white text-primary">{{item.count}}</span></a></p></li>
-                                    {% else %}
-                                        <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary subject-filter" data-subj="{{item.id}}"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div> <!-- end card-->
-
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="card-widgets">
-                            <a data-bs-toggle="collapse" href="#cardCollpase2" role="button" aria-expanded="false" aria-controls="cardCollpase2"><i class="mdi mdi-chevron-double-right"></i></a>
-                        </div>
-
-                        <div class="d-flex align-items-start">
-                            <img class="me-3 rounded-circle" src="{% static 'customs/images/economics.png' %}" width="40" alt="Generic placeholder image">
-                            <h5 class="card-title mb-0" style="color:#003C80">{{subjects.1.groups}}</h5>
-                        </div>
-                                        
-                        <div id="cardCollpase2" class="collapse pt-3">
-                            <ul style="padding-left:10px!important">
-                                {% for item in subjects.1.items %}
-                                    {% if table.subject_id_id == item.id %}
-                                        <li style="list-style: none; line-height: 45px;" class="rounded bg-primary px-2 pt-1 mb-1 "><p><a href="javascript:void(0)" class="text-white fw-bold subject-filter" data-subj="{{item.id}}"> {{item.name}} <span class="badge float-end ms-2 bg-white text-primary">{{item.count}}</span></a></p></li>
-                                    {% else %}
-                                        <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
-                                    {% endif %}
-
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div> <!-- end card-->
-          
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="card-widgets">
-                            <a data-bs-toggle="collapse" href="#cardCollpase3" role="button" aria-expanded="false" aria-controls="cardCollpase3"><i class="mdi mdi-chevron-double-right"></i></a>
-                        </div>
-
-                        <div class="d-flex align-items-start">
-                            <img class="me-3 rounded-circle" src="{% static 'customs/images/farm.png' %}" width="40" alt="Generic placeholder image">
-                            <h5 class="card-title mb-0" style="color:#003C80">{{subjects.2.groups}}</h5>
-                        </div>
-                        
-                                        
-                        <div id="cardCollpase3" class="collapse pt-3">
-                            <ul style="padding-left:10px!important">
-
-                                {% for item in subjects.2.items %}
-                                    {% if table.subject_id_id == item.id %}
-                                        <li style="list-style: none; line-height: 45px;" class="rounded bg-primary px-2 pt-1 mb-1 "><p><a href="javascript:void(0)" class="text-white fw-bold subject-filter" data-subj="{{item.id}}"> {{item.name}} <span class="badge float-end ms-2 bg-white text-primary">{{item.count}}</span></a></p></li>
-                                    {% else %}
-                                        <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
-                                    {% endif %}
-                                    
-                                {% endfor %}
- 
-                            </ul>
-                        </div>
-                    </div>
-                </div> 
-
             </div>
             <div class="col-lg-9 px-4">
                 <ul class="nav nav-tabs nav-bordered mb-4" >
@@ -853,7 +742,7 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane show active" id="dinamicTable">
-                        <div class="card pb-3" style="box-shadow:none">
+                        <div class="card pb-3" >
                             <div class="card-body px-3 mt-4 mt-lg-0">
                                 <div class="mb-3">
                                     <h4 class="font-weight-bold"><strong>{{table.name}}, ({{table.unit_id.name}})</strong></h4>
@@ -864,8 +753,8 @@
                                 <div class="row my-1">
                                     <div class="col-sm-6">
                                         <div class="form-check form-switch mb-2">
-                                            <input type="checkbox" class="form-check-input" id="customSwitch1" checked>
-                                            <label class="form-check-label font-14" for="customSwitch1">Bekukan Kolom</label>
+                                            <input type="checkbox" class="form-check-input" id="customSwitch1">
+                                            <label class="form-check-label font-14" for="customSwitch1">Tampilan Penuh</label>
                                         </div>
                                     </div>
                                     <div class="col-sm-6 d-flex justify-content-end" style="padding-right:18px!important">
@@ -952,9 +841,8 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="dropdown float-end">
@@ -963,13 +851,9 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Weekly Report</a>
+                                                <a href="javascript:void(0);" class="dropdown-item">Total</a>
                                                 <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Monthly Report</a>
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Settings</a>
+                                                <a href="javascript:void(0);" class="dropdown-item">Persen (%)</a>
                                             </div>
                                         </div>
                                         <h4 class="header-title mb-4">Line Chart</h4>
@@ -978,12 +862,49 @@
                                             <div class="mt-3 chartjs-chart" >
                                                 <canvas id="task-line-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
                                             </div>
+                                            <br>
+                                            <span>{{table.footer_desc}} (diolah)</span>
+                                        </div>
+
+                                    </div> <!-- end card body-->
+                                </div> <!-- end card -->
+                            </div>
+                        </div>
+                        
+                                                
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="dropdown float-end">
+                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="mdi mdi-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <!-- item-->
+                                                <a href="javascript:void(0);" class="dropdown-item">Total</a>
+                                                <!-- item-->
+                                                <a href="javascript:void(0);" class="dropdown-item">Persen (%)</a>
+                                            </div>
+                                        </div>
+                                        <h4 class="header-title mb-4">Bar Chart</h4>
+
+                                        <div dir="ltr">
+                                            <div class="mt-3 chartjs-chart">
+                                                <canvas id="task-bart-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                            </div>
+                                            <br>
+                                            <span>{{table.footer_desc}} (diolah)</span>
                                         </div>
 
                                     </div> <!-- end card body-->
                                 </div> <!-- end card -->
                             </div><!-- end col-->
-                            <div class="col-6">
+                        </div>
+                        <!-- end row-->
+
+                        <div class="row">
+                            <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="dropdown float-end">
@@ -1007,6 +928,8 @@
                                             <div class="mt-3 chartjs-chart" >
                                                 <canvas id="pie-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
                                             </div>
+                                            <br>
+                                            <span>{{table.footer_desc}} (diolah)</span>
                                         </div>
 
                                         
@@ -1015,41 +938,6 @@
                                 </div> <!-- end card -->
                             </div>
                         </div>
-                        
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="dropdown float-end">
-                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="mdi mdi-dots-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end">
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Weekly Report</a>
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Monthly Report</a>
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Action</a>
-                                                <!-- item-->
-                                                <a href="javascript:void(0);" class="dropdown-item">Settings</a>
-                                            </div>
-                                        </div>
-                                        <h4 class="header-title mb-4">Tasks Overview</h4>
-
-                                        <div dir="ltr">
-                                            <div class="mt-3 chartjs-chart" style="height: 450px;">
-                                                <canvas id="task-bart-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
-                                            </div>
-                                        </div>
-
-                                    </div> <!-- end card body-->
-                                </div> <!-- end card -->
-                            </div><!-- end col-->
-                        </div>
-                        <!-- end row-->
-
-
                         
                     </div>
                     <div class="tab-pane" id="data_comparisons">
@@ -1345,7 +1233,6 @@
         }
     });
 
-
     $("#expandButton").on('click', function (event){
         if ($('#main-content').css('margin-top') == '-50px'){
             $("#search-content").addClass('d-none')
@@ -1364,6 +1251,11 @@
 
 <script>
 
+    const randomColor = (i) => {
+        const colors = ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864'];
+        return colors[i % colors.length];
+      }
+
     function showData(){
         if ($('.compare-item').hasClass('d-none')){
             $('.compare-item').removeClass('d-none')
@@ -1373,7 +1265,6 @@
     }
 
     function show_comparison_panel(state){
-
         if (state == 'comp'){
             $("#comparison-card").removeClass('d-none')
             $("#dataset-card").addClass('d-none')
@@ -1388,34 +1279,16 @@
         data: {
         datasets: [
         /* Outer doughnut data starts*/
+        {% for dt in chart_data.data_pie %}
         {
-            data: [
-            10,
-            20,
-            30
-            ],
-            backgroundColor: ['#17A589'],
-            label: 'Tahun 2024',
+            data: {{dt|safe}},
+            backgroundColor: ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864'],
         },
-        /* Outer doughnut data ends*/
-        /* Inner doughnut data starts*/
-        {
-            data: [
-            45,
-            25,
-            11
-            ],
-            backgroundColor:['#17A589'],
-            label: 'Tahun 2023',
-            
-        }
+        {% endfor %}
+       
         /* Inner doughnut data ends*/
         ],
-        labels: [
-            "Kab. Muna Barat",
-            "Kab. Muna",
-            "Kota Kendari"
-        ]
+        labels: {{chart_data.label_pie_chart|safe}}
         },
         options: {
             plugins: {
@@ -1428,7 +1301,7 @@
             title: {
                 position: 'right',
                 display: true,
-                text: ['Layer 1: Tahun 2023','Layer 2: Tahun 2024'],
+                text: {{chart_data.label_pie_layer|safe}},
                 fontSize:11,
                 fontStyle:'normal',
                 fontFamily: ['Nunito', 'sans-serif']
@@ -1441,7 +1314,6 @@
             },
         }
     })
-
 
     let draw = Chart.controllers.line.prototype.draw;
     Chart.controllers.line = Chart.controllers.line.extend({
@@ -1458,36 +1330,23 @@
         }
     });
 
+    
     new Chart('task-line-chart', {
         type: 'line',
         
         data: {
-            labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],    
+            labels: {{chart_data.labels|safe}},    
             datasets: [
-            {
-                label: 'Male',
-                data: [56.4, 47.0, 42.0, 54.3, 39.4, 27.4, 61, 51, 51.2],
-                fill: false,
-                borderColor: '#17A589',
-                backgroundColor:'#17A589',
-                borderWidth: 1.2,
-                },
-                {
-                label: 'Female',
-                data: [49.4, 44.0, 41.0, 42.3, 46.4, 45.4, 47, 48, 76.2],
-                fill: false,
-                borderColor: '#2E86C1',
-                backgroundColor:'#2E86C1',
-                borderWidth: 1.2,
-                },
-                {
-                label: 'Male + Female',
-                data: [51.4, 52.0, 52.0, 50.3, 51.4, 51.4, 62, 64, 60.2],
-                fill: false,
-                borderColor: '#B479FF',
-                backgroundColor:'#B479FF',
-                borderWidth: 1.2,
-                },
+                {% for dt in chart_data.data %}
+                    {
+                        label: '{{dt.label|safe}}',
+                        data: {{dt.data|safe}},
+                        fill: false,
+                        borderColor: randomColor({{forloop.counter}}),
+                        backgroundColor:randomColor({{forloop.counter}}),
+                        borderWidth: 1.2,
+                    },
+                {% endfor %}
             ]
         },
         options: {
@@ -1498,24 +1357,21 @@
             }
             },
             scales: {
-            yAxes: [{
-                ticks: {
-                min: 0,
-                max: 80,
-                stepSize: 20
-                },
-                scaleLabel: {
-                display: true,
-                labelString: 'Percent (%)'
-                }
-            }],
-            xAxes: [{
-                gridLines: {
-                    drawOnChartArea: false
-                }
-                },
-            ]
-            }
+                yAxes: [{
+                    scaleLabel: {
+                    display: true,
+                    labelString: '{{chart_data.agg|safe}}'
+                    }
+                }],
+                xAxes: [{
+                    gridLines: {
+                        drawOnChartArea: false,
+                        
+                    }
+                    },
+                ]
+            },
+            
         },
         showDatapoints: true,
 
@@ -1524,107 +1380,18 @@
     new Chart('task-bart-chart', {
         type: 'bar',
         data: {
-            labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'],    
-            datasets: [{
-                label: 'Male',
-                data: [42.4, 43.0, 43.0, 50.3, 49.4, 48.4, 50, 51, 60],
-                backgroundColor: 'rgba(124, 181, 236, 0.9)',
-                borderColor: 'rgb(124, 181, 236)',
-                borderWidth: 1
-            },
-            {
-                label: 'Female',
-                data: [57.6, 57.0, 57.0, 49.7, 50.6, 51.6, 50, 51, 60],
-                backgroundColor: 'rgba(67, 67, 72, 0.9)',
-                borderColor: 'rgb(67, 67, 72)',
-                borderWidth: 1
-            },
-            {
-                label: 'Male + Female',
-                data: [47.6, 47.0, 37.0, 49.7, 51.6, 53.6, 55, 50, 61],
-                backgroundColor: 'rgba(67, 67, 72, 0.9)',
-                borderColor: 'rgb(67, 67, 72)',
-                borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            legend: {
-            position: 'bottom',
-            labels: {
-                usePointStyle: true
-            }
-            },
-            scales: {
-            yAxes: [{
-                ticks: {
-                min: 0,
-                max: 80,
-                stepSize: 20
-                },
-                scaleLabel: {
-                display: true,
-                labelString: 'Percent (%)'
-                }
-            }],
-            xAxes: [{
-                gridLines: {
-                    drawOnChartArea: false
-                }
-                },
-                {
-                offset: true,
-                ticks: {
-                    autoSkip: false,
-                    maxRotation: 0,
-                    padding: -15,
-                    callback: (v, i) => {
-                    if (i == 1) {
-                        return 'Total';
-                    } else if (i == 4) {
-                        return 'Lower than 2.50';
-                    } else {
-                        return '';
-                    }
-                    }
-                },
-                gridLines: {
-                    drawOnChartArea: false,
-                    offsetGridLines: true,
-                    tickMarkLength: 20,
-                    color: ['white', 'white', 'white', 'lightgray', 'white', 'white', 'lightgray']
-                }
-                }
-            ]
-            }
-        }
-    });
+            labels: {{chart_data.labels|safe}},
+            datasets: [
 
-    new Chart('task-bart-chart-2', {
-        type: 'bar',
-        data: {
-            labels: ['2015', '2016'],    
-            datasets: [{
-                label: 'Male',
-                data: [42.4, 43.0],
-                backgroundColor: 'rgba(124, 181, 236, 0.9)',
-                borderColor: 'rgb(124, 181, 236)',
-                borderWidth: 1
-            },
-            {
-                label: 'Female',
-                data: [57.6, 57.0],
-                backgroundColor: 'rgba(67, 67, 72, 0.9)',
-                borderColor: 'rgb(67, 67, 72)',
-                borderWidth: 1
-            },
-            {
-                label: 'Male + Female',
-                data: [47.6, 47.0],
-                backgroundColor: 'rgba(67, 67, 72, 0.9)',
-                borderColor: 'rgb(67, 67, 72)',
-                borderWidth: 1
-                }
+                {% for dt in chart_data.data %}
+                    {
+                        label: '{{dt.label|safe}}',
+                        data: {{dt.data|safe}},
+                        borderColor: randomColor({{forloop.counter}}),
+                        backgroundColor:randomColor({{forloop.counter}}),
+                        borderWidth: 1.2,
+                    },
+                {% endfor %}
             ]
         },
         options: {
@@ -1636,14 +1403,9 @@
             },
             scales: {
             yAxes: [{
-                ticks: {
-                min: 0,
-                max: 80,
-                stepSize: 20
-                },
                 scaleLabel: {
                 display: true,
-                labelString: 'Percent (%)'
+                labelString: '{{chart_data.agg|safe}}'
                 }
             }],
             xAxes: [{
@@ -1651,29 +1413,6 @@
                     drawOnChartArea: false
                 }
                 },
-                {
-                offset: true,
-                ticks: {
-                    autoSkip: false,
-                    maxRotation: 0,
-                    padding: -15,
-                    callback: (v, i) => {
-                    if (i == 1) {
-                        return 'Total';
-                    } else if (i == 4) {
-                        return 'Lower than 2.50';
-                    } else {
-                        return '';
-                    }
-                    }
-                },
-                gridLines: {
-                    drawOnChartArea: false,
-                    offsetGridLines: true,
-                    tickMarkLength: 20,
-                    color: ['white', 'white', 'white', 'lightgray', 'white', 'white', 'lightgray']
-                }
-                }
             ]
             }
         }

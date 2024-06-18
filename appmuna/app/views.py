@@ -10,6 +10,7 @@ from app.helpers import split_list
 from pprint import pprint
 
 import json
+from .helpers import get_chart_data, get_list_periods, get_content_table
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -102,7 +103,6 @@ class HomeAppClassView(View):
                 'no' : idx,
                 'items': dt
             })
-
 
         videographs = models.BackendVideoGraphicsModel.objects.order_by('-created_at')
 
@@ -248,14 +248,12 @@ class HomeDataTraceClassView(LoginRequiredMixin, View):
         }
 
 class SearchEngineClassView(View):
-
     def get(self,request):
         context = {
             'title' : 'Kemiskinan | Telusuri Data'
         }
 
         return render(request, 'app/search_app.html', context)
-
 
 class StatisticsTablesClassView(View):
     def get(self,request):
@@ -409,130 +407,15 @@ class StatisticDetailTableClassView(View):
                 model_data_period = model_data.values('year', 'item_period').distinct()
 
                 # List Periods
-                list_periods = []
-                for dt in model_data_period:
-
-                    dt_periods = {
-                                    'id' : dt["item_period"],
-                                    'name' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period
-                                }
-                    
-                    check_exist = next((index for (index, d) in enumerate(list_periods) if d["year"] == dt['year']), None)
-                    if check_exist is None:
-                        list_periods.append({
-                            "year"    : dt['year'],
-                            "periods" : [dt_periods]
-                        })
-                    else:
-                        list_periods[check_exist]['periods'].append(dt_periods)
-
-                # Subjects
-                model_sbj = models.BackendSubjectsModel.objects.filter(show_state = '1').order_by('subject_group', 'name')
-
-                subjectItems = []
-                for item in model_sbj:
-
-                    qry = models.BackendContentIndicatorsModel.objects.values('indicator_id','indicator_id__subject_id').filter(indicator_id__subject_id = str(item.pk)).distinct()
-                    dt_item =   {
-                                    'id' : item.id,
-                                    'name' : item.name if len(item.name) <= 20 else f'{item.name[:20]}...',
-                                    'count' : qry.count() if qry.exists() else 0
-                                }
-                    
-                    check_exist = next((index for (index, d) in enumerate(subjectItems) if d["groups"] == item.get_subject_group_display()), None)
-                    if check_exist is None:
-                        subjectItems.append({
-                            "groups"    : item.get_subject_group_display(),
-                            "items"     : [dt_item]
-                        })
-                    else:
-                        subjectItems[check_exist]['items'].append(dt_item)
-
-                # Content Data
-                data_content_table = []
-
-                for dt in model_data.order_by('item_row', 'year', 'item_period', 'item_char').values():
-
-                    items_col = {
-                                    'item_char_id': dt['item_char'],
-                                    'item_char': models.BackendCharacteristicItemsModel.objects.filter(pk=dt['item_char']).first().item_char,
-                                    'id_content_field': dt['id'],
-                                    'value' : round(float(dt["value"]), model.decimal_point)
-                                }
-                    
-                    items_period = {
-                                    'item_period_id' : dt["item_period"],
-                                    'item_period' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period,
-                                    'items': [items_col]
-                                    }
-                    
-                    if len(data_content_table) > 0:
-
-                        check_exist = next((index for (index, d) in enumerate(data_content_table) if dt['item_row'] == d['row_id']), None)
-                        if check_exist is not None:
-                            check_year = next((index for (index, d) in enumerate(data_content_table[check_exist]['items']) if dt['year'] == d['year']), None)
-                            if check_year is not None: # Cek apakah tahun ada di dalam list? Jika Not None, cek ketersedian periode item
-                            
-                                check_item_period = next((index for (index, d) in enumerate(data_content_table[check_exist]['items'][check_year]['items']) if dt['item_period'] == d['item_period_id']), None)
-
-                                if check_item_period is not None:
-                                   
-                                    check_content_field = next((index for (index, d) in enumerate(data_content_table[check_exist]['items'][check_year]['items'][check_item_period]['items']) if dt['item_char'] == d['item_char_id']), None)
-
-                                    if check_content_field is None:
-                                        data_content_table[check_exist]['items'][check_year]['items'][check_item_period]['items'].append(items_col)
-                                    
-                                else:
-                                    data_content_table[check_exist]['items'][check_year]['items'].append(items_period)
-                            else:
-                                data_content_table[check_exist]['items'].append(
-                                    {
-                                        'year' : dt["year"],
-                                        'items' : [items_period] 
-                                    }
-                                )
-
-                            continue
-
-                    content_data = {
-                        'row_id' : dt["item_row"],
-                        'row_name' : models.BackendRowsItemsModel.objects.filter(pk = dt["item_row"]).first().item_row,
-                        'order_num' : models.BackendRowsItemsModel.objects.filter(pk = dt["item_row"]).first().order_num,
-                        'items' : [
-                            {
-                                'year' : dt["year"],
-                                'items' : [ items_period] 
-                            }
-                        ]
-                    }
-
-                    data_content_table.append(content_data)
-                
-                
-                data_content_table = sorted(data_content_table, key=itemgetter('order_num'))
-
-                if model.get_summarize_status_display() != 'none':
-                    for dt_rows in data_content_table:
-                        for dt_years in dt_rows['items']:
-                            for dt_periods in dt_years['items']:
-                                # Add summarize data
-                                dt_collections = []
-                                for dt_cols in dt_periods['items']:
-                                    dt_collections.append(float(dt_cols['value']))
-                                
-                                smr = sum(dt_collections)  if model.get_summarize_status_display() == 'sum' else  sum(dt_collections) / len(dt_collections)
-                                dt_periods['items'].append({
-                                    'item_char' : 'Total',
-                                    'value': smr
-                                })
-
-                # Rows Data
-                data_rows = models.BackendRowsItemsModel.objects.filter(row_id = model.row_group_id).order_by('order_num').values('id', 'item_row')
-
+                data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
+                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
+                list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
+            
+                pprint(list_periods)
+                # pprint(model_data_period)
                 # Cols Data
                 col_span = 1
                 if model.col_group_id is not None:
-
                     dt = data_content_table[0]
                     count_period = len(dt['items'][0]['items'])
                     count_cols = len(dt['items'][0]['items'][0]['items'])
@@ -545,9 +428,8 @@ class StatisticDetailTableClassView(View):
                     'data_contents' : data_content_table,
                     'data_meanings' : data_meanings,
                     'periods' : list_periods,
-                    'subjects' : subjectItems,
                     'col_span' : col_span,
-                    'line_height_filter': 50*model_data_period.count(),
+                    'chart_data': chart_data
                 }
 
                 return render(request, 'app/statistics_preview.html', context)

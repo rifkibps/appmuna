@@ -159,6 +159,7 @@ class BackendIndicatorsModel(models.Model):
       ('0', 'none'),
       ('1', 'sum'),
       ('2', 'avg'),
+      ('3', 'percent'),
    )
 
 
