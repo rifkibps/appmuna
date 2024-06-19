@@ -6,11 +6,10 @@ from django.db.models import Q, Count
 
 from backend import models, forms
 
-from app.helpers import split_list
 from pprint import pprint
 
 import json
-from .helpers import get_chart_data, get_list_periods, get_content_table
+from .helpers import get_chart_data, get_list_periods, get_content_table, split_list, get_content_comparison
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -410,9 +409,11 @@ class StatisticDetailTableClassView(View):
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
                 chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
-            
-                pprint(list_periods)
-                # pprint(model_data_period)
+
+                data_comparison = get_content_table(indicator_id, request.GET.get('compare_by').split('-'))
+                data_comparison = get_content_comparison(data_comparison)
+
+
                 # Cols Data
                 col_span = 1
                 if model.col_group_id is not None:

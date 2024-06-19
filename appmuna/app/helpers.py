@@ -5,9 +5,53 @@ from operator import itemgetter
 def split_list (list_dt,n_length):
     return [list_dt[i:i+n_length] for i in range(0, len(list_dt), n_length)]
 
-def get_content_table(indicator_id, filter_ = None):
-    model = models.BackendIndicatorsModel.objects.filter(pk=indicator_id).first()
+def get_content_comparison(datalists):
+    
+    for dt in datalists:
+        for dt_years in dt['items']:
+        
+            first_data = dt_years['items'][0]['items']
+            second_data = dt_years['items'][1]['items']
+            cols_comparisons = []
 
+            # pprint(dt_years['items'][0])
+            # return
+
+            for idx in range(len(first_data)):
+                dev = second_data[idx]['value'] - first_data[idx]['value']
+                dev_percent = round(dev / first_data[idx]['value'] * 100, 2) if first_data[idx]['value'] != 0 else '-'
+                
+                if type(dev_percent) == float:
+                    if dev_percent < 0 :
+                        title = 'Penurunan', 
+                        class_, icon = 'text-danger', 'mdi-arrow-down-bold'
+                    else:
+                        title = 'Peningkatan'
+                        class_, icon = 'text-success', 'mdi-arrow-up-bold'
+
+                    value = f'<span class="{class_} me-2">(<span class="mdi {icon}"></span>{dev_percent}%)</span>'
+                    content = f'Terjadi {title} sebesar {dev} ({dev_percent}%) dibandingkan dengan data {dt_years['items'][0]["item_period"]}, {dt_years["year"]}'
+                    title = f'Terjadi {title} {dev_percent}%.'
+                else:
+                    value = dev_percent
+                    content = f'Terjadi {title} sebesar {dev} dibandingkan dengan data {dt_years['items'][0]["item_period"]}, {dt_years["year"]}'
+                    title = f'Terjadi {title} sebesar {dev}',
+
+                cols_comparisons.append({
+                    'item_char' : first_data[idx]['item_char'],
+                    'value' :  value,
+                    'title' : title,
+                    'content' :content
+                })
+                
+            dt_years['items'].insert(0, {'item_period': f'Perbandingan ({dt_years['items'][0]["item_period"]} {dt_years["year"]} - {dt_years['items'][1]["item_period"]} {dt_years["year"]})', 'items': cols_comparisons})
+
+
+    pprint(datalists)
+
+def get_content_table(indicator_id, filter_ = None):
+
+    model = models.BackendIndicatorsModel.objects.filter(pk=indicator_id).first()
     model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
 
     if filter_:
