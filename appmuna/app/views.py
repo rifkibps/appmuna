@@ -409,10 +409,11 @@ class StatisticDetailTableClassView(View):
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
                 chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
-
-                data_comparison = get_content_table(indicator_id, request.GET.get('compare_by').split('-'))
-                data_comparison = get_content_comparison(data_comparison)
-
+                
+                data_comparisons = []
+                if request.GET.get('compare_by'):
+                    data_comparisons = get_content_table(indicator_id, request.GET.get('compare_by').split('-'))
+                    data_comparisons = get_content_comparison(data_comparisons)
 
                 # Cols Data
                 col_span = 1
@@ -430,7 +431,8 @@ class StatisticDetailTableClassView(View):
                     'data_meanings' : data_meanings,
                     'periods' : list_periods,
                     'col_span' : col_span,
-                    'chart_data': chart_data
+                    'chart_data': chart_data,
+                    'data_comparisons' : data_comparisons
                 }
 
                 return render(request, 'app/statistics_preview.html', context)

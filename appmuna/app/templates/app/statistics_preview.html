@@ -442,7 +442,6 @@
                                                     <th rowspan="4" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
                                                 </tr>
                                                 
-
                                                 {% for item_years in data_contents.0.items %}
                                                     <tr>
                                                         <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
@@ -475,9 +474,9 @@
                                                             {% for item_periods in item_years.items %}
                                                                 {% for item_cols in item_periods.items %}
                                                                     {% if forloop.last %}
-                                                                        <td class="text-center border-between">{{len_cols}} {{ item_cols.value }}</td>
+                                                                        <td class="text-center border-between">{{ item_cols.value }}</td>
                                                                     {% else %}
-                                                                        <td class="text-center">{{len_cols}} {{ item_cols.value }}</td>
+                                                                        <td class="text-center">{{ item_cols.value }}</td>
                                                                     {% endif %}
                                                                 {% endfor %}
                                                             {% endfor %}
@@ -630,64 +629,51 @@
                                         <table class="table table-sm table-striped table-centered nowrap w-100 mb-1 font-14" id="content-table">
                                             <thead style="background-color:#2262AB;color:white">
                                                 <tr>
-                                                    <th rowspan="2" class="text-center sticky-col header-col first-col">No</th>
-                                                    <th rowspan="2" class="sticky-col header-col second-col">Kelompok</th>
-                                                    <th class="text-center" colspan="3">Perbandingan (Triwulan I 2023 - Triwulan II 2023)</th>
-                                                    <th class="text-center compare-item d-none" colspan="3">Karakteristik Kemiskinan (Triwulan I, 2023)</th>
-                                                    <th class="text-center compare-item d-none" colspan="3">Karakteristik Kemiskinan (Triwulan II, 2023)</th>
+                                                    <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
+                                                    <th rowspan="3" class="sticky-col header-col second-col">{{table.row_group_id.name}}</th>
                                                 </tr>
+                                                    
+                                                {% for item_years in data_comparisons.0.items %}
+                                               
                                                 <tr>
-                                                    <th class="text-center">Laki-laki</th>
-                                                    <th class="text-center">Perempuan</th>
-                                                    <th class="text-center">Laki-laki + Perempuan</th>
-
-                                                    <th class="text-center compare-item d-none">Laki-laki</th>
-                                                    <th class="text-center compare-item d-none">Perempuan</th>
-                                                    <th class="text-center compare-item d-none">Laki-laki + Perempuan</th>
-
-                                                    <th class="text-center compare-item d-none">Laki-laki</th>
-                                                    <th class="text-center compare-item d-none">Perempuan</th>
-                                                    <th class="text-center compare-item d-none">Laki-laki + Perempuan</th>
+                                                {% for item_periods in item_years.items %}
+                                                    <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }} {% if forloop.counter > 1 %}{{item_years.year}}{% endif %}</th>
+                                                {% endfor %}
                                                 </tr>
 
                                                 <tr>
-                                                    <th class="sticky-col text-center header-col first-col font-12">(1)</th>
-                                                    <th class="sticky-col text-center header-col second-col font-12">(2)</th>
-                                                    {% for i in '123'  %}
-                                                    <th class="sticky-col text-center font-12">({{i}})</th>
+                                                {% for item_periods in item_years.items %}
+                                                    {% for item_cols in item_periods.items %}
+                                                        <th class="text-center">{{ item_cols.item_char }}</th>
                                                     {% endfor %}
-                                                    {% for i in '123456'  %}
-                                                    <th class="sticky-col text-center font-12 compare-item d-none">({{i}})</th>
-                                                    {% endfor %}
+                                                {% endfor %}
                                                 </tr>
+                                                {% endfor %} 
                                             </thead>
+
                                             <tbody>
-                                                {% for i in '123456789123456789'  %}
-                                                <tr >
-                                                    <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
-                                                    <td class="sticky-col second-col">Buton</td>
+                                                {% for item_rows in data_comparisons %}
+                                                    <tr>
+                                                        <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
+                                                        <td class="sticky-col second-col">{{item_rows.row_name}}</td>
+                                                        {% for item_years in item_rows.items %}
+                                                            {% with idx_col=forloop.counter0 %}
+                                                                {% for item_periods in item_years.items %}
+                                                                    {% for item_cols in item_periods.items %}
+                                                                        {% if idx_col == 0 %}
+                                                                        <td class="text-center {{ item_cols.class_ }} comparison-col" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="{{item_cols.content}}" title="{{item_cols.title}}">
+                                                                            {{ item_cols.value|safe }}
+                                                                        </td>
+                                                                        {% else %}
+                                                                        <td class="text-center {% if forloop.last %} border-between {% endif %}">{{ item_cols.value }}</td>
+                                                                        
+                                                                        {% endif %}
 
-                                                    <td class="text-center text-danger comparison-col" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Terjadi penurunan sebesar 0.25 (5.27%) dibandingkan dengan data triwulan I, 2023" title="Terjadi Penurunan 5.24%.">
-                                                        <span class="text-danger me-2">(<span class="mdi mdi-arrow-down-bold"></span>1.08%)</span>
-                                                    </td>
-                                                    <td class="text-center text-danger" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Terjadi penurunan sebesar 0.25 (5.27%) dibandingkan dengan data triwulan I, 2023" title="Terjadi Penurunan 5.24%."> 2.7
-                                                        <span class="text-danger me-2 font-10">(<span class="mdi mdi-arrow-down-bold"></span>2.08%)</span>
-                                                    </td>
-                                                    <td class="text-center text-success" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="Terjadi penurunan sebesar 0.25 (5.27%) dibandingkan dengan data triwulan I, 2023" title="Terjadi Penurunan 5.24%."> 2.6
-                                                        <span class="text-success me-2 font-10">(<span class="mdi mdi-arrow-up-bold"></span>5.27%)</span>
-                                                    </td>
-
-                                                    <td class="text-center compare-item d-none">1.200</td>
-                                                    <td class="text-center compare-item d-none">4.100</td>
-                                                    <td class="text-center compare-item d-none">3.100</td>
-
-                                                    <td class="text-center compare-item d-none">1.200</td>
-                                                    <td class="text-center compare-item d-none">4.100</td>
-                                                    <td class="text-center compare-item d-none">3.100</td>
-                                                    
-                                                    
-
-                                                </tr>
+                                                                    {% endfor %}
+                                                                {% endfor %}
+                                                            {% endwith %}
+                                                        {% endfor %}
+                                                    </tr>
                                                 {% endfor %}
                                             </tbody>
                                         </table>
