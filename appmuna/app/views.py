@@ -381,7 +381,6 @@ class StatisticsDataTablesClassView(View):
                 'indicator_id__name': f'<a href="{reverse_lazy("app:statistics-app-preview")}?indicator={obj["indicator_id"]}" class="text-secondary" title="{obj['indicator_id__name']}">{obj['indicator_id__name'][:50]} ..</a>' ,
                 'indicator_id__time_period_id__name': obj['indicator_id__time_period_id__name'],
                 'indicator_id__updated_at' : obj['indicator_id__updated_at'].strftime('%d %b %Y'),
-                'actions': f'<button class="btn btn-sm btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><i class="mdi mdi-chevron-right"></i></button> <div class="dropdown-menu" style="font-size:14px;"><a class="dropdown-item pb-0" href="{reverse_lazy("app:statistics-app-preview")}?indicator={obj["indicator_id"]}"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a><a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a></div>'
             })
 
         return {    
@@ -391,9 +390,28 @@ class StatisticsDataTablesClassView(View):
             'data': data,
         }
 
+class StatisticDetailNoColsTableClassView(View):
+
+    def get(self, request):
+        if request.GET.get('indicator'):
+            indicator_id = request.GET.get('indicator')
+            model = models.BackendIndicatorsModel.objects.filter(pk=indicator_id)
+
+            if model.exists():
+                model = model.first()
+                data_meanings = models.BackendIndicatorsMeaningModel.objects.filter(indicator_id=indicator_id).order_by('year', 'item_period').values()
+                model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
+                model_data_period = model_data.values('year', 'item_period').distinct()
+
+            
+
+            else:
+                return redirect('app:statistics-app')
+        else:
+            return redirect('app:statistics-app')
 class StatisticDetailTableClassView(View):
 
-    def get(self,request):
+    def get(self, request):
 
         if request.GET.get('indicator'):
             indicator_id = request.GET.get('indicator')
@@ -551,16 +569,6 @@ class VideographicPreviewClassView(View):
         }
 
         return render(request, 'app/videographic_preview.html', context)
-
-class DevelopmenDataClassView(View):
-
-    def get(self,request):
-        context = {
-            'title' : 'Indikator Data Pembangunan'
-        }
-
-        return render(request, 'app/dev_data.html', context)
-
 
 class StrategicDataClassView(View):
 

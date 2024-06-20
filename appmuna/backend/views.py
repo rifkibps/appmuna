@@ -1629,7 +1629,7 @@ class BackendContentInputClassView(LoginRequiredMixin,View):
                 context['status_update'] = True
 
             context['data_contents'] = data_content_table
-            print("Test")
+            print(data_content_table)
             print(data_content_table)
             context['data_indicator'] = data_indicator
             context['created_at'] = data_indicator.created_at.strftime('%d %B %Y'),

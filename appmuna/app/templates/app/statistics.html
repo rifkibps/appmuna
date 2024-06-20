@@ -144,7 +144,7 @@
                         </div>
                                         
                         <div id="cardCollpase" class="collapse pt-3 show">
-                            <ul style="padding-left:0px!important;font-size:15px">
+                            <ul style="padding-left:0px!important;font-size:13.5px;overflow-y: scroll; height:200px;">
 
                                 {% for item in subjects.0.items %}
                                     <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary subject-filter" data-subj="{{item.id}}"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
@@ -166,7 +166,7 @@
                         </div>
                                         
                         <div id="cardCollpase2" class="collapse pt-3">
-                            <ul style="padding-left:10px!important">
+                            <ul style="padding-left:0px!important;font-size:13.5px;overflow-y: scroll; height:200px;">
                                 {% for item in subjects.1.items %}
                                     <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
                                 {% endfor %}
@@ -178,7 +178,7 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <div class="card-widgets">
-                            <a data-bs-toggle="collapse" href="#cardCollpase3" role="button" aria-expanded="false" aria-controls="cardCollpase3"><i class="mdi mdi-chevron-double-right"></i></a>
+                            <a data-bs-toggle="collapse" href="#cardCollpase3" role="button"><i class="mdi mdi-chevron-double-right"></i></a>
                         </div>
 
                         <div class="d-flex align-items-start">
@@ -188,7 +188,7 @@
                         
                                         
                         <div id="cardCollpase3" class="collapse pt-3">
-                            <ul style="padding-left:10px!important">
+                            <ul style="padding-left:0px!important;font-size:13.5px;overflow-y: scroll; height:200px;">
 
                                 {% for item in subjects.2.items %}
                                     <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
@@ -200,30 +200,29 @@
                 </div> 
             </div>
     
-            <div class="col-lg-9 px-4 mt-5">
+            <div class="col-lg-9 mt-5">
                 <div class="card pb-3">
                     <div class="card-body px-3 pt-2 pb-0">
                         <div class="mb-3">
-                            <h4 class="font-weight-bold"><strong>Indikator Statistik</strong></h4>
+                            <h4 class="font-weight-bold"><strong>Tabel Statistik</strong></h4>
                         </div>
                         <div class="row mb-2">
                             <div class="col-6">
-                                <button type="button" class="btn btn-primary" style="margin-right:3px!important" id="refresh"><i class="mdi mdi-filter-off"></i> </button>
-                                <button type="button" class="btn btn-success" style="margin-right:3px!important"><i class="mdi mdi mdi-file-excel"></i> </button>
-                                <button type="button" class="btn btn-info" style="margin-right:3px!important"><i class="mdi mdi-file-pdf"></i> </button>
+                                <button type="button" class="btn btn-sm btn-primary" style="margin-right:3px!important" id="refresh"><i class="mdi mdi-filter-off"></i> </button>
+                                <button type="button" class="btn btn-sm btn-success" style="margin-right:3px!important"><i class="mdi mdi mdi-file-excel"></i> </button>
+                                <button type="button" class="btn btn-sm btn-info" style="margin-right:3px!important"><i class="mdi mdi-file-pdf"></i> </button>
                             </div>
                             <div class="col-6 d-flex justify-content-end">
                                 <input type="text" class="form-control form-control-sm" id="search-box" placeholder="Cari data ..." style="width:250px">
                             </div>
                         </div>
-                        <table class="table table-striped table-bordered table-centered nowrap w-100 font-14" id="statistics-table">
+                        <table class="table table-striped table-bordered table-centered nowrap w-100 font-13" id="statistics-table">
                             <thead >
                                 <tr>
                                     <th class="text-center">No</th>
                                     <th>Data Statistik</th>
                                     <th class="text-center">Periode Data</th>
                                     <th class="text-center">Update Terakhir</th>
-                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -303,17 +302,12 @@
         columns :[
             {"data": 'no'},
             {"data": 'indicator_id__name'},
-            {"data" : 'indicator_id__time_period_id__name'},
+            {"data": 'indicator_id__time_period_id__name'},
             {"data" : 'indicator_id__updated_at'},
-            {"data" : 'actions'},
         ],
         order: [[1, 'asc']],
         columnDefs: [
-         {
-            'targets': [4], /* column index */
-            'orderable': !1, /* true or false */             
-        },
-        { targets: [0,2,3,4], className: 'text-center' }
+        { targets: [0,2,3], className: 'text-center' }
         ],
         
         dom: 'lfrti<"bottom-wrapper"p>',

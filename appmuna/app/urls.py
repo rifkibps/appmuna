@@ -12,7 +12,8 @@ urlpatterns = [
     path('app/statistics/data', views.StatisticsDataTablesClassView.as_view(), name='statistics-app-data'),
 
     path('app/statistics/preview', views.StatisticDetailTableClassView.as_view(), name='statistics-app-preview'),
-    path('app/development-data', views.DevelopmenDataClassView.as_view(), name='dev-app'),
+    path('app/statistics/preview/no-cols', views.StatisticDetailNoColsTableClassView.as_view(), name='statistics-app-preview'),
+    
     path('app/strategic-data', views.StrategicDataClassView.as_view(), name='strategic-app'),
     
 
