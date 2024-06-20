@@ -378,7 +378,7 @@ class StatisticsDataTablesClassView(View):
             data.append(
             {
                 'no': [x for x in id_def_data if obj['indicator_id'] == x[1]][0][0],
-                'indicator_id__name': f'<a href="{reverse_lazy("app:statistics-app-preview")}" class="text-secondary">{obj['indicator_id__name']}</a>' ,
+                'indicator_id__name': f'<a href="{reverse_lazy("app:statistics-app-preview")}?indicator={obj["indicator_id"]}" class="text-secondary" title="{obj['indicator_id__name']}">{obj['indicator_id__name'][:50]} ..</a>' ,
                 'indicator_id__time_period_id__name': obj['indicator_id__time_period_id__name'],
                 'indicator_id__updated_at' : obj['indicator_id__updated_at'].strftime('%d %b %Y'),
                 'actions': f'<button class="btn btn-sm btn-primary" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ><i class="mdi mdi-chevron-right"></i></button> <div class="dropdown-menu" style="font-size:14px;"><a class="dropdown-item pb-0" href="{reverse_lazy("app:statistics-app-preview")}?indicator={obj["indicator_id"]}"><i class="mdi mdi-magnify-scan"></i>&ensp;Lihat Data</a><a class="dropdown-item" href="#"><i class="mdi mdi-download"></i>&ensp;Unduh Data</a></div>'
@@ -401,7 +401,7 @@ class StatisticDetailTableClassView(View):
             model = models.BackendIndicatorsModel.objects.filter(pk=indicator_id)
             if model.exists():
                 model = model.first()
-                data_meanings = models.BackendIndicatorsMeaningModel.objects.filter(indicator_id=indicator_id)
+                data_meanings = models.BackendIndicatorsMeaningModel.objects.filter(indicator_id=indicator_id).order_by('year', 'item_period').values()
                 model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
                 model_data_period = model_data.values('year', 'item_period').distinct()
 
@@ -411,9 +411,31 @@ class StatisticDetailTableClassView(View):
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
                 
                 data_comparisons = []
+                data_compare_req = []
+                chart_data_compare = []
+                data_comparisons_title = ''
                 if request.GET.get('compare_by'):
-                    data_comparisons = get_content_table(indicator_id, request.GET.get('compare_by').split('-'))
+                    data_compare_req = request.GET.get('compare_by').split('-')
+                    data_comparisons = get_content_table(indicator_id, data_compare_req)
+                    chart_data_compare = get_chart_data(data_content_table, model.get_summarize_status_display())
                     data_comparisons = get_content_comparison(data_comparisons)
+
+                    first_year, first_period = data_compare_req[0].split('_')
+                    second_year, second_period = data_compare_req[1].split('_')
+                    data_comparisons_title = f'Perbandingan {model.name} ({model.unit_id.name}), {models.BackendPeriodNameItemsModel.objects.filter(pk=first_period).first().item_period} ({first_year}) - {models.BackendPeriodNameItemsModel.objects.filter(pk=second_period).first().item_period} ({second_year})'
+
+                data_meanings_ = []
+                for dt in data_meanings:
+
+                    check_exist = next((index for (index, d) in enumerate(data_meanings_) if d['year'] == dt['year']), None)
+                    context = {'item_period' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt['item_period']).first().item_period, 'context' : dt['context']}
+                    if check_exist:
+                        data_meanings_[check_exist]['items'].append(context)
+                    else:
+                        data_meanings_.append({
+                            'year' : dt['year'],
+                            'items' : [context]
+                        })
 
                 # Cols Data
                 col_span = 1
@@ -422,17 +444,21 @@ class StatisticDetailTableClassView(View):
                     count_period = len(dt['items'][0]['items'])
                     count_cols = len(dt['items'][0]['items'][0]['items'])
                     col_span = count_period * count_cols
-                    
+                
+            
                 context = {
                     'title' : 'Kemiskinan | Tabel Statistik',
                     'table' : model,
                     'table_last_updated' : model_data.order_by('-updated_at').first().updated_at,
                     'data_contents' : data_content_table,
-                    'data_meanings' : data_meanings,
+                    'data_meanings' : data_meanings_,
                     'periods' : list_periods,
                     'col_span' : col_span,
                     'chart_data': chart_data,
-                    'data_comparisons' : data_comparisons
+                    'data_comparisons' : data_comparisons,
+                    'data_comparisons_title' : data_comparisons_title,
+                    'data_compare_req' : data_compare_req,
+                    'chart_data_compare' : chart_data_compare
                 }
 
                 return render(request, 'app/statistics_preview.html', context)

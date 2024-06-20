@@ -1,5 +1,6 @@
-{% extends 'horizontal/home_app.html' %} {% load static %} {% block css-extender
-%}
+{% extends 'horizontal/home_app.html' %}
+{% load static %} 
+{% block css-extender %}
 
 <link
   href="assets/css/vendor/jstree.min.css"
@@ -46,7 +47,9 @@
     background-color: #003c80 !important;
   }
 </style>
-{% endblock css-extender %} {% block main-content %}
+{% endblock css-extender %}
+
+{% block main-content %}
 <!-- START HERO -->
 <section class="hero-section">
   <div class="container">
