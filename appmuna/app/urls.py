@@ -12,7 +12,7 @@ urlpatterns = [
     path('app/statistics/data', views.StatisticsDataTablesClassView.as_view(), name='statistics-app-data'),
 
     path('app/statistics/preview', views.StatisticDetailTableClassView.as_view(), name='statistics-app-preview'),
-    path('app/statistics/preview/no-cols', views.StatisticDetailNoColsTableClassView.as_view(), name='statistics-app-preview'),
+    path('app/statistics/preview/no-cols', views.StatisticDetailNoColsTableClassView.as_view(), name='statistics-app-nocols'),
     
     path('app/strategic-data', views.StrategicDataClassView.as_view(), name='strategic-app'),
     

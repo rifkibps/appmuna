@@ -213,27 +213,27 @@
                                 <p>{{table.time_period_id.name}}</p>
                             </div>
                         </div>
-
+                        
                         <div>
-                            <h5>Data Tersedia: </h5>
+                            <h5>Data Tersedia:</h5>
                             <div class="mt-1">
                                 <div id="jstree-1">
                                     <ul>
                                         {% for period in periods %}
-                                            {% if forloop.counter == 1 %}
-                                            <li data-jstree='{"opened" : true }'>
+                                            {% if is_year %}
+                                                <li>{{period.year}}</li>
                                             {% else %}
-                                            <li>
+                                                <li {% if forloop.counter == 1 %}data-jstree='{"opened" : true }'{% endif %}>
+                                                    {{period.year}}
+                                                    <ul>
+                                                        {% for item in period.periods %}
+                                                        <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
+                                                            <a href="#">{{item.name}}</a>
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </li>
                                             {% endif %}
-                                                {{period.year}}
-                                                <ul>
-                                                    {% for item in period.periods %}
-                                                    <li data-jstree='{ "icon" : "mdi mdi-file-chart-outline" }'>
-                                                        <a href="#">{{item.name}}</a>
-                                                    </li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </li>
                                         {% endfor %}
                                     </ul>
                                 </div>
@@ -264,9 +264,18 @@
                                 <ul class="detailPeriod py-2" style="list-style:none;padding-left:5px;overflow-y: scroll;">
 
                                     {% for period in periods %}
+                                    {% if is_year %}
+                                        {% for item in period.periods %}
+                                        <li style="padding-bottom:2px">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input border filterPeriod" id="check_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {{item.checked}}>
+                                                <label class="filterPeriodLabel" for="check_{{period.year}}_{{item.id}}" style="font-weight:normal"> Tahun {{period.year}} </label>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    {% else %}
                                     <li class="yearPeriod" style="cursor: pointer" >
                                         <i class="mdi mdi-chevron-right"></i>
-                                        
                                         <span style="font-weight:bold">Tahun {{period.year}}</span>
                                         <ul class="py-2" style="list-style:none;padding-left:20px;">
                                             {% for item in period.periods %}
@@ -279,8 +288,8 @@
                                             {% endfor %}
                                         </ul>
                                     </li>
+                                    {% endif %}
                                     {% endfor %}
-
                                 </ul>
                                 
                             </div>
@@ -437,29 +446,26 @@
                                         <table class="table table-sm table-striped table-centered nowrap w-100 font-13" id="content-table">
                                             <thead style="background-color:#2262AB;color:white">
                                                 <tr>
-                                                    <th rowspan="4" class="text-center sticky-col header-col first-col">No</th>
-                                                    <th rowspan="4" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                                    <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
+                                                    <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
                                                 </tr>
                                                 
                                                 {% for item_years in data_contents.0.items %}
-                                                    <tr>
-                                                        <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
-                                                    </tr>
-
-                                                    <tr>
-                                                    {% for item_periods in item_years.items %}
-                                                        <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
-                                                    {% endfor %}
-                                                    </tr>
-
-                                                    <tr>
-                                                    {% for item_periods in item_years.items %}
-                                                        {% for item_cols in item_periods.items %}
-                                                            <th class="text-center">{{ item_cols.item_char }}</th>
+                                                
+                                                    {% if is_year %}
+                                                        <tr>
+                                                            <th colspan="{{ col_span }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
+                                                        </tr>
+                                                    {% else %}
+                                                        <tr>
+                                                            <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
+                                                        </tr>
+                                                        <tr>
+                                                        {% for item_periods in item_years.items %}
+                                                            <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
                                                         {% endfor %}
-                                                    {% endfor %}
-                                                    </tr>
-
+                                                        </tr>
+                                                    {% endif %}
                                                 {% endfor %} 
                                                 
                                             </thead>
@@ -507,7 +513,6 @@
 
                                                             <div class="timeline-item-info">
                                                                 <a href="#" class="text-info fw-bold mb-1 d-block">Tahun {{data_meaning.year}}</a>
-            
                                                                 <ul style="padding-left:20px">
                                                                     {% for dt in data_meaning.items %}
                                                                         <li>
@@ -653,27 +658,27 @@
                                             <thead style="background-color:#2262AB;color:white">
                                                 <tr>
                                                     <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
-                                                    <th rowspan="3" class="sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                                    <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
                                                 </tr>
-                                                    
-                                                {% for item_years in data_comparisons.0.items %}
-                                               
-                                                <tr>
-                                                {% for item_periods in item_years.items %}
-                                                    <th colspan="{{item_periods.items|length}}" class="text-center {% if forloop.counter > 1 %}compare-item d-none{% endif %}">{{ item_periods.item_period }} {% if forloop.counter > 1 %}{{item_years.year}}{% endif %}</th>
-                                                {% endfor %}
-                                                </tr>
-
-                                                <tr>
-                                                {% for item_periods in item_years.items %}
-                                                    {% with idx=forloop.counter %}
-                                                        {% for item_cols in item_periods.items %}
-                                                            <th class="text-center {% if idx > 1 %}compare-item d-none{% endif %}">{{ item_cols.item_char }}</th>
+                                                
+                                                {% for item_years in data_contents.0.items %}
+                                                
+                                                    {% if is_year %}
+                                                        <tr>
+                                                            <th colspan="{{ col_span }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
+                                                        </tr>
+                                                    {% else %}
+                                                        <tr>
+                                                            <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
+                                                        </tr>
+                                                        <tr>
+                                                        {% for item_periods in item_years.items %}
+                                                            <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
                                                         {% endfor %}
-                                                    {% endwith %}
-                                                {% endfor %}
-                                                </tr>
+                                                        </tr>
+                                                    {% endif %}
                                                 {% endfor %} 
+                                                
                                             </thead>
 
                                             <tbody>

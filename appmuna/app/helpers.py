@@ -67,7 +67,7 @@ def get_content_table(indicator_id, filter_ = None):
     for dt in model_data.order_by('item_row', 'year', 'item_period', 'item_char').values():
         items_col = {
             'item_char_id': dt['item_char'],
-            'item_char': models.BackendCharacteristicItemsModel.objects.filter(pk=dt['item_char']).first().item_char,
+            'item_char': models.BackendCharacteristicItemsModel.objects.filter(pk=dt['item_char']).first().item_char if len(dt['item_char']) > 0 else '',
             'id_content_field': dt['id'],
             'value' : round(float(dt["value"]), model.decimal_point)
         }
@@ -133,7 +133,7 @@ def get_content_table(indicator_id, filter_ = None):
 
     return data_content_table
 
-def get_list_periods(model_data_period, filter_ = None):
+def get_list_periods(model_data_period, filter_ = None, no_cols = False):
     list_periods = []
     list_filter = []
 
@@ -143,10 +143,12 @@ def get_list_periods(model_data_period, filter_ = None):
             list_filter.append({'year': splitter[0], 'item_period': splitter[1]})
             
     for dt in model_data_period:
+        name = models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period
         dt_periods = {
             'id' : dt["item_period"],
-            'name' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period,
+            'name' : '' if name.lower() == 'tahun' else name,
         }
+        
         if filter_:
             check = next((True for dt_ in list_filter if dt_['year'] == dt['year'] and dt_['item_period'] == dt['item_period']), False)
             dt_periods['checked'] = 'checked' if check else ''
@@ -164,7 +166,7 @@ def get_list_periods(model_data_period, filter_ = None):
 
     return list_periods
 
-def get_chart_data(data, summarize = 'sum'):
+def get_chart_data(data, summarize = 'sum', is_nocols = False):
 
     label_x_line = []
     data_line = []
@@ -187,7 +189,9 @@ def get_chart_data(data, summarize = 'sum'):
         })
 
     total_period = []
-
+    pprint(label_x_line)
+    pprint(data[0])
+    return
     for idx in range(len(label_x_line)):
         total_period.append(sum(dt['data'][idx] for dt in data_line))
 

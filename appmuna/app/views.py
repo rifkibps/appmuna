@@ -374,11 +374,12 @@ class StatisticsDataTablesClassView(View):
 
         data = []
         for obj in object_list:
-            
+            qry = models.BackendIndicatorsModel.objects.filter(pk=obj['indicator_id']).first().col_group_id
+            href = f'{reverse_lazy("app:statistics-app-preview")}?indicator={obj["indicator_id"]}' if qry is not None else f'{reverse_lazy("app:statistics-app-nocols")}?indicator={obj["indicator_id"]}'
             data.append(
             {
                 'no': [x for x in id_def_data if obj['indicator_id'] == x[1]][0][0],
-                'indicator_id__name': f'<a href="{reverse_lazy("app:statistics-app-preview")}?indicator={obj["indicator_id"]}" class="text-secondary" title="{obj['indicator_id__name']}">{obj['indicator_id__name'][:50]} ..</a>' ,
+                'indicator_id__name': f'<a href="{href}" class="text-secondary" title="{obj['indicator_id__name']}">{obj['indicator_id__name'][:50]} ..</a>' ,
                 'indicator_id__time_period_id__name': obj['indicator_id__time_period_id__name'],
                 'indicator_id__updated_at' : obj['indicator_id__updated_at'].strftime('%d %b %Y'),
             })
@@ -403,12 +404,49 @@ class StatisticDetailNoColsTableClassView(View):
                 model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
                 model_data_period = model_data.values('year', 'item_period').distinct()
 
-            
+                list_periods = get_list_periods(model_data_period, request.GET.getlist('data'), no_cols=True)
+                data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
+                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display(), True)
 
+                data_meanings_ = []
+                for dt in data_meanings:
+                    check_exist = next((index for (index, d) in enumerate(data_meanings_) if d['year'] == dt['year']), None)
+                    context = {'item_period' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt['item_period']).first().item_period, 'context' : dt['context']}
+                    if check_exist is not None:
+                        data_meanings_[check_exist]['items'].append(context)
+                    else:
+                        data_meanings_.append({
+                            'year' : dt['year'],
+                            'items' : [context]
+                        })
+
+                dt = data_content_table[0]
+                count_period = len(dt['items'][0]['items'])
+                count_cols = len(dt['items'][0]['items'][0]['items'])
+                col_span = count_period * count_cols
+
+                context = {
+                    'title' : 'Kemiskinan | Tabel Statistik',
+                    'table' : model,
+                    'table_last_updated' : model_data.order_by('-updated_at').first().updated_at,
+                    'data_contents' : data_content_table,
+                    'is_year' : True if model.col_group_id_id is None and len(list_periods[0]['periods'][0]['name']) == 0 else False,
+                    'data_meanings' : data_meanings_,
+                    'periods' : list_periods,
+                    'col_span' : col_span,
+                    # 'chart_data': chart_data,
+                    # 'data_comparisons' : data_comparisons,
+                    # 'data_comparisons_title' : data_comparisons_title,
+                    # 'data_compare_req' : data_compare_req,
+                    # 'chart_data_compare' : chart_data_compare
+                }
+
+                return render(request, 'app/statistics_preview_nocols.html', context)
             else:
-                return redirect('app:statistics-app')
+                return redirect('app:statistics-app-nocols')
         else:
-            return redirect('app:statistics-app')
+            return redirect('app:statistics-app-nocols')
+        
 class StatisticDetailTableClassView(View):
 
     def get(self, request):
@@ -444,10 +482,9 @@ class StatisticDetailTableClassView(View):
 
                 data_meanings_ = []
                 for dt in data_meanings:
-
                     check_exist = next((index for (index, d) in enumerate(data_meanings_) if d['year'] == dt['year']), None)
                     context = {'item_period' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt['item_period']).first().item_period, 'context' : dt['context']}
-                    if check_exist:
+                    if check_exist is not None:
                         data_meanings_[check_exist]['items'].append(context)
                     else:
                         data_meanings_.append({
@@ -462,7 +499,6 @@ class StatisticDetailTableClassView(View):
                     count_period = len(dt['items'][0]['items'])
                     count_cols = len(dt['items'][0]['items'][0]['items'])
                     col_span = count_period * count_cols
-                
             
                 context = {
                     'title' : 'Kemiskinan | Tabel Statistik',
