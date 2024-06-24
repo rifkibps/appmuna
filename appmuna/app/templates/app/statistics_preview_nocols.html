@@ -441,57 +441,55 @@
                                 <input type="hidden" name="year" id="year" value="{{current_year}}">
                                 <input type="hidden" name="item_period" id="item_period" value="{{period.id}}">
 
-                                <div class="view">
-                                    <div class="wrapper">
-                                        <table class="table table-sm table-striped table-centered nowrap w-100 font-13" id="content-table">
-                                            <thead style="background-color:#2262AB;color:white">
-                                                <tr>
-                                                    <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
-                                                    <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
-                                                </tr>
-                                                
-                                                {% for item_years in data_contents.0.items %}
-                                                
-                                                    {% if is_year %}
-                                                        <tr>
-                                                            <th colspan="{{ col_span }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
-                                                        </tr>
-                                                    {% else %}
-                                                        <tr>
-                                                            <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
-                                                        </tr>
-                                                        <tr>
-                                                        {% for item_periods in item_years.items %}
-                                                            <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
-                                                        {% endfor %}
-                                                        </tr>
-                                                    {% endif %}
-                                                {% endfor %} 
-                                                
-                                            </thead>
-                                            <tbody>
-                                                
-                                                {% for item_rows in data_contents %}
+                                <div class="wrapper">
+                                    <table class="table table-sm table-striped table-centered nowrap w-100 font-13" id="content-table">
+                                        <thead style="background-color:#2262AB;color:white">
+                                            <tr>
+                                                <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
+                                                <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                            </tr>
+                                            
+                                            {% for item_years in data_contents.0.items %}
+                                            
+                                                {% if is_year %}
                                                     <tr>
-                                                        <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
-                                                        <td class="sticky-col second-col">{{item_rows.row_name}}</td>
-                                                        {% for item_years in item_rows.items %}
-                                                            {% for item_periods in item_years.items %}
-                                                                {% for item_cols in item_periods.items %}
-                                                                    {% if forloop.last %}
-                                                                        <td class="text-center border-between">{{ item_cols.value }}</td>
-                                                                    {% else %}
-                                                                        <td class="text-center">{{ item_cols.value }}</td>
-                                                                    {% endif %}
-                                                                {% endfor %}
+                                                        <th colspan="{{ col_span }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
+                                                    </tr>
+                                                {% else %}
+                                                    <tr>
+                                                        <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
+                                                    </tr>
+                                                    <tr>
+                                                    {% for item_periods in item_years.items %}
+                                                        <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
+                                                    {% endfor %}
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %} 
+                                            
+                                        </thead>
+                                        <tbody>
+                                            
+                                            {% for item_rows in data_contents %}
+                                                <tr>
+                                                    <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
+                                                    <td class="sticky-col second-col">{{item_rows.row_name}}</td>
+                                                    {% for item_years in item_rows.items %}
+                                                        {% for item_periods in item_years.items %}
+                                                            {% for item_cols in item_periods.items %}
+                                                                {% if forloop.last %}
+                                                                    <td class="text-center border-between">{{ item_cols.value }}</td>
+                                                                {% else %}
+                                                                    <td class="text-center">{{ item_cols.value }}</td>
+                                                                {% endif %}
                                                             {% endfor %}
                                                         {% endfor %}
-                                                    </tr>
-                                                {% endfor %}
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endfor %}
 
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
 
                                 <h5 class="font-weight-light font-13"><i>{{table.footer_desc}}</i></h5>
@@ -768,5 +766,376 @@
 <script src="{% static 'app-design/assets/js/vendor/Chart.bundle.min.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script src="{% static 'app-design/assets/js/pages/demo.dashboard-projects.js' %}"></script>
+
+<script>
+    
+    var filter_period = "{{ request.GET|get_query_periods:'data'|safe }}"
+    var compare_qry = '{{ request.GET.compare_by }}'
+
+    function showChart(target){
+        if ($(target).hasClass("d-none")){
+            $(target).removeClass('d-none')
+        }else{
+            $(target).addClass('d-none')
+        }
+    }
+
+    $( window).resize(function(){
+        if($(this).width() <= 768){
+            $("#search-content").addClass('d-none')
+            $(".hero-section").removeAttr('style')
+            $("#main-content").css('margin-top', '-200px')
+            $("#expandButton").addClass('d-none')
+            $("#top-search-mitra").css('width', '200px')
+        }else{
+            $("#search-content").removeClass('d-none')
+            $(".hero-section").css('height', '630px')    
+            $("#main-content").css('margin-top', '-50px')
+            $("#expandButton").removeClass('d-none')
+            $("#top-search-mitra").css('width', '400px')
+        }
+    });
+
+    $("#expandButton").on('click', function (event){
+        if ($('#main-content').css('margin-top') == '-50px'){
+            $("#search-content").addClass('d-none')
+            $(".hero-section").removeAttr('style')
+            $("#main-content").css('margin-top', '-200px')
+            $(this).parent().css({'bottom': '-98px'})
+        }else{
+            $(this).parent().css('bottom', '-253px')
+            $(".hero-section").css('height', '630px')    
+            $("#search-content").removeClass('d-none')
+            $("#main-content").css('margin-top', '-50px')
+        }
+    })
+
+    $('.filterPeriod, .filterPeriodLabel, .filterPeriodStart, .filterPeriodLabelStart, .filterPeriodEnd, .filterPeriodLabelEnd').on('click', function (e){
+        e.stopPropagation();
+    })
+
+    $('.filterPeriodStart').on('change', function (e){
+        $(".filterPeriodStart").prop('checked', false);
+        $(this).prop('checked', true);
+    })
+
+    $('.filterPeriodEnd').on('change', function (e){
+        $(".filterPeriodEnd").prop('checked', false);
+        $(this).prop('checked', true);
+    })
+
+
+    $('.filterData').on('click', function (e){
+        var pageURL = '{{ request.path }}?indicator={{table.id}}';
+        $('.filterPeriod:checkbox:checked').each(function () {
+            pageURL += '&data='+ $(this).val()
+        });
+        
+        if (compare_qry.length > 0) {
+            pageURL += '&compare_by=' + compare_qry
+        }
+        
+        return $(location).attr('href', pageURL);
+    })
+
+    $('#fullscreen_table').on('change', function (e){
+
+        if ($('#sidebar-table-content').hasClass("d-none")){
+            $('#sidebar-table-content').removeClass().addClass('col-lg-3')
+            $('#main-table-content').removeClass().addClass('col-lg-9')
+        } else{
+            $('#sidebar-table-content').removeClass().addClass('d-none')
+            $('#main-table-content').removeClass().addClass('col-lg-12')
+        }
+
+    })
+
+
+    $(".yearPeriod, .yearPeriodStart").on("click", function (e) {
+        e.stopPropagation();
+        var list_item = $(this).find('ul')
+        if (!list_item.hasClass("show")){
+            $(this).find('ul').not(list_item).removeClass('show').addClass('d-none');
+            list_item.removeClass("d-none")
+            list_item.addClass("show")
+        } else{
+            list_item.removeClass("show")
+            list_item.addClass("d-none")
+        }
+    })
+
+    $(".compareData").on('click', function (e){
+        var pageURL = '{{ request.path }}?indicator={{table.id}}';
+        var data_start = $('.filterPeriodStart:checkbox:checked').val()
+        var data_end = $('.filterPeriodEnd:checkbox:checked').val()
+
+        if (data_start && data_end){
+            
+            if (data_start == data_end){
+                return push_notif("Terjadi Kesalahan!", "Periode awal tidak boleh melebihi/sama dengan periode akhir.", "error") 
+            }
+
+            compare_qry = '&compare_by=' + data_start + '-' + data_end
+
+            if (filter_period.length > 0) {
+                pageURL += filter_period
+            }
+
+            pageURL += compare_qry
+            return $(location).attr('href', pageURL);
+        } else {
+            return false
+        }
+
+    })
+
+    $('#clipboard-btn').on('click', function(e){
+        e.preventDefault()
+        setTimeout(function () {
+            $('#clipboard-btn').popover('hide');
+        }, 1500);
+    })
+    
+</script>
+
+<script>
+
+    const randomColor = (i) => {
+        const colors = ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864'];
+        return colors[i % colors.length];
+      }
+
+    function showData(){
+        if ($('.compare-item').hasClass('d-none')){
+            $('.compare-item').removeClass('d-none')
+        }else{
+            $('.compare-item').addClass('d-none')
+        }
+    }
+
+    function show_comparison_panel(state){
+        if (state == 'comp'){
+            $("#comparison-card").removeClass('d-none')
+            $("#dataset-card").addClass('d-none')
+        }else{
+            $("#dataset-card").removeClass('d-none')
+            $("#comparison-card").addClass('d-none')
+        }
+    }
+
+    function exportChart(chart, title){
+        var a = document.createElement('a');
+        a.href = chart.toBase64Image();
+        a.download = title;
+        // Trigger the download
+        a.click();
+    }
+
+    let draw = Chart.controllers.line.prototype.draw;
+    Chart.controllers.line = Chart.controllers.line.extend({
+        draw: function() {
+            let ctx = this.chart.chart.ctx;
+            ctx.save();
+            ctx.shadowColor = '#1CB395';
+            ctx.shadowBlur = 12;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 5;
+            ctx.stroke();
+            draw.apply(this, arguments);
+            ctx.restore();
+        }
+    });
+
+    var pie_chart = new Chart('pie-chart', {
+        type: 'doughnut',
+        data: {
+        datasets: [
+        /* Outer doughnut data starts*/
+        {% for dt in chart_data.data_pie %}
+        {
+            data: {{dt|safe}},
+            backgroundColor: ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864'],
+        },
+        {% endfor %}
+       
+        /* Inner doughnut data ends*/
+        ],
+        labels: {{chart_data.label_pie_chart|safe}}
+        },
+        options: {
+            plugins: {
+                datalabels: {
+                formatter: (value) => {
+                    return value + '%';
+                },
+                },
+            },
+            title: {
+                position: 'right',
+                display: true,
+                text: {{chart_data.label_pie_layer|safe}},
+                fontSize:11,
+                fontStyle:'normal',
+                fontFamily: ['Nunito', 'sans-serif']
+            },
+            legend: {
+            position: 'right',
+            labels: {
+                usePointStyle: true
+            },
+            },
+        }
+    })
+
+    var line_chart = new Chart('task-line-chart', {
+        type: 'line',
+        
+        data: {
+            labels: {{chart_data.labels|safe}},    
+            datasets: [
+                {% for dt in chart_data.data %}
+                    {
+                        label: '{{dt.label|safe}}',
+                        data: {{dt.data|safe}},
+                        fill: false,
+                        borderColor: randomColor({{forloop.counter}}),
+                        backgroundColor:randomColor({{forloop.counter}}),
+                        borderWidth: 1.2,
+                    },
+                {% endfor %}
+            ]
+        },
+        options: {
+            legend: {
+            position: 'bottom',
+            labels: {
+                usePointStyle: true
+            }
+            },
+            scales: {
+                yAxes: [{
+                    scaleLabel: {
+                    display: true,
+                    labelString: '{{chart_data.agg|safe}}'
+                    }
+                }],
+                xAxes: [{
+                    gridLines: {
+                        drawOnChartArea: false,
+                        
+                    }
+                    },
+                ]
+            },
+            
+        },
+        showDatapoints: true,
+
+    })
+
+    var bar_chart = new Chart('task-bart-chart', {
+        type: 'bar',
+        data: {
+            labels: {{chart_data.labels|safe}},
+            datasets: [
+
+                {% for dt in chart_data.data %}
+                    {
+                        label: '{{dt.label|safe}}',
+                        data: {{dt.data|safe}},
+                        borderColor: randomColor({{forloop.counter}}),
+                        backgroundColor:randomColor({{forloop.counter}}),
+                        borderWidth: 1.2,
+                    },
+                {% endfor %}
+            ]
+        },
+        options: {
+            legend: {
+            position: 'bottom',
+            labels: {
+                usePointStyle: true
+            }
+            },
+            scales: {
+            yAxes: [{
+                scaleLabel: {
+                display: true,
+                labelString: '{{chart_data.agg|safe}}'
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    drawOnChartArea: false
+                }
+                },
+            ]
+            }
+        }
+    });
+
+    {% if data_comparisons_title %}
+    var compare_chart = new Chart('task-bart-chart-2', {
+        type: 'bar',
+        data: {
+            labels: {{chart_data_compare.labels|safe}},
+            datasets: [
+
+                {% for dt in chart_data_compare.data %}
+                    {
+                        label: '{{dt.label|safe}}',
+                        data: {{dt.data|safe}},
+                        borderColor: randomColor({{forloop.counter}}),
+                        backgroundColor:randomColor({{forloop.counter}}),
+                        borderWidth: 1.2,
+                    },
+                {% endfor %}
+            ]
+        },
+        options: {
+            legend: {
+            position: 'bottom',
+            labels: {
+                usePointStyle: true
+            }
+            },
+            scales: {
+            yAxes: [{
+                scaleLabel: {
+                display: true,
+                labelString: '{{chart_data_compare.agg|safe}}'
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    drawOnChartArea: false
+                }
+                },
+            ]
+            }
+        }
+    });
+    {% endif %}
+
+</script>
+
+<script>
+
+    $('#export-line-chart').on('click', function(e){
+        exportChart(line_chart, 'Line chart - {{table.name}}.png')
+    })
+
+    $('#export-bar-chart').on('click', function(e){
+        exportChart(bar_chart, 'Bar chart - {{table.name}}.png')
+    })
+
+    $('#export-pie-chart').on('click', function(e){
+        exportChart(pie_chart, 'Pie chart - {{table.name}}.png')
+    })
+
+    $('#export-compare-chart').on('click', function(e){
+        exportChart(compare_chart, 'Grafik Komparasi - {{data_comparisons_title}}.png')
+    })
+</script>
 
 {% endblock js-extender %}

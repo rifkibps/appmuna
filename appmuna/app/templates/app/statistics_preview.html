@@ -435,60 +435,58 @@
                                 <input type="hidden" name="year" id="year" value="{{current_year}}">
                                 <input type="hidden" name="item_period" id="item_period" value="{{period.id}}">
 
-                                <div class="view">
-                                    <div class="wrapper">
-                                        <table class="table table-sm table-striped table-centered nowrap w-100 font-13" id="content-table">
-                                            <thead style="background-color:#2262AB;color:white">
+                                <div class="wrapper">
+                                    <table class="table table-sm table-striped table-centered nowrap w-100 font-13" id="content-table">
+                                        <thead style="background-color:#2262AB;color:white">
+                                            <tr>
+                                                <th rowspan="4" class="text-center sticky-col header-col first-col">No</th>
+                                                <th rowspan="4" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                            </tr>
+                                            
+                                            {% for item_years in data_contents.0.items %}
                                                 <tr>
-                                                    <th rowspan="4" class="text-center sticky-col header-col first-col">No</th>
-                                                    <th rowspan="4" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                                    <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
                                                 </tr>
-                                                
-                                                {% for item_years in data_contents.0.items %}
-                                                    <tr>
-                                                        <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
-                                                    </tr>
 
-                                                    <tr>
-                                                    {% for item_periods in item_years.items %}
-                                                        <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
+                                                <tr>
+                                                {% for item_periods in item_years.items %}
+                                                    <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
+                                                {% endfor %}
+                                                </tr>
+
+                                                <tr>
+                                                {% for item_periods in item_years.items %}
+                                                    {% for item_cols in item_periods.items %}
+                                                        <th class="text-center">{{ item_cols.item_char }}</th>
                                                     {% endfor %}
-                                                    </tr>
+                                                {% endfor %}
+                                                </tr>
 
-                                                    <tr>
-                                                    {% for item_periods in item_years.items %}
-                                                        {% for item_cols in item_periods.items %}
-                                                            <th class="text-center">{{ item_cols.item_char }}</th>
-                                                        {% endfor %}
-                                                    {% endfor %}
-                                                    </tr>
-
-                                                {% endfor %} 
-                                                
-                                            </thead>
-                                            <tbody>
-                                                
-                                                {% for item_rows in data_contents %}
-                                                    <tr>
-                                                        <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
-                                                        <td class="sticky-col second-col">{{item_rows.row_name}}</td>
-                                                        {% for item_years in item_rows.items %}
-                                                            {% for item_periods in item_years.items %}
-                                                                {% for item_cols in item_periods.items %}
-                                                                    {% if forloop.last %}
-                                                                        <td class="text-center border-between">{{ item_cols.value }}</td>
-                                                                    {% else %}
-                                                                        <td class="text-center">{{ item_cols.value }}</td>
-                                                                    {% endif %}
-                                                                {% endfor %}
+                                            {% endfor %} 
+                                            
+                                        </thead>
+                                        <tbody>
+                                            
+                                            {% for item_rows in data_contents %}
+                                                <tr>
+                                                    <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
+                                                    <td class="sticky-col second-col">{{item_rows.row_name}}</td>
+                                                    {% for item_years in item_rows.items %}
+                                                        {% for item_periods in item_years.items %}
+                                                            {% for item_cols in item_periods.items %}
+                                                                {% if forloop.last %}
+                                                                    <td class="text-center border-between">{{ item_cols.value }}</td>
+                                                                {% else %}
+                                                                    <td class="text-center">{{ item_cols.value }}</td>
+                                                                {% endif %}
                                                             {% endfor %}
                                                         {% endfor %}
-                                                    </tr>
-                                                {% endfor %}
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endfor %}
 
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
 
                                 <h5 class="font-weight-light font-13"><i>{{table.footer_desc}}</i></h5>

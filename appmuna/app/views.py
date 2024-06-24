@@ -434,7 +434,7 @@ class StatisticDetailNoColsTableClassView(View):
                     'data_meanings' : data_meanings_,
                     'periods' : list_periods,
                     'col_span' : col_span,
-                    # 'chart_data': chart_data,
+                    'chart_data': chart_data,
                     # 'data_comparisons' : data_comparisons,
                     # 'data_comparisons_title' : data_comparisons_title,
                     # 'data_compare_req' : data_compare_req,

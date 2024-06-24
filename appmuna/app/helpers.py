@@ -166,6 +166,7 @@ def get_list_periods(model_data_period, filter_ = None, no_cols = False):
 
     return list_periods
 
+
 def get_chart_data(data, summarize = 'sum', is_nocols = False):
 
     label_x_line = []
@@ -179,9 +180,12 @@ def get_chart_data(data, summarize = 'sum', is_nocols = False):
                     label_x_line.append(label)
 
                 for dt_col in dt_period['items']:
-                    if dt_col['item_char'].lower() == 'total':
+                    if is_nocols is False:
+                        if dt_col['item_char'].lower() == 'total':
+                            list_data_line.append(dt_col['value'])
+                            continue
+                    else:
                         list_data_line.append(dt_col['value'])
-                        continue
 
         data_line.append({
             'label': dt_content['row_name'],
@@ -189,9 +193,6 @@ def get_chart_data(data, summarize = 'sum', is_nocols = False):
         })
 
     total_period = []
-    pprint(label_x_line)
-    pprint(data[0])
-    return
     for idx in range(len(label_x_line)):
         total_period.append(sum(dt['data'][idx] for dt in data_line))
 
@@ -218,4 +219,6 @@ def get_chart_data(data, summarize = 'sum', is_nocols = False):
     chart_data['data_pie'] = data_pie
     chart_data['label_pie_layer'] = [f'Layer {idx+1}: {dt}' for idx, dt in enumerate(label_x_line)]
     
+
+    pprint(chart_data)
     return chart_data
