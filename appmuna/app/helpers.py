@@ -117,7 +117,9 @@ def get_content_table(indicator_id, filter_ = None):
     
     data_content_table = sorted(data_content_table, key=itemgetter('order_num'))
 
-    if model.get_summarize_status_display() != 'none':
+    summarize_dt = model.get_summarize_status_display().lower()
+    sum_values_rows = []
+    if summarize_dt != 'none':
         for dt_rows in data_content_table:
             for dt_years in dt_rows['items']:
                 for dt_periods in dt_years['items']:
@@ -125,11 +127,30 @@ def get_content_table(indicator_id, filter_ = None):
                     dt_collections = []
                     for dt_cols in dt_periods['items']:
                         dt_collections.append(float(dt_cols['value']))
-                    smr = sum(dt_collections)  if model.get_summarize_status_display() == 'sum' else  sum(dt_collections) / len(dt_collections)
+                    
+                    if summarize_dt == 'sum':
+                        smr = sum(dt_collections)
+                        item_char = 'Total'
+                    elif summarize_dt == 'avg':
+                        smr = sum(dt_collections) / len(dt_collections)
+                        item_char = 'Rerata'
+                    else: # For percent
+                        smr = sum(dt_collections)
+                        item_char = 'Persen'
+
                     dt_periods['items'].append({
-                        'item_char' : 'Total',
+                        'item_char' : item_char,
                         'value': smr
                     })
+                    sum_values_rows.append({'item_period' : f"{dt_years['year']}_{dt_periods['item_period_id']}", 'sum' : sum(dt_collections)})
+    
+    if summarize_dt == 'percent':
+        for dt_rows in data_content_table:
+            for dt_years in dt_rows['items']:
+                for dt_periods in dt_years['items']:
+                    total_each_rows = [dt['sum'] for dt in sum_values_rows if f"{dt_years['year']}_{dt_periods['item_period_id']}" == dt['item_period']]
+                    total_each_rows = sum(total_each_rows)
+                    dt_periods['items'][-1]['value'] = round(dt_periods['items'][-1]['value'] / total_each_rows * 100, 2)
 
     return data_content_table
 
@@ -167,7 +188,7 @@ def get_list_periods(model_data_period, filter_ = None, no_cols = False):
     return list_periods
 
 
-def get_chart_data(data, summarize = 'sum', is_nocols = False):
+def get_chart_data(data, summarize = 'sum'):
 
     label_x_line = []
     data_line = []
@@ -180,31 +201,34 @@ def get_chart_data(data, summarize = 'sum', is_nocols = False):
                     label_x_line.append(label)
 
                 for dt_col in dt_period['items']:
-                    if is_nocols is False:
-                        if dt_col['item_char'].lower() == 'total':
-                            list_data_line.append(dt_col['value'])
-                            continue
-                    else:
+                    item_char = dt_col['item_char'].lower()
+                    if item_char == 'total' or item_char == 'rerata' or item_char == 'persen':
                         list_data_line.append(dt_col['value'])
+                        continue
 
         data_line.append({
             'label': dt_content['row_name'],
             'data': list_data_line
         })
 
-    total_period = []
-    for idx in range(len(label_x_line)):
-        total_period.append(sum(dt['data'][idx] for dt in data_line))
+    if summarize.lower() in ['sum', 'percent']:
+        data_pie = []
+        if summarize == 'sum':
+            total_period = []
+            for idx in range(len(label_x_line)):
+                total_period.append(sum(dt['data'][idx] for dt in data_line))
 
-    for dt in data_line:
-        percent = []
-        for idx, dt_ in enumerate(dt['data']):
-            percent.append(round(dt_/total_period[idx]*100, 2))
-        dt['data_percent'] = percent
-        
-    data_pie = []
-    for idx in range(len(label_x_line)):
-        data_pie.append([dt['data_percent'][idx] for dt in data_line])
+            for dt in data_line:
+                percent = []
+                for idx, dt_ in enumerate(dt['data']):
+                    percent.append(round(dt_/total_period[idx]*100, 2))
+                dt['data_percent'] = percent
+
+            for idx in range(len(label_x_line)):
+                data_pie.append([dt['data_percent'][idx] for dt in data_line])
+        else:
+            for idx in range(len(label_x_line)):
+                data_pie.append([dt['data'][idx] for dt in data_line])
 
     chart_data = {'labels': label_x_line, 'data' : data_line}
 
@@ -213,12 +237,10 @@ def get_chart_data(data, summarize = 'sum', is_nocols = False):
     elif summarize == 'avg':
         chart_data['agg'] =  'Rerata'
     else:
-        chart_data['agg'] =  'Persen (100%)'
+        chart_data['agg'] =  'Persen (%)'
 
     chart_data['label_pie_chart'] = [dt['label'] for dt in data_line]
     chart_data['data_pie'] = data_pie
     chart_data['label_pie_layer'] = [f'Layer {idx+1}: {dt}' for idx, dt in enumerate(label_x_line)]
     
-
-    pprint(chart_data)
     return chart_data

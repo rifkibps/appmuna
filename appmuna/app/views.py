@@ -406,7 +406,7 @@ class StatisticDetailNoColsTableClassView(View):
 
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'), no_cols=True)
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
-                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display(), True)
+                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
 
                 data_meanings_ = []
                 for dt in data_meanings:
