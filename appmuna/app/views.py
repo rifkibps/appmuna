@@ -379,7 +379,7 @@ class StatisticsDataTablesClassView(View):
             data.append(
             {
                 'no': [x for x in id_def_data if obj['indicator_id'] == x[1]][0][0],
-                'indicator_id__name': f'<a href="{href}" class="text-secondary" title="{obj['indicator_id__name']}">{obj['indicator_id__name'][:50]} ..</a>' ,
+                'indicator_id__name': f'<a href="{href}" class="text-secondary" title="{obj["indicator_id__name"]}">{obj["indicator_id__name"][:50]} ..</a>' ,
                 'indicator_id__time_period_id__name': obj['indicator_id__time_period_id__name'],
                 'indicator_id__updated_at' : obj['indicator_id__updated_at'].strftime('%d %b %Y'),
             })
@@ -425,7 +425,7 @@ class StatisticDetailNoColsTableClassView(View):
                 count_cols = len(dt['items'][0]['items'][0]['items'])
                 col_span = count_period * count_cols
                 
-
+                pprint(dt)
                 context = {
                     'title' : 'Kemiskinan | Tabel Statistik',
                     'table' : model,

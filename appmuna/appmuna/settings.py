@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'authentication',
     'import_export',
     'django_cleanup.apps.CleanupConfig',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [

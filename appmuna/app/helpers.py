@@ -29,12 +29,12 @@ def get_content_comparison(datalists):
                         title = 'Peningkatan'
                         class_, icon = 'text-success', 'mdi-arrow-up-bold'
                     value = f'<span class="{class_} me-2">(<span class="mdi {icon}"></span>{dev_percent}%)</span>'
-                    content = f'Terjadi {title} sebesar {dev} ({dev_percent}%) dibandingkan dengan data {dt_years['items'][0]["item_period"]}, {dt_years["year"]}'
+                    content = f'Terjadi {title} sebesar {dev} ({dev_percent}%) dibandingkan dengan data {dt_years["items"][0]["item_period"]}, {dt_years["year"]}'
                     title = f'Terjadi {title} {dev_percent}%.'
                 else:
                     class_ = ''
                     value = dev_percent
-                    content = f'Terjadi {title} sebesar {dev} dibandingkan dengan data {dt_years['items'][0]["item_period"]}, {dt_years["year"]}'
+                    content = f'Terjadi {title} sebesar {dev} dibandingkan dengan data {dt_years["items"][0]["item_period"]}, {dt_years["year"]}'
                     title = f'Terjadi {title} sebesar {dev}',
 
                 cols_comparisons.append({
@@ -45,7 +45,7 @@ def get_content_comparison(datalists):
                     'content' :content
                 })
                 
-            dt_years['items'].insert(0, {'item_period': f'Perbandingan ({dt_years['items'][0]["item_period"]} {dt_years["year"]} - {dt_years['items'][1]["item_period"]} {dt_years["year"]})', 'items': cols_comparisons})
+            dt_years['items'].insert(0, {'item_period': f'Perbandingan ({dt_years["items"][0]["item_period"]} {dt_years["year"]} - {dt_years["items"][1]["item_period"]} {dt_years["year"]})', 'items': cols_comparisons})
 
     return datalists
 

@@ -1,5 +1,5 @@
 {% extends 'horizontal/home_app.html' %}
-
+{% load mathfilters %}
 {% load filter_tags %}
 
 {% load static %}
@@ -163,7 +163,7 @@
                 </div>
 
                 <div class="mb-3 mt-4">
-                    <h5>Konsep dan Definisi: </h5>
+                    <h5>Konsep dan Definisi:</h5>
                     <div class="mt-1">
                         <p>
                             {{table.desc}}
@@ -453,7 +453,10 @@
                                             
                                                 {% if is_year %}
                                                     <tr>
-                                                        <th colspan="{{ col_span }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
+                                                        <th colspan="1" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
+                                                        {% if table.get_summarize_status_display != 'none' %}
+                                                        <th colspan="1" rowspan="2" class="text-center">{{item_years.items.0.items.1.item_char}}</th>
+                                                        {% endif %}
                                                     </tr>
                                                 {% else %}
                                                     <tr>
@@ -461,7 +464,12 @@
                                                     </tr>
                                                     <tr>
                                                     {% for item_periods in item_years.items %}
+                                                        {% if table.get_summarize_status_display != 'none' %}
+                                                        <th colspan="{{item_periods.items|length|sub:1}}" class="text-center">{{ item_periods.item_period }}</th>
+                                                        <th colspan="1" class="text-center">{{ item_periods.items.1.item_char }}</th>
+                                                        {% else %}
                                                         <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
+                                                        {% endif %}
                                                     {% endfor %}
                                                     </tr>
                                                 {% endif %}
@@ -478,7 +486,11 @@
                                                         {% for item_periods in item_years.items %}
                                                             {% for item_cols in item_periods.items %}
                                                                 {% if forloop.last %}
-                                                                    <td class="text-center border-between">{{ item_cols.value }}</td>
+                                                                    {% if table.get_summarize_status_display != 'none' %}
+                                                                        <th class="text-center border-between">{{ item_cols.value }}</th>
+                                                                    {% else %}
+                                                                        <td class="text-center border-between">{{ item_cols.value }}</td>
+                                                                    {% endif %}
                                                                 {% else %}
                                                                     <td class="text-center">{{ item_cols.value }}</td>
                                                                 {% endif %}
@@ -534,92 +546,92 @@
                             </div>
                         </div>
 
-
-                        <div class="row" id="graphLine">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="dropdown float-end">
-                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="mdi mdi-dots-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end px-0 font-13">
-                                                <a href="javascript:void(0);" class="dropdown-item" id="export-line-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                        {% if table.get_summarize_status_display != 'none' %}
+                            <div class="row" id="graphLine">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown float-end">
+                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="mdi mdi-dots-vertical"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end px-0 font-13">
+                                                    <a href="javascript:void(0);" class="dropdown-item" id="export-line-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <h4 class="header-title mb-4">Line Chart</h4>
+                                            <h4 class="header-title mb-4">Line Chart</h4>
 
-                                        <div dir="ltr">
-                                            <div class="mt-3 chartjs-chart" >
-                                                <canvas id="task-line-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                            <div dir="ltr">
+                                                <div class="mt-3 chartjs-chart" >
+                                                    <canvas id="task-line-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                </div>
+                                                <br>
+                                                <span>{{table.footer_desc}} (diolah)</span>
                                             </div>
-                                            <br>
-                                            <span>{{table.footer_desc}} (diolah)</span>
-                                        </div>
 
-                                    </div> <!-- end card body-->
-                                </div> <!-- end card -->
+                                        </div> <!-- end card body-->
+                                    </div> <!-- end card -->
+                                </div>
                             </div>
-                        </div>
-                        
-                                                
-                        <div class="row" id="graphBar">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="dropdown float-end">
-                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="mdi mdi-dots-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end px-0 font-13">
-                                                <a href="javascript:void(0);" class="dropdown-item" id="export-bar-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                            
+                            <div class="row" id="graphBar">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown float-end">
+                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="mdi mdi-dots-vertical"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end px-0 font-13">
+                                                    <a href="javascript:void(0);" class="dropdown-item" id="export-bar-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <h4 class="header-title mb-4">Bar Chart</h4>
+                                            <h4 class="header-title mb-4">Bar Chart</h4>
 
-                                        <div dir="ltr">
-                                            <div class="mt-3 chartjs-chart">
-                                                <canvas id="task-bart-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                            <div dir="ltr">
+                                                <div class="mt-3 chartjs-chart">
+                                                    <canvas id="task-bart-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                </div>
+                                                <br>
+                                                <span>{{table.footer_desc}} (diolah)</span>
                                             </div>
-                                            <br>
-                                            <span>{{table.footer_desc}} (diolah)</span>
-                                        </div>
 
-                                    </div> <!-- end card body-->
-                                </div> <!-- end card -->
-                            </div><!-- end col-->
-                        </div>
-                        <!-- end row-->
-
-                        {% if model.get_summarize_status_display == 'avg' %}
-                        <div class="row" id="graphPie">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="dropdown float-end">
-                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="mdi mdi-dots-vertical"></i>
-                                            </a>
-                                            <div class="dropdown-menu dropdown-menu-end px-0 font-13">
-                                                <a href="javascript:void(0);" class="dropdown-item" id="export-pie-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
-                                            </div>
-                                        </div>
-                                        <h4 class="header-title mb-4">Pie Chart</h4>
-
-                                        <div dir="ltr">
-                                            <div class="mt-3 chartjs-chart" >
-                                                <canvas id="pie-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
-                                            </div>
-                                            <br>
-                                            <span>{{table.footer_desc}} (diolah)</span>
-                                        </div>
-
-                                        
-
-                                    </div> <!-- end card body-->
-                                </div> <!-- end card -->
+                                        </div> <!-- end card body-->
+                                    </div> <!-- end card -->
+                                </div><!-- end col-->
                             </div>
-                        </div>
+                            <!-- end row-->
+
+                            {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' %}
+                            <div class="row" id="graphPie">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="dropdown float-end">
+                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="mdi mdi-dots-vertical"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end px-0 font-13">
+                                                    <a href="javascript:void(0);" class="dropdown-item" id="export-pie-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                                </div>
+                                            </div>
+                                            <h4 class="header-title mb-4">Pie Chart</h4>
+
+                                            <div dir="ltr">
+                                                <div class="mt-3 chartjs-chart" >
+                                                    <canvas id="pie-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                </div>
+                                                <br>
+                                                <span>{{table.footer_desc}} (diolah)</span>
+                                            </div>
+
+                                            
+
+                                        </div> <!-- end card body-->
+                                    </div> <!-- end card -->
+                                </div>
+                            </div>
+                            {% endif %}
                         {% endif %}
                         
                     </div>
@@ -948,7 +960,7 @@
         }
     });
 
-    {% if model.get_summarize_status_display == 'avg' %}
+    {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' %}
 
     var pie_chart = new Chart('pie-chart', {
         type: 'doughnut',
