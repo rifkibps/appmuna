@@ -239,8 +239,9 @@ def get_chart_data(data, summarize = 'sum'):
     else:
         chart_data['agg'] =  'Persen (%)'
 
-    chart_data['label_pie_chart'] = [dt['label'] for dt in data_line]
-    chart_data['data_pie'] = data_pie
-    chart_data['label_pie_layer'] = [f'Layer {idx+1}: {dt}' for idx, dt in enumerate(label_x_line)]
+    if summarize.lower() in ['sum', 'percent']:
+        chart_data['label_pie_chart'] = [dt['label'] for dt in data_line]
+        chart_data['data_pie'] = data_pie
+        chart_data['label_pie_layer'] = [f'Layer {idx+1}: {dt}' for idx, dt in enumerate(label_x_line)]
     
     return chart_data

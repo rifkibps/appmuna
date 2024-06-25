@@ -424,6 +424,7 @@ class StatisticDetailNoColsTableClassView(View):
                 count_period = len(dt['items'][0]['items'])
                 count_cols = len(dt['items'][0]['items'][0]['items'])
                 col_span = count_period * count_cols
+                
 
                 context = {
                     'title' : 'Kemiskinan | Tabel Statistik',

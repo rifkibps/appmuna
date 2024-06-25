@@ -591,6 +591,7 @@
                         </div>
                         <!-- end row-->
 
+                        {% if model.get_summarize_status_display == 'avg' %}
                         <div class="row" id="graphPie">
                             <div class="col-12">
                                 <div class="card">
@@ -619,6 +620,7 @@
                                 </div> <!-- end card -->
                             </div>
                         </div>
+                        {% endif %}
                         
                     </div>
                     <div class="tab-pane" id="data_comparisons">
@@ -946,6 +948,8 @@
         }
     });
 
+    {% if model.get_summarize_status_display == 'avg' %}
+
     var pie_chart = new Chart('pie-chart', {
         type: 'doughnut',
         data: {
@@ -987,9 +991,10 @@
         }
     })
 
+    {% endif %}
+
     var line_chart = new Chart('task-line-chart', {
         type: 'line',
-        
         data: {
             labels: {{chart_data.labels|safe}},    
             datasets: [
