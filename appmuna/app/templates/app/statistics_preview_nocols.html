@@ -331,9 +331,22 @@
                         <div id="cardCollpase" class="collapse pt-3 show">
                             <div class="mb-3">
                                 <h5>Periode Pertama: </h5>
-                                <ul class="detailPeriodStart py-2" style="list-style:none;padding-left:5px;overflow-y: scroll; height:100px">
+                                <ul class="detailPeriodStart py-2" style="list-style:none;padding-left:5px;overflow-y: scroll">
+
                                     {% for period in periods %}
-                                    <li class="yearPeriodStart" style="cursor: pointer" >
+                                    {% if is_year %}
+                                        {% for item in period.periods %}
+                                        <li style="padding-bottom:2px">
+                                            <div class="form-check">
+                                                {% with check=period.year|add:'_'|add:item.id %}
+                                                    <input type="checkbox" class="form-check-input border filterPeriodStart" id="check_start_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.0 %}checked{% endif %}>
+                                                    <label class="filterPeriodLabelStart" for="check_start_{{period.year}}_{{item.id}}" style="font-weight:normal"> Tahun {{period.year}} </label>
+                                                {% endwith %}
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    {% else %}
+                                    <li class="yearPeriod" style="cursor: pointer" >
                                         <i class="mdi mdi-chevron-right"></i>
                                         <span style="font-weight:bold">Tahun {{period.year}}</span>
                                         <ul class="py-2" style="list-style:none;padding-left:20px;">
@@ -344,19 +357,32 @@
                                                         <input type="checkbox" class="form-check-input border filterPeriodStart" id="check_start_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.0 %}checked{% endif %}>
                                                         <label class="filterPeriodLabelStart" for="check_start_{{period.year}}_{{item.id}}" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
                                                         {% endwith %}
-                                                        
                                                     </div>
                                                 </li>
                                             {% endfor %}
                                         </ul>
                                     </li>
+                                    {% endif %}
                                     {% endfor %}
                                 </ul>
                             </div>
                             <div class="mb-3">
                                 <h5>Periode Kedua: </h5>
-                                <ul class="detailPeriodAkhir py-2" style="list-style:none;padding-left:5px;overflow-y: scroll; height:100px">
+                                <ul class="detailPeriodAkhir py-2" style="list-style:none;padding-left:5px;overflow-y: scroll">
+
                                     {% for period in periods %}
+                                    {% if is_year %}
+                                        {% for item in period.periods %}
+                                        <li style="padding-bottom:2px">
+                                            <div class="form-check">
+                                                {% with check=period.year|add:'_'|add:item.id %}
+                                                    <input type="checkbox" class="form-check-input border filterPeriodEnd" id="check_end_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.0 %}checked{% endif %}>
+                                                    <label class="filterPeriodLabelEnd" for="check_end_{{period.year}}_{{item.id}}" style="font-weight:normal"> Tahun {{period.year}} </label>
+                                                {% endwith %}
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    {% else %}
                                     <li class="yearPeriod" style="cursor: pointer" >
                                         <i class="mdi mdi-chevron-right"></i>
                                         <span style="font-weight:bold">Tahun {{period.year}}</span>
@@ -365,14 +391,15 @@
                                                 <li style="padding-bottom:2px">
                                                     <div class="form-check">
                                                         {% with check=period.year|add:'_'|add:item.id %}
-                                                        <input type="checkbox" class="form-check-input border filterPeriodEnd" id="check_end_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.1 %}checked{% endif %}>
-                                                        <label class="filterPeriodLabelEnd" for="check_end_{{period.year}}_{{item.id}}" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
+                                                        <input type="checkbox" class="form-check-input border filterPeriodEnd" id="check_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.0 %}checked{% endif %}>
+                                                        <label class="filterPeriodLabelEnd" for="check_{{period.year}}_{{item.id}}" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
                                                         {% endwith %}
                                                     </div>
                                                 </li>
                                             {% endfor %}
                                         </ul>
                                     </li>
+                                    {% endif %}
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -453,10 +480,7 @@
                                             
                                                 {% if is_year %}
                                                     <tr>
-                                                        <th colspan="1" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
-                                                        {% if table.get_summarize_status_display != 'none' %}
-                                                        <th colspan="1" rowspan="2" class="text-center">{{item_years.items.0.items.1.item_char}}</th>
-                                                        {% endif %}
+                                                        <th colspan="{{ col_span|sub:1 }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
                                                     </tr>
                                                 {% else %}
                                                     <tr>
@@ -464,12 +488,7 @@
                                                     </tr>
                                                     <tr>
                                                     {% for item_periods in item_years.items %}
-                                                        {% if table.get_summarize_status_display != 'none' %}
-                                                        <th colspan="{{item_periods.items|length|sub:1}}" class="text-center">{{ item_periods.item_period }}</th>
-                                                        <th colspan="1" class="text-center">{{ item_periods.items.1.item_char }}</th>
-                                                        {% else %}
-                                                        <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
-                                                        {% endif %}
+                                                    <th colspan="{{item_periods.items|length|sub:1}}" class="text-center">{{ item_periods.item_period }}</th>
                                                     {% endfor %}
                                                     </tr>
                                                 {% endif %}
@@ -485,13 +504,7 @@
                                                     {% for item_years in item_rows.items %}
                                                         {% for item_periods in item_years.items %}
                                                             {% for item_cols in item_periods.items %}
-                                                                {% if forloop.last %}
-                                                                    {% if table.get_summarize_status_display != 'none' %}
-                                                                        <th class="text-center border-between">{{ item_cols.value }}</th>
-                                                                    {% else %}
-                                                                        <td class="text-center border-between">{{ item_cols.value }}</td>
-                                                                    {% endif %}
-                                                                {% else %}
+                                                                {% if forloop.first %}
                                                                     <td class="text-center">{{ item_cols.value }}</td>
                                                                 {% endif %}
                                                             {% endfor %}

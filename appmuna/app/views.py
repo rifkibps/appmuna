@@ -408,6 +408,22 @@ class StatisticDetailNoColsTableClassView(View):
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
                 chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
 
+
+                data_comparisons = []
+                data_compare_req = []
+                chart_data_compare = []
+                data_comparisons_title = ''
+                if request.GET.get('compare_by'):
+                    data_compare_req = request.GET.get('compare_by').split('-')
+                    data_comparisons = get_content_table(indicator_id, data_compare_req)
+                    chart_data_compare = get_chart_data(data_content_table, model.get_summarize_status_display())
+                    data_comparisons = get_content_comparison(data_comparisons)
+
+                    first_year, first_period = data_compare_req[0].split('_')
+                    second_year, second_period = data_compare_req[1].split('_')
+                    data_comparisons_title = f'Perbandingan {model.name} ({model.unit_id.name}), {models.BackendPeriodNameItemsModel.objects.filter(pk=first_period).first().item_period} ({first_year}) - {models.BackendPeriodNameItemsModel.objects.filter(pk=second_period).first().item_period} ({second_year})'
+
+
                 data_meanings_ = []
                 for dt in data_meanings:
                     check_exist = next((index for (index, d) in enumerate(data_meanings_) if d['year'] == dt['year']), None)
@@ -425,7 +441,6 @@ class StatisticDetailNoColsTableClassView(View):
                 count_cols = len(dt['items'][0]['items'][0]['items'])
                 col_span = count_period * count_cols
                 
-                pprint(dt)
                 context = {
                     'title' : 'Kemiskinan | Tabel Statistik',
                     'table' : model,
@@ -436,10 +451,10 @@ class StatisticDetailNoColsTableClassView(View):
                     'periods' : list_periods,
                     'col_span' : col_span,
                     'chart_data': chart_data,
-                    # 'data_comparisons' : data_comparisons,
-                    # 'data_comparisons_title' : data_comparisons_title,
-                    # 'data_compare_req' : data_compare_req,
-                    # 'chart_data_compare' : chart_data_compare
+                    'data_comparisons' : data_comparisons,
+                    'data_comparisons_title' : data_comparisons_title,
+                    'data_compare_req' : data_compare_req,
+                    'chart_data_compare' : chart_data_compare
                 }
 
                 return render(request, 'app/statistics_preview_nocols.html', context)

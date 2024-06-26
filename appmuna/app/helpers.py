@@ -121,13 +121,17 @@ def get_content_table(indicator_id, filter_ = None):
     sum_values_rows = []
     if summarize_dt != 'none':
         for dt_rows in data_content_table:
+
             for dt_years in dt_rows['items']:
+
                 for dt_periods in dt_years['items']:
+    
                     # Add summarize data
                     dt_collections = []
                     for dt_cols in dt_periods['items']:
                         dt_collections.append(float(dt_cols['value']))
-                    
+
+
                     if summarize_dt == 'sum':
                         smr = sum(dt_collections)
                         item_char = 'Total'
@@ -142,8 +146,10 @@ def get_content_table(indicator_id, filter_ = None):
                         'item_char' : item_char,
                         'value': smr
                     })
+
                     sum_values_rows.append({'item_period' : f"{dt_years['year']}_{dt_periods['item_period_id']}", 'sum' : sum(dt_collections)})
-    
+
+
     if summarize_dt == 'percent':
         for dt_rows in data_content_table:
             for dt_years in dt_rows['items']:
