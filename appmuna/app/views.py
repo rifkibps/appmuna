@@ -402,12 +402,11 @@ class StatisticDetailNoColsTableClassView(View):
                 model = model.first()
                 data_meanings = models.BackendIndicatorsMeaningModel.objects.filter(indicator_id=indicator_id).order_by('year', 'item_period').values()
                 model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
-                model_data_period = model_data.values('year', 'item_period').distinct()
+                model_data_period = model_data.order_by('year', 'item_period').values('year', 'item_period').distinct()
 
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'), no_cols=True)
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
                 chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
-
 
                 data_comparisons = []
                 data_compare_req = []
@@ -416,6 +415,7 @@ class StatisticDetailNoColsTableClassView(View):
                 if request.GET.get('compare_by'):
                     data_compare_req = request.GET.get('compare_by').split('-')
                     data_comparisons = get_content_table(indicator_id, data_compare_req)
+                   
                     chart_data_compare = get_chart_data(data_content_table, model.get_summarize_status_display())
                     data_comparisons = get_content_comparison(data_comparisons)
 
@@ -475,13 +475,14 @@ class StatisticDetailTableClassView(View):
                 model = model.first()
                 data_meanings = models.BackendIndicatorsMeaningModel.objects.filter(indicator_id=indicator_id).order_by('year', 'item_period').values()
                 model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
-                model_data_period = model_data.values('year', 'item_period').distinct()
+                model_data_period = model_data.order_by('year', 'item_period').values('year', 'item_period').distinct()
 
                 # List Periods
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
                 chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
                 
+                pprint(data_content_table[0])
                 data_comparisons = []
                 data_compare_req = []
                 chart_data_compare = []

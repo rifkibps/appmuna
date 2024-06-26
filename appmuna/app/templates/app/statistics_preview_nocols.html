@@ -476,23 +476,26 @@
                                                 <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
                                             </tr>
                                             
-                                            {% for item_years in data_contents.0.items %}
-                                            
-                                                {% if is_year %}
-                                                    <tr>
-                                                        <th colspan="{{ col_span|sub:1 }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
-                                                    </tr>
-                                                {% else %}
-                                                    <tr>
-                                                        <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
-                                                    </tr>
-                                                    <tr>
-                                                    {% for item_periods in item_years.items %}
-                                                    <th colspan="{{item_periods.items|length|sub:1}}" class="text-center">{{ item_periods.item_period }}</th>
-                                                    {% endfor %}
-                                                    </tr>
-                                                {% endif %}
-                                            {% endfor %} 
+                                            {% if is_year %}
+                                                <tr>
+                                                    {% for item_years in data_contents.0.items %}
+                                                    <th colspan="{{ col_span|sub:1 }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
+                                                    {% endfor %} 
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    {% for item_years in data_contents.0.items %}
+                                                        <th colspan="{{item_years.items|length}}" class="text-center">Tahun {{item_years.year}}</th>
+                                                    {% endfor %} 
+                                                </tr>
+                                                <tr>
+                                                    {% for item_years in data_contents.0.items %}
+                                                        {% for item_periods in item_years.items %}
+                                                        <th colspan="{{item_periods.items|length|sub:1}}" class="text-center">{{ item_periods.item_period }}</th>
+                                                        {% endfor %}
+                                                    {% endfor %} 
+                                                </tr>
+                                            {% endif %}
                                             
                                         </thead>
                                         <tbody>

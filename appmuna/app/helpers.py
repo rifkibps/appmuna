@@ -8,45 +8,51 @@ def split_list (list_dt,n_length):
 def get_content_comparison(datalists):
     
     for dt in datalists:
-        for dt_years in dt['items']:
-        
-            first_data = dt_years['items'][0]['items']
-            second_data = dt_years['items'][1]['items']
-            cols_comparisons = []
 
-            # pprint(dt_years['items'][0])
-            # return
+        if len(dt['items']) == 1: # Perbandingan antar triwulan di tahun yang sama
+            dt_years = dt['items'][0]
+            first_data = dt_years['items'][0]
+            second_data = dt_years['items'][1]
+        else:
+            dt_first_years = dt['items'][0]
+            dt_second_years = dt['items'][0]
+            
+            first_data = dt_first_years['items'][0]
+            second_data = dt_second_years['items'][1]
+            
+        cols_comparisons = []
 
-            for idx in range(len(first_data)):
-                dev = second_data[idx]['value'] - first_data[idx]['value']
-                dev_percent = round(dev / first_data[idx]['value'] * 100, 2) if first_data[idx]['value'] != 0 else '-'
-                
-                if type(dev_percent) == float:
-                    if dev_percent < 0 :
-                        title = 'Penurunan', 
-                        class_, icon = 'text-danger', 'mdi-arrow-down-bold'
-                    else:
-                        title = 'Peningkatan'
-                        class_, icon = 'text-success', 'mdi-arrow-up-bold'
-                    value = f'<span class="{class_} me-2">(<span class="mdi {icon}"></span>{dev_percent}%)</span>'
-                    content = f'Terjadi {title} sebesar {dev} ({dev_percent}%) dibandingkan dengan data {dt_years["items"][0]["item_period"]}, {dt_years["year"]}'
-                    title = f'Terjadi {title} {dev_percent}%.'
+        for idx in range(len(first_data['items'])):
+            dev = second_data['items'][idx]['value'] - first_data['items'][idx]['value']
+            dev_percent = round(dev / first_data['items'][idx]['value'] * 100, 2) if first_data['items'][idx]['value'] != 0 else '-'
+            
+            if type(dev_percent) == float:
+                if dev_percent < 0 :
+                    title = 'Penurunan', 
+                    class_, icon = 'text-danger', 'mdi-arrow-down-bold'
                 else:
-                    class_ = ''
-                    value = dev_percent
-                    content = f'Terjadi {title} sebesar {dev} dibandingkan dengan data {dt_years["items"][0]["item_period"]}, {dt_years["year"]}'
-                    title = f'Terjadi {title} sebesar {dev}',
+                    title = 'Peningkatan'
+                    class_, icon = 'text-success', 'mdi-arrow-up-bold'
+                value = f'<span class="{class_} me-2">(<span class="mdi {icon}"></span>{dev_percent}%)</span>'
+                content = f'Terjadi {title} sebesar {dev} ({dev_percent}%) dibandingkan dengan data {first_data["item_period"]}, {dt_years["year"]}'
+                title = f'Terjadi {title} {dev_percent}%.'
+            else:
+                class_ = ''
+                value = dev_percent
+                content = f'Terjadi {title} sebesar {dev} dibandingkan dengan data {first_data["item_period"]}, {dt_years["year"]}'
+                title = f'Terjadi {title} sebesar {dev}',
 
-                cols_comparisons.append({
-                    'item_char' : first_data[idx]['item_char'],
-                    'value' :  value,
-                    'title' : title,
-                    'class_' : class_,
-                    'content' :content
-                })
-                
-            dt_years['items'].insert(0, {'item_period': f'Perbandingan ({dt_years["items"][0]["item_period"]} {dt_years["year"]} - {dt_years["items"][1]["item_period"]} {dt_years["year"]})', 'items': cols_comparisons})
+            cols_comparisons.append({
+                'item_char' : first_data['items'][idx]['item_char'],
+                'value' :  value,
+                'title' : title,
+                'class_' : class_,
+                'content' :content
+            })
+            
+        dt_years['items'].insert(0, {'item_period': f'Perbandingan ({first_data["item_period"]} {dt_years["year"]} - {second_data["item_period"]} {dt_years["year"]})', 'items': cols_comparisons})
 
+            
     return datalists
 
 def get_content_table(indicator_id, filter_ = None):
@@ -130,7 +136,6 @@ def get_content_table(indicator_id, filter_ = None):
                     dt_collections = []
                     for dt_cols in dt_periods['items']:
                         dt_collections.append(float(dt_cols['value']))
-
 
                     if summarize_dt == 'sum':
                         smr = sum(dt_collections)

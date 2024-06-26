@@ -443,26 +443,29 @@
                                                 <th rowspan="4" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
                                             </tr>
                                             
-                                            {% for item_years in data_contents.0.items %}
-                                                <tr>
-                                                    <th colspan="{{ col_span }}" class="text-center">Tahun {{item_years.year}}</th>
-                                                </tr>
-
-                                                <tr>
-                                                {% for item_periods in item_years.items %}
-                                                    <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
+                                            <tr>
+                                                {% for dt_year in data_contents.0.items %}
+                                                <th colspan="{{ col_span }}" class="text-center">Tahun {{dt_year.year}}</th>
                                                 {% endfor %}
-                                                </tr>
+                                            </tr>
 
-                                                <tr>
-                                                {% for item_periods in item_years.items %}
-                                                    {% for item_cols in item_periods.items %}
-                                                        <th class="text-center">{{ item_cols.item_char }}</th>
+                                            <tr>
+                                                {% for dt_year in data_contents.0.items %}
+                                                    {% for item_periods in dt_year.items %}
+                                                        <th colspan="{{item_periods.items|length}}" class="text-center">{{ item_periods.item_period }}</th>
                                                     {% endfor %}
                                                 {% endfor %}
-                                                </tr>
+                                            </tr>
 
-                                            {% endfor %} 
+                                            <tr>
+                                                {% for dt_year in data_contents.0.items %}
+                                                    {% for item_periods in dt_year.items %}
+                                                        {% for item_cols in item_periods.items %}
+                                                            <th class="text-center">{{ item_cols.item_char }}</th>
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            </tr>
                                             
                                         </thead>
                                         <tbody>
