@@ -1,11 +1,12 @@
 from pprint import pprint
 from backend import models
 from operator import itemgetter
+  
 
 def split_list (list_dt,n_length):
     return [list_dt[i:i+n_length] for i in range(0, len(list_dt), n_length)]
 
-def get_content_comparison(datalists, model):
+def get_content_comparison(datalists):
     
     for dt in datalists:
 
@@ -71,22 +72,27 @@ def get_content_comparison(datalists, model):
                             )
     return datalists
 
-def get_content_table(indicator_id, filter_ = None):
+def get_content_table(indicator_id, filter_ = []):
 
     model = models.BackendIndicatorsModel.objects.filter(pk=indicator_id).first()
     model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
 
-    if filter_:
-        years = []
-        periods_items = []
+    if len(filter_) > 0:
+        model_data_ = []
         for dt in filter_:
             year, period_item = dt.split('_')
-            years.append(year)
-            periods_items.append(period_item)
-        model_data = model_data.filter(year__in = years, item_period__in=periods_items)
-    
+            qry = model_data.filter(year = year, item_period = period_item)
+            if qry.exists():
+                model_data_+= qry.values()
+
+        model_data = sorted(model_data_, key=itemgetter('item_row', 'year', 'item_period', 'item_char')) 
+    else:
+        model_data = model_data.order_by('item_row', 'year', 'item_period', 'item_char').values()
+
+    pprint(model_data)
+
     data_content_table = []
-    for dt in model_data.order_by('item_row', 'year', 'item_period', 'item_char').values():
+    for dt in model_data:
         items_col = {
             'item_char_id': dt['item_char'],
             'item_char': models.BackendCharacteristicItemsModel.objects.filter(pk=dt['item_char']).first().item_char if len(dt['item_char']) > 0 else '',

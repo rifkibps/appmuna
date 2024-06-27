@@ -419,8 +419,8 @@
                             </div>
     
                             <div class="mt-4 mb-3">
-                                <a href="{% url 'app:statistics-app-nocols' %}?indicator={{ request.GET.indicator }}{{ request.GET|get_query_periods:'data' }}" class="btn btn-primary">Reset</a>
                                 <button type="button" class="btn btn-primary compareData"><i class="mdi mdi-rocket me-1"></i> <span>Bandingkan Data</span> </button>
+                                <a href="{% url 'app:statistics-app-nocols' %}?indicator={{ request.GET.indicator }}{{ request.GET|get_query_periods:'data' }}" class="btn btn-primary">Reset</a>
                             </div>
                         </div>
                     </div>
