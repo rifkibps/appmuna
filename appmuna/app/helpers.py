@@ -5,7 +5,7 @@ from operator import itemgetter
 def split_list (list_dt,n_length):
     return [list_dt[i:i+n_length] for i in range(0, len(list_dt), n_length)]
 
-def get_content_comparison(datalists):
+def get_content_comparison(datalists, model):
     
     for dt in datalists:
 
@@ -13,46 +13,62 @@ def get_content_comparison(datalists):
             dt_years = dt['items'][0]
             first_data = dt_years['items'][0]
             second_data = dt_years['items'][1]
+            year_comparison = f'{dt_years["year"]}'
         else:
             dt_first_years = dt['items'][0]
-            dt_second_years = dt['items'][0]
+            dt_second_years = dt['items'][1]
             
             first_data = dt_first_years['items'][0]
-            second_data = dt_second_years['items'][1]
+            second_data = dt_second_years['items'][0]
+            year_comparison = f'{dt_first_years["year"]}'
             
         cols_comparisons = []
-
         for idx in range(len(first_data['items'])):
             dev = second_data['items'][idx]['value'] - first_data['items'][idx]['value']
             dev_percent = round(dev / first_data['items'][idx]['value'] * 100, 2) if first_data['items'][idx]['value'] != 0 else '-'
             
             if type(dev_percent) == float:
+                
                 if dev_percent < 0 :
-                    title = 'Penurunan', 
+                    title = 'Penurunan'
                     class_, icon = 'text-danger', 'mdi-arrow-down-bold'
                 else:
                     title = 'Peningkatan'
                     class_, icon = 'text-success', 'mdi-arrow-up-bold'
-                value = f'<span class="{class_} me-2">(<span class="mdi {icon}"></span>{dev_percent}%)</span>'
-                content = f'Terjadi {title} sebesar {dev} ({dev_percent}%) dibandingkan dengan data {first_data["item_period"]}, {dt_years["year"]}'
+                
+                value = f'<span class="{class_} me-2"><span class="mdi {icon}"></span>{dev_percent}%</span>'
+                content = f'Terjadi {title} sebesar {dev} ({dev_percent}%) dibandingkan dengan data {first_data["item_period"]}, {year_comparison}'
                 title = f'Terjadi {title} {dev_percent}%.'
             else:
                 class_ = ''
                 value = dev_percent
-                content = f'Terjadi {title} sebesar {dev} dibandingkan dengan data {first_data["item_period"]}, {dt_years["year"]}'
+                content = f'Terjadi {title} sebesar {dev} dibandingkan dengan data {first_data["item_period"]}, {year_comparison}'
                 title = f'Terjadi {title} sebesar {dev}',
 
-            cols_comparisons.append({
-                'item_char' : first_data['items'][idx]['item_char'],
-                'value' :  value,
-                'title' : title,
-                'class_' : class_,
-                'content' :content
-            })
-            
-        dt_years['items'].insert(0, {'item_period': f'Perbandingan ({first_data["item_period"]} {dt_years["year"]} - {second_data["item_period"]} {dt_years["year"]})', 'items': cols_comparisons})
+            dt_ = {
+                    'item_char' : first_data['items'][idx]['item_char'],
+                    'value' :  value,
+                    'title' : title,
+                    'class_' : class_,
+                    'content' :content
+            }
+            cols_comparisons.append(dt_)
 
-            
+        # pprint(cols_comparisons)
+        if len(dt['items']) == 1: # Perbandingan antar triwulan di tahun yang sama
+            dt_years['items'].insert(0, {'item_period': f'Perbandingan ({first_data["item_period"]} {dt_years["year"]} - {second_data["item_period"]} {dt_years["year"]})', 'items': cols_comparisons})
+        else:
+            dt['items'].insert(0, 
+                               {'year': f'Perbandingan ({first_data["item_period"]} {dt_first_years["year"]} - {second_data["item_period"]} {dt_second_years["year"]})',
+                                'items': [
+                                        {
+                                        'item_period' : '',
+                                        'item_period_id' : '',
+                                        'items' : cols_comparisons
+                                    }
+                                    ]
+                                }
+                            )
     return datalists
 
 def get_content_table(indicator_id, filter_ = None):
