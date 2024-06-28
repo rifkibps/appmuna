@@ -277,7 +277,7 @@
                                     <li class="yearPeriod" style="cursor: pointer" >
                                         <i class="mdi mdi-chevron-right"></i>
                                         <span style="font-weight:bold">Tahun {{period.year}}</span>
-                                        <ul class="py-2" style="list-style:none;padding-left:20px;">
+                                        <ul class="show py-2" style="list-style:none;padding-left:20px;">
                                             {% for item in period.periods %}
                                                 <li style="padding-bottom:2px">
                                                     <div class="form-check">
@@ -335,72 +335,72 @@
                                 <ul class="detailPeriodStart py-2" style="list-style:none;padding-left:5px;overflow-y: scroll">
 
                                     {% for period in periods %}
-                                    {% if is_year %}
-                                        {% for item in period.periods %}
-                                        <li style="padding-bottom:2px">
-                                            <div class="form-check">
-                                                {% with check=period.year|add:'_'|add:item.id %}
-                                                    <input type="checkbox" class="form-check-input border filterPeriodStart" id="check_start_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.0 %}checked{% endif %}>
-                                                    <label class="filterPeriodLabelStart" for="check_start_{{period.year}}_{{item.id}}" style="font-weight:normal"> Tahun {{period.year}} </label>
-                                                {% endwith %}
-                                            </div>
-                                        </li>
-                                        {% endfor %}
-                                    {% else %}
-                                    <li class="yearPeriod" style="cursor: pointer" >
-                                        <i class="mdi mdi-chevron-right"></i>
-                                        <span style="font-weight:bold">Tahun {{period.year}}</span>
-                                        <ul class="py-2" style="list-style:none;padding-left:20px;">
+                                        {% if is_year %}
                                             {% for item in period.periods %}
-                                                <li style="padding-bottom:2px">
-                                                    <div class="form-check">
-                                                        {% with check=period.year|add:'_'|add:item.id %}
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    {% with check=period.year|add:'_'|add:item.id %}
                                                         <input type="checkbox" class="form-check-input border filterPeriodStart" id="check_start_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.0 %}checked{% endif %}>
-                                                        <label class="filterPeriodLabelStart" for="check_start_{{period.year}}_{{item.id}}" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
-                                                        {% endwith %}
-                                                    </div>
-                                                </li>
+                                                        <label class="filterPeriodLabelStart" for="check_start_{{period.year}}_{{item.id}}" style="font-weight:normal"> Tahun {{period.year}} </label>
+                                                    {% endwith %}
+                                                </div>
+                                            </li>
                                             {% endfor %}
-                                        </ul>
-                                    </li>
-                                    {% endif %}
+                                        {% else %}
+                                        <li class="yearPeriod" style="cursor: pointer" >
+                                            <i class="mdi mdi-chevron-right"></i>
+                                            <span style="font-weight:bold">Tahun {{period.year}}</span>
+                                            <ul class="show py-2" style="list-style:none;padding-left:20px;">
+                                                {% for item in period.periods %}
+                                                    <li style="padding-bottom:2px">
+                                                        <div class="form-check">
+                                                            {% with check=period.year|add:'_'|add:item.id %}
+                                                            <input type="checkbox" class="form-check-input border filterPeriodStart" id="check_start_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.0 %}checked{% endif %}>
+                                                            <label class="filterPeriodLabelStart" for="check_start_{{period.year}}_{{item.id}}" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
+                                                            {% endwith %}
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </div>
                             <div class="mb-3">
-                                <h5>Periode Kedua: </h5>
-                                <ul class="detailPeriodAkhir py-2" style="list-style:none;padding-left:5px;overflow-y: scroll">
 
+                                <h5>Periode Kedua:</h5>
+                                <ul class="detailPeriodAkhir py-2" style="list-style:none;padding-left:5px;overflow-y: scroll">
                                     {% for period in periods %}
-                                    {% if is_year %}
-                                        {% for item in period.periods %}
-                                        <li style="padding-bottom:2px">
-                                            <div class="form-check">
-                                                {% with check=period.year|add:'_'|add:item.id %}
-                                                    <input type="checkbox" class="form-check-input border filterPeriodEnd" id="check_end_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.1 %}checked{% endif %}>
-                                                    <label class="filterPeriodLabelEnd" for="check_end_{{period.year}}_{{item.id}}" style="font-weight:normal"> Tahun {{period.year}} </label>
-                                                {% endwith %}
-                                            </div>
-                                        </li>
-                                        {% endfor %}
-                                    {% else %}
-                                    <li class="yearPeriod" style="cursor: pointer" >
-                                        <i class="mdi mdi-chevron-right"></i>
-                                        <span style="font-weight:bold">Tahun {{period.year}}</span>
-                                        <ul class="py-2" style="list-style:none;padding-left:20px;">
+                                        {% if is_year %}
                                             {% for item in period.periods %}
-                                                <li style="padding-bottom:2px">
-                                                    <div class="form-check">
-                                                        {% with check=period.year|add:'_'|add:item.id %}
+                                            <li style="padding-bottom:2px">
+                                                <div class="form-check">
+                                                    {% with check=period.year|add:'_'|add:item.id %}
                                                         <input type="checkbox" class="form-check-input border filterPeriodEnd" id="check_end_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.1 %}checked{% endif %}>
-                                                        <label class="filterPeriodLabelEnd" for="check_end_{{period.year}}_{{item.id}}" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
-                                                        {% endwith %}
-                                                    </div>
-                                                </li>
+                                                        <label class="filterPeriodLabelEnd" for="check_end_{{period.year}}_{{item.id}}" style="font-weight:normal"> Tahun {{period.year}} </label>
+                                                    {% endwith %}
+                                                </div>
+                                            </li>
                                             {% endfor %}
-                                        </ul>
-                                    </li>
-                                    {% endif %}
+                                        {% else %}
+                                        <li class="yearPeriod" style="cursor: pointer" >
+                                            <i class="mdi mdi-chevron-right"></i>
+                                            <span style="font-weight:bold">Tahun {{period.year}}</span>
+                                            <ul class="py-2" style="list-style:none;padding-left:20px;">
+                                                {% for item in period.periods %}
+                                                    <li style="padding-bottom:2px">
+                                                        <div class="form-check">
+                                                            {% with check=period.year|add:'_'|add:item.id %}
+                                                            <input type="checkbox" class="form-check-input border filterPeriodEnd" id="check_end_{{period.year}}_{{item.id}}" value="{{period.year}}_{{item.id}}" {% if check == data_compare_req.1 %}checked{% endif %}>
+                                                            <label class="filterPeriodLabelEnd" for="check_end_{{period.year}}_{{item.id}}" style="font-weight:normal"><i class="mdi mdi-chart-box"></i> {{item.name}} </label>
+                                                            {% endwith %}
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                        {% endif %}
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -926,6 +926,7 @@
     $(".yearPeriod, .yearPeriodStart").on("click", function (e) {
         e.stopPropagation();
         var list_item = $(this).find('ul')
+
         if (!list_item.hasClass("show")){
             $(this).find('ul').not(list_item).removeClass('show').addClass('d-none');
             list_item.removeClass("d-none")
