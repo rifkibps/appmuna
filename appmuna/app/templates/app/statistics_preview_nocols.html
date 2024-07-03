@@ -293,7 +293,8 @@
                                 </ul>
                                 
                             </div>
-            
+                            
+                            {% if table.get_summarize_status_display != 'none' %}
                             <div class="mb-4">
                                 <h5>Grafik: </h5>
                                 <div class="mt-1">
@@ -308,17 +309,23 @@
                                             <i class="mdi mdi-chart-line"></i>
                                             <label for="checkbox_line">Line Chart</label>
                                         </li>
+
+                                        {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' %}
                                         <li>
                                             <input type="checkbox" class="form-check-input" id="checkbox_pie" onchange="showChart('#graphPie')" checked>&ensp;
                                             <i class="mdi mdi-chart-pie"></i>
                                             <label for="checkbox_pie">Pie Chart</label>
                                         </li>
+                                        {% endif %}
                                     </ul>
     
                                 </div>
                             </div>
+                            {% endif %}
+                            
                            
-                            <button type="button" class="btn btn-primary filterData"><i class="mdi mdi-filter me-1"></i> <span>Filter Data</span> </button>
+                            <button type="button" class="btn btn-primary filterData"><i class="mdi mdi-filter me-1"></i> <span>Pilih Data</span> </button>
+                            <a href="{% url 'app:statistics-app-nocols' %}?indicator={{ request.GET.indicator }}" class="btn btn-primary">Clear</a>
                         </div>
                     </div>
                 </div> <!-- end card-->
@@ -405,6 +412,7 @@
                                 </ul>
                             </div>
 
+                            {% if table.get_summarize_status_display != 'none' %}
                             <div class="mb-4">
                                 <h5>Grafik: </h5>
                                 <div class="mt-1">
@@ -417,10 +425,18 @@
                                     </ul>
                                 </div>
                             </div>
-    
+                            {% endif %}
+
                             <div class="mt-4 mb-3">
-                                <button type="button" class="btn btn-primary compareData"><i class="mdi mdi-rocket me-1"></i> <span>Bandingkan Data</span> </button>
-                                <a href="{% url 'app:statistics-app-nocols' %}?indicator={{ request.GET.indicator }}{{ request.GET|get_query_periods:'data' }}" class="btn btn-primary">Reset</a>
+                                {% if table.get_summarize_status_display != 'none' %}
+                                    <button type="button" class="btn btn-primary compareData"><span>Bandingkan Data</span> </button>
+                                    <a href="{% url 'app:statistics-app-nocols' %}?indicator={{ request.GET.indicator }}{{ request.GET|get_query_periods:'data' }}" class="btn btn-primary">Reset</a>
+                                {% else %}
+                                    <button type="button" class="btn btn-primary compareData" disabled><span>Bandingkan Data</span> </button>
+                                    <button type="button" class="btn btn-primary" disabled><span>Reset</span> </button>
+                                {% endif %}
+
+
                             </div>
                         </div>
                     </div>
@@ -525,7 +541,7 @@
                                 <h5 class="font-weight-light font-13"><i>{{table.footer_desc}}</i></h5>
                             </div>
                         </div>
-
+                        {% if data_meanings|length > 0 %}
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
@@ -537,14 +553,18 @@
                                                     
                                                     {% for data_meaning in data_meanings %}
                                                         <div class="timeline-item">
-                                                            <span class="bg-info-lighten text-info timeline-icon">{{forloop.counter}}</span>
+                                                            <span class="bg-primary-lighten text-primary timeline-icon">{{forloop.counter}}</span>
 
                                                             <div class="timeline-item-info">
-                                                                <a href="#" class="text-info fw-bold mb-1 d-block">Tahun {{data_meaning.year}}</a>
+                                        
+                                                                <a href="#" class="text-primary fw-bold mb-1 d-block">Tahun {{data_meaning.year}}</a>
+
                                                                 <ul style="padding-left:20px">
                                                                     {% for dt in data_meaning.items %}
                                                                         <li>
+                                                                            {% if is_year == False %}
                                                                             <small>{{dt.item_period}}</small>
+                                                                            {% endif %}
                                                                             <p class="mb-0 pb-2">
                                                                                 <small class="text-muted">{{dt.context}}</small>
                                                                             </p>
@@ -563,6 +583,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
 
                         {% if table.get_summarize_status_display != 'none' %}
                             <div class="row" id="graphLine">
@@ -672,7 +693,7 @@
                                     <div class="col-sm-6">
                                         
                                         <div class="form-check form-switch mb-2">
-                                            <input type="checkbox" class="form-check-input" id="customSwitch1" disabled>
+                                            <input type="checkbox" class="form-check-input" id="customSwitch1" onchange="showData()">
                                             <label class="form-check-label font-14" for="customSwitch1">Tampilkan Data Pembanding</label>
                                         </div>
                                         
@@ -684,90 +705,86 @@
                                     </div>
                                     
                                 </div>
-                                <div class="view">
-                                    <div class="wrapper">
-                                        
-                                        <table class="table table-sm table-striped table-centered nowrap w-100 mb-1 font-14" id="content-table">
-                                            <thead style="background-color:#2262AB;color:white">
+                                <div class="wrapper">
+                                    <table class="table table-sm table-striped table-centered nowrap w-100 mb-1 font-14" id="content-table">
+                                        <thead style="background-color:#2262AB;color:white">
+                                            <tr>
+                                                <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
+                                                <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                            </tr>
+                                            
+                                            {% if is_year %}
                                                 <tr>
-                                                    <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
-                                                    <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                                    {% for item_years in data_comparisons.0.items %}
+                                                    <th colspan="{{ col_span|sub:1 }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
+                                                    {% endfor %} 
                                                 </tr>
-                                                
-                                                {% if is_year %}
-                                                    <tr>
-                                                        {% for item_years in data_comparisons.0.items %}
-                                                        <th colspan="{{ col_span|sub:1 }}" rowspan="2" class="text-center">Tahun {{item_years.year}}</th>
-                                                        {% endfor %} 
-                                                    </tr>
-                                                {% else %}
-                                                    <tr>
-                                                        {% for item_years in data_comparisons.0.items %}
-                                                            {% if item_years.items.0.item_period|length == 0 %}
-                                                            <th colspan="{{item_years.items|length}}" rowspan="2" class="text-center">{{item_years.year}}</th>
-                                                            {% else %}
-                                                            <th colspan="{{item_years.items|length}}" class="text-center">Tahun {{item_years.year}}</th>
-                                                            {% endif %}
+                                            {% elif comp_in_years %}
+                                                <tr>
+                                                    {% for dt_year in data_comparisons.0.items %}
+                                                        {% for dt_periods in dt_year.items %}
+                                                            <th colspan="{{dt_year.items.0.items|length|sub:1}}" class="text-center {% if forloop.first is False %} compare-item d-none {% endif %}">{{dt_periods.item_period}} {% if forloop.first is False %}{{dt_year.year}}{% endif %}</th>
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    {% for dt_year in data_comparisons.0.items %}
+                                                        <th class="text-center {% if forloop.first is False %} compare-item d-none {% endif %}">{% if forloop.first %} {{dt_year.year}} {% else %} {{dt_year.items.0.item_period}} {{dt_year.year}} {% endif %}</th>
+                                                    {% endfor %} 
+                                                </tr>
+                                            {% endif %}
+                                            
+                                        </thead>
 
-                                                        {% endfor %} 
-                                                    </tr>
-                                                    <tr>
-                                                        {% for item_years in data_comparisons.0.items %}
-                                                            {% for item_periods in item_years.items %}
-                                                                {% if item_periods.item_period|length != 0 %}
-                                                                <th colspan="{{item_periods.items|length|sub:1}}" class="text-center">{{ item_periods.item_period }}</th>
-                                                                {% endif %}
-                                                            {% endfor %}
-                                                        {% endfor %} 
-                                                    </tr>
-                                                {% endif %}
-                                                
-                                            </thead>
-
-                                            <tbody>
-                                                {% for item_rows in data_comparisons %}
-                                                    <tr>
-                                                        <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
-                                                        <td class="sticky-col second-col">{{item_rows.row_name}}</td>
-
+                                        <tbody>
+                                            {% for item_rows in data_comparisons %}
+                                                <tr>
+                                                    <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
+                                                    <td class="sticky-col second-col">{{item_rows.row_name}}</td>
+                                                    
+                                                    {% if comp_in_years or is_year %}
                                                         {% for item_years in item_rows.items %}
-                                                            {% if item_years.items|length != 1 %}
-                                                                {% for item_periods in item_years.items %}
-                                                                    {% with idx_col=forloop.counter0 %}
-                                                                        {% for item_cols in item_periods.items %}
-                                                                            {% if forloop.first %}
-                                                                                {% if idx_col == 0 %}
-                                                                                <td class="text-center {{ item_cols.class_ }} comparison-col {% if forloop.last %} {% endif %}" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="{{item_cols.content}}" title="{{item_cols.title}}">
-                                                                                    {{ item_cols.value|safe }}
-                                                                                </td>
-                                                                                {% else %}
-                                                                                <td class="text-center {% if forloop.last %} {% endif %} compare-item">{{ item_cols.value }}</td>
-                                                                                {% endif %}
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    {% endwith %}
-                                                                {% endfor %}
-                                                            {% else %}
-                                                                {% for item_periods in item_years.items %}
+                                                            {% for item_periods in item_years.items %}
+                                                                {% with idx_col=forloop.counter0 %}
                                                                     {% for item_cols in item_periods.items %}
                                                                         {% if forloop.first %}
-                                                                            {% if item_periods.item_period|length == 0 %}
-                                                                                <td class="text-center {{ item_cols.class_ }} comparison-col" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="{{item_cols.content}}" title="{{item_cols.title}}">
-                                                                                    {{ item_cols.value|safe }}
-                                                                                </td>
+                                                                            {% if idx_col == 0 %}
+                                                                            <td class="text-center {{ item_cols.class_ }} comparison-col {% if forloop.last %} {% endif %}" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="{{item_cols.content}}" title="{{item_cols.title}}">
+                                                                                {{ item_cols.value|safe }}
+                                                                            </td>
                                                                             {% else %}
-                                                                                <td class="text-center">{{ item_cols.value|safe }}</td>
+                                                                            <td class="text-center compare-item d-none">{{ item_cols.value }}</td>
                                                                             {% endif %}
                                                                         {% endif %}
                                                                     {% endfor %}
-                                                                {% endfor %}
-                                                            {% endif %}
+                                                                {% endwith %}
+                                                            {% endfor %}
                                                         {% endfor %}
-                                                    </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                                    {% else %}
+                                                    
+                                                        {% for item_years in item_rows.items %}
+                                                            {% for item_periods in item_years.items %}
+                                                                {% for item_cols in item_periods.items %}
+                                                                    {% if forloop.first %}
+                                                                        {% if item_periods.item_period|length == 0 %}
+                                                                            <td class="text-center {{ item_cols.class_ }} comparison-col" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-content="{{item_cols.content}}" title="{{item_cols.title}}">
+                                                                                {{ item_cols.value|safe }}
+                                                                            </td>
+                                                                        {% else %}
+                                                                            <td class="text-center compare-item d-none">{{ item_cols.value|safe }}</td>
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                        
+                                                    {% endif %}
+
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
 
                                 <h5 class="font-weight-light font-13"><i>{{table.footer_desc}}</i></h5>

@@ -32,12 +32,15 @@ def get_content_comparison(datalists):
                 
                 if dev_percent < 0 :
                     title = 'Penurunan'
-                    class_, icon = 'text-danger', 'mdi-arrow-down-bold'
+                    class_, icon = '', 'mdi-arrow-down-bold text-danger'
+                    # class_, icon = 'text-danger', 'mdi-arrow-down-bold'
                 else:
                     title = 'Peningkatan'
-                    class_, icon = 'text-success', 'mdi-arrow-up-bold'
+                    class_, icon = '', 'mdi-arrow-up-bold text-success'
+                    # class_, icon = 'text-success', 'mdi-arrow-up-bold'
                 
-                value = f'<span class="{class_} me-2"><span class="mdi {icon}"></span>{dev_percent}%</span>'
+                value = f'{dev_percent}% <span class="mdi {icon}"></span> '
+                # value = f'<span class="{class_} me-2"><span class="mdi {icon}"></span>{dev_percent}%</span>'
                 content = f'Terjadi {title} sebesar {dev} ({dev_percent}%) dibandingkan dengan data {first_data["item_period"]}, {year_comparison}'
                 title = f'Terjadi {title} {dev_percent}%.'
             else:
@@ -55,7 +58,6 @@ def get_content_comparison(datalists):
             }
             cols_comparisons.append(dt_)
 
-        # pprint(cols_comparisons)
         if len(dt['items']) == 1: # Perbandingan antar triwulan di tahun yang sama
             dt_years['items'].insert(0, {'item_period': f'Perbandingan ({first_data["item_period"]} {dt_years["year"]} - {second_data["item_period"]} {dt_years["year"]})', 'items': cols_comparisons})
         else:
@@ -88,8 +90,6 @@ def get_content_table(indicator_id, filter_ = []):
         model_data = sorted(model_data_, key=itemgetter('item_row', 'year', 'item_period', 'item_char')) 
     else:
         model_data = model_data.order_by('item_row', 'year', 'item_period', 'item_char').values()
-
-    pprint(model_data)
 
     data_content_table = []
     for dt in model_data:
@@ -187,7 +187,7 @@ def get_content_table(indicator_id, filter_ = []):
 
     return data_content_table
 
-def get_list_periods(model_data_period, filter_ = None, no_cols = False):
+def get_list_periods(model_data_period, filter_ = None):
     list_periods = []
     list_filter = []
 

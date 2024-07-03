@@ -404,26 +404,27 @@ class StatisticDetailNoColsTableClassView(View):
                 model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
                 model_data_period = model_data.order_by('year', 'item_period').values('year', 'item_period').distinct()
 
-                list_periods = get_list_periods(model_data_period, request.GET.getlist('data'), no_cols=True)
+                list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
                 chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
-                pprint(data_content_table)
 
                 data_comparisons = []
                 data_compare_req = []
                 chart_data_compare = []
                 data_comparisons_title = ''
+                comp_in_years = True
                 if request.GET.get('compare_by'):
                     data_compare_req = request.GET.get('compare_by').split('-')
                     data_comparisons = get_content_table(indicator_id, data_compare_req)
                     chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display())
                     data_comparisons = get_content_comparison(data_comparisons)
 
-                    pprint(data_compare_req)
-
                     first_year, first_period = data_compare_req[0].split('_')
                     second_year, second_period = data_compare_req[1].split('_')
                     data_comparisons_title = f'Perbandingan {model.name} ({model.unit_id.name}), {models.BackendPeriodNameItemsModel.objects.filter(pk=first_period).first().item_period} ({first_year}) - {models.BackendPeriodNameItemsModel.objects.filter(pk=second_period).first().item_period} ({second_year})'
+                    comp_in_years = first_year == second_year
+
+                    pprint(data_comparisons[0])
 
                 data_meanings_ = []
                 for dt in data_meanings:
@@ -443,7 +444,7 @@ class StatisticDetailNoColsTableClassView(View):
                 col_span = count_period * count_cols
                 
                 context = {
-                    'title' : 'Kemiskinan | Tabel Statistik',
+                    'title' : model.name,
                     'table' : model,
                     'table_last_updated' : model_data.order_by('-updated_at').first().updated_at,
                     'data_contents' : data_content_table,
@@ -453,6 +454,7 @@ class StatisticDetailNoColsTableClassView(View):
                     'col_span' : col_span,
                     'chart_data': chart_data,
                     'data_comparisons' : data_comparisons,
+                    'comp_in_years' : comp_in_years,
                     'data_comparisons_title' : data_comparisons_title,
                     'data_compare_req' : data_compare_req,
                     'chart_data_compare' : chart_data_compare
@@ -487,6 +489,7 @@ class StatisticDetailTableClassView(View):
                 data_compare_req = []
                 chart_data_compare = []
                 data_comparisons_title = ''
+                comp_in_years = True
                 if request.GET.get('compare_by'):
                     data_compare_req = request.GET.get('compare_by').split('-')
                     data_comparisons = get_content_table(indicator_id, data_compare_req)
@@ -496,6 +499,7 @@ class StatisticDetailTableClassView(View):
                     first_year, first_period = data_compare_req[0].split('_')
                     second_year, second_period = data_compare_req[1].split('_')
                     data_comparisons_title = f'Perbandingan {model.name} ({model.unit_id.name}), {models.BackendPeriodNameItemsModel.objects.filter(pk=first_period).first().item_period} ({first_year}) - {models.BackendPeriodNameItemsModel.objects.filter(pk=second_period).first().item_period} ({second_year})'
+                    comp_in_years = first_year == second_year
 
                 data_meanings_ = []
                 for dt in data_meanings:
@@ -510,24 +514,24 @@ class StatisticDetailTableClassView(View):
                         })
 
                 # Cols Data
-                col_span = 1
-                if model.col_group_id is not None:
-                    dt = data_content_table[0]
-                    count_period = len(dt['items'][0]['items'])
-                    count_cols = len(dt['items'][0]['items'][0]['items'])
-                    col_span = count_period * count_cols
-            
+                dt = data_content_table[0]
+                count_period = len(dt['items'][0]['items'])
+                count_cols = len(dt['items'][0]['items'][0]['items'])
+                col_span = count_period * count_cols
+
                 context = {
-                    'title' : 'Kemiskinan | Tabel Statistik',
+                    'title' : model.name,
                     'table' : model,
                     'table_last_updated' : model_data.order_by('-updated_at').first().updated_at,
                     'data_contents' : data_content_table,
                     'data_meanings' : data_meanings_,
                     'periods' : list_periods,
+                    'is_year' : True if len(list_periods[0]['periods'][0]['name']) == 0 else False,
                     'col_span' : col_span,
                     'chart_data': chart_data,
                     'data_comparisons' : data_comparisons,
                     'data_comparisons_title' : data_comparisons_title,
+                    'comp_in_years': comp_in_years,
                     'data_compare_req' : data_compare_req,
                     'chart_data_compare' : chart_data_compare
                 }
