@@ -156,12 +156,12 @@ class BackendIndicatorsModel(models.Model):
    )
 
    summarize_status = (
-      ('0', 'none'),
+      ('0', 'none'), # Untuk indeks, atau persen, kalau persen -> summarizenya none terus di check tipe datanya persen atau engga, klo persen otmatis ada grafiknya untuk tabulasi sama kaya percent
       ('1', 'sum'),
       ('2', 'avg'),
       ('3', 'percent'),
+      ('4', 'Only for data percent'),
    )
-
 
    subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_indicator', verbose_name='Subjek Statistik')
    subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_indicator', verbose_name='Subjek CSA')

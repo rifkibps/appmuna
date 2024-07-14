@@ -182,7 +182,7 @@
                     <h5>Karakteristik Indikator: </h5>
                     <div class="mt-1">
                         <ul>
-                            <li>Kelompok Baris: {{table.row_group_id.name}}</li>
+                            <li>Kelompok Baris: {% if have_rows %} {{table.row_group_id.name}} {% else %} {{table.name}} {% endif %}</li>
                             <li>Kelompok Kolom: {% if table.col_group_id %} {{table.col_group_id.name}} {% else %} Series {{table.time_period_id.name}} {% endif %}</li>
                         </ul>
                     </div>
@@ -294,7 +294,7 @@
                                 
                             </div>
                             
-                            {% if table.get_summarize_status_display != 'none' %}
+                            {% if table.get_summarize_status_display != 'none' or table.unit_id.name == 'Persen' %}
                             <div class="mb-4">
                                 <h5>Grafik: </h5>
                                 <div class="mt-1">
@@ -310,7 +310,7 @@
                                             <label for="checkbox_line">Line Chart</label>
                                         </li>
 
-                                        {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' %}
+                                        {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' or table.unit_id.name == 'Persen' %}
                                         <li>
                                             <input type="checkbox" class="form-check-input" id="checkbox_pie" onchange="showChart('#graphPie')" checked>&ensp;
                                             <i class="mdi mdi-chart-pie"></i>
@@ -412,7 +412,7 @@
                                 </ul>
                             </div>
 
-                            {% if table.get_summarize_status_display != 'none' %}
+                            {% if table.get_summarize_status_display != 'none' or table.unit_id.name == 'Persen' %}
                             <div class="mb-4">
                                 <h5>Grafik: </h5>
                                 <div class="mt-1">
@@ -491,7 +491,7 @@
                                         <thead style="background-color:#2262AB;color:white">
                                             <tr>
                                                 <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
-                                                <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                                <th rowspan="3" class="text-center sticky-col header-col second-col text-truncate">{% if have_rows %}{{table.row_group_id.name}} {% else %} Data {% endif %}</th>
                                             </tr>
                                             
                                             {% if is_year %}
@@ -521,7 +521,7 @@
                                             {% for item_rows in data_contents %}
                                                 <tr>
                                                     <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
-                                                    <td class="sticky-col second-col">{{item_rows.row_name}}</td>
+                                                    <td class="sticky-col second-col">{% if have_rows %}{{item_rows.row_name}} {% else %} {{table.name}} {% endif %}</td>
                                                     {% for item_years in item_rows.items %}
                                                         {% for item_periods in item_years.items %}
                                                             {% for item_cols in item_periods.items %}
@@ -541,6 +541,7 @@
                                 <h5 class="font-weight-light font-13"><i>{{table.footer_desc}}</i></h5>
                             </div>
                         </div>
+
                         {% if data_meanings|length > 0 %}
                         <div class="row">
                             <div class="col-12">
@@ -585,7 +586,9 @@
                         </div>
                         {% endif %}
 
-                        {% if table.get_summarize_status_display != 'none' %}
+                        {% comment %} {% if have_rows %}{{table.row_group_id.name}} {% else %} Data {% endif %} {% endcomment %}
+                        
+                        {% if table.get_summarize_status_display != 'none' or table.unit_id.name == 'Persen' %}
                             <div class="row" id="graphLine">
                                 <div class="col-12">
                                     <div class="card">
@@ -641,7 +644,7 @@
                             </div>
                             <!-- end row-->
 
-                            {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' %}
+                            {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' or table.unit_id.name == 'Persen' %}
                             <div class="row" id="graphPie">
                                 <div class="col-12">
                                     <div class="card">
@@ -710,7 +713,7 @@
                                         <thead style="background-color:#2262AB;color:white">
                                             <tr>
                                                 <th rowspan="3" class="text-center sticky-col header-col first-col">No</th>
-                                                <th rowspan="3" class="text-center sticky-col header-col second-col">{{table.row_group_id.name}}</th>
+                                                <th rowspan="3" class="text-center sticky-col header-col second-col text-truncate">{% if have_rows %}{{table.row_group_id.name}} {% else %} Data {% endif %}</th>
                                             </tr>
                                             
                                             {% if is_year %}
@@ -741,8 +744,8 @@
                                             {% for item_rows in data_comparisons %}
                                                 <tr>
                                                     <td class="text-center sticky-col first-col">{{forloop.counter}}</td>
-                                                    <td class="sticky-col second-col">{{item_rows.row_name}}</td>
-                                                    
+                                                    <td class="sticky-col second-col">{% if have_rows %}{{item_rows.row_name}} {% else %} {{table.name}} {% endif %}</td>
+
                                                     {% if comp_in_years or is_year %}
                                                         {% for item_years in item_rows.items %}
                                                             {% for item_periods in item_years.items %}
@@ -1036,7 +1039,7 @@
         }
     });
 
-    {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' %}
+    {% if table.get_summarize_status_display == 'sum' or table.get_summarize_status_display == 'percent' or table.unit_id.name == 'Persen' %}
 
     var pie_chart = new Chart('pie-chart', {
         type: 'doughnut',
@@ -1107,9 +1110,12 @@
             },
             scales: {
                 yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    },
                     scaleLabel: {
-                    display: true,
-                    labelString: '{{chart_data.agg|safe}}'
+                        display: true,
+                        labelString: '{{chart_data.agg|safe}}'
                     }
                 }],
                 xAxes: [{
@@ -1151,7 +1157,11 @@
             }
             },
             scales: {
-            yAxes: [{
+            yAxes: [
+            {
+                ticks: {
+                    beginAtZero: true
+                },
                 scaleLabel: {
                 display: true,
                 labelString: '{{chart_data.agg|safe}}'
@@ -1194,6 +1204,9 @@
             },
             scales: {
             yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
                 scaleLabel: {
                 display: true,
                 labelString: '{{chart_data_compare.agg|safe}}'

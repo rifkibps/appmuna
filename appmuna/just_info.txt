@@ -1,0 +1,2 @@
+If u want u get queries child data under parent data, so u can use this code!
+parentModel.[name_related_from_child].all()

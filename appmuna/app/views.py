@@ -9,7 +9,7 @@ from backend import models, forms
 from pprint import pprint
 
 import json
-from .helpers import get_chart_data, get_list_periods, get_content_table, split_list, get_content_comparison
+from .helpers import get_chart_data, get_list_periods, get_content_table, split_list, get_content_comparison, get_table_summarizer
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -397,17 +397,20 @@ class StatisticDetailNoColsTableClassView(View):
         if request.GET.get('indicator'):
             indicator_id = request.GET.get('indicator')
             model = models.BackendIndicatorsModel.objects.filter(pk=indicator_id)
-
             if model.exists():
                 model = model.first()
+                
+                # Cek baris apakah dummy or not
+                have_rows = False if model.row_group_id.row_items.first().order_num == 99 else True
+
                 data_meanings = models.BackendIndicatorsMeaningModel.objects.filter(indicator_id=indicator_id).order_by('year', 'item_period').values()
                 model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
                 model_data_period = model_data.order_by('year', 'item_period').values('year', 'item_period').distinct()
-
+                
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
-                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
-
+                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display(), model.unit_id.name.lower(), False, have_rows)
+                
                 data_comparisons = []
                 data_compare_req = []
                 chart_data_compare = []
@@ -416,15 +419,13 @@ class StatisticDetailNoColsTableClassView(View):
                 if request.GET.get('compare_by'):
                     data_compare_req = request.GET.get('compare_by').split('-')
                     data_comparisons = get_content_table(indicator_id, data_compare_req)
-                    chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display())
+                    chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display(), model.unit_id.name.lower(), False,have_rows)
                     data_comparisons = get_content_comparison(data_comparisons)
 
                     first_year, first_period = data_compare_req[0].split('_')
                     second_year, second_period = data_compare_req[1].split('_')
                     data_comparisons_title = f'Perbandingan {model.name} ({model.unit_id.name}), {models.BackendPeriodNameItemsModel.objects.filter(pk=first_period).first().item_period} ({first_year}) - {models.BackendPeriodNameItemsModel.objects.filter(pk=second_period).first().item_period} ({second_year})'
                     comp_in_years = first_year == second_year
-
-                    pprint(data_comparisons[0])
 
                 data_meanings_ = []
                 for dt in data_meanings:
@@ -446,6 +447,7 @@ class StatisticDetailNoColsTableClassView(View):
                 context = {
                     'title' : model.name,
                     'table' : model,
+                    'have_rows': have_rows,
                     'table_last_updated' : model_data.order_by('-updated_at').first().updated_at,
                     'data_contents' : data_content_table,
                     'is_year' : True if model.col_group_id_id is None and len(list_periods[0]['periods'][0]['name']) == 0 else False,
@@ -479,21 +481,22 @@ class StatisticDetailTableClassView(View):
                 data_meanings = models.BackendIndicatorsMeaningModel.objects.filter(indicator_id=indicator_id).order_by('year', 'item_period').values()
                 model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
                 model_data_period = model_data.order_by('year', 'item_period').values('year', 'item_period').distinct()
-
-                # List Periods
-                data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
-                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display())
-                list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
                 
-                data_comparisons = []
-                data_compare_req = []
-                chart_data_compare = []
+                # List Periods
+                have_rows = False if model.row_group_id.row_items.first().order_num == 99 else True
+                list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
+                data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
+                data_summarize_table = get_table_summarizer(indicator_id, request.GET.getlist('data'))
+                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display(), model.unit_id.name.lower(), True, have_rows)
+                chart_data['data_rows'] = [dt['row_name'] for dt in data_content_table] * len(list_periods)
+
+                data_comparisons, data_compare_req, chart_data_compare = [], [], []
                 data_comparisons_title = ''
                 comp_in_years = True
                 if request.GET.get('compare_by'):
                     data_compare_req = request.GET.get('compare_by').split('-')
                     data_comparisons = get_content_table(indicator_id, data_compare_req)
-                    chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display())
+                    chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display(), model.unit_id.name.lower(), True, have_rows)
                     data_comparisons = get_content_comparison(data_comparisons)
 
                     first_year, first_period = data_compare_req[0].split('_')
@@ -522,9 +525,11 @@ class StatisticDetailTableClassView(View):
                 context = {
                     'title' : model.name,
                     'table' : model,
+                    'have_rows' : have_rows,
                     'table_last_updated' : model_data.order_by('-updated_at').first().updated_at,
                     'data_contents' : data_content_table,
                     'data_meanings' : data_meanings_,
+                    'data_summarize' : data_summarize_table,
                     'periods' : list_periods,
                     'is_year' : True if len(list_periods[0]['periods'][0]['name']) == 0 else False,
                     'col_span' : col_span,
@@ -564,8 +569,7 @@ class DataRequestPreviewClassView(View):
         return render(request, 'app/data_request_preview.html', context) 
     
 class DashboardAppClassView(View):
-    print('hello world')
-    print('Ini perubahan dari master')
+    pass
 
 
 class PublicationClassView(View):
@@ -630,8 +634,29 @@ class VideographicPreviewClassView(View):
 class StrategicDataClassView(View):
 
     def get(self,request):
+
+        model = models.BackendIndicatorsModel.objects.filter(~Q(level_data=0)).order_by('-time_period_id__name')
+
+        for dt in model:
+            qry = models.BackendContentIndicatorsModel.objects.filter(indicator_id = dt.pk).order_by('year')
+            if qry.exists():
+                pass
+                break
+        # model = models.BackendContentIndicatorsModel.objects.values('indicator_id', 'indicator_id__name', 'indicator_id__updated_at', 'indicator_id__time_period_id__name').distinct()
+
+        # last_updated = model.order_by('-indicator_id__updated_at').first()['indicator_id__updated_at'].strftime('%d %b %Y')
+
+        # tables_data = {}
+        # for dt in model.order_by('indicator_id__time_period_id__name'):
+        #     period_name = dt['indicator_id__time_period_id__name'].lower()
+        #     if period_name in tables_data:
+        #         tables_data[period_name].append(dt)
+        #     else:
+        #         tables_data[period_name] = [dt]
+
         context = {
-            'title' : 'Indikator Data Strategis'
+            'title' : 'Indikator Data Strategis',
+            # 'last_updated' : last_updated
         }
 
         return render(request, 'app/strategic_data.html', context)
