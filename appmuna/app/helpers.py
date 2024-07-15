@@ -56,10 +56,10 @@ def get_table_summarizer(indicator_id, filter_ = []):
         for dt_chars in dt_rows['items']:
             values = dt_chars['values']
             dt_chars['stats_items'] = [
-                {'stat' : 'Min', 'val' : min(values)},
-                {'stat' : 'Median', 'val' : statistics.median(values)},
-                {'stat' : 'Average', 'val' : statistics.mean(values)},
-                {'stat' : 'Max', 'val' : max(values)},
+                {'stat' : 'Min', 'val' : round(min(values), model.decimal_point)},
+                {'stat' : 'Median', 'val' : round(statistics.median(values), model.decimal_point)},
+                {'stat' : 'Average', 'val' : round(statistics.mean(values), model.decimal_point)},
+                {'stat' : 'Max', 'val' : round(max(values), model.decimal_point)},
             ]
     return table_summarize
 

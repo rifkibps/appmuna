@@ -600,7 +600,9 @@
                                 <div class="card">
                                     <div class="card-body px-3 mt-4 mt-lg-0">
                                         <div class="mb-3">
-                                            <h4 class="font-weight-bold"><strong>Statistik Deskriptif {{table.name}} s.d. ...</strong></h4>
+                                            {% with idx=periods|length|sub:1 %}
+                                            <h4 class="font-weight-bold"><strong>Statistik Deskriptif {{table.name}}, Tahun {{periods.0.year}} s.d. {{periods.idx.year}}</strong></h4>
+                                            {% endwith %}
                                         </div>
                                         <div class="wrapper">
                                             <table class="table table-sm table-striped table-centered nowrap w-100 font-13">
