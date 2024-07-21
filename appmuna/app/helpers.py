@@ -3,7 +3,6 @@ from backend import models
 from operator import itemgetter
 import statistics
 
-  
 def randomColor(space) :
     colors = ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864']
     return colors[:space]
@@ -131,8 +130,9 @@ def get_content_comparison(datalists):
                             )
     return datalists
 
-def get_content_table(indicator_id, filter_ = []):
+def get_content_table(indicator_id, filter_ = [], force_agg = False):
 
+    # force_agg: 'sum', 'avg' , 'percent',
     model = models.BackendIndicatorsModel.objects.filter(pk=indicator_id).first()
     model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
 
@@ -200,10 +200,10 @@ def get_content_table(indicator_id, filter_ = []):
         data_content_table.append(content_data)
     
     data_content_table = sorted(data_content_table, key=itemgetter('order_num'))
-    summarize_dt = model.get_summarize_status_display().lower()
+    summarize_dt = model.get_summarize_status_display().lower() if force_agg is False else force_agg
     sum_values_rows = []
 
-    if summarize_dt != 'none' and model.unit_id.name.lower() != 'persen':
+    if summarize_dt != 'none' and model.unit_id.is_agg == '1':
         for dt_rows in data_content_table:
             for dt_years in dt_rows['items']:
                 for dt_periods in dt_years['items']:
@@ -228,8 +228,8 @@ def get_content_table(indicator_id, filter_ = []):
                     })
 
                     sum_values_rows.append({'item_period' : f"{dt_years['year']}_{dt_periods['item_period_id']}", 'sum' : sum(dt_collections)})
-    
-    if summarize_dt == 'percent' and model.unit_id.name.lower() != 'persen':
+
+    if summarize_dt == 'percent' and model.unit_id.is_agg == '1':
         for dt_rows in data_content_table:
             for dt_years in dt_rows['items']:
                 for dt_periods in dt_years['items']:
@@ -272,14 +272,10 @@ def get_list_periods(model_data_period, filter_ = None):
 
     return list_periods
 
-def get_chart_data(data, summarize = 'sum', cons_data = False, have_cols = True, have_rows = True):
-    # @cons_data_type : Persen atau Indeks
+def get_chart_data(data, summarize = 'sum', is_aggregatable = True, chart_opts = False, have_cols = True):
+
     label_x = []
     data_collections = []
-
-    cons_data_type = False
-    if cons_data:
-        cons_data_type = True if cons_data in ['persen', 'indeks'] else False
 
     for dt_content in data:
         list_data = []
@@ -291,7 +287,10 @@ def get_chart_data(data, summarize = 'sum', cons_data = False, have_cols = True,
 
                 for idx2, dt_col in enumerate(dt_period['items']):
                     item_char = dt_col['item_char'].lower()
-                    if cons_data_type:
+                    if is_aggregatable:
+                        if item_char in ['total', 'rerata', 'persen']:
+                            list_data.append(dt_col['value'])
+                    else:
                         if have_cols:
                             colors = randomColor(len(dt_period['items']))
                             check_exist = next((index for (index, d) in enumerate(data_collections) if (d['label'] == dt_col['item_char']) and (d['group'] == dt_content['row_name'])), None)
@@ -310,11 +309,8 @@ def get_chart_data(data, summarize = 'sum', cons_data = False, have_cols = True,
                                 })
                         else:
                             list_data.append(dt_col['value'])
-                    else:
-                        if item_char in ['total', 'rerata', 'persen']:
-                            list_data.append(dt_col['value'])
 
-        if (cons_data_type and have_cols) is False:
+        if (is_aggregatable is False and have_cols) is False:
             data_collections.append({
                 'label': dt_content['row_name'],
                 'data': list_data
@@ -322,7 +318,7 @@ def get_chart_data(data, summarize = 'sum', cons_data = False, have_cols = True,
 
     chart_data = {'labels': label_x, 'data' : data_collections}
 
-    if summarize.lower() in ['sum', 'percent'] or (cons_data == 'persen' and have_cols == False) or (cons_data == 'persen' and have_cols and have_rows == False):
+    if summarize.lower() in ['sum', 'percent'] or chart_opts in ['2', '3']:
         data_pie = []
         if summarize == 'sum':
             total_period = []
@@ -335,11 +331,20 @@ def get_chart_data(data, summarize = 'sum', cons_data = False, have_cols = True,
                     percent.append(round(dt_/total_period[idx]*100, 2))
                 dt['data_percent'] = percent
 
-            for idx in range(len(label_x)):
-                data_pie.append([dt['data_percent'][idx] for dt in data_collections])
+            for idx, data in enumerate(label_x):
+                data_pie.append(
+                    {
+                        'data': [dt['data_percent'][idx] for dt in data_collections],
+                        'group' : data
+                    }
+                )
         else:
-            for idx in range(len(label_x)):
-                data_pie.append([dt['data'][idx] for dt in data_collections])
+            for idx, data in enumerate(label_x):
+                data_pie.append(
+                    {
+                        'data': [dt['data'][idx] for dt in data_collections],
+                        'group' : data
+                    })
 
         chart_data['label_pie_chart'] = [dt['label'] for dt in data_collections]
         chart_data['data_pie'] = data_pie

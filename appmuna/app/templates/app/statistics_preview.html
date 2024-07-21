@@ -297,35 +297,34 @@
                                 </ul>
                                 
                             </div>
-                            
-                            {% if table.get_summarize_status_display != 'none' or table.unit_id.name in "Persen,Indeks" %}
+                            {% if table.get_summarize_status_display != 'none' or table.unit_id.name != '0' %}
                             <div class="mb-4">
                                 <h5>Grafik: </h5>
                                 <div class="mt-1">
                                     <ul style="list-style:none;padding-left:5px;">
-                                        <li>
-                                            <input type="checkbox" class="form-check-input" id="checkbox_bar" onchange="showChart('#graphBar')" checked>&ensp;
-                                            <i class="mdi mdi-chart-bar"></i>
-                                            <label for="checkbox_bar">Bar Chart</label> 
-                                        </li>
-                                        
-                                        {% if table.unit_id.name not in "Persen,Indeks" %}
-                                        <li>
-                                            <input type="checkbox" class="form-check-input" id="checkbox_line" onchange="showChart('#graphLine')" checked>&ensp;
-                                            <i class="mdi mdi-chart-line"></i>
-                                            <label for="checkbox_line">Line Chart</label>
-                                        </li>
+                                        {% if table.unit_id.is_viz in '1,3' %}
+                                            <li>
+                                                <input type="checkbox" class="form-check-input" id="checkbox_bar" onchange="showChart('#graphBar')" checked>&ensp;
+                                                <i class="mdi mdi-chart-bar"></i>
+                                                <label for="checkbox_bar">Bar Chart</label> 
+                                            </li>
+                                            <li>
+                                                <input type="checkbox" class="form-check-input" id="checkbox_line" onchange="showChart('#graphLine')" checked>&ensp;
+                                                <i class="mdi mdi-chart-line"></i>
+                                                <label for="checkbox_line">Line Chart</label>
+                                            </li>
                                         {% endif %}
 
-                                        {% if table.unit_id.name == 'Persen' and have_rows == False or table.get_summarize_status_display in "sum,percent" %}
-                                        <li>
-                                            <input type="checkbox" class="form-check-input" id="checkbox_pie" onchange="showChart('#graphPie')" checked>&ensp;
-                                            <i class="mdi mdi-chart-pie"></i>
-                                            <label for="checkbox_pie">Pie Chart</label>
-                                        </li>
+                                        {% if have_rows is not False or table.col_group_id|length > 0 %}
+                                            {% if table.get_summarize_status_display in 'sum,percent' or table.unit_id.is_viz in '2,3' %}
+                                                <li>
+                                                    <input type="checkbox" class="form-check-input" id="checkbox_pie" onchange="showChart('#graphPie')" checked>&ensp;
+                                                    <i class="mdi mdi-chart-pie"></i>
+                                                    <label for="checkbox_pie">Pie Chart</label>
+                                                </li>
+                                            {% endif %}
                                         {% endif %}
                                     </ul>
-    
                                 </div>
                             </div>
                             {% endif %}
@@ -416,20 +415,19 @@
                                     {% endfor %}
                                 </ul>
                             </div>
-
-                            {% if table.get_summarize_status_display != 'none' or table.unit_id.name in "Persen,Indeks" %}
-                            <div class="mb-4">
-                                <h5>Grafik: </h5>
-                                <div class="mt-1">
-                                    <ul style="list-style:none;padding-left:5px;">
-                                        <li>
-                                            <input type="checkbox" class="form-check-input" id="checkbox_compare" onchange="showChart('#chartComparison')" checked>&ensp;
-                                            <i class="mdi mdi-chart-bar"></i>
-                                            <label for="checkbox_compare">Bar Chart</label>
-                                        </li>
-                                    </ul>
+                            {% if table.get_summarize_status_display != 'none' or table.unit_id.is_viz in '1,3' %}
+                                <div class="mb-4">
+                                    <h5>Grafik: </h5>
+                                    <div class="mt-1">
+                                        <ul style="list-style:none;padding-left:5px;">
+                                            <li>
+                                                <input type="checkbox" class="form-check-input" id="checkbox_compare" onchange="showChart('#chartComparison')" checked>&ensp;
+                                                <i class="mdi mdi-chart-bar"></i>
+                                                <label for="checkbox_compare">Bar Chart</label>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
                             {% endif %}
     
                             <div class="mt-4 mb-3">
@@ -466,7 +464,7 @@
                         <div class="card pb-3" >
                             <div class="card-body px-3 mt-4 mt-lg-0">
                                 <div class="mb-3">
-                                    <h4 class="font-weight-bold"><strong>{{table.name}}, ({{table.unit_id.name}})</strong></h4>
+                                    <h4 class="font-weight-bold"><strong>{{table.name}} ({{table.unit_id.name}}), {{range_period}}</strong></h4>
                                 </div>
                                 <div class="mt-1">
                                     <p class="font-weight-light font-13">Terakhir diperbarui: {{table_last_updated|date:"d F Y" }}</p>
@@ -553,56 +551,53 @@
                         </div>
 
                         {% if data_meanings|length > 0 %}
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="mt-2">
-                                                <h5>Interpretasi Data:</h5>
-                                                <div data-simplebar="" style="max-height: 419px;"> 
-                                                    <div class="timeline-alt pb-0">
-                                                        
-                                                        {% for data_meaning in data_meanings %}
-                                                            <div class="timeline-item">
-                                                                <span class="bg-primary-lighten text-primary timeline-icon">{{forloop.counter}}</span>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="mt-2">
+                                            <h5>Penjelasan Data:</h5>
+                                            <div data-simplebar="" style="max-height: 419px;"> 
+                                                <div class="timeline-alt pb-0">
+                                                    {% for data_meaning in data_meanings %}
+                                                        <div class="timeline-item">
+                                                            <span class="bg-secondary-lighten text-secondary timeline-icon">{{forloop.counter}}</span>
 
-                                                                <div class="timeline-item-info">
-                                                                    <a href="#" class="text-primary fw-bold mb-1 d-block">Tahun {{data_meaning.year}}</a>
-                
-                                                                    <ul style="padding-left:20px">
-                                                                        {% for dt in data_meaning.items %}
-                                                                            <li>
-                                                                                {% if is_year == False %}
-                                                                                <small>{{dt.item_period}}</small>
-                                                                                {% endif %}
-                                                                                <p class="mb-0 pb-2">
-                                                                                    <small class="text-muted">{{dt.context}}</small>
-                                                                                </p>
-                                                                            </li>
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </div>
+                                                            <div class="timeline-item-info">
+                                                                <a href="#" class="text-secondary fw-bold mb-1 d-block">Tahun {{data_meaning.year}}</a>
+                                                                <ul style="padding-left:20px">
+                                                                    {% for dt in data_meaning.items %}
+                                                                        <li>
+                                                                            {% if is_year == False %}
+                                                                            <small>{{dt.item_period}}</small>
+                                                                            {% endif %}
+                                                                            <p class="mb-0 pb-2">
+                                                                                <small class="text-muted">{{dt.context}}</small>
+                                                                            </p>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
                                                             </div>
-                                                        {% endfor %}
+                                                        </div>
+                                                    {% endfor %}
 
-                                                    </div>
-                                                    <!-- end timeline -->
-                                                </div> <!-- end slimscroll -->
-                                            </div>
+                                                </div>
+                                                <!-- end timeline -->
+                                            </div> <!-- end slimscroll -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         {% endif %}
-                        
+
+                        <h3 class="my-3">Ringkasan Data Statistik</h3>
                         <div class="row">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body px-3 mt-4 mt-lg-0">
                                         <div class="mb-3">
-                                            {% with idx=periods|length|sub:1 %}
-                                            <h4 class="font-weight-bold"><strong>Statistik Deskriptif {{table.name}}, Tahun {{periods.0.year}} s.d. {{periods.idx.year}}</strong></h4>
-                                            {% endwith %}
+                                            <h5 class="font-weight-bold"><strong>Statistik Deskriptif {{table.name}}, {{range_period}}</strong></h5>
                                         </div>
                                         <div class="wrapper">
                                             <table class="table table-sm table-striped table-centered nowrap w-100 font-13">
@@ -648,8 +643,10 @@
                             </div>
                         </div>
 
-                        {% if table.get_summarize_status_display != 'none' or table.unit_id.name in "Persen,Indeks" %}
-                            {% if table.unit_id.name not in "Persen,Indeks" %}
+                        {% if table.get_summarize_status_display != 'none' or table.unit_id.is_viz != '0' %}
+                            <h3 class="my-3" >Visualisasi Data</h3>
+
+                            {% if table.unit_id.is_viz in '1,3' %}
                                 <div class="row" id="graphLine">
                                     <div class="col-12">
                                         <div class="card">
@@ -662,10 +659,10 @@
                                                         <a href="javascript:void(0);" class="dropdown-item" id="export-line-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
                                                     </div>
                                                 </div>
-                                                <h4 class="header-title mb-4">Line Chart</h4>
+                                                <h5 class="mb-3 text-center">Visualisasi Sebaran {{table.name}} {{range_period}}</h5>
 
                                                 <div dir="ltr">
-                                                    <div class="mt-3 chartjs-chart" >
+                                                    <div class="chartjs-chart" >
                                                         <canvas id="task-line-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
                                                     </div>
                                                     <br>
@@ -676,36 +673,7 @@
                                         </div> <!-- end card -->
                                     </div>
                                 </div>
-                            {% endif %}
-
-                            <div class="row" id="graphBar">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="dropdown float-end">
-                                                <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="mdi mdi-dots-vertical"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-end px-0 font-13">
-                                                    <a href="javascript:void(0);" class="dropdown-item" id="export-bar-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
-                                                </div>
-                                            </div>
-                                            <h4 class="header-title mb-4">Bar Chart</h4>
-
-                                            <div dir="ltr">
-                                                <div class="mt-3 chartjs-chart">
-                                                    <canvas id="task-bart-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
-                                                </div>
-                                                <br>
-                                                <span>{{table.footer_desc}} (diolah)</span>
-                                            </div>
-                                        </div> <!-- end card body-->
-                                    </div> <!-- end card -->
-                                </div><!-- end col-->
-                            </div>
-
-                            {% if table.unit_id.name == 'Persen' and have_rows == False or table.get_summarize_status_display in "sum,percent" %}
-                                <div class="row" id="graphPie">
+                                <div class="row" id="graphBar">
                                     <div class="col-12">
                                         <div class="card">
                                             <div class="card-body">
@@ -714,22 +682,51 @@
                                                         <i class="mdi mdi-dots-vertical"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end px-0 font-13">
-                                                        <a href="javascript:void(0);" class="dropdown-item" id="export-pie-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                                        <a href="javascript:void(0);" class="dropdown-item" id="export-bar-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
                                                     </div>
                                                 </div>
-                                                <h4 class="header-title mb-4">Pie Chart</h4>
+                                                <h5 class="mb-3 text-center">Visualisasi Sebaran Data {{table.name}} {{range_period}}</h5>
 
                                                 <div dir="ltr">
-                                                    <div class="mt-3 chartjs-chart" >
-                                                        <canvas id="pie-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                    <div class="chartjs-chart">
+                                                        <canvas id="task-bart-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
                                                     </div>
                                                     <br>
                                                     <span>{{table.footer_desc}} (diolah)</span>
                                                 </div>
                                             </div> <!-- end card body-->
                                         </div> <!-- end card -->
-                                    </div>
+                                    </div><!-- end col-->
                                 </div>
+                            {% endif %}
+                            
+                            {% if have_rows is not False or table.col_group_id|length > 0 %}
+                                {% if table.get_summarize_status_display in 'sum,percent' or table.unit_id.is_viz in '2,3' %}
+                                    <div class="row" id="graphPie">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="dropdown float-end">
+                                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="mdi mdi-dots-vertical"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end px-0 font-13">
+                                                            <a href="javascript:void(0);" class="dropdown-item" id="export-pie-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                                        </div>
+                                                    </div>
+                                                    <h5 class="mb-3 text-center">Visualisasi Sebaran {{table.name}} {{range_period}}</h5>
+                                                    <div dir="ltr">
+                                                        <div class="chartjs-chart" >
+                                                            <canvas id="pie-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                        </div>
+                                                        <br>
+                                                        <span>{{table.footer_desc}} (diolah)</span>
+                                                    </div>
+                                                </div> <!-- end card body-->
+                                            </div> <!-- end card -->
+                                        </div>
+                                    </div>
+                                {% endif %}
                             {% endif %}
                         {% endif %} 
                     </div>
@@ -888,6 +885,7 @@
                                         
                                     </div>
                                 </div>
+                                
                                 <div class="row" id="chartComparison">
                                     <div class="col-12">
                                         <div class="card">
@@ -901,10 +899,9 @@
                                                         <a href="javascript:void(0);" class="dropdown-item" id="export-compare-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
                                                     </div>
                                                 </div>
-                                                <h4 class="header-title mb-4">Grafik Perbandingan</h4>
-
+                                                <h5 class="mb-3 text-center">Grafik Perbandingan {{data_comparisons_title}}</h5>
                                                 <div dir="ltr">
-                                                    <div class="mt-3 chartjs-chart" style="height: 450px;">
+                                                    <div class="chartjs-chart" style="height: 450px;">
                                                         <canvas id="task-bart-chart-2" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
                                                     </div>
                                                     {{table.footer_desc}} (diolah)
@@ -1135,7 +1132,8 @@
         /* Outer doughnut data starts*/
         {% for dt in chart_data.data_pie %}
         {
-            data: {{dt|safe}},
+            data: {{dt.data|safe}},
+            group: '{{dt.group|safe}}',
             backgroundColor: ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864'],
         },
         {% endfor %}
@@ -1145,12 +1143,12 @@
         labels: {{chart_data.label_pie_chart|safe}}
         },
         options: {
-            plugins: {
-                datalabels: {
-                formatter: (value) => {
-                    return value + '%';
-                },
-                },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return  ' ' + data.datasets[tooltipItem.datasetIndex].group + ' ' + data.labels[tooltipItem.index] + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + ' persen (%)'
+                    }
+                }
             },
             title: {
                 position: 'right',
@@ -1174,7 +1172,7 @@
     var line_chart = new Chart('task-line-chart', {
         type: 'line',
         data: {
-            labels: {{chart_data.labels|safe}},    
+            labels: {{chart_data.labels|safe}},
             datasets: [
                 {% for dt in chart_data.data %}
                     {
@@ -1208,7 +1206,6 @@
                 xAxes: [{
                     gridLines: {
                         drawOnChartArea: false,
-                        
                     }
                     },
                 ]

@@ -117,7 +117,6 @@ class BackendPeriodNameItemsModel(models.Model):
    def __str__(self):
       return f"{self.pk} | {self.period_id}-{self.item_period} {self.period_id.name} | {self.item_period}"
 
-
 # Unit Name Model
 class BackendUnitsModel(models.Model):
    
@@ -125,7 +124,27 @@ class BackendUnitsModel(models.Model):
         verbose_name = 'Satuan Data Statistik'
         verbose_name_plural = 'Satuan Data Statistik'   
 
+   agg_choices = (
+      ('0', 'Tidak'),
+      ('1', 'Ya')
+   )
+
+   viz_choices = (
+      ('0', 'No Visualization'),
+      ('1', 'Bar/Line Chart'),
+      ('2', 'Pie Chart'),
+      ('3', 'Bar/line and Pie Chart')
+   )
+
+   comp_choices = (
+      ('0', 'Tidak'),
+      ('1', 'Ya')
+   )
+
    name = models.CharField(max_length=256, null=False, blank=False, verbose_name='Nama Satuan' )
+   is_agg = models.CharField(max_length=1, choices=agg_choices, null=False, blank=False, default='1', verbose_name='Apakah dapat diagregasikan?')
+   is_viz = models.CharField(max_length=1, choices=viz_choices, null=False, blank=False, default='3', verbose_name='Visualisasi Data')
+   is_comp = models.CharField(max_length=1, choices=comp_choices, null=False, blank=False, default='1', verbose_name='Apakah dapat dibandingkan?')
    desc = models.TextField(null=True, blank=True, verbose_name='Keterangan Satuan' )
 
    def __str__(self):
@@ -160,7 +179,6 @@ class BackendIndicatorsModel(models.Model):
       ('1', 'sum'),
       ('2', 'avg'),
       ('3', 'percent'),
-      ('4', 'Only for data percent'),
    )
 
    subject_id = models.ForeignKey(BackendSubjectsModel, on_delete=models.CASCADE, null=False, related_name='subject_indicator', verbose_name='Subjek Statistik')

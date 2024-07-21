@@ -376,10 +376,11 @@ class StatisticsDataTablesClassView(View):
         for obj in object_list:
             qry = models.BackendIndicatorsModel.objects.filter(pk=obj['indicator_id']).first().col_group_id
             href = f'{reverse_lazy("app:statistics-app-preview")}?indicator={obj["indicator_id"]}' if qry is not None else f'{reverse_lazy("app:statistics-app-nocols")}?indicator={obj["indicator_id"]}'
+            name = f'{obj["indicator_id__name"][:80]}..' if len(obj["indicator_id__name"]) > 80 else obj["indicator_id__name"]
             data.append(
             {
                 'no': [x for x in id_def_data if obj['indicator_id'] == x[1]][0][0],
-                'indicator_id__name': f'<a href="{href}" class="text-secondary" title="{obj["indicator_id__name"]}">{obj["indicator_id__name"][:50]} ..</a>' ,
+                'indicator_id__name': f'<a href="{href}" class="text-secondary" title="{obj["indicator_id__name"]}">{name}</a>' ,
                 'indicator_id__time_period_id__name': obj['indicator_id__time_period_id__name'],
                 'indicator_id__updated_at' : obj['indicator_id__updated_at'].strftime('%d %b %Y'),
             })
@@ -402,14 +403,14 @@ class StatisticDetailNoColsTableClassView(View):
                 
                 # Cek baris apakah dummy or not
                 have_rows = False if model.row_group_id.row_items.first().order_num == 99 else True
-
                 data_meanings = models.BackendIndicatorsMeaningModel.objects.filter(indicator_id=indicator_id).order_by('year', 'item_period').values()
                 model_data = models.BackendContentIndicatorsModel.objects.filter(indicator_id=indicator_id)
                 model_data_period = model_data.order_by('year', 'item_period').values('year', 'item_period').distinct()
                 
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
-                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display(), model.unit_id.name.lower(), False, have_rows)
+                data_summarize_table = get_table_summarizer(indicator_id, request.GET.getlist('data'))
+                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display(), model.unit_id.is_agg == '1', model.unit_id.is_viz, False)
                 
                 data_comparisons = []
                 data_compare_req = []
@@ -419,7 +420,7 @@ class StatisticDetailNoColsTableClassView(View):
                 if request.GET.get('compare_by'):
                     data_compare_req = request.GET.get('compare_by').split('-')
                     data_comparisons = get_content_table(indicator_id, data_compare_req)
-                    chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display(), model.unit_id.name.lower(), False,have_rows)
+                    chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display(), model.unit_id.is_agg == '1', model.unit_id.is_viz, False)
                     data_comparisons = get_content_comparison(data_comparisons)
 
                     first_year, first_period = data_compare_req[0].split('_')
@@ -455,6 +456,8 @@ class StatisticDetailNoColsTableClassView(View):
                     'periods' : list_periods,
                     'col_span' : col_span,
                     'chart_data': chart_data,
+                    'range_period' : f"Tahun {list_periods[0]['year']} s.d. {list_periods[-1]['year']}", 
+                    'data_summarize' : data_summarize_table,
                     'data_comparisons' : data_comparisons,
                     'comp_in_years' : comp_in_years,
                     'data_comparisons_title' : data_comparisons_title,
@@ -487,7 +490,7 @@ class StatisticDetailTableClassView(View):
                 list_periods = get_list_periods(model_data_period, request.GET.getlist('data'))
                 data_content_table = get_content_table(indicator_id, request.GET.getlist('data'))
                 data_summarize_table = get_table_summarizer(indicator_id, request.GET.getlist('data'))
-                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display(), model.unit_id.name.lower(), True, have_rows)
+                chart_data = get_chart_data(data_content_table, model.get_summarize_status_display(), model.unit_id.is_agg == '1', model.unit_id.is_viz, True)
                 chart_data['data_rows'] = [dt['row_name'] for dt in data_content_table] * len(list_periods)
 
                 data_comparisons, data_compare_req, chart_data_compare = [], [], []
@@ -496,7 +499,7 @@ class StatisticDetailTableClassView(View):
                 if request.GET.get('compare_by'):
                     data_compare_req = request.GET.get('compare_by').split('-')
                     data_comparisons = get_content_table(indicator_id, data_compare_req)
-                    chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display(), model.unit_id.name.lower(), True, have_rows)
+                    chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display(), model.unit_id.is_agg == '1', model.unit_id.is_viz, True)
                     data_comparisons = get_content_comparison(data_comparisons)
 
                     first_year, first_period = data_compare_req[0].split('_')
@@ -529,6 +532,7 @@ class StatisticDetailTableClassView(View):
                     'table_last_updated' : model_data.order_by('-updated_at').first().updated_at,
                     'data_contents' : data_content_table,
                     'data_meanings' : data_meanings_,
+                    'range_period' : f"Tahun {list_periods[0]['year']} s.d. {list_periods[-1]['year']}", 
                     'data_summarize' : data_summarize_table,
                     'periods' : list_periods,
                     'is_year' : True if len(list_periods[0]['periods'][0]['name']) == 0 else False,
@@ -635,12 +639,72 @@ class StrategicDataClassView(View):
 
     def get(self,request):
 
-        model = models.BackendIndicatorsModel.objects.filter(~Q(level_data=0)).order_by('-time_period_id__name')
+        model = models.BackendIndicatorsModel.objects.filter(~Q(level_data=0)).order_by('time_period_id__name')
+        # 1. Filter data statistik yang merupakan data pembangunan dan strategis
+        # 2. Grouping berdasarkan jenis periode data
+        # 3. Kita ambil periode dasar dari masing2 group
 
+        datasets = [
+            {
+                'group' : 'Tahunan',
+                'period_basic' : [2023, 2024, 2025],
+                'items_group' : [
+                    {
+                        'data_id' : 20,
+                        'data' : 'Persentase Penduduk Miskin Pada Tingkat Administratif Kecamatan di Kabupaten Muna (Persen)',
+                        'data_items' : [{'period': '2023', 'value' : '21'}, {'period': '2024', 'value' : '25'}]
+                    }
+                ]
+            },
+            
+        ]
         for dt in model:
             qry = models.BackendContentIndicatorsModel.objects.filter(indicator_id = dt.pk).order_by('year')
             if qry.exists():
-                pass
+                pprint(dt.unit_id.is_agg)
+                if dt.unit_id.is_agg == '0':
+                    pass
+
+                new_qry = get_content_table(indicator_id = dt.pk, force_agg = 'sum')
+                # Agregating data for each rows and characteristics
+                if dt.col_group_id: # There is columns
+                    pprint(get_content_table(indicator_id = dt.pk, force_agg=True)[0])
+
+                else : # There's no columns
+                    pass
+                pprint(dt.__dict__)
+                pprint(qry.values())
+                # Check group di dalam dataset
+                check_group = next((IndexError for (IndexError, d) in enumerate(datasets) if d["group"] == dt.time_period_id.name), None)
+                if check_group is not None:
+
+                    check_items_group = next((idx for (idx, d) in enumerate(datasets[check_group]['items_group']) if d['data_id'] == dt.id))
+                    if check_items_group is not None:
+                        datasets[check_group]['items_groups'][check_items_group]['data_items'].append(
+                            {'period': '2023', 'value' : '21'}
+                        )
+                    else:
+                        datasets[check_group]['items_groups'].append({
+                            {
+                                'data_id' : 20,
+                                'data' : 'Persentase Penduduk Miskin Pada Tingkat Administratif Kecamatan di Kabupaten Muna (Persen)',
+                                'data_items' : [{'period': '2023', 'value' : '21'}]
+                            }
+                        })
+                else:
+                    datasets.append({
+                        'group' : dt.time_period_id.name,
+                        'period_basic' : [],
+                        'items_group' : [
+                            {
+                                'data_id' : 20,
+                                'data'  : 'Persentase Penduduk Miskin Pada Tingkat Administratif Kecamatan di Kabupaten Muna (Persen)',
+                                'data_items' : [
+                                    {'period': '2023', 'value' : '21'}
+                                ]
+                            }
+                        ]
+                    })
                 break
         # model = models.BackendContentIndicatorsModel.objects.values('indicator_id', 'indicator_id__name', 'indicator_id__updated_at', 'indicator_id__time_period_id__name').distinct()
 
