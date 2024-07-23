@@ -203,7 +203,7 @@ def get_content_table(indicator_id, filter_ = [], force_agg = False):
     summarize_dt = model.get_summarize_status_display().lower() if force_agg is False else force_agg
     sum_values_rows = []
 
-    if summarize_dt != 'none' and model.unit_id.is_agg == '1':
+    if (summarize_dt != 'none' and model.unit_id.is_agg == '1') or force_agg is not False:
         for dt_rows in data_content_table:
             for dt_years in dt_rows['items']:
                 for dt_periods in dt_years['items']:
@@ -229,7 +229,7 @@ def get_content_table(indicator_id, filter_ = [], force_agg = False):
 
                     sum_values_rows.append({'item_period' : f"{dt_years['year']}_{dt_periods['item_period_id']}", 'sum' : sum(dt_collections)})
 
-    if summarize_dt == 'percent' and model.unit_id.is_agg == '1':
+    if (summarize_dt == 'percent' and model.unit_id.is_agg == '1') or force_agg == 'percent':
         for dt_rows in data_content_table:
             for dt_years in dt_rows['items']:
                 for dt_periods in dt_years['items']:

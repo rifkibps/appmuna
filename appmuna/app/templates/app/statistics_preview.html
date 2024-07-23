@@ -315,7 +315,7 @@
                                             </li>
                                         {% endif %}
 
-                                        {% if have_rows is not False or table.col_group_id|length > 0 %}
+                                        {% if have_rows is True or table.col_group_id|length > 0 %}
                                             {% if table.get_summarize_status_display in 'sum,percent' or table.unit_id.is_viz in '2,3' %}
                                                 <li>
                                                     <input type="checkbox" class="form-check-input" id="checkbox_pie" onchange="showChart('#graphPie')" checked>&ensp;
@@ -431,7 +431,7 @@
                             {% endif %}
     
                             <div class="mt-4 mb-3">
-                                {% if table.get_summarize_status_display != 'none' or table.unit_id.name in "Persen,Indeks" %}
+                                {% if table.unit_id.is_comp != '0' %}
                                     <button type="button" class="btn btn-primary compareData"><span>Bandingkan Data</span> </button>
                                     <a href="{% url 'app:statistics-app-preview' %}?indicator={{ request.GET.indicator }}{{ request.GET|get_query_periods:'data' }}" class="btn btn-primary">Reset</a>
                                 {% else %}
@@ -647,32 +647,35 @@
                             <h3 class="my-3" >Visualisasi Data</h3>
 
                             {% if table.unit_id.is_viz in '1,3' %}
-                                <div class="row" id="graphLine">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="dropdown float-end">
-                                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="mdi mdi-dots-vertical"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end px-0 font-13">
-                                                        <a href="javascript:void(0);" class="dropdown-item" id="export-line-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                {% if table.unit_id.name not in "Persen,Indeks" %}
+                                    <div class="row" id="graphLine">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="dropdown float-end">
+                                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="mdi mdi-dots-vertical"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end px-0 font-13">
+                                                            <a href="javascript:void(0);" class="dropdown-item" id="export-line-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <h5 class="mb-3 text-center">Visualisasi Sebaran {{table.name}} {{range_period}}</h5>
+                                                    <h5 class="mb-3 text-center">Visualisasi Sebaran {{table.name}} {{range_period}}</h5>
 
-                                                <div dir="ltr">
-                                                    <div class="chartjs-chart" >
-                                                        <canvas id="task-line-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                    <div dir="ltr">
+                                                        <div class="chartjs-chart" >
+                                                            <canvas id="task-line-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                        </div>
+                                                        <br>
+                                                        <span>{{table.footer_desc}} (diolah)</span>
                                                     </div>
-                                                    <br>
-                                                    <span>{{table.footer_desc}} (diolah)</span>
-                                                </div>
 
-                                            </div> <!-- end card body-->
-                                        </div> <!-- end card -->
+                                                </div> <!-- end card body-->
+                                            </div> <!-- end card -->
+                                        </div>
                                     </div>
-                                </div>
+                                {% endif %}
+
                                 <div class="row" id="graphBar">
                                     <div class="col-12">
                                         <div class="card">
@@ -700,40 +703,41 @@
                                 </div>
                             {% endif %}
                             
-                            {% if have_rows is not False or table.col_group_id|length > 0 %}
+                            {% if have_rows is True or table.col_group_id|length > 0 %}
                                 {% if table.get_summarize_status_display in 'sum,percent' or table.unit_id.is_viz in '2,3' %}
-                                    <div class="row" id="graphPie">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="dropdown float-end">
-                                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="mdi mdi-dots-vertical"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-end px-0 font-13">
-                                                            <a href="javascript:void(0);" class="dropdown-item" id="export-pie-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                    {% if table.unit_id.name not in "Persen,Indeks" %}
+                                        <div class="row" id="graphPie">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="dropdown float-end">
+                                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i class="mdi mdi-dots-vertical"></i>
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-end px-0 font-13">
+                                                                <a href="javascript:void(0);" class="dropdown-item" id="export-pie-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <h5 class="mb-3 text-center">Visualisasi Sebaran {{table.name}} {{range_period}}</h5>
-                                                    <div dir="ltr">
-                                                        <div class="chartjs-chart" >
-                                                            <canvas id="pie-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                        <h5 class="mb-3 text-center">Visualisasi Sebaran {{table.name}} {{range_period}}</h5>
+                                                        <div dir="ltr">
+                                                            <div class="chartjs-chart" >
+                                                                <canvas id="pie-chart" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                            </div>
+                                                            <br>
+                                                            <span>{{table.footer_desc}} (diolah)</span>
                                                         </div>
-                                                        <br>
-                                                        <span>{{table.footer_desc}} (diolah)</span>
-                                                    </div>
-                                                </div> <!-- end card body-->
-                                            </div> <!-- end card -->
+                                                    </div> <!-- end card body-->
+                                                </div> <!-- end card -->
+                                            </div>
                                         </div>
-                                    </div>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         {% endif %} 
                     </div>
 
                     <div class="tab-pane" id="data_comparisons">
-
-                        {% if table.get_summarize_status_display != 'none' or table.unit_id.name == 'Persen' %}
+                        {% if table.unit_id.is_comp != '0'  %}
                             {% if data_comparisons_title %}
                                 <div class="card pb-3" style="box-shadow:none">
                                     <div class="card-body px-3 mt-4 mt-lg-0">
@@ -885,32 +889,34 @@
                                         
                                     </div>
                                 </div>
-                                
-                                <div class="row" id="chartComparison">
-                                    <div class="col-12">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="dropdown float-end">
-                                                    <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="mdi mdi-dots-vertical"></i>
-                                                    </a>
-                                                    
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a href="javascript:void(0);" class="dropdown-item" id="export-compare-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
-                                                    </div>
-                                                </div>
-                                                <h5 class="mb-3 text-center">Grafik Perbandingan {{data_comparisons_title}}</h5>
-                                                <div dir="ltr">
-                                                    <div class="chartjs-chart" style="height: 450px;">
-                                                        <canvas id="task-bart-chart-2" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
-                                                    </div>
-                                                    {{table.footer_desc}} (diolah)
-                                                </div>
 
-                                            </div> <!-- end card body-->
-                                        </div> <!-- end card -->
-                                    </div><!-- end col-->
-                                </div>
+                                {% if table.unit_id.is_viz in '1,3' %}
+                                    <div class="row" id="chartComparison">
+                                        <div class="col-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="dropdown float-end">
+                                                        <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="mdi mdi-dots-vertical"></i>
+                                                        </a>
+                                                        
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a href="javascript:void(0);" class="dropdown-item" id="export-compare-chart"><i class="mdi mdi-download"></i> Export Grafik</a>
+                                                        </div>
+                                                    </div>
+                                                    <h5 class="mb-3 text-center">Grafik Perbandingan {{data_comparisons_title}}</h5>
+                                                    <div dir="ltr">
+                                                        <div class="chartjs-chart" style="height: 450px;">
+                                                            <canvas id="task-bart-chart-2" data-bgcolor="#727cf5" data-bordercolor="#727cf5"></canvas>
+                                                        </div>
+                                                        {{table.footer_desc}} (diolah)
+                                                    </div>
+
+                                                </div> <!-- end card body-->
+                                            </div> <!-- end card -->
+                                        </div><!-- end col-->
+                                    </div>
+                                {% endif %}
                             {% else %}
                                 <div class="row my-1">
                                     <div class="alert alert-primary">
@@ -1123,257 +1129,331 @@
             ctx.restore();
         }
     });
-
-    {% if table.unit_id.name == 'Persen' and have_rows == False or table.get_summarize_status_display in "sum,percent" %}
-    var pie_chart = new Chart('pie-chart', {
-        type: 'doughnut',
-        data: {
-        datasets: [
-        /* Outer doughnut data starts*/
-        {% for dt in chart_data.data_pie %}
-        {
-            data: {{dt.data|safe}},
-            group: '{{dt.group|safe}}',
-            backgroundColor: ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864'],
-        },
-        {% endfor %}
-       
-        /* Inner doughnut data ends*/
-        ],
-        labels: {{chart_data.label_pie_chart|safe}}
-        },
-        options: {
-            tooltips: {
-                callbacks: {
-                    label: function(tooltipItem, data) {
-                        return  ' ' + data.datasets[tooltipItem.datasetIndex].group + ' ' + data.labels[tooltipItem.index] + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + ' persen (%)'
+    {% if have_rows is True or table.col_group_id|length > 0 %}
+        {% if table.get_summarize_status_display in 'sum,percent' or table.unit_id.is_viz in '2,3' %}
+            {% if table.unit_id.name not in "Persen,Indeks" %}
+                var pie_chart = new Chart('pie-chart', {
+                    type: 'doughnut',
+                    data: {
+                    datasets: [
+                    /* Outer doughnut data starts*/
+                    {% for dt in chart_data.data_pie %}
+                    {
+                        data: {{dt.data|safe}},
+                        group: '{{dt.group|safe}}',
+                        backgroundColor: ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864'],
+                    },
+                    {% endfor %}
+                
+                    /* Inner doughnut data ends*/
+                    ],
+                    labels: {{chart_data.label_pie_chart|safe}}
+                    },
+                    options: {
+                        tooltips: {
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    return  ' ' + data.datasets[tooltipItem.datasetIndex].group + ' ' + data.labels[tooltipItem.index] + ' : ' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] + ' persen (%)'
+                                }
+                            }
+                        },
+                        title: {
+                            position: 'right',
+                            display: true,
+                            text: {{chart_data.label_pie_layer|safe}},
+                            fontSize:11,
+                            fontStyle:'normal',
+                            fontFamily: ['Nunito', 'sans-serif']
+                        },
+                        legend: {
+                        position: 'right',
+                        labels: {
+                            usePointStyle: true
+                        },
+                        },
                     }
-                }
-            },
-            title: {
-                position: 'right',
-                display: true,
-                text: {{chart_data.label_pie_layer|safe}},
-                fontSize:11,
-                fontStyle:'normal',
-                fontFamily: ['Nunito', 'sans-serif']
-            },
-            legend: {
-            position: 'right',
-            labels: {
-                usePointStyle: true
-            },
-            },
-        }
-    })
+                })
+            {% endif %}
+        {% endif %}
     {% endif %}
     
-    {% if table.unit_id.name not in "Persen,Indeks" %}
-    var line_chart = new Chart('task-line-chart', {
-        type: 'line',
-        data: {
-            labels: {{chart_data.labels|safe}},
-            datasets: [
-                {% for dt in chart_data.data %}
-                    {
-                        label: '{{dt.label|safe}}',
-                        data: {{dt.data|safe}},
-                        fill: false,
-                        borderColor: randomColor({{forloop.counter}}),
-                        backgroundColor:randomColor({{forloop.counter}}),
-                        borderWidth: 1.2,
-                    },
-                {% endfor %}
-            ]
-        },
-        options: {
-            legend: {
-            position: 'bottom',
-            labels: {
-                usePointStyle: true
-            }
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    },
-                    scaleLabel: {
-                    display: true,
-                    labelString: '{{chart_data.agg|safe}}'
-                    }
-                }],
-                xAxes: [{
-                    gridLines: {
-                        drawOnChartArea: false,
+    {% if table.get_summarize_status_display != 'none' or table.unit_id.is_viz in '1,3' %}
+        {% if table.unit_id.name not in "Persen,Indeks" %}
+            var line_chart = new Chart('task-line-chart', {
+                type: 'line',
+                data: {
+                    labels: {{chart_data.labels|safe}},
+                    datasets: [
+                        {% for dt in chart_data.data %}
+                            {
+                                label: '{{dt.label|safe}}',
+                                data: {{dt.data|safe}},
+                                fill: false,
+                                borderColor: randomColor({{forloop.counter}}),
+                                backgroundColor:randomColor({{forloop.counter}}),
+                                borderWidth: 1.2,
+                            },
+                        {% endfor %}
+                    ]
+                },
+                options: {
+                    legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true
                     }
                     },
-                ]
-            },
-            
-        },
-        showDatapoints: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                            display: true,
+                            labelString: '{{chart_data.agg|safe}}'
+                            }
+                        }],
+                        xAxes: [{
+                            gridLines: {
+                                drawOnChartArea: false,
+                            }
+                            },
+                        ]
+                    },
+                    
+                },
+                showDatapoints: true,
 
-    })
+            })
+
+            var bar_chart = new Chart('task-bart-chart', {
+                type: 'bar',
+                data: {
+                    labels: {{chart_data.labels|safe}},
+                    datasets: [
+
+                        {% for dt in chart_data.data %}
+                            {
+                                label: '{{dt.label|safe}}',
+                                data: {{dt.data|safe}},
+                                borderColor: randomColor({{forloop.counter}}),
+                                backgroundColor:randomColor({{forloop.counter}}),
+                                borderWidth: 1.2,
+                            },
+                        {% endfor %}
+                    ]
+                },
+                options: {
+                    legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true
+                    }
+                    },
+                    scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        scaleLabel: {
+                        display: true,
+                        labelString: '{{chart_data.agg|safe}}'
+                        }
+                    }],
+                    xAxes: [{
+                        gridLines: {
+                            drawOnChartArea: false
+                        }
+                        },
+                    ]
+                    }
+                }
+            });
+        {% else %}
+            const groupedChartOptions = {
+                type: 'bar',
+                data: {
+                    labels: {{chart_data.labels|safe}},
+                    datasets: {{chart_data.data|safe}},
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                let data1 = data.datasets[tooltipItem.datasetIndex]
+                                return data1.group + ' (' + data1.label + ') : ' + data1.data[tooltipItem.index] + ' persen (%)'  ;
+                            }
+                        }
+                    },
+                    scales: {
+                        scaleShowValues: true,
+                        xAxes: [
+                            {% if have_rows is False %}
+                                {
+                                    ticks: {
+                                        display: true,
+                                    },
+                                }
+                            {% else %}
+                                {
+                                    ticks: {
+                                        display: false,
+                                    },
+                                },
+                                {
+                                    offset: true,
+                                    labels: {{chart_data.data_rows|safe}},
+                                    gridLines: {
+                                    display: false,
+                                    },
+                                    ticks: {
+                                        fontSize: 10,
+                                        maxRotation: 90,
+                                        minRotation: 90
+                                    }
+                                },
+                                {
+                                    offset: true,
+                                    gridLines: {
+                                    display: false
+                                    }
+                                }
+                            {% endif %}
+                        ],
+                        yAxes: [{
+                            stacked: true,
+                            scaleLabel: {
+                                display: true,
+                            },
+                            gridLines: {
+                                display: false
+                            }
+                        }]
+                    }
+                }
+            };
+            new Chart('task-bart-chart', groupedChartOptions);
+        {% endif %}
     {% endif %}
 
-    {% if table.unit_id.name in "Persen,Indeks" %}
-        const groupedChartOptions = {
-            type: 'bar',
-            data: {
-                labels: {{chart_data.labels|safe}},
-                datasets: {{chart_data.data|safe}},
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                tooltips: {
-                    callbacks: {
-                        label: function(tooltipItem, data) {
-                            let data1 = data.datasets[tooltipItem.datasetIndex]
-                            return data1.group + ' (' + data1.label + ') : ' + data1.data[tooltipItem.index] + ' persen (%)'  ;
+    {% if data_comparisons_title and table.unit_id.is_comp != '0' %}
+        {% if table.get_summarize_status_display != 'none' or table.unit_id.is_viz in '1,3' %}
+            {% if table.unit_id.name not in "Persen,Indeks" %}
+                var compare_chart = new Chart('task-bart-chart-2', {
+                    type: 'bar',
+                    data: {
+                        labels: {{chart_data_compare.labels|safe}},
+                        datasets: [
+
+                            {% for dt in chart_data_compare.data %}
+                                {
+                                    label: '{{dt.label|safe}}',
+                                    data: {{dt.data|safe}},
+                                    borderColor: randomColor({{forloop.counter}}),
+                                    backgroundColor:randomColor({{forloop.counter}}),
+                                    borderWidth: 1.2,
+                                },
+                            {% endfor %}
+                        ]
+                    },
+                    options: {
+                        legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true
+                        }
+                        },
+                        scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                            display: true,
+                            labelString: '{{chart_data_compare.agg|safe}}'
+                            }
+                        }],
+                        xAxes: [{
+                            gridLines: {
+                                drawOnChartArea: false
+                            }
+                            },
+                        ]
                         }
                     }
-                },
-                scales: {
-                    scaleShowValues: true,
-                    xAxes: [
-                        {% if have_rows is False %}
-                            {
-                                ticks: {
+                });
+            {% else %}
+                const groupedChartOptions2 = {
+                    type: 'bar',
+                    data: {
+                        labels: {{chart_data_compare.labels|safe}},
+                        datasets: {{chart_data_compare.data|safe}},
+                    },
+                    options: {
+                        legend: {
+                            display: false
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    let data1 = data.datasets[tooltipItem.datasetIndex]
+                                    return data1.group + ' (' + data1.label + ') : ' + data1.data[tooltipItem.index] + ' persen (%)'  ;
+                                }
+                            }
+                        },
+                        scales: {
+                            scaleShowValues: true,
+                            xAxes: [
+                                {% if have_rows is False %}
+                                    {
+                                        ticks: {
+                                            display: true,
+                                        },
+                                    }
+                                {% else %}
+                                    {
+                                        ticks: {
+                                            display: false,
+                                        },
+                                    },
+                                    {
+                                        offset: true,
+                                        labels: {{chart_data_compare.data_rows|safe}},
+                                        gridLines: {
+                                        display: false,
+                                        },
+                                        ticks: {
+                                            fontSize: 10,
+                                            maxRotation: 90,
+                                            minRotation: 90
+                                        }
+                                    },
+                                    {
+                                        offset: true,
+                                        gridLines: {
+                                        display: false
+                                        }
+                                    }
+                                {% endif %}
+                            ],
+                            yAxes: [{
+                                stacked: true,
+                                scaleLabel: {
                                     display: true,
                                 },
-                            }
-                        {% else %}
-                            {
-                                ticks: {
-                                    display: false,
-                                },
-                            },
-                            {
-                                offset: true,
-                                labels: {{chart_data.data_rows|safe}},
                                 gridLines: {
-                                display: false,
-                                },
-                                ticks: {
-                                    fontSize: 10,
-                                    maxRotation: 90,
-                                    minRotation: 90
+                                    display: false
                                 }
-                            },
-                            {
-                                offset: true,
-                                gridLines: {
-                                display: false
-                                }
-                            }
-                        {% endif %}
-                    ],
-                    yAxes: [{
-                        stacked: true,
-                        scaleLabel: {
-                            display: true,
-                        },
-                        gridLines: {
-                            display: false
+                            }]
                         }
-                    }]
-                }
-            }
-        };
-        new Chart('task-bart-chart', groupedChartOptions);
-    {% else %}
-        var bar_chart = new Chart('task-bart-chart', {
-            type: 'bar',
-            data: {
-                labels: {{chart_data.labels|safe}},
-                datasets: [
-
-                    {% for dt in chart_data.data %}
-                        {
-                            label: '{{dt.label|safe}}',
-                            data: {{dt.data|safe}},
-                            borderColor: randomColor({{forloop.counter}}),
-                            backgroundColor:randomColor({{forloop.counter}}),
-                            borderWidth: 1.2,
-                        },
-                    {% endfor %}
-                ]
-            },
-            options: {
-                legend: {
-                position: 'bottom',
-                labels: {
-                    usePointStyle: true
-                }
-                },
-                scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    },
-                    scaleLabel: {
-                    display: true,
-                    labelString: '{{chart_data.agg|safe}}'
                     }
-                }],
-                xAxes: [{
-                    gridLines: {
-                        drawOnChartArea: false
-                    }
-                    },
-                ]
-                }
-            }
-        });
-    {% endif %}
-
-    {% if data_comparisons_title %}
-    var compare_chart = new Chart('task-bart-chart-2', {
-        type: 'bar',
-        data: {
-            labels: {{chart_data_compare.labels|safe}},
-            datasets: [
-
-                {% for dt in chart_data_compare.data %}
-                    {
-                        label: '{{dt.label|safe}}',
-                        data: {{dt.data|safe}},
-                        borderColor: randomColor({{forloop.counter}}),
-                        backgroundColor:randomColor({{forloop.counter}}),
-                        borderWidth: 1.2,
-                    },
-                {% endfor %}
-            ]
-        },
-        options: {
-            legend: {
-            position: 'bottom',
-            labels: {
-                usePointStyle: true
-            }
-            },
-            scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                },
-                scaleLabel: {
-                display: true,
-                labelString: '{{chart_data_compare.agg|safe}}'
-                }
-            }],
-            xAxes: [{
-                gridLines: {
-                    drawOnChartArea: false
-                }
-                },
-            ]
-            }
-        }
-    });
+                };
+                new Chart('task-bart-chart-2', groupedChartOptions2);
+            {% endif %}
+        {% endif %}
     {% endif %}
 
 </script>

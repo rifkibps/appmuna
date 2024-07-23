@@ -500,6 +500,7 @@ class StatisticDetailTableClassView(View):
                     data_compare_req = request.GET.get('compare_by').split('-')
                     data_comparisons = get_content_table(indicator_id, data_compare_req)
                     chart_data_compare = get_chart_data(data_comparisons, model.get_summarize_status_display(), model.unit_id.is_agg == '1', model.unit_id.is_viz, True)
+                    chart_data_compare['data_rows'] = [dt['row_name'] for dt in data_comparisons] * len(list_periods)
                     data_comparisons = get_content_comparison(data_comparisons)
 
                     first_year, first_period = data_compare_req[0].split('_')
@@ -639,85 +640,86 @@ class StrategicDataClassView(View):
 
     def get(self,request):
 
-        model = models.BackendIndicatorsModel.objects.filter(~Q(level_data=0)).order_by('time_period_id__name')
+        # indicator_id = 14
+        # model = models.BackendIndicatorsModel.objects.filter(Q(pk=indicator_id)).order_by('time_period_id__name', 'name')
+        model = models.BackendIndicatorsModel.objects.filter(~Q(level_data=0)).order_by('time_period_id__name', 'name')
         # 1. Filter data statistik yang merupakan data pembangunan dan strategis
         # 2. Grouping berdasarkan jenis periode data
         # 3. Kita ambil periode dasar dari masing2 group
 
-        datasets = [
-            {
-                'group' : 'Tahunan',
-                'period_basic' : [2023, 2024, 2025],
-                'items_group' : [
-                    {
-                        'data_id' : 20,
-                        'data' : 'Persentase Penduduk Miskin Pada Tingkat Administratif Kecamatan di Kabupaten Muna (Persen)',
-                        'data_items' : [{'period': '2023', 'value' : '21'}, {'period': '2024', 'value' : '25'}]
-                    }
-                ]
-            },
-            
-        ]
+        datasets = []
+
         for dt in model:
-            qry = models.BackendContentIndicatorsModel.objects.filter(indicator_id = dt.pk).order_by('year')
-            if qry.exists():
-                pprint(dt.unit_id.is_agg)
-                if dt.unit_id.is_agg == '0':
-                    pass
 
-                new_qry = get_content_table(indicator_id = dt.pk, force_agg = 'sum')
-                # Agregating data for each rows and characteristics
-                if dt.col_group_id: # There is columns
-                    pprint(get_content_table(indicator_id = dt.pk, force_agg=True)[0])
+            table_content = models.BackendContentIndicatorsModel.objects.filter(indicator_id = dt.pk).order_by('year')
+            if table_content.exists():
+                # have_rows = False if dt.row_group_id.row_items.first().order_num == 99 else True
+                # have_cols = True if dt.col_group_id_id else False
 
-                else : # There's no columns
-                    pass
-                pprint(dt.__dict__)
-                pprint(qry.values())
-                # Check group di dalam dataset
-                check_group = next((IndexError for (IndexError, d) in enumerate(datasets) if d["group"] == dt.time_period_id.name), None)
-                if check_group is not None:
+                group = dt.time_period_id.name
+                periode_basic = []
+                # NOTES: NANTI MASUKIN AGGREGATENYA APAKAH PAKAI SUM, RATA-RATA. ATAU PERSEN. Defalt ini kan masih pakai SUM
 
-                    check_items_group = next((idx for (idx, d) in enumerate(datasets[check_group]['items_group']) if d['data_id'] == dt.id))
-                    if check_items_group is not None:
-                        datasets[check_group]['items_groups'][check_items_group]['data_items'].append(
-                            {'period': '2023', 'value' : '21'}
-                        )
-                    else:
-                        datasets[check_group]['items_groups'].append({
-                            {
-                                'data_id' : 20,
-                                'data' : 'Persentase Penduduk Miskin Pada Tingkat Administratif Kecamatan di Kabupaten Muna (Persen)',
-                                'data_items' : [{'period': '2023', 'value' : '21'}]
-                            }
-                        })
-                else:
-                    datasets.append({
-                        'group' : dt.time_period_id.name,
-                        'period_basic' : [],
-                        'items_group' : [
-                            {
-                                'data_id' : 20,
-                                'data'  : 'Persentase Penduduk Miskin Pada Tingkat Administratif Kecamatan di Kabupaten Muna (Persen)',
-                                'data_items' : [
-                                    {'period': '2023', 'value' : '21'}
-                                ]
-                            }
-                        ]
+                if dt.unit_id.is_agg == '0': # Tidak dapat diagregatkan
+                    continue
+
+                qry_content = get_content_table(indicator_id = dt.pk, force_agg = 'sum')
+                list_values = []
+                for rows in qry_content:
+                    for idx1, years in enumerate(rows['items']):
+                        for idx2, periods in enumerate(years['items']):
+                            period_name = f"{periods['item_period']} {years['year']}"
+                            
+                            if f'{idx1}-{idx2}_{period_name}' not in periode_basic:
+                                periode_basic.append(f'{idx1}-{idx2}_{period_name}')
+
+                            for cols in periods['items']:
+                                if cols['item_char'] == 'Total':
+
+                                    check_val = next((idx for (idx, d) in enumerate(list_values) if d['period'] == period_name), None)
+                                    if check_val is not None:
+                                        list_values[check_val]['value'].append(cols['value'])
+                                    else:
+                                        list_values.append(
+                                            {
+                                                'period' : period_name,
+                                                'value' : [cols['value']]
+                                            }
+                                        )
+                
+                for dt_ in list_values:
+                    dt_['value'] = round(float(sum(dt_['value'])), dt.decimal_point)
+
+                items_group = {}
+                items_group['id'] = dt.pk
+                items_group['data'] = f'{dt.name} ({dt.unit_id.name})'
+                items_group['data_items'] = list_values
+
+                check_group = next((idx for (idx, d) in enumerate(datasets) if d["group"] == group), None)
+
+                if check_group is None:
+                    datasets.append ({
+                        'group' : group,
+                        'period_basic' : periode_basic,
+                        'items_group' : [items_group]
                     })
-                break
-        # model = models.BackendContentIndicatorsModel.objects.values('indicator_id', 'indicator_id__name', 'indicator_id__updated_at', 'indicator_id__time_period_id__name').distinct()
+                else:
+                        for period_ in periode_basic:
+                            if period_ not in datasets[check_group]['period_basic']:
+                                datasets[check_group]['period_basic'].append(period_)
 
-        # last_updated = model.order_by('-indicator_id__updated_at').first()['indicator_id__updated_at'].strftime('%d %b %Y')
+                        datasets[check_group]['items_group'].append(items_group)
 
-        # tables_data = {}
-        # for dt in model.order_by('indicator_id__time_period_id__name'):
-        #     period_name = dt['indicator_id__time_period_id__name'].lower()
-        #     if period_name in tables_data:
-        #         tables_data[period_name].append(dt)
-        #     else:
-        #         tables_data[period_name] = [dt]
+        datasets = sorted(datasets, key=itemgetter('period_basic'))
+        for idx, dt in enumerate(datasets):
+            dt['period_basic'].sort()
+            for idx2, dt_ in enumerate(dt['period_basic']):
+                dt['period_basic'][idx2] = dt_.split('_')[-1]
 
+            datasets[idx]['period_basic'] = list(set(dt['period_basic']))
+
+
+        pprint(datasets)
         context = {
             'title' : 'Indikator Data Strategis',
             # 'last_updated' : last_updated
