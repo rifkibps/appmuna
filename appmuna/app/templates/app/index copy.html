@@ -2,9 +2,6 @@
 {% load static %}
 
 {% block css-extender%}
-<link href="http://kenwheeler.github.io/slick/slick/slick.css" rel="stylesheet" />
-<link href="http://kenwheeler.github.io/slick/slick/slick-theme.css" rel="stylesheet"/>
-
 <style>
   input,
   input::placeholder {
@@ -176,23 +173,87 @@
 <section class="pb-5" style="margin-top: -45px">
   <div class="container">
     <div class="row align-items-center">
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner" role="listbox">
 
-      <div class="slick-test">
-        {% for i in '12345678'  %}
-          <div class="card widget-flat py-2 mx-1">
-            <div class="card-body">
-              <div class="float-end">
-                <i class="mdi mdi-account-multiple widget-icon"></i>
-              </div>
-              <h5 class="text-muted fw-normal mt-0"> Customers {{i}} </h5>
-              <h3 class="mt-3 mb-3">36,254</h3>
-              <p class="mb-0 text-muted">
-                <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
-                <span class="text-nowrap">Since last month</span>
-              </p>
+          <div class="carousel-item active">
+            <div class="row">
+              {% for dt in '1234' %}
+                <div class="col-md-6 col-lg-3">
+                  <div class="card widget-flat py-2">
+                    <div class="card-body">
+                      <div class="float-end">
+                        <i class="mdi mdi-account-multiple widget-icon"></i>
+                      </div>
+                      <h5 class="text-muted fw-normal mt-0"> Customers </h5>
+                      <h3 class="mt-3 mb-3">36,254</h3>
+                      <p class="mb-0 text-muted">
+                        <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
             </div>
           </div>
-        {% endfor %}
+          
+          <div class="carousel-item">
+            <div class="row">
+              {% for dt in '1234' %}
+                <div class="col-md-6 col-lg-3">
+                  <div class="card widget-flat py-2">
+                    <div class="card-body">
+                      <div class="float-end">
+                        <i class="mdi mdi-account-multiple widget-icon"></i>
+                      </div>
+                      <h5 class="text-muted fw-normal mt-0"> Customers </h5>
+                      <h3 class="mt-3 mb-3">36,254</h3>
+                      <p class="mb-0 text-muted">
+                        <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> 5.27%</span>
+                        <span class="text-nowrap">Since last month</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <a
+          class="carousel-control-prev"
+          href="#carouselExampleControls"
+          role="button"
+          data-bs-slide="prev"
+          style="margin-left: -130px"
+        >
+          <div class="avatar-sm m-auto">
+            <span class="avatar-title bg-primary-lighten rounded-circle">
+              <span
+                class="carousel-control-prev-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </span>
+          </div>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#carouselExampleControls"
+          role="button"
+          data-bs-slide="next"
+          style="margin-right: -130px"
+        >
+          <div class="avatar-sm m-auto">
+            <span class="avatar-title bg-primary-lighten rounded-circle">
+              <span
+                class="carousel-control-next-icon"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </span>
+          </div>
+        </a>
       </div>
     </div>
   </div>
@@ -216,7 +277,7 @@
 
     <div class="row py-4">
       <div class="col-xl-3 col-lg-6">
-        <div class="card bg-primary py-3">
+        <div class="card bg-primary py-3" style="border-radius: 20px">
           <div class="card-body">
             <div class="text-center text-white">
               <h2>1.520</h2>
@@ -226,7 +287,7 @@
         </div>
       </div>
       <div class="col-xl-3 col-lg-6">
-        <div class="card bg-primary py-3">
+        <div class="card bg-primary py-3" style="border-radius: 20px">
           <div class="card-body">
             <div class="text-center text-white">
               <h2>10</h2>
@@ -236,7 +297,7 @@
         </div>
       </div>
       <div class="col-xl-3 col-lg-6">
-        <div class="card bg-primary py-3">
+        <div class="card bg-primary py-3" style="border-radius: 20px">
           <div class="card-body">
             <div class="text-center text-white">
               <h2>35</h2>
@@ -246,7 +307,7 @@
         </div>
       </div>
       <div class="col-xl-3 col-lg-6">
-        <div class="card bg-primary py-3">
+        <div class="card bg-primary py-3" style="border-radius: 20px">
           <div class="card-body">
             <div class="text-center text-white">
               <h2>100.231</h2>
@@ -273,10 +334,18 @@
     </div>
 
     <div class="row mt-2 py-5 align-items-center">
-      <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
+      <div
+        id="carouselControls1"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
         <ol class="carousel-indicators" style="margin-bottom: -30px">
           {% for card in cards %}
-          <li data-bs-target="#carouselControls1" data-bs-slide-to="{{card.no}}" class="{% if card.no == 0 %}active{% endif %} bg-primary-lighten"></li>
+          <li
+            data-bs-target="#carouselControls1"
+            data-bs-slide-to="{{card.no}}"
+            class="{% if card.no == 0 %}active{% endif %} bg-primary-lighten"
+          ></li>
           {% endfor %}
         </ol>
         <div class="carousel-inner" role="listbox">
@@ -339,7 +408,9 @@
             <div class="row py-4">
               <div class="col-12">
                 <div class="table-responsive">
-                  <table class="table table-hover table-centered mb-0 table-xxl">
+                  <table
+                    class="table table-hover table-centered mb-0 table-xxl"
+                  >
                     <thead>
                       <tr>
                         <th>Data Statistik</th>
@@ -376,7 +447,140 @@
               </div>
             </div>
           </div>
+          <div class="tab-pane" id="ikm_table">
+            <div class="row py-4">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table
+                    class="table table-hover table-centered mb-0 table-xxl"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Data Statistik</th>
+                        <th>Kategori Statistik</th>
+                        <th>Jenis Data</th>
+                        <th>Tanggal Rilis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if stats_data_ikm|length > 0 %}
+                      {% for dt in stats_data_ikm %}
+                      <tr>
+                        <td>
+                          <a href="#" class="text-secondary">{{dt.name}}</a>
+                        </td>
+                        <td>{{dt.subject_id.name}}</td>
+                        <td>Statistik {{dt.get_stat_category_display}}</td>
+                        <td>{{ dt.created_at|date:"d M Y" }}</td>
+                      </tr>
+                      {% endfor %}
+                      {% else %}
+                      <tr>
+                        <td colspan="4"><i>Data belum tersedia</i></td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+
+                {% if stats_data_ikm|length > 3 %}
+                <br />
+                <a href="#" class="btn"
+                  >Muat lebih banyak <i class="dripicons-chevron-right"></i
+                ></a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="ids_table">
+            <div class="row py-4">
+              <div class="col-12">
+                <div class="table-responsive">
+                  <table
+                    class="table table-hover table-centered mb-0 table-xxl"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Data Statistik</th>
+                        <th>Kategori Statistik</th>
+                        <th>Jenis Data</th>
+                        <th>Tanggal Rilis</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if stats_data_str|length > 0 %} 
+                      {% for dt in stats_data_str %}
+                      <tr>
+                        <td>
+                          <a href="#" class="text-secondary">{{dt.name}}</a>
+                        </td>
+                        <td>{{dt.subject_id.name}}</td>
+                        <td>Statistik {{dt.get_stat_category_display}}</td>
+                        <td>{{ dt.created_at|date:"d M Y" }}</td>
+                      </tr>
+                      {% endfor %}
+                      {% else %}
+                      <tr>
+                        <td colspan="4"><i>Data belum tersedia</i></td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+                {% if stats_data_str|length > 3 %}
+                <br />
+                <a href="#" class="btn"
+                  >Muat lebih banyak <i class="dripicons-chevron-right"></i
+                ></a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
         </div>
+
+        <ul
+          class="nav nav-pills bg-nav-pills nav-justified mt-3 mb-5"
+          style="border-radius: 20px; font-size: 13px"
+        >
+          <li class="nav-item">
+            <a
+              href="#stats_table"
+              data-bs-toggle="tab"
+              aria-expanded="show active"
+              class="nav-link py-2 active"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-home-variant d-md-none d-block"></i>
+              <span class="d-none d-md-block">Tabel Statistik</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#ikm_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-account-circle d-md-none d-block"></i>
+              <span class="d-none d-md-block"
+                >Indikator Kinerja Pembangunan</span
+              >
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#ids_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block">Indikator Data Strategis</span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -574,7 +778,218 @@
   </div>
 </section>
 
-<section class="py-5 bg-light-lighten border-top border-bottom border-light" id="layanan-statistik">
+<section
+  class="pt-5 pb-3 bg-light-lighten border-top border-bottom border-light"
+  id="media-statistik"
+>
+  <div class="container">
+    <div class="row mb-3">
+      <div class="col-lg-12">
+        <div class="text-left">
+          <h2>Berita dan Media Statistik Kab Muna</h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="row py-3">
+      <div class="col-12">
+        <ul
+          class="nav nav-pills bg-nav-pills nav-justified mb-3"
+          style="border-radius: 20px"
+        >
+          <li class="nav-item">
+            <a
+              href="#brs"
+              data-bs-toggle="tab"
+              aria-expanded="show active"
+              class="nav-link py-2 active"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-home-variant d-md-none d-block"></i>
+              <span class="d-none d-md-block">Berita Statistik</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#publikasi"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-account-circle d-md-none d-block"></i>
+              <span class="d-none d-md-block">Publikasi Statistik</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#infograph"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block">Infografis</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a
+              href="#videograph"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+              style="border-radius: 20px"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block">Videografis</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content pt-3">
+          <div class="tab-pane show active" id="brs">
+            {% for dt_stat in stats_news %}
+            <a
+              href="#"
+              class="list-group-item list-group-item-action shadow-sm"
+              style="border-radius: 20px; margin-bottom: 15px; border: none"
+            >
+              <div class="row g-0 align-items-center">
+                <div class="col-sm-1">
+                  <img
+                    class="ms-2 rounded"
+                    src="/media/{{dt_stat.thumbnail}}"
+                    width="55"
+                    alt="{{dt_stat.title}}"
+                  />
+                </div>
+                <div class="col-sm-11">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{dt_stat.title}}</h5>
+                    <small>{{dt_stat.created_at|date:"d M Y"}}</small>
+                  </div>
+                  <p class="mb-1">{{dt_stat.content}}</p>
+                  <small class="text-muted">{{dt_stat.author}}</small>
+                </div>
+              </div>
+            </a>
+            {% endfor %} {% if stats_news|length > 3 %}
+            <div class="mt-3">
+              <a href="#" class="btn"
+                >Muat lebih banyak <i class="dripicons-chevron-right"></i
+              ></a>
+            </div>
+            {% endif %}
+          </div>
+          <div class="tab-pane" id="publikasi">
+            <div class="row">
+              {% for dt_pub in pubs_data %}
+              <div class="col-xxl-4 col-lg-6">
+                <a
+                  href="#"
+                  class="list-group-item list-group-item-action mb-2 shadow-sm"
+                  style="border: none; border-radius: 20px"
+                >
+                  <div class="row g-0 align-items-center">
+                    <div class="col-sm-4">
+                      <img
+                        class="ms-1 rounded"
+                        src="/media/{{dt_pub.thumbnail}}"
+                        width="80"
+                        alt="Generic placeholder image"
+                      />
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">{{dt_pub.title}}</h5>
+                      </div>
+                      <p class="mb-1">{{dt_pub.release|date:"d M Y"}}</p>
+                      <small class="text-muted"
+                        >No. Publikasi / Katalog:
+                        {{dt_pub.publication_no}}/{{dt_pub.catalog_no}}</small
+                      >
+                    </div>
+                  </div>
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if pubs_data|length > 8 %}
+            <div class="mt-3">
+              <a href="#" class="btn"
+                >Muat lebih banyak <i class="dripicons-chevron-right"></i
+              ></a>
+            </div>
+            {% endif %}
+          </div>
+          <div class="tab-pane" id="infograph">
+            <div class="row">
+              {% for info_dt in infographs_data %}
+              <div class="col-xl-3 col-lg-6">
+                <div class="demo-box text-center">
+                  <img
+                    src="/media/{{info_dt.thumbnail}}"
+                    alt="{{info_dt.title}}"
+                    class="img-fluid shadow-sm rounded"
+                  />
+                  <h5 class="mt-3 f-17">{{info_dt.title}}</h5>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if infographs_data|length > 11 %}
+            <div class="mt-3">
+              <a href="#" class="btn"
+                >Muat lebih banyak <i class="dripicons-chevron-right"></i
+              ></a>
+            </div>
+            {% endif %}
+          </div>
+          <div class="tab-pane" id="videograph">
+            {% comment %} Pas diklik videonya, munculin tampilkan videonya di
+            atasnya {% endcomment %}
+            <div class="row">
+              {% for dt_vidgraph in videographs_data %}
+              <div class="col-xl-4 col-lg-6">
+                <div
+                  class="demo-box text-center mt-3 mt-lg-0"
+                  data-bs-toggle="modal"
+                  data-bs-target="#bs-example-modal-lg"
+                >
+                  <iframe
+                    class="shadow-sm rounded"
+                    width="410"
+                    height="250"
+                    src="{{dt_vidgraph.link}}?autoplay=1"
+                    title="{{dt_vidgraph.title}}"
+                    frameborder="0"
+                    allowfullscreen
+                    style="margin-bottom: -5px"
+                  ></iframe>
+                  <h5 class="mt-3 f-17">{{dt_vidgraph.title}}</h5>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            {% if videographs_data|length > 8 %}
+            <div class="mt-3">
+              <a href="#" class="btn"
+                >Muat lebih banyak <i class="dripicons-chevron-right"></i
+              ></a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5" id="layanan-statistik">
   <div class="container">
     <div class="row mb-3">
       <div class="col-lg-12">
@@ -647,7 +1062,15 @@
 </section>
 
 <!-- Dark Filled Modal -->
-{% comment %} <div class="modal fade" id="bs-example-modal-lg" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="bs-example-modal-lg"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myLargeModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered modal-xl">
     <div class="modal-content">
       <div class="modal-body text-center pt-2 px-0 pb-0 mb-0">
@@ -672,26 +1095,10 @@
     <!-- /.modal-content -->
   </div>
   <!-- /.modal-dialog -->
-</div> {% endcomment %}
+</div>
 <!-- /.modal -->
 
-{% endblock main-content %}
-
-{% block js-extender %}
-<script src="https://cdn.jsdelivr.net/jquery.slick/1.4.1/slick.min.js"></script>
-
-<script>
-  $('.slick-test').slick({
-    infinite: true,
-    slidesToShow: 4,
-    slidesToScroll: 2,
-    autoplay: true,
-    autoplaySpeed: 5000,
-    dots: true,
-
-  })
-</script>
-
+{% endblock main-content %} {% block js-extender %}
 <script>
   var table = $("#data_table_check").DataTable({
     info: false,

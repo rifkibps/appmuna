@@ -113,6 +113,7 @@ class BackendPeriodNameItemsModel(models.Model):
    
    period_id = models.ForeignKey(BackendPeriodsModel, on_delete=models.CASCADE, null=False, related_name='period_item')
    item_period = models.CharField(max_length=256, null=False, blank=False, verbose_name='Item Periode Waktu' )
+   order_item = models.IntegerField(null=False, blank=False, verbose_name='Nomor Urut Periode' )
 
    def __str__(self):
       return f"{self.pk} | {self.period_id}-{self.item_period} {self.period_id.name} | {self.item_period}"
@@ -185,7 +186,8 @@ class BackendIndicatorsModel(models.Model):
    subject_csa_id = models.ForeignKey(BackendSubjectsSCAModel, on_delete=models.CASCADE, null=True, blank=True, related_name='subject_csa_indicator', verbose_name='Subjek CSA')
    name =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Nama Indikator' )
    desc =  models.TextField(null=False, blank=False, verbose_name='Deskripsi Indikator' )
-   footer_desc =  models.CharField(max_length=512, null=False, blank=False, verbose_name='Keterangan Indikator' )
+   source =  models.CharField(max_length=512, null=False, blank=False, default='BPS Kabupaten Muna', verbose_name='Sumber Data' )
+   footer_desc =  models.CharField(max_length=512, null=True, blank=True, verbose_name='Keterangan Indikator' )
    col_group_id = models.ForeignKey(BackendCharacteristicsModel, on_delete=models.CASCADE, null=True, blank=True, related_name='cols_indicator', verbose_name='Kelompok Karakteristik' )
    row_group_id = models.ForeignKey(BackendRowsModel, on_delete=models.CASCADE, null=False, related_name='rows_indicator', verbose_name='Kelompok Judul Baris')
    time_period_id = models.ForeignKey(BackendPeriodsModel, on_delete=models.CASCADE, null=False, related_name='period_indicator', verbose_name='Periode Data')

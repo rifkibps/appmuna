@@ -157,9 +157,11 @@ def get_content_table(indicator_id, filter_ = [], force_agg = False):
             'value' : round(float(dt["value"]), model.decimal_point)
         }
         
+        qry_period = models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first()
         items_period = {
             'item_period_id' : dt["item_period"],
-            'item_period' : models.BackendPeriodNameItemsModel.objects.filter(pk=dt["item_period"]).first().item_period,
+            'item_period' : qry_period.item_period,
+            'order_num' : qry_period.order_item,
             'items': [items_col]
         }
         

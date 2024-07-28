@@ -42,7 +42,7 @@ class HomeAppClassView(View):
                         'item' : subj.name
                     }
                 )
-        
+
         card_data_pages = []
 
         card_data = split_list(subjects, 12)
@@ -643,18 +643,12 @@ class StrategicDataClassView(View):
         # indicator_id = 14
         # model = models.BackendIndicatorsModel.objects.filter(Q(pk=indicator_id)).order_by('time_period_id__name', 'name')
         model = models.BackendIndicatorsModel.objects.filter(~Q(level_data=0)).order_by('time_period_id__name', 'name')
-        # 1. Filter data statistik yang merupakan data pembangunan dan strategis
-        # 2. Grouping berdasarkan jenis periode data
-        # 3. Kita ambil periode dasar dari masing2 group
 
         datasets = []
-
         for dt in model:
 
-            table_content = models.BackendContentIndicatorsModel.objects.filter(indicator_id = dt.pk).order_by('year')
+            table_content = models.BackendContentIndicatorsModel.objects.filter(indicator_id = dt.pk).order_by('-updated_at')
             if table_content.exists():
-                # have_rows = False if dt.row_group_id.row_items.first().order_num == 99 else True
-                # have_cols = True if dt.col_group_id_id else False
 
                 group = dt.time_period_id.name
                 periode_basic = []
@@ -666,12 +660,13 @@ class StrategicDataClassView(View):
                 qry_content = get_content_table(indicator_id = dt.pk, force_agg = 'sum')
                 list_values = []
                 for rows in qry_content:
-                    for idx1, years in enumerate(rows['items']):
-                        for idx2, periods in enumerate(years['items']):
+                    for years in rows['items']:
+                        for periods in years['items']:
                             period_name = f"{periods['item_period']} {years['year']}"
-                            
-                            if f'{idx1}-{idx2}_{period_name}' not in periode_basic:
-                                periode_basic.append(f'{idx1}-{idx2}_{period_name}')
+                            period_name_ = f"{periods['order_num']}_{periods['item_period']}_{years['year']}"
+
+                            if period_name_ not in periode_basic:
+                                periode_basic.append(period_name_)
 
                             for cols in periods['items']:
                                 if cols['item_char'] == 'Total':
@@ -694,7 +689,9 @@ class StrategicDataClassView(View):
                 items_group['id'] = dt.pk
                 items_group['data'] = f'{dt.name} ({dt.unit_id.name})'
                 items_group['data_items'] = list_values
-
+                items_group['last_updated'] = table_content.first().updated_at
+                items_group['href'] = f'{reverse_lazy("app:statistics-app-preview")}?indicator={dt.pk}' if dt.col_group_id is not None else  f'{reverse_lazy("app:statistics-app-nocols")}?indicator={dt.pk}'
+                
                 check_group = next((idx for (idx, d) in enumerate(datasets) if d["group"] == group), None)
 
                 if check_group is None:
@@ -710,19 +707,27 @@ class StrategicDataClassView(View):
 
                         datasets[check_group]['items_group'].append(items_group)
 
-        datasets = sorted(datasets, key=itemgetter('period_basic'))
         for idx, dt in enumerate(datasets):
-            dt['period_basic'].sort()
-            for idx2, dt_ in enumerate(dt['period_basic']):
-                dt['period_basic'][idx2] = dt_.split('_')[-1]
 
-            datasets[idx]['period_basic'] = list(set(dt['period_basic']))
+            # Order Period Basic
+            orders = [item_dt.split('_') for item_dt in dt['period_basic']]
+            orders = sorted(orders, key = lambda x: (x[2], x[0]))
+            orders = [f"{order[1]} {order[2]}" for order in orders]
 
+            datasets[idx]['period_basic'] = orders
+            datasets[idx]['items_group'] = sorted(dt['items_group'], key=itemgetter('last_updated'), reverse=True) 
+
+        src_colls = []
+        for src in list(model.values_list('source', flat=True)):
+            check = next((idx for (idx, d) in enumerate(src_colls) if d.lower().replace(" ", "") == src.lower().replace(" ", "")), None)
+            if check is None:
+                src_colls.append(src)
 
         pprint(datasets)
         context = {
             'title' : 'Indikator Data Strategis',
-            # 'last_updated' : last_updated
+            'datasets' : datasets,
+            'sources' : src_colls
         }
 
         return render(request, 'app/strategic_data.html', context)
