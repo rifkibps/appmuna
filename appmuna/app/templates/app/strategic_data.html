@@ -216,9 +216,7 @@
                                                     <p class="font-weight-light font-13">Terakhir diperbarui: {{dt.items_group.0.last_updated}}</p>
                                                 </div>
                                                 <div class="col-sm-8 d-flex justify-content-end" style="padding-right:18px!important">
-                                                
                                                     <input type="text" id="searchBar" class="form-control mx-2" placeholder="Cari Data ..." style="width:250px">
-                                                    
                                                     <button type="button" class="btn btn-primary" style="margin-right:3px!important"   id="clipboard-btn" onclick="showFilter()"><i class="mdi mdi-filter"></i> </button>
                                                     <button type="button" class="btn btn-success" style="margin-right:3px!important" data-bs-toggle="popover" title="Berhasil !" data-bs-content="Tautan berhasil disalin."><i class="mdi mdi-clipboard-file"></i> </button>
                                                     <button type="button" class="btn btn-info" style="margin-right:3px!important"><i class="mdi mdi-file-excel"></i> </button>
@@ -270,7 +268,8 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <h5 class="font-weight-light font-13 mt-3">Keterangan: None (Data belum tersedia)</h5>
+                                            <h5 class="font-weight-light font-13 mt-3">Keterangan:</h5>
+                                            <ul><li class="font-13">None : Data belum tersedia</li></ul>
                                             <h5 class="font-weight-light font-13 mt-2">Sumber:</h5>
                                             <ul>{% for src in sources  %}<li class="font-13">{{src}}</li>{% endfor %}</ul>
                                         </div>

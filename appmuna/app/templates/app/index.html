@@ -8,7 +8,7 @@
 <style>
   input,
   input::placeholder {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   datalist {
@@ -221,7 +221,7 @@
           <div class="card-body">
             <div class="text-center text-white">
               <h2>1.520</h2>
-              <p class="mb-0" style="font-size: 23px">Elemen Data</p>
+              <p class="mb-0" style="font-size: 23px">Data Statistik</p>
             </div>
           </div>
         </div>
@@ -231,7 +231,7 @@
           <div class="card-body">
             <div class="text-center text-white">
               <h2>10</h2>
-              <p class="mb-0" style="font-size: 23px">OPD/Instansi</p>
+              <p class="mb-0" style="font-size: 23px">Indikator Strategis</p>
             </div>
           </div>
         </div>
@@ -241,7 +241,7 @@
           <div class="card-body">
             <div class="text-center text-white">
               <h2>35</h2>
-              <p class="mb-0" style="font-size: 23px">Kategori</p>
+              <p class="mb-0" style="font-size: 23px">Media Statistik</p>
             </div>
           </div>
         </div>
@@ -251,7 +251,7 @@
           <div class="card-body">
             <div class="text-center text-white">
               <h2>100.231</h2>
-              <p class="mb-0" style="font-size: 23px">Pengunjung</p>
+              <p class="mb-0" style="font-size: 23px">Layanan Statistik</p>
             </div>
           </div>
         </div>
@@ -273,48 +273,37 @@
       </div>
     </div>
 
-    <div class="row mt-2 py-5 align-items-center">
-      <div id="carouselControls1" class="carousel slide" data-bs-ride="carousel">
-        <ol class="carousel-indicators" style="margin-bottom: -30px">
-          {% for card in cards %}
-          <li data-bs-target="#carouselControls1" data-bs-slide-to="{{card.no}}" class="{% if card.no == 0 %}active{% endif %} bg-primary-lighten"></li>
-          {% endfor %}
-        </ol>
-        <div class="carousel-inner" role="listbox">
-          {% for card in cards %}
-          <div
-            class="carousel-item {% if card.no == 0 %}active{% endif %}"
-            data-bs-interval=""
-          >
-            <div class="row">
-              {% for card_dt in card.items %}
-              <div class="col-md-6 col-lg-2">
-                <div class="card">
-                  <img
-                    src="{% static 'app-design/assets/images/features-2.svg' %}"
-                    class="card-img-top"
-                    alt="..."
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">
-                      <a href="#" class="text-primary stretched-link"
-                        >{{card_dt.item}}</a
-                      >
-                    </h5>
-                    <p class="card-text font-11">
-                      <b>{{card_dt.group}}</b>
-                    </p>
-                  </div>
-                  <!-- end card-body -->
-                </div>
-                <!-- end card -->
-              </div>
-              <!-- end col-->
-              {% endfor %}
+    <div class="row mt-2 py-4 align-items-center">
+      <div class="slick-subjects mb-3" >
+        {% for i in '12345678'  %}
+          <div class="card" style="box-shadow:none; margin-right:15px">
+            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="#" class="text-primary stretched-link">Kemiskinan {{i}}</a>
+              </h5>
+              <p class="card-text font-11">
+                <b>Sosial dan Kependudukan</b>
+              </p>
             </div>
           </div>
-          {% endfor %}
-        </div>
+        {% endfor %}
+      </div>
+
+      <div class="slick-subjects2" >
+        {% for i in '12345678'  %}
+          <div class="card" style="box-shadow:none; margin-right:15px">
+            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href="#" class="text-primary stretched-link">Kemiskinan {{i}}</a>
+              </h5>
+              <p class="card-text font-11">
+                <b>Sosial dan Kependudukan</b>
+              </p>
+            </div>
+          </div>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -333,52 +322,100 @@
       </div>
     </div>
 
-    <div class="row py-3">
-      <div class="col-12">
-        <div class="tab-content pt-2">
-          <div class="tab-pane show active" id="stats_table">
-            <div class="row py-4">
-              <div class="col-12">
-                <div class="table-responsive">
-                  <table class="table table-hover table-centered mb-0 table-xxl">
-                    <thead>
-                      <tr>
-                        <th>Data Statistik</th>
-                        <th>Kategori Statistik</th>
-                        <th>Jenis Data</th>
-                        <th>Tanggal Rilis</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% if stats_data|length > 0 %} {% for dt in stats_data %}
-                      <tr>
-                        <td>
-                          <a href="#" class="text-secondary">{{dt.name}}</a>
-                        </td>
-                        <td>{{dt.subject_id.name}}</td>
-                        <td>Statistik {{dt.get_stat_category_display}}</td>
-                        <td>{{ dt.created_at|date:"d M Y" }}</td>
-                      </tr>
-                      {% endfor %} {% else %}
-                      <tr>
-                        <td colspan="4"><i>Data belum tersedia</i></td>
-                      </tr>
-                      {% endif %}
-                    </tbody>
-                  </table>
-                </div>
-
-                {% if stats_data|length > 3 %}
-                <br />
-                <a href="#" class="btn"
-                  >Muat lebih banyak <i class="dripicons-chevron-right"></i
-                ></a>
-                {% endif %}
-              </div>
-            </div>
+    <div class="row py-4">
+      <div class="col-sm-2 mb-2 mt-2 mb-sm-0">
+          <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+              <a class="nav-link active show py-2" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab">
+                  <i class="mdi mdi-clipboard-text-search d-md-none d-block"></i>
+                  <span class="d-none d-md-block">Tabel Statistik</span>
+              </a>
+              <a class="nav-link mt-2 py-2" id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile" role="tab">
+                  <i class="mdi mdi-file-table-outline d-md-none d-block"></i>
+                  <span class="d-none d-md-block">Cek Ketersedian Data</span>
+              </a>
           </div>
-        </div>
-      </div>
+      </div> <!-- end col-->
+  
+      <div class="col-sm-10 px-3">
+          <div class="tab-content" id="v-pills-tabContent">
+              <div class="tab-pane fade active show" id="v-pills-home" role="tabpanel">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="table-responsive">
+                      <table class="table table-hover table-centered mb-0 table-xxl">
+                        <thead>
+                          <tr>
+                            <th>Data Statistik</th>
+                            <th>Kategori Statistik</th>
+                            <th>Jenis Data</th>
+                            <th>Tanggal Rilis</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if stats_data|length > 0 %} {% for dt in stats_data %}
+                          <tr>
+                            <td>
+                              <a href="#" class="text-secondary">{{dt.name}}</a>
+                            </td>
+                            <td>{{dt.subject_id.name}}</td>
+                            <td>Statistik {{dt.get_stat_category_display}}</td>
+                            <td>{{ dt.created_at|date:"d M Y" }}</td>
+                          </tr>
+                          {% endfor %} {% else %}
+                          <tr>
+                            <td colspan="4"><i>Data belum tersedia</i></td>
+                          </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    {% if stats_data|length > 3 %}
+                    <br>
+                    <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="v-pills-profile" role="tabpanel">
+                <div class="row mt-3">
+                  <div class="col-lg-12">
+                    <div class="app-search dropdown">
+                      <div class="row gy-2 gx-2 align-items-center">
+                        <div class="col-auto">
+                          <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Telusuri Ketersediaan Data ..." id="search_data" autocomplete="off" style="width: 300px; height: 45px; border-radius: 5px">
+                            <span class="mdi mdi-magnify search-icon" style="margin-top: 5px"></span>
+                          </div>
+                        </div>
+                        <div class="col-auto mt-2 px-0">
+                          <button class="btn btn-primary rounded ml-2"  id="button-search_data">
+                            Cek Data
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-12 table-responsive">
+                    <table class="table table-hover table-centered mb-0 w-100 dt-responsive" id="data_table_check">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Data Statistik</th>
+                          <th>Kategori</th>
+                          <th>Periode</th>
+                          <th>Rilis</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-secondary"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+          </div> <!-- end tab-content-->
+      </div> <!-- end col-->
     </div>
   </div>
 </section>
@@ -388,293 +425,180 @@
     <div class="row mb-3">
       <div class="col-lg-12">
         <div class="text-left">
-          <h2>Publikasi Statistik</h2>
+          <h2 class="text-muted">Media Statistik</h2>
         </div>
       </div>
     </div>
 
-    <div class="row pb-3 align-items-center">
-      <div
-        id="carouselControls2"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <ol class="carousel-indicators" style="margin-bottom: -30px">
-          {% for pub in pubs %}
-          <li
-            data-bs-target="#carouselControls2"
-            data-bs-slide-to="{{pub.no}}"
-            class="{% if pub.no == 0 %}active{% endif %} bg-primary-lighten"
-          ></li>
-          {% endfor %}
-        </ol>
-        <div class="carousel-inner" role="listbox">
-          {% for pub in pubs %}
-          <div
-            class="carousel-item {% if pub.no == 0 %}active{% endif %}"
-            data-bs-interval=""
-          >
-            <div class="row">
-              {% for pub_dt in pub.items %}
-              <div class="col-md-6 col-lg-3">
-                <div class="card">
-                  <img
-                    src="/media/{{pub_dt.thumbnail}}"
-                    class="card-img-top"
-                    alt="..."
-                    height="430"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">
-                      <a href="#" class="text-primary stretched-link"
-                        >{{pub_dt.title}}</a
-                      >
-                    </h5>
-                    <p class="card-text">{{pub_dt.desc}}</p>
-                  </div>
-                  <!-- end card-body -->
-                </div>
-                <!-- end card -->
-              </div>
-              <!-- end col-->
-              {% endfor %}
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-        <a
-          class="carousel-control-prev"
-          href="#carouselControls2"
-          role="button"
-          data-bs-slide="prev"
-          style="margin-left: -130px"
-        >
-          <div class="avatar-sm m-auto">
-            <span class="avatar-title bg-primary-lighten rounded-circle">
-              <span
-                class="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Previous</span>
-            </span>
-          </div>
-        </a>
-        <a
-          class="carousel-control-next"
-          href="#carouselControls2"
-          role="button"
-          data-bs-slide="next"
-          style="margin-right: -130px"
-        >
-          <div class="avatar-sm m-auto">
-            <span class="avatar-title bg-primary-lighten rounded-circle">
-              <span
-                class="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Next</span>
-            </span>
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <div class="row mb-3 mt-4">
-      <div class="col-lg-12">
-        <div class="text-left">
-          <h2>Infografis Statistik</h2>
-        </div>
-      </div>
-    </div>
-
-    <div class="row pb-3 align-items-center">
-      <div
-        id="carouselControls3"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <ol class="carousel-indicators" style="margin-bottom: -30px">
-          {% for infograph in infographcs %}
-          <li
-            data-bs-target="#carouselControls3"
-            data-bs-slide-to="{{infograph.no}}"
-            class="{% if infograph.no == 0 %}active{% endif %} bg-primary-lighten"
-          ></li>
-          {% endfor %}
-        </ol>
-        <div class="carousel-inner" role="listbox">
-          {% for infograph in infographcs %}
-          <div
-            class="carousel-item {% if infograph.no == 0 %}active{% endif %}"
-            data-bs-interval=""
-          >
-            <div class="row">
-              {% for infograph_dt in infograph.items %}
-              <div class="col-md-6 col-lg-3">
-                <div class="card">
-                  <img
-                    src="/media/{{infograph_dt.thumbnail}}"
-                    class="card-img-top"
-                    alt="..."
-                    height="430"
-                  />
-                  <div class="card-body">
-                    <h5 class="card-title">
-                      <a href="#" class="text-primary stretched-link"
-                        >{{infograph_dt.title}}</a
-                      >
-                    </h5>
-                    <p class="card-text">{{infograph_dt.desc}}</p>
-                  </div>
-                  <!-- end card-body -->
-                </div>
-                <!-- end card -->
-              </div>
-              <!-- end col-->
-              {% endfor %}
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-        <a
-          class="carousel-control-prev"
-          href="#carouselControls3"
-          role="button"
-          data-bs-slide="prev"
-          style="margin-left: -130px"
-        >
-          <div class="avatar-sm m-auto">
-            <span class="avatar-title bg-primary-lighten rounded-circle">
-              <span
-                class="carousel-control-prev-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Previous</span>
-            </span>
-          </div>
-        </a>
-        <a
-          class="carousel-control-next"
-          href="#carouselControls3"
-          role="button"
-          data-bs-slide="next"
-          style="margin-right: -130px"
-        >
-          <div class="avatar-sm m-auto">
-            <span class="avatar-title bg-primary-lighten rounded-circle">
-              <span
-                class="carousel-control-next-icon"
-                aria-hidden="true"
-              ></span>
-              <span class="visually-hidden">Next</span>
-            </span>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="py-5 bg-light-lighten border-top border-bottom border-light" id="layanan-statistik">
-  <div class="container">
-    <div class="row mb-3">
-      <div class="col-lg-12">
-        <div class="text-left">
-          <h2>Layanan Konsultasi Statistik</h2>
-        </div>
-      </div>
-    </div>
-
-    <div class="row py-3">
+    <div class="row mt-4">
       <div class="col-12">
-        <div class="row align-items-center mt-3">
-          <div class="col-lg-12 d-flex justify-content-center">
-            <div class="app-search dropdown ml-5">
-              <div class="row gy-2 gx-2 align-items-center">
-                <div class="col-auto">
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Telusuri Ketersediaan Data ..."
-                      id="search_data"
-                      autocomplete="off"
-                      style="width: 450px; height: 45px; border-radius: 5px"
-                    />
-                    <span
-                      class="mdi mdi-magnify search-icon"
-                      style="margin-top: 5px"
-                    ></span>
+          <div class="tab-content">
+            <div class="tab-pane" id="infographs">
+              <div class="slick-infographs mt-3">
+                {% for infograph in infographcs %}
+                  {% for infograph_dt in infograph.items %}
+                    <div class="card mx-2">
+                      <img src="/media/{{infograph_dt.thumbnail}}" class="card-img-top" alt="..." height="430" >
+                      <div class="card-body">
+                        <h5 class="card-title">
+                          <a href="#" class="text-muted"><span>{{infograph_dt.title}}</span></a>
+                        </h5>
+                        <p class="card-text text-truncate">{{infograph_dt.desc}}</p>
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="tab-pane show active" id="videographs">
+              <div class="slick-videographs mt-3">
+                {% for pub in pubs %}
+                  {% for pub_dt in pub.items %}
+                  <div class="card">
+                    <img src="/media/{{pub_dt.thumbnail}}" class="card-img-top">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <a href="#" class="text-primary stretched-link" >{{pub_dt.title}}</a>
+                      </h5>
+                      <p class="card-text">{{pub_dt.desc}}</p>
+                    </div>
                   </div>
+                  {% endfor %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="tab-pane" id="pubs">
+              <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <h3>Publikasi <span class="text-primary">Statistik</span></h3>
+                        <p class="text-muted mt-2">Layanan infografis dan visualisasi data statistik interaktif.</p>
+                    </div>
                 </div>
-                <div class="col-auto mt-2 px-0">
-                  <button
-                    class="btn btn-primary rounded ml-2"
-                    style="height: 45px"
-                    id="button-search_data"
-                    fdprocessedid="hdtwr9"
-                  >
-                    Cek Data
-                  </button>
+              </div>
+              <div class="row mt-3">
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Vertical Layout</h5>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center mt-3 mt-lg-0">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-2.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Horizontal Layout</h5>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center mt-3 mt-lg-0">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-3.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Detached Layout</h5>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                    <div class="demo-box text-center">
+                        <img src="{% static 'app-design/assets/images/layouts/layout-5.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                        <h5 class="mt-3 f-17">Light Sidenav Layout</h5>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center mt-3 mt-lg-0">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-6.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Boxed Layout</h5>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center mt-3 mt-lg-0">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-4.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Semi Dark Layout</h5>
+                      </div>
+                  </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="news">
+              <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <h3>Berita Resmi <span class="text-primary">Statistik</span></h3>
+                        <p class="text-muted mt-2">Layanan infografis dan visualisasi data statistik interaktif.</p>
+                    </div>
                 </div>
+              </div>
+              <div class="row mt-3">
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Vertical Layout</h5>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center mt-3 mt-lg-0">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-2.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Horizontal Layout</h5>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center mt-3 mt-lg-0">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-3.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Detached Layout</h5>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                    <div class="demo-box text-center">
+                        <img src="{% static 'app-design/assets/images/layouts/layout-5.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                        <h5 class="mt-3 f-17">Light Sidenav Layout</h5>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center mt-3 mt-lg-0">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-6.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Boxed Layout</h5>
+                      </div>
+                  </div>
+                  <div class="col-lg-4 py-2">
+                      <div class="demo-box text-center mt-3 mt-lg-0">
+                          <img src="{% static 'app-design/assets/images/layouts/layout-4.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                          <h5 class="mt-3 f-17">Semi Dark Layout</h5>
+                      </div>
+                  </div>
               </div>
             </div>
           </div>
-        </div>
+      </div>
+    </div>
 
-        <div class="row" style="margin-top: 50px">
-          <div class="col-12 table-responsive">
-            <table
-              class="table table-hover table-centered mb-0 w-100 dt-responsive"
-              id="data_table_checkasdasd"
-            >
-              <thead>
-                <tr>
-                  <th style="width: 5px !important">No</th>
-                  <th style="width: 400px !important">Data Statistik</th>
-                  <th>Kategori Statistik</th>
-                  <th>Ketersedian Tahun</th>
-                  <th>Periode Data</th>
-                  <th>Tanggal Rilis</th>
-                </tr>
-              </thead>
-              <tbody class="text-muted"></tbody>
-            </table>
-          </div>
-        </div>
+    <div class="row py-4 px-4">
+      <div class="col-12">
+          <ul class="nav nav-pills nav-justified mt-3" style="font-size:13px">
+              <li class="nav-item mx-1">
+                  <a href="#infographs" data-bs-toggle="tab" class="nav-link active py-2" style="border-radius:20px;">
+                      <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                      <span class="d-none d-md-block">Infografis</span>
+                  </a>
+              </li>
+              <li class="nav-item">
+                <a href="#videographs" data-bs-toggle="tab" class="nav-link py-2" style="border-radius:20px;">
+                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Videografis</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#pubs" data-bs-toggle="tab" class="nav-link py-2" style="border-radius:20px;">
+                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Publikasi</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#news" data-bs-toggle="tab" class="nav-link py-2" style="border-radius:20px;">
+                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                    <span class="d-none d-md-block">Berita Resmi Statistik</span>
+                </a>
+              </li>
+          </ul>
       </div>
     </div>
   </div>
 </section>
-
-<!-- Dark Filled Modal -->
-{% comment %} <div class="modal fade" id="bs-example-modal-lg" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-xl">
-    <div class="modal-content">
-      <div class="modal-body text-center pt-2 px-0 pb-0 mb-0">
-        <h4
-          class="mb-2 text-secondary"
-          id="myLargeModalLabel"
-          style="font-size: 18px"
-        >
-          <i>Luas Panen dan Produksi Jagung di Indonesia 2023</i>
-        </h4>
-        <iframe
-          style="margin-bottom: -5px"
-          id="Geeks3"
-          width="1136"
-          height="580"
-          src="https://www.youtube.com/embed/V5he1JXiQbg?autoplay=1"
-          frameborder="0"
-          allowfullscreen
-        ></iframe>
-      </div>
-    </div>
-    <!-- /.modal-content -->
-  </div>
-  <!-- /.modal-dialog -->
-</div> {% endcomment %}
-<!-- /.modal -->
 
 {% endblock main-content %}
 
@@ -682,13 +606,104 @@
 <script src="https://cdn.jsdelivr.net/jquery.slick/1.4.1/slick.min.js"></script>
 
 <script>
-  $('.slick-test').slick({
+
+  const responive_slicker_adjs = [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3,
+        infinite: true,
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    }
+  ]
+
+  $('.slick-test, .slick-infographs').slick({
     infinite: true,
     slidesToShow: 4,
     slidesToScroll: 2,
     autoplay: true,
     autoplaySpeed: 5000,
+    responsive : [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
   })
+
+  $('.slick-videographs').slick({
+    infinite: false,
+    slidesToShow: 4,
+    slidesToScroll: 2,
+    autoplay: false,
+    autoplaySpeed: 5000,
+  })
+
+
+  $('.slick-subjects, .slick-subjects2').slick({
+    infinite: false,
+    slidesToShow: 6,
+    slidesToScroll: 2,
+    autoplay: false,
+    responsive : [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: false,
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  })
+
 </script>
 
 <script>
@@ -696,10 +711,10 @@
     info: false,
     searching: false,
     lengthChange: false,
-    fixedColumns: true,
     pageLength: 5,
     processing: true,
     serverSide: true,
+    bAutoWidth: false,
     ajax: {
       url: "{% url 'app:data-tracing-app' %}",
       headers: {
@@ -714,10 +729,9 @@
       },
     },
     columns: [
-      { data: "no" },
-      { data: "indicator_id__name" },
+      { data: "no", width: '5%',},
+      { data: "indicator_id__name", width: '50%'},
       { data: "indicator_id__subject_id__name" },
-      { data: "year" },
       { data: "indicator_id__time_period_id__name" },
       { data: "created_at" },
     ],

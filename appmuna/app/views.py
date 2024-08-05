@@ -228,17 +228,15 @@ class HomeDataTraceClassView(LoginRequiredMixin, View):
         for obj in object_list:
             obj_dt = models.BackendContentIndicatorsModel.objects.filter(indicator_id = obj['indicator_id'], year=obj['year'], item_period=obj['item_period']).first()
             obj_period = models.BackendPeriodNameItemsModel.objects.filter(pk = obj_dt.item_period).first()
-
             data.append(
             {
                 'no': [x for x in id_def_data if obj_dt.indicator_id.id == x[1] and obj_dt.year == x[2] and obj_dt.item_period == x[3]][0][0],
                 'indicator_id__name': obj_dt.indicator_id.name,
                 'indicator_id__subject_id__name': obj_dt.indicator_id.subject_id.name,
-                'indicator_id__time_period_id__name': obj_period.item_period,
-                'year': obj_dt.year,
-                'item_period': obj_dt.item_period,
+                'indicator_id__time_period_id__name': f'{obj_period.item_period} {obj_dt.year}',
                 'created_at' : obj_dt.created_at.strftime('%d %b %Y'),
             })
+            
         return {    
             'draw': draw,
             'recordsTotal': records_total,
@@ -723,7 +721,6 @@ class StrategicDataClassView(View):
             if check is None:
                 src_colls.append(src)
 
-        pprint(datasets)
         context = {
             'title' : 'Indikator Data Strategis',
             'datasets' : datasets,
