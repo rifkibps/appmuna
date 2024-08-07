@@ -38,6 +38,11 @@
     background-color: #f8f8f8;
     outline: 0 none;
   }
+
+  .nav-pills > li > a.active {
+    background-color: #FA5C7C !important;
+  }
+
 </style>
 {% endblock css-extender %}
 
@@ -399,7 +404,7 @@
                 </div>
                 <div class="row mt-2">
                   <div class="col-12 table-responsive">
-                    <table class="table table-hover table-centered mb-0 w-100 dt-responsive" id="data_table_check">
+                    <table class="table table-hover table-centered mb-0 w-100 dt-responsive" id="data_table_checka">
                       <thead>
                         <tr>
                           <th>No</th>
@@ -425,7 +430,7 @@
     <div class="row mb-3">
       <div class="col-lg-12">
         <div class="text-left">
-          <h2 class="text-muted">Media Statistik</h2>
+          <h2>Media Statistik</h2>
         </div>
       </div>
     </div>
@@ -433,38 +438,44 @@
     <div class="row mt-4">
       <div class="col-12">
           <div class="tab-content">
-            <div class="tab-pane" id="infographs">
+            <div class="tab-pane show active" id="infographs">
+              <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <h3>Publikasi <span class="text-primary">Statistik</span></h3>
+                        <p class="text-muted mt-2">Layanan infografis dan visualisasi data statistik interaktif.</p>
+                    </div>
+                </div>
+              </div>
               <div class="slick-infographs mt-3">
                 {% for infograph in infographcs %}
                   {% for infograph_dt in infograph.items %}
-                    <div class="card mx-2">
-                      <img src="/media/{{infograph_dt.thumbnail}}" class="card-img-top" alt="..." height="430" >
-                      <div class="card-body">
-                        <h5 class="card-title">
-                          <a href="#" class="text-muted"><span>{{infograph_dt.title}}</span></a>
-                        </h5>
-                        <p class="card-text text-truncate">{{infograph_dt.desc}}</p>
-                      </div>
+                    <div class="demo-box text-center mt-3 mt-lg-0 mx-1">
+                        <img src="/media/{{infograph_dt.thumbnail}}" alt="Infografis {{infograph_dt.title}}" class="img-fluid shadow-sm rounded">
+                        <h5 class="mt-3 f-17">{{infograph_dt.title}}</h5>
                     </div>
                   {% endfor %}
                 {% endfor %}
               </div>
             </div>
-            <div class="tab-pane show active" id="videographs">
-              <div class="slick-videographs mt-3">
-                {% for pub in pubs %}
-                  {% for pub_dt in pub.items %}
-                  <div class="card">
-                    <img src="/media/{{pub_dt.thumbnail}}" class="card-img-top">
-                    <div class="card-body">
-                      <h5 class="card-title">
-                        <a href="#" class="text-primary stretched-link" >{{pub_dt.title}}</a>
-                      </h5>
-                      <p class="card-text">{{pub_dt.desc}}</p>
+            <div class="tab-pane" id="videographs">
+              <div class="row">
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <h3>Videografis <span class="text-primary">Statistik</span></h3>
+                        <p class="text-muted mt-2">Layanan infografis dan visualisasi data statistik interaktif.</p>
                     </div>
-                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="slick-videographs mt-3">
+                  {% for i in '1234567890' %}
+                    <div class="demo-box text-center mt-3 mt-lg-0 mx-1">
+                        <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                        <h5 class="mt-3 f-17">Vertical Layout</h5>
+                    </div>
                   {% endfor %}
-                {% endfor %}
+                </div>
               </div>
             </div>
             <div class="tab-pane" id="pubs">
@@ -476,122 +487,41 @@
                     </div>
                 </div>
               </div>
-              <div class="row mt-3">
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Vertical Layout</h5>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center mt-3 mt-lg-0">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-2.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Horizontal Layout</h5>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center mt-3 mt-lg-0">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-3.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Detached Layout</h5>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                    <div class="demo-box text-center">
-                        <img src="{% static 'app-design/assets/images/layouts/layout-5.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Light Sidenav Layout</h5>
+
+              <div class="slick-pubs mt-3">
+                {% for pub in pubs %}
+                  {% for pub_dt in pub.items %}
+                    <div class="demo-box text-center mt-3 mt-lg-0 mx-1">
+                      <img src="/media/{{pub_dt.thumbnail}}" alt="Infografis {{pub_dt.title}}" class="img-fluid shadow-sm rounded">
+                      <h5 class="mt-3 f-17">{{pub_dt.title}}</h5>
                     </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center mt-3 mt-lg-0">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-6.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Boxed Layout</h5>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center mt-3 mt-lg-0">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-4.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Semi Dark Layout</h5>
-                      </div>
-                  </div>
-              </div>
-            </div>
-            <div class="tab-pane" id="news">
-              <div class="row">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h3>Berita Resmi <span class="text-primary">Statistik</span></h3>
-                        <p class="text-muted mt-2">Layanan infografis dan visualisasi data statistik interaktif.</p>
-                    </div>
-                </div>
-              </div>
-              <div class="row mt-3">
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Vertical Layout</h5>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center mt-3 mt-lg-0">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-2.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Horizontal Layout</h5>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center mt-3 mt-lg-0">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-3.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Detached Layout</h5>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                    <div class="demo-box text-center">
-                        <img src="{% static 'app-design/assets/images/layouts/layout-5.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Light Sidenav Layout</h5>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center mt-3 mt-lg-0">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-6.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Boxed Layout</h5>
-                      </div>
-                  </div>
-                  <div class="col-lg-4 py-2">
-                      <div class="demo-box text-center mt-3 mt-lg-0">
-                          <img src="{% static 'app-design/assets/images/layouts/layout-4.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                          <h5 class="mt-3 f-17">Semi Dark Layout</h5>
-                      </div>
-                  </div>
+                  {% endfor %}
+                {% endfor %}
               </div>
             </div>
           </div>
       </div>
     </div>
 
-    <div class="row py-4 px-4">
-      <div class="col-12">
+    <div class="row py-3 px-4 align-items-center justify-content-center">
+      <div class="col-5">
           <ul class="nav nav-pills nav-justified mt-3" style="font-size:13px">
               <li class="nav-item mx-1">
-                  <a href="#infographs" data-bs-toggle="tab" class="nav-link active py-2" style="border-radius:20px;">
+                  <a href="#infographs" data-bs-toggle="tab" class="nav-link active py-2" style="border-radius:20px;" onclick="init_slick('.slick-infographs')">
                       <i class="mdi mdi-home-variant d-md-none d-block"></i>
                       <span class="d-none d-md-block">Infografis</span>
                   </a>
               </li>
               <li class="nav-item">
-                <a href="#videographs" data-bs-toggle="tab" class="nav-link py-2" style="border-radius:20px;">
+                <a href="#videographs" data-bs-toggle="tab" class="nav-link py-2" style="border-radius:20px;" onclick="init_slick('.slick-videographs')">
                     <i class="mdi mdi-home-variant d-md-none d-block"></i>
                     <span class="d-none d-md-block">Videografis</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#pubs" data-bs-toggle="tab" class="nav-link py-2" style="border-radius:20px;">
+                <a href="#pubs" data-bs-toggle="tab" class="nav-link py-2" style="border-radius:20px;" onclick="init_slick('.slick-pubs')">
                     <i class="mdi mdi-home-variant d-md-none d-block"></i>
                     <span class="d-none d-md-block">Publikasi</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#news" data-bs-toggle="tab" class="nav-link py-2" style="border-radius:20px;">
-                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
-                    <span class="d-none d-md-block">Berita Resmi Statistik</span>
                 </a>
               </li>
           </ul>
@@ -607,32 +537,43 @@
 
 <script>
 
-  const responive_slicker_adjs = [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        infinite: true,
-      }
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2
-      }
-    },
-    {
-      breakpoint: 480,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1
-      }
-    }
-  ]
+  function init_slick(target){
+    $(target).slick('refresh')
+  }
 
-  $('.slick-test, .slick-infographs').slick({
+  $('.slick-infographs, .slick-videographs, .slick-pubs').slick({
+    infinite: true,
+    slidesToShow: 4,
+    slidesToScroll: 2,
+    autoplay: false,
+    autoplaySpeed: 5000,
+    responsive : [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  })
+ 
+  $('.slick-test').slick({
     infinite: true,
     slidesToShow: 4,
     slidesToScroll: 2,
@@ -663,15 +604,6 @@
       }
     ]
   })
-
-  $('.slick-videographs').slick({
-    infinite: false,
-    slidesToShow: 4,
-    slidesToScroll: 2,
-    autoplay: false,
-    autoplaySpeed: 5000,
-  })
-
 
   $('.slick-subjects, .slick-subjects2').slick({
     infinite: false,

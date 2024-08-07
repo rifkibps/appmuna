@@ -6,44 +6,18 @@
     <meta charset="utf-8" />
     <title>{{ title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      content="A fully featured admin theme which can be used to build CRM, CMS, etc."
-      name="description"
-    />
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Coderthemes" name="Rifki Gustiawan" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico" />
     <!-- third party css -->
-    <link
-      href="{% static 'app-design/assets/css/vendor/dataTables.bootstrap5.css' %}"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link href="{% static 'app-design/assets/css/vendor/dataTables.bootstrap5.css' %}" rel="stylesheet" type="text/css"/>
 
-    <link
-      href="{% static 'app-design/assets/css/vendor/responsive.bootstrap5.css' %}"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link href="{% static 'app-design/assets/css/vendor/responsive.bootstrap5.css' %}" rel="stylesheet" type="text/css"/>
     <!-- third party css end -->
-
-    <link
-      href="{% static 'app-design/assets/css/icons.min.css' %}"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      href="{% static 'app-design/assets/css/app.min.css' %}"
-      rel="stylesheet"
-      type="text/css"
-      id="light-style"
-    />
-    <link
-      href="{% static 'app-design/assets/css/app-dark.min.css' %}"
-      rel="stylesheet"
-      type="text/css"
-      id="dark-style"
-    />
+    <link href="{% static 'app-design/assets/css/icons.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'app-design/assets/css/app.min.css' %}" rel="stylesheet" type="text/css" id="light-style"/>
+    <link href="{% static 'app-design/assets/css/app-dark.min.css' %}" rel="stylesheet" type="text/css" id="dark-style"/>
 
     <style>
       /* width */
@@ -76,17 +50,7 @@
     {% block css-extender %} {% endblock css-extender %}
   </head>
 
-  <body
-    class="loading"
-    {%
-    block
-    data_layout
-    %}{%
-    endblock
-    data_layout
-    %}
-    data-layout-config='{"layoutBoxed":false,"darkMode":false,"showRightSidebarOnStart": true}'
-  >
+  <body class="loading" {% block data_layout %} {% endblock data_layout %} data-layout-config='{"layoutBoxed":false,"darkMode":false,"showRightSidebarOnStart": true}' >
     <!-- Pre-loader -->
     <div id="preloader">
       <div id="status">
@@ -104,126 +68,65 @@
       <div class="container">
         <!-- logo -->
         <a href="{% url 'home:homepage' %}" class="navbar-brand me-lg-5">
-          <img
-            src="{% static 'customs/images/bps_kab_muna_dark.png' %}"
-            alt=""
-            class="logo-dark"
-            height="45"
-          />
+          <img src="{% static 'customs/images/bps_kab_muna_dark.png' %}" alt="" class="logo-dark" height="45"/>
         </a>
 
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDropdown"
-          aria-controls="navbarNavDropdown"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
           <i class="mdi mdi-menu"></i>
         </button>
 
         <!-- menus -->
-
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
+
           <!-- left menu -->
           <ul class="navbar-nav me-auto align-items-center">
-            <li class="nav-item mx-lg-1">
-              <a class="nav-link active" href="{% url 'app:home-app' %}"
-                >Beranda</a
-              >
-            </li>
-            <li class="nav-item dropdown mx-lg-1">
-              <a
-                class="nav-link dropdown-toggle arrow-none"
-                href="#"
-                id="stats-data"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Data Statistik
-                <div class="arrow-down"></div>
-              </a>
-              <div class="dropdown-menu" aria-labelledby="stats-data">
-                <a href="{% url 'app:statistics-app' %}" class="dropdown-item"
-                  >Tabel Statistik</a
-                >
-                <a href="{% url 'app:strategic-app' %}" class="dropdown-item"
-                  >Indikator Strategis</a
-                >
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle arrow-none"
-                href="#"
-                id="topnav-layouts"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Media Statistik
-                <div class="arrow-down"></div>
-              </a>
-              <div class="dropdown-menu" aria-labelledby="topnav-layouts">
-                <a href="{% url 'app:publications' %}" class="dropdown-item">Berita Statistik</a>
-                <a href="{% url 'app:publications' %}" class="dropdown-item"
-                  >Publikasi Statistik</a
-                >
-                <a href="{% url 'app:infographs' %}" class="dropdown-item">Infografis</a>
-                <a href="{% url 'app:videographics' %}" class="dropdown-item">Videografis</a>
-              </div>
-            </li>
-            <li class="nav-item mx-lg-1">
-              <a class="nav-link" href="{% url 'app:data-request-app' %}"
-                >Layanan Statistik</a
-              >
-            </li>
+              <li class="nav-item mx-lg-1">
+                  <a class="nav-link active" href="{% url 'app:home-app' %}">Beranda</a>
+              </li>
+              <li class="nav-item mx-lg-1">
+                  <a class="nav-link" href="{% url 'app:statistics-app' %}">Tabel Statistik</a>
+              </li>
+              <li class="nav-item mx-lg-1">
+                  <a class="nav-link" href="{% url 'app:strategic-app' %}">Data Strategis</a>
+              </li>
+              <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layouts" role="button" data-bs-toggle="dropdown">
+                    Media Statistik <div class="arrow-down"></div>
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="topnav-layouts">
+                    <a href="{% url 'app:publications' %}" class="dropdown-item">Berita Statistik</a>
+                    <a href="{% url 'app:publications' %}" class="dropdown-item">Publikasi Statistik</a>
+                    <a href="{% url 'app:infographs' %}" class="dropdown-item">Infografis</a>
+                    <a href="{% url 'app:videographics' %}" class="dropdown-item">Videografis</a>
+                  </div>
+                </li>
+              <li class="nav-item mx-lg-1">
+                  <a class="nav-link" href="{% url 'app:data-request-app' %}">Layanan Statistik</a>
+              </li>
           </ul>
 
           <!-- right menu -->
           <ul class="navbar-nav ms-auto align-items-center">
-            {% if request.user.is_authenticated %}
-            <li class="nav-item me-0">
-              <form action="{% url 'auth:logout' %}" method="post">
-                {% csrf_token %}
-                <a type="submit" class="nav-link d-lg-none">Bank Data</a>
-                <button
-                  type="submit"
-                  class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex"
-                  data-bs-container="body"
-                  data-bs-toggle="popover"
-                  data-bs-trigger="hover"
-                  data-bs-placement="bottom"
-                  data-bs-content="Halo, Rifki Gustiawan !"
-                  title=""
-                >
-                  <i class="mdi mdi-logout me-2"></i> Logout
-                </button>
-              </form>
-            </li>
-            {% else %}
-            <li class="nav-item me-0">
-              <a
-                href="../../product/hyper-responsive-admin-dashboard-template/index.htm"
-                target="_blank"
-                class="nav-link d-lg-none"
-                >Login Sekarang</a
-              >
-              <a
-                href="../../product/hyper-responsive-admin-dashboard-template/index.htm"
-                target="_blank"
-                class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex"
-              >
-                <i class="mdi mdi-login me-2"></i> Login Sekarang
-              </a>
-            </li>
-            {% endif %}
+              {% if request.user.is_authenticated %}
+                  <li class="nav-item me-0">
+                      <form action="{% url 'auth:logout' %}" method="post">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-light btn-rounded d-none d-lg-inline-flex py-2 px-3" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Halo, {% if request.user.get_full_name %} {{request.user.get_full_name}} {% else %} {{request.user.username}} {% endif %} !" title="">
+                              <i class="mdi mdi-logout me-2"></i>Logout 
+                              
+                          </button>
+                      </form>
+                  </li>   
+              {% else %}
+                  <li class="nav-item me-0">
+                      <a href="{% url 'auth:login' %}" target="_blank" class="nav-link d-lg-none">Login</a>
+                      <a href="{% url 'auth:login' %}" target="_blank" class="btn btn-light btn-rounded d-none d-lg-inline-flex py-2 px-3">
+                          <i class="mdi mdi-login me-2"></i> Login Sekarang
+                      </a>
+                  </li>
+              {% endif %}
           </ul>
+
         </div>
       </div>
     </nav>
@@ -325,32 +228,11 @@
           <div class="col-lg-2 mt-3 mt-lg-0">
             <h5 class="text-light">Menu</h5>
             <ul class="list-unstyled ps-0 mb-0 mt-3">
-              <li class="mt-2">
-                <a href="javascript: void(0);" class="text-muted"
-                  >Data Strategis</a
-                >
-              </li>
-              <li class="mt-2">
-                <a href="javascript: void(0);" class="text-muted"
-                  >Data Kinerja Pembangunan</a
-                >
-              </li>
-              <li class="mt-2">
-                <a href="javascript: void(0);" class="text-muted"
-                  >Tabel Statistik</a
-                >
-              </li>
-              <li class="mt-2">
-                <a href="javascript: void(0);" class="text-muted"
-                  >Berita Statistik</a
-                >
-              </li>
-              <li class="mt-2">
-                <a href="javascript: void(0);" class="text-muted"
-                  >Permohonan Data</a
-                >
-              </li>
-            </ul>
+              <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Tabel Statistik</a></li>
+              <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Data Strategis</a></li>
+              <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Layanan Statistik</a></li>
+              <li class="mt-2"><a href="javascript: void(0);" class="text-muted">Media Statistik</a></li>
+          </ul>
           </div>
 
           <div class="col-lg-2 mt-3 mt-lg-0">

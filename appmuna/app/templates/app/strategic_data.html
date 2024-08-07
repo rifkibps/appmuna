@@ -1,6 +1,7 @@
 {% extends 'horizontal/home_app.html' %}
 {% load filter_tags %}
 {% load static %}
+{% load mathfilters %}
 
 {% block css-extender %}
 
@@ -181,10 +182,24 @@
     </div>
 </section>
 
-<section class="pt-2 pb-5">
-
+<section class="py-4">
     <div class="container">
-        <div class="row py-3 px-4">
+        <div class="row px-2 align-items-center justify-content-start">
+            <div class="col-{{datasets|length|add:1}}">
+                <ul class="nav nav-pills nav-justified mt-3" style="font-size:13px">
+                    {% for dt in datasets  %}
+                        <li class="nav-item mx-1">
+                            <a href="#tab_{{dt.group}}" data-bs-toggle="tab" class="nav-link {% if forloop.first %}active{% endif %} py-2" style="border-radius:20px;" >
+                                <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                <span class="d-none d-md-block">{{dt.group}}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="row py-2 px-4 d-none">
             <div class="col-12">
                 <ul class="nav nav-pills bg-nav-pills nav-justified mt-3" style="border-radius:20px; font-size:13px">
                     {% for dt in datasets  %}
@@ -199,7 +214,7 @@
             </div>
         </div>
 
-        <div class="row py-2">
+        <div class="row py-1">
             <div class="col-12">
                 <div class="tab-content">
                     {% for dt in datasets %}
@@ -268,9 +283,10 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <h5 class="font-weight-light font-13 mt-3">Keterangan:</h5>
-                                            <ul><li class="font-13">None : Data belum tersedia</li></ul>
-                                            <h5 class="font-weight-light font-13 mt-2">Sumber:</h5>
+                                            <h5 class="font-13 mt-1" style="font-weight:normal!important">Keterangan: </h5>
+                                            <ul class="px-2"><li class="font-13" style="list-style:None">NA : Data belum tersedia</li></ul>
+
+                                            <h5 class="font-weight-light font-13 mt-3">Sumber:</h5>
                                             <ul>{% for src in sources  %}<li class="font-13">{{src}}</li>{% endfor %}</ul>
                                         </div>
                                     </div>
