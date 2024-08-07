@@ -376,8 +376,8 @@ class BackendDataConsultModel(models.Model):
 class BackendDataConsultResponsModel(models.Model):
 
    class Meta:
-      verbose_name = 'Renspons Konsultasi Data' 
-      verbose_name_plural = 'Renspons Konsultasi Data'
+      verbose_name = 'Respons Konsultasi Data' 
+      verbose_name_plural = 'Respons Konsultasi Data'
 
    adm_state = (
       ('1', 'Ya'),
@@ -444,3 +444,34 @@ class BackendPublicationsModel(models.Model):
 
    def __str__(self):
       return f"{self.id} {self.title} | {self.catalog_no} | {self.publication_no}"
+   
+class BackendDashboardSummarizeModel(models.Model):
+
+   class Meta:
+      verbose_name = 'Highlight Dashboard Item' 
+      verbose_name_plural = 'Highlight Dashboard Item'
+
+   state = (
+      ('1', 'Ya'),
+      ('2', 'Tidak')
+   )
+   colors_tag = (
+      ('1', 'ribbon-primary'),
+      ('2', 'ribbon-warning'),
+      ('3', 'ribbon-danger'),
+      ('4', 'ribbon-info'),
+   )
+
+   title = models.CharField(max_length=30, null=False, blank=False, verbose_name='Judul Item')
+   indicator_id = models.ForeignKey(BackendIndicatorsModel, on_delete=models.PROTECT, null=True, blank=True, related_name='table_reference')
+   year = models.CharField(max_length=5, null=False, blank=False, verbose_name='Tahun Data')
+   item_period = models.CharField(max_length=32, null=False, blank=False, verbose_name='Periode Waktu')
+   unit_id = models.CharField(max_length=255, null=True, blank=True, verbose_name = 'Satuan Data')
+   value = models.DecimalField(null=True, blank=True, verbose_name = 'Nilai', decimal_places = 2, max_digits=50)
+   color_tag = models.CharField(max_length=1, choices = colors_tag, null=True, blank=True, verbose_name = 'Color Tag')
+   tag = models.CharField(max_length=255, null=True, blank=True, verbose_name = 'Tag')
+   is_show = models.CharField(max_length=1, choices = state, default="1", null=False, blank=False, verbose_name='Tampilkan Data?')
+   created_at = models.DateField(auto_now_add = True, editable=False)
+   
+   def __str__(self):
+      return f"{self.id} {self.title}"

@@ -50,3 +50,5 @@ admin.site.register(models.BackendPublicationsModel)
 
 admin.site.register(models.BackendDataConsultModel)
 
+admin.site.register(models.BackendDashboardSummarizeModel)
+

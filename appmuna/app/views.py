@@ -120,7 +120,7 @@ class HomeAppClassView(View):
             'cards' : card_data_pages,
             'pubs' : pubs_data_card,
             'infographcs' : infographs_data_card,
-
+            'dashboard' : ['Persentase Penduduk Miskin Muna', 'Pertumbuhan Ekonomi','Inflasi','Nilai Impor','Angka Harapan Hidup','IPM Muna','Nilai Ekspor' ],
             'stats_news' : stats_news,
             'pubs_data': pubs[:9],
             'infographs_data' : infographics[:8],
