@@ -75,7 +75,6 @@
                 {% for item in items_summarize %}
                     <div class="card widget-flat py-2 mx-1" style="box-shadow:none">
                         <div class="card-body">
-            
                             <div class="float-end" style="font-size:30px">
                                 <i class="mdi mdi-pulse widget-icon"></i>
                             </div>
@@ -192,27 +191,38 @@
     </div>
 </section>
 
-<section class="py-5">
+<section class="py-5 bg-light-lighten border-top border-bottom border-light">
     <div class="container">
-        <div class="row pb-3 align-items-center">
-            <div class="slick-slider">
-                {% for i in '123456789'  %}
-                    <div class="card" style="margin-right:20px!important">
-                        <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <h5 class="card-title"><a href="#" class="text-primary stretched-link">Card with stretched link</a></h5>
-                            <p class="card-text">
-                                Some quick example text to build on the card up the bulk of the card's content.
-                            </p>
-                        </div> <!-- end card-body -->
-                    </div> <!-- end card -->
-                {% endfor %}
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center">
+                    <h3>Flexible <span class="text-primary">Layouts</span></h3>
+                    <p class="text-muted mt-2">There are three different layout options available to cater need for
+                        any <br> modern web
+                        application.</p>
+                </div>
             </div>
+        </div>
+        <div class="slick-features mt-4">
+            {% for i in '123456' %}
+                <div class="demo-box text-center mx-2">
+                    <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                    <h5 class="mt-3 fw-normal" data-bs-toggle="modal" data-bs-target="#centermodal">Vertical Layout</h5>
+                </div>
+                <div class="demo-box text-center mt-3 mt-lg-0  mx-2">
+                    <img src="{% static 'app-design/assets/images/layouts/layout-2.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                    <h5 class="mt-3 fw-normal" onclick="return alert('Hello World')">Horizontal Layout</h5>
+                </div>
+                <div class="demo-box text-center mt-3 mt-lg-0  mx-2">
+                    <img src="{% static 'app-design/assets/images/layouts/layout-3.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+                    <h5 class="mt-3 fw-normal" onclick="return alert('Hello World')">Detached Layout</h5>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </section>
 
-<section class="py-5 bg-light-lighten border-top border-bottom border-light">
+<section class="py-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -281,6 +291,17 @@
     </div> <!-- end container-->
 </section>
 
+<!-- Center modal -->
+<div class="modal fade" id="centermodal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-white">
+            <div class="modal-body">
+                <img src="{% static 'app-design/assets/images/layouts/layout-2.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 {% endblock main-content %}
 
 {% block js-extender %}
@@ -289,7 +310,7 @@
     <script src="https://cdn.jsdelivr.net/jquery.slick/1.4.1/slick.min.js"></script>
 
     <script>
-        $('.slick-slider, .slick-summarize').slick({
+        $('.slick-slider, .slick-summarize, .slick-features').slick({
         infinite: true,
         slidesToShow: 4,
         slidesToScroll: 2,
