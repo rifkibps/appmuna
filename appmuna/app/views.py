@@ -9,7 +9,7 @@ from backend import models, forms
 from pprint import pprint
 
 import json
-from .helpers import get_chart_data, get_list_periods, get_content_table, split_list, get_content_comparison, get_table_summarizer
+from .helpers import get_chart_data, get_list_periods, get_content_table, split_list, get_content_comparison, get_table_summarizer, get_highlight_dashboard_items
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -105,11 +105,6 @@ class HomeAppClassView(View):
 
         videographs = models.BackendVideoGraphicsModel.objects.order_by('-created_at')
 
-        stats_news = models.BackendStatsNewsModel.objects.order_by('-created_at').values()[:4]
-        for val in stats_news:
-            content = list(val['content'].split(" ")) 
-            val['content']  =  f"{' '.join(content[:20])} ..."
-
         stats_data = models.BackendIndicatorsModel.objects.order_by('created_at')[:4]
         stats_data_str = models.BackendIndicatorsModel.objects.filter(level_data = '1').order_by('created_at')[:4]
         stats_data_ikm = models.BackendIndicatorsModel.objects.filter(level_data = '2').order_by('created_at')[:4]
@@ -120,8 +115,7 @@ class HomeAppClassView(View):
             'cards' : card_data_pages,
             'pubs' : pubs_data_card,
             'infographcs' : infographs_data_card,
-            'dashboard' : ['Persentase Penduduk Miskin Muna', 'Pertumbuhan Ekonomi','Inflasi','Nilai Impor','Angka Harapan Hidup','IPM Muna','Nilai Ekspor' ],
-            'stats_news' : stats_news,
+            'items_summarize' : get_highlight_dashboard_items(),
             'pubs_data': pubs[:9],
             'infographs_data' : infographics[:8],
             'videographs_data' : videographs[:9],
@@ -637,9 +631,7 @@ class VideographicPreviewClassView(View):
 class StrategicDataClassView(View):
 
     def get(self,request):
-
-        # indicator_id = 14
-        # model = models.BackendIndicatorsModel.objects.filter(Q(pk=indicator_id)).order_by('time_period_id__name', 'name')
+        # Program Masih cacat
         model = models.BackendIndicatorsModel.objects.filter(~Q(level_data=0)).order_by('time_period_id__name', 'name')
 
         datasets = []
@@ -654,6 +646,7 @@ class StrategicDataClassView(View):
 
                 if dt.unit_id.is_agg == '0': # Tidak dapat diagregatkan
                     continue
+                # harus dicek dulu, klo dia gaada kolom atau langsung series, maka gaperlu liat is_agg != '0'
 
                 qry_content = get_content_table(indicator_id = dt.pk, force_agg = 'sum')
                 list_values = []

@@ -113,7 +113,6 @@
                           {% csrf_token %}
                           <button type="submit" class="btn btn-light btn-rounded d-none d-lg-inline-flex py-2 px-3" data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-content="Halo, {% if request.user.get_full_name %} {{request.user.get_full_name}} {% else %} {{request.user.username}} {% endif %} !" title="">
                               <i class="mdi mdi-logout me-2"></i>Logout 
-                              
                           </button>
                       </form>
                   </li>   

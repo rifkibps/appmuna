@@ -159,22 +159,24 @@
 <section class="pb-4" style="margin-top: -45px">
   <div class="container">
     <div class="row align-items-center">
-      <div class="slick-test" >
-        {% for i in dashboard %}
-          <div class="card widget-flat py-2 mx-1 ribbon-box" style="box-shadow:none">
+      <div class="slick-items" >
+        {% for item in items_summarize %}
+          <div class="card widget-flat py-2 mx-1 {% if item.tag_state is True %}ribbon-box{% endif %}" style="box-shadow:none">
             <div class="card-body">
-              <div class="ribbon ribbon-primary float-start" style="margin-top:-25px"><i class="mdi mdi-access-point me-1"></i> Terbaru</div>
-              <div style="margin-top:26px">
+              {% if item.tag_state is True %}
+                <div class="ribbon {{item.color_tag|safe}} float-start" style="margin-top:-25px">{{item.tag|safe}}</div>
+              {% endif %}
+              <div {% if item.tag_state is True %}style="margin-top:26px"{% endif %}>
                 <div class="float-end" style="font-size:30px">
                   <i class="mdi mdi-pulse widget-icon"></i>
                 </div>
-                <h5 class="mt-0 fw-normal"> {{i}}</h5>
+                <h5 class="mt-0 fw-normal">{{item.title}}</h5>
                 <div class="mt-3" style="margin-bottom:20px">
-                  <h3 class="d-inline me-1">5,11</h3>
-                  <span style="font-size:18px">(Persen)</span>
+                  <h3 class="d-inline me-1">{{item.value}}</h3>
+                  <span style="font-size:18px">({{item.unit_id}})</span>
                 </div>
                 <p class="mb-0 text-muted">
-                  <span class="text-nowrap">Triwulan I 2024</span>
+                  <span class="text-nowrap">{{item.item_period}} {{item.year}}</span>
                 </p>
               </div>
             </div>
@@ -556,7 +558,7 @@
     ]
   })
  
-  $('.slick-test').slick({
+  $('.slick-items').slick({
     infinite: true,
     slidesToShow: 4,
     slidesToScroll: 2,

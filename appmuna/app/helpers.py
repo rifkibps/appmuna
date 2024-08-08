@@ -360,3 +360,95 @@ def get_chart_data(data, summarize = 'sum', is_aggregatable = True, chart_opts =
             chart_data['agg'] =  'Persen (%)'
 
     return chart_data
+
+def get_highlight_dashboard_items():
+
+    items = models.BackendDashboardSummarizeModel.objects.filter(is_show='1').order_by('-created_at')
+    data = []
+    for item in items:
+        tag_state = True if item.color_tag != None and item.tag != None else False
+        item_highlight = {
+            'title' : item.title,
+            'tag_state' : tag_state,
+            'color_tag' : item.get_color_tag_display(), 
+            'tag': item.tag,
+            'year' : item.year,
+        }
+
+        if item.indicator_id_id is not None:
+            
+            table = models.BackendIndicatorsModel.objects.filter(pk = item.indicator_id_id)
+            if table.exists():
+                dt_table = table.first()
+
+                # Case 1. Tabel tidak memiliki baris dan tidak memiliki kolom (baris == dummy dan series) [SOlVED]
+                # Case 2. Tabel memiliki baris dan tidak memiliki kolom 
+                # Case 3. Tabel tidak memiliki baris dan memiliki kolom 
+                # Case 4. Tabel memiliki baris dan kolom
+
+                have_rows = False if dt_table.row_group_id.row_items.first().order_num == 99 else True
+                have_cols = False if dt_table.col_group_id is None else True
+
+                case_1 = have_rows == False and have_cols == False
+                case_2 = have_rows == True and have_cols == False
+                case_3 = have_rows == False and have_cols ==  True
+                case_4 = have_rows == True and have_cols == True
+
+                qry_content = get_content_table(indicator_id = item.indicator_id_id, filter_=[f'{item.year}_{item.item_period}'])
+                if len(qry_content) == 0:
+                    continue
+
+                flatten_content = qry_content[0]['items'][0]['items'][0]
+                if case_1 or case_3 :
+                    # Case 1 & 3
+                    if case_1:
+                        item_highlight['item_period'] = flatten_content['item_period']
+                        item_highlight['value'] = flatten_content['items'][0]['value']
+                        item_highlight['unit_id'] = dt_table.unit_id.name
+
+                        data.append(item_highlight)
+                        continue
+
+                    if case_3:
+                        if dt_table.summarize_status != '0':
+                                for dt in flatten_content['items']:
+                                    if dt['item_char'] in ['Total', 'Rerata']:
+                                        item_highlight['item_period'] = flatten_content['item_period']
+                                        item_highlight['value'] = dt['value']
+                                        item_highlight['unit_id'] = dt_table.unit_id.name
+                                        data.append(item_highlight)
+                                        continue
+                
+                elif case_2 or case_4 :
+
+                    if dt_table.unit_id.is_agg == '1' and dt_table.summarize_status != '0':
+                        list_values = []
+                        for rows in qry_content:
+                            for years in rows['items']:
+                                for periods in years['items']:
+                                    for cols in periods['items']:
+                                        if cols['item_char'] in ['Total', 'Rerata']:
+                                            list_values.append(cols['value'])
+
+                        if dt_table.summarize_status == '1':
+                            val = round(float(sum(list_values)), dt_table.decimal_point)
+                        elif dt_table.summarize_status == '2':
+                            val = round(statistics.mean(list_values), dt_table.decimal_point)
+                        else:
+                            continue
+
+                        item_highlight['item_period'] = flatten_content['item_period']
+                        item_highlight['value'] = val
+                        item_highlight['unit_id'] = dt_table.unit_id.name
+
+                        data.append(item_highlight)
+                        continue
+
+        else:
+            item_highlight['item_period']  = item.item_period
+            item_highlight['unit_id']  = item.unit_id
+            item_highlight['value']  = round(item.value, 2)
+            data.append(item_highlight)
+            continue
+        
+    return data
