@@ -3,11 +3,40 @@ from backend import models
 from operator import itemgetter
 import statistics
 
+def get_subjects_lists(grouping=False):
+
+    subjects = models.BackendSubjectsModel.objects.order_by('subject_group', 'name')
+    if grouping:
+        subjs_data = []
+        for subj in subjects:
+            check_exist = next((index for (index, d) in enumerate(subjs_data) if d["groups"] == subj.get_subject_group_display()), None)
+            if check_exist is None:
+                subjs_data.append({
+                    "groups"    : subj.get_subject_group_display(),
+                    "items"     : [
+                        {
+                            'id' : subj.id,
+                            'item' : subj.name
+                        }
+                    ]
+                })
+            else:
+                subjs_data[check_exist]['items'].append(
+                    {
+                        'id' : subj.id,
+                        'item' : subj.name
+                    }
+                )
+        subjects = subjs_data
+    
+    return subjects
+    
+
 def randomColor(space) :
     colors = ['#A3E4D7','#76D7C4', '#48C9B0','#1ABC9C', '#17A589', '#148F77','#117864']
     return colors[:space]
 
-def split_list (list_dt,n_length):
+def split_list (list_dt, n_length):
     return [list_dt[i:i+n_length] for i in range(0, len(list_dt), n_length)]
 
 def get_table_summarizer(indicator_id, filter_ = []):

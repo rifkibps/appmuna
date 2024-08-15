@@ -196,7 +196,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="text-center">
-                    <h3>Flexible <span class="text-primary">Layouts</span></h3>
+                    <h3>Layanan <span class="text-primary">Tersedia</span></h3>
                     <p class="text-muted mt-2">There are three different layout options available to cater need for
                         any <br> modern web
                         application.</p>
@@ -229,66 +229,23 @@
                 <div class="text-center">
                     <h1 class="mt-0"><i class="mdi mdi-newspaper-variant-multiple-outline"></i></h1>
                     <h3>Frequently Asked Questions <span class="text-primary">(FAQ)</span></h3>
-                    <p class="text-muted mt-2">Berisi tentang pertanyaan pertanyaan yang sering diajukan.</p>
-                    <button type="button" class="btn btn-primary btn-sm mt-2 py-2 rounded"><i class="mdi mdi-newspaper me-1"></i>Muat lebih banyak FAQ</button>
+                    <p class="text-muted mt-2">Beberapa pertanyaan yang sering diajukan</p>
                 </div>
             </div>
         </div>
 
         <div class="row mt-5">
-            <div class="col-lg-5 offset-lg-1">
-                <!-- Question/Answer -->
-                <div>
-                    <div class="faq-question-q-box">Q.</div>
-                    <h4 class="faq-question text-body">Can I use this template for my client?</h4>
-                    <p class="faq-answer mb-4 pb-1 text-muted">Yup, the marketplace license allows you to use this theme
-                        in any end products.
-                        For more information on licenses, please refere <a href="../../licenses/index.htm" target="_blank">here</a>.</p>
+            {% for fq_item in faq %}
+                <div class="col-lg-5 offset-lg-1">
+                    <div>
+                        <div class="faq-question-q-box">Q.</div>
+                        <h4 class="faq-question text-body">{{fq_item.question}}</h4>
+                        <p class="faq-answer mb-4 pb-1 text-muted">{{fq_item.answer|safe}}</p>
+                    </div>
                 </div>
-
-                <!-- Question/Answer -->
-                <div>
-                    <div class="faq-question-q-box">Q.</div>
-                    <h4 class="faq-question text-body">How do I get help with the theme?</h4>
-                    <p class="faq-answer mb-4 pb-1 text-muted">Use our dedicated support email (support@coderthemes.com) to send your issues or feedback. We are here to help anytime.</p>
-                </div>
-                
-                <div>
-                    <div class="faq-question-q-box">Q.</div>
-                    <h4 class="faq-question text-body">How do I get help with the theme?</h4>
-                    <p class="faq-answer mb-4 pb-1 text-muted">Use our dedicated support email (support@coderthemes.com) to send your issues or feedback. We are here to help anytime.</p>
-                </div>
-            </div>
-            <!--/col-lg-5 -->
-
-            <div class="col-lg-5">
-                <!-- Question/Answer -->
-                <div>
-                    <div class="faq-question-q-box">Q.</div>
-                    <h4 class="faq-question text-body">Can this theme work with Wordpress?</h4>
-                    <p class="faq-answer mb-4 pb-1 text-muted">No. This is a HTML template. It won't directly with
-                        wordpress, though you can convert this into wordpress compatible theme.</p>
-                </div>
-
-                <!-- Question/Answer -->
-                <div>
-                    <div class="faq-question-q-box">Q.</div>
-                    <h4 class="faq-question text-body">Will you regularly give updates of Hyper?</h4>
-                    <p class="faq-answer mb-4 pb-1 text-muted">Yes, We will update the Hyper regularly. All the
-                        future updates would be available without any cost.</p>
-                </div>
-                <div>
-                    <div class="faq-question-q-box">Q.</div>
-                    <h4 class="faq-question text-body">Will you regularly give updates of Hyper?</h4>
-                    <p class="faq-answer mb-4 pb-1 text-muted">Yes, We will update the Hyper regularly. All the
-                        future updates would be available without any cost.</p>
-                </div>
-            </div>
-            <!--/col-lg-5-->
+            {% endfor %}
         </div>
-        <!-- end row -->
-
-    </div> <!-- end container-->
+    </div>
 </section>
 
 <!-- Center modal -->

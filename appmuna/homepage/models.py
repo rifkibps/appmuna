@@ -32,4 +32,17 @@ class MessagesRequestData(models.Model):
 
    def __str__(self):
       return f"{self.request.desc} [{self.msg}]"
+
+class FAQModels(models.Model):
+
+   class Meta:
+      verbose_name = 'FAQ' 
+      verbose_name_plural = 'FAQ'
+
+   question = models.CharField(max_length=256, null=False, blank=False, verbose_name='Pertanyaan' )
+   answer = models.TextField(null=False, blank=False, verbose_name='Jawaban')
+   created_at = models.DateField(auto_now_add = True, editable=False)
+   
+   def __str__(self):
+      return f"{self.pk}. {self.question}"
       

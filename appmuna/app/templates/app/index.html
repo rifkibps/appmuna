@@ -56,9 +56,7 @@
         <div class="">
           <div>
             <span class="badge bg-danger rounded-pill">Baru</span>
-            <span class="text-white-50 ms-1"
-              >Selamat datang di portal Satu Data Muna</span
-            >
+            <span class="text-white-50 ms-1">Selamat datang di portal Satu Data Muna</span>
           </div>
           <h2 class="text-white fw-normal mb-4 mt-3 hero-title">
             Telusuri Data Statistik Kabupaten Muna
@@ -76,62 +74,34 @@
                 <form action="{% url 'app:search-app' %}" method="get">
                   <div class="row gy-2 gx-2 align-items-center">
                     <div class="col-auto px-0">
-                      <input class="form-control" list="browserdata" id="browser" name="browser" placeholder="Filter Data" autocomplete="off"
-                        style=" width: 120px; height: 50px; background-color: #ffffff; padding-left: 20px; border: 0; border-radius: 5px;"/>
+                      <input class="form-control" list="browserdata" id="browser" name="browser" placeholder="Filter Data" autocomplete="off" style=" width: 120px; height: 50px; background-color: #ffffff; padding-left: 20px; border: 0; border-radius: 5px;"/>
                       <datalist id="browserdata">
                         <span style="font-size: 0.9em;font-weight: bold;padding: 0.4em 1.5em;">All</span>
-                        <br />
-                        {% for dt in subjects %} {% if dt.items|length > 0 %}
-                        <span
-                          style="
-                            font-size: 0.9em;
-                            font-weight: bold;
-                            padding: 0.4em 1.5em;
-                          "
-                        >
-                          <span
-                            class="text-warning fw-bold"
-                            style="font-size: 18px"
-                            ><i class="mdi mdi-minus"></i
-                          ></span>
-                          {{dt.groups}}
-                        </span>
-                        <br />
-                        {% for dt_item in dt.items %}
-                        <option value="{{dt_item.item}}">
-                          {{dt_item.item}}
-                        </option>
-                        {% endfor %} {% endif %} {% endfor %}
+                        <br>
+                        {% for dt in subjects %}
+                          {% if dt.items|length > 0 %}
+                            <span style=" font-size: 0.9em; font-weight: bold; padding: 0.4em 1.5em;">
+                              <span class="text-warning fw-bold" style="font-size: 18px" ><i class="mdi mdi-minus"></i></span>
+                              {{dt.groups}}
+                            </span>
+                            <br>
+                            {% for dt_item in dt.items %}
+                              <option value="{{dt_item.item}}">
+                                {{dt_item.item}}
+                              </option>
+                            {% endfor %}
+                          {% endif %} 
+                        {% endfor %}
                       </datalist>
                     </div>
                     <div class="col-auto">
                       <div class="input-group">
-                        <input
-                          type="text"
-                          class="form-control"
-                          placeholder="Telusuri data statistik ..."
-                          id="top-search-mitra"
-                          autocomplete="off"
-                          style="
-                            width: 420px;
-                            height: 50px;
-                            background-color: #ffffff;
-                            border-radius: 5px;
-                          "
-                        />
-                        <span
-                          class="mdi mdi-magnify search-icon"
-                          style="margin-top: 5px"
-                        ></span>
+                        <input type="text" class="form-control" placeholder="Telusuri data statistik ..." id="top-search-mitra" autocomplete="off" style="width: 420px;height: 50px;background-color: #ffffff;border-radius: 5px;"/>
+                        <span class="mdi mdi-magnify search-icon" style="margin-top: 5px"></span>
                       </div>
                     </div>
                     <div class="col-auto mt-2 px-0">
-                      <button
-                        class="btn btn-danger rounded"
-                        type="submit"
-                        style="height: 47px"
-                        id="button-top-search"
-                      >
+                      <button class="btn btn-danger rounded" type="submit" style="height: 47px" id="button-top-search">
                         Telusuri Data
                       </button>
                     </div>
@@ -264,37 +234,25 @@
     </div>
 
     <div class="row mt-2 py-4 align-items-center">
-      <div class="slick-subjects mb-3" >
-        {% for i in '12345678'  %}
-          <div class="card" style="box-shadow:none; margin-right:15px">
-            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">
-                <a href="#" class="text-primary stretched-link">Kemiskinan {{i}}</a>
-              </h5>
-              <p class="card-text font-11">
-                <b>Sosial dan Kependudukan</b>
-              </p>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
 
-      <div class="slick-subjects2" >
-        {% for i in '12345678'  %}
-          <div class="card" style="box-shadow:none; margin-right:15px">
-            <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">
-                <a href="#" class="text-primary stretched-link">Kemiskinan {{i}}</a>
-              </h5>
-              <p class="card-text font-11">
-                <b>Sosial dan Kependudukan</b>
-              </p>
+      {% for card in cards %}
+        <div class="slick-subjects {% if forloop.first %} mb-3 {% endif %}" >
+          {% for dt in card  %}
+            <div class="card" style="box-shadow:none; margin-right:15px">
+              <img src="{% static 'app-design/assets/images/features-2.svg' %}" class="card-img-top" alt="{{dt.name}}">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <a href="#" class="text-primary stretched-link">{{dt.name}}</a>
+                </h5>
+                <p class="card-text font-12" style="font-weight:100!important">
+                  {{dt.get_subject_group_display}}
+                </p>
+              </div>
             </div>
-          </div>
-        {% endfor %}
-      </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
     </div>
   </div>
 </section>
@@ -332,7 +290,7 @@
                 <div class="row">
                   <div class="col-12">
                     <div class="table-responsive">
-                      <table class="table table-hover table-centered mb-0 table-xxl">
+                      <table class="table table-hover table-centered mb-0 table-xxl" id="statistics_table">
                         <thead>
                           <tr>
                             <th>Data Statistik</th>
@@ -389,7 +347,7 @@
                 </div>
                 <div class="row mt-2">
                   <div class="col-12 table-responsive">
-                    <table class="table table-hover table-centered mb-0 w-100 dt-responsive" id="data_table_checka">
+                    <table class="table table-hover table-centered mb-0 w-100 dt-responsive" id="data_table_check">
                       <thead>
                         <tr>
                           <th>No</th>
@@ -434,12 +392,10 @@
               </div>
               <div class="slick-infographs mt-3">
                 {% for infograph in infographcs %}
-                  {% for infograph_dt in infograph.items %}
-                    <div class="demo-box text-center mt-3 mt-lg-0 mx-1">
-                        <img src="/media/{{infograph_dt.thumbnail}}" alt="Infografis {{infograph_dt.title}}" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">{{infograph_dt.title}}</h5>
-                    </div>
-                  {% endfor %}
+                  <div class="demo-box text-center mt-3 mt-lg-0 mx-1">
+                      <img src="/media/{{infograph.thumbnail}}" alt="Infografis {{infograph.title}}" class="img-fluid shadow-sm rounded">
+                      <h5 class="mt-3 f-17 text-truncate">{{infograph.title}}</h5>
+                  </div>
                 {% endfor %}
               </div>
             </div>
@@ -454,10 +410,10 @@
               </div>
               <div class="row mt-3">
                 <div class="slick-videographs mt-3">
-                  {% for i in '1234567890' %}
+                  {% for videograph in videographs %}
                     <div class="demo-box text-center mt-3 mt-lg-0 mx-1">
-                        <img src="{% static 'app-design/assets/images/layouts/layout-1.png' %}" alt="demo-img" class="img-fluid shadow-sm rounded">
-                        <h5 class="mt-3 f-17">Vertical Layout</h5>
+                        <img src="/media/{{videograph.thumbnail}}" alt="{{videograph.title}}" class="img-fluid shadow-sm rounded">
+                        <h5 class="mt-3 f-17 text-truncate">{{videograph.title}}</h5>
                     </div>
                   {% endfor %}
                 </div>
@@ -474,13 +430,11 @@
               </div>
 
               <div class="slick-pubs mt-3">
-                {% for pub in pubs %}
-                  {% for pub_dt in pub.items %}
-                    <div class="demo-box text-center mt-3 mt-lg-0 mx-1">
-                      <img src="/media/{{pub_dt.thumbnail}}" alt="Infografis {{pub_dt.title}}" class="img-fluid shadow-sm rounded">
-                      <h5 class="mt-3 f-17">{{pub_dt.title}}</h5>
-                    </div>
-                  {% endfor %}
+                {% for publication in publications %}
+                  <div class="demo-box text-center mt-3 mt-lg-0 mx-1">
+                    <img src="/media/{{publication.thumbnail}}" alt="Infografis {{publication.title}}" class="img-fluid shadow-sm rounded">
+                    <h5 class="mt-3 f-17">{{publication.title}}</h5>
+                  </div>
                 {% endfor %}
               </div>
             </div>
@@ -590,7 +544,7 @@
     ]
   })
 
-  $('.slick-subjects, .slick-subjects2').slick({
+  $('.slick-subjects').slick({
     infinite: false,
     slidesToShow: 6,
     slidesToScroll: 2,
@@ -624,7 +578,7 @@
 </script>
 
 <script>
-  var table = $("#data_table_check").DataTable({
+  var table_check = $("#data_table_check").DataTable({
     info: false,
     searching: false,
     lengthChange: false,
@@ -663,6 +617,44 @@
     },
   });
 
+  var table_static = $("#statistics_table").DataTable({
+    info: false,
+    searching: false,
+    lengthChange: false,
+    pageLength: 5,
+    processing: true,
+    serverSide: true,
+    bAutoWidth: false,
+    ajax: {
+      url: "{% url 'app:statistics-table' %}",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": "{{csrf_token}}",
+      },
+      type: "POST",
+      data: function (d) {
+        return $.extend({}, d, {
+          search_data: $("#search_data").val(),
+        });
+      },
+    },
+    columns: [
+      { data: "no", width: '5%',},
+      { data: "indicator_id__name", width: '50%'},
+      { data: "indicator_id__subject_id__name" },
+      { data: "indicator_id__time_period_id__name" },
+      { data: "created_at" },
+    ],
+    language: {
+      paginate: {
+        previous: "<i class='mdi mdi-chevron-left'>",
+        next: "<i class='mdi mdi-chevron-right'>",
+      },
+    },
+    drawCallback: function () {
+      $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+    },
+  });
   $("#button-search_data").on("click", function () {
     table.draw();
   });
