@@ -96,7 +96,6 @@ class BackendUnitsJsonClassView(LoginRequiredMixin, View):
         data = []
 
         for obj in object_list:
-
             data.append(
             {
                 'checkbox': f'<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes" name="select" onchange="pushValue(this);" id="check{obj.id}" value="{obj.id}"><label class="form-check-label" for="check{obj.id}">&nbsp;</label></div>',
