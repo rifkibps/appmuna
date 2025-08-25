@@ -73,8 +73,8 @@
                                             <input type="text" class="form-control form-control-sm" name="items[]" placeholder="Isikan item satuan data" required>
                                         </td>
                                         <td>
-                                            <a href="javascript: void(0);" class="btn btn-sm addRow"><i class="mdi mdi-plus"></i> add</a>
-                                            <a href="javascript: void(0);" class="btn btn-sm removeRow"> <i class="mdi mdi-close"></i> remove</a>
+                                            <a href="javascript:void(0);" class="btn btn-sm addRow"><i class="mdi mdi-plus"></i> add</a>
+                                            <a href="javascript:void(0);" class="btn btn-sm removeRow"> <i class="mdi mdi-close"></i> remove</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -189,7 +189,6 @@
 
             if (valsId.length > 0) {
                 $('input[name="select"]').each(function () {
-    
                         var sThisVal = $(this).val();
                         if (valsId.includes(sThisVal)) 
                             $(this).prop('checked', true)

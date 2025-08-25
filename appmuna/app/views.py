@@ -43,7 +43,7 @@ class HomeAppClassView(View):
             'stats_data' : stats_data,
             }
         
-        return render(request, 'app/index.html', context)
+        return render(request, 'app/app_new.html', context)
 
 class HomeDataConsultClassView(View):
 
