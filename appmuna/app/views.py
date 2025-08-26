@@ -27,22 +27,33 @@ class HomeAppClassView(View):
         cards = [cards[:mid], cards[mid:]]
 
         # Publikasi Data
-        publications = models.BackendPublicationsModel.objects.order_by('-release', 'title').values()[:16]
-        infographics = models.BackendInfographicsModel.objects.order_by('-created_at').values()[:16]
-        videographs = models.BackendVideoGraphicsModel.objects.order_by('-created_at').values()[:16]
+        publications = models.BackendPublicationsModel.objects.order_by('-release', 'title').values()
+        infographics = models.BackendInfographicsModel.objects.order_by('-created_at').values()
+        videographs = models.BackendVideoGraphicsModel.objects.order_by('-created_at').values()
+        news = models.BackendStatsNewsModel.objects.filter(show_state = '1').values()
+        count_media_stats = len(publications) + len(videographs) + len(videographs) + len(news)
+        services = models.BackendDataConsultModel.objects.values()
 
-        stats_data = models.BackendIndicatorsModel.objects.order_by('created_at')[:4]
+        count_services = len(services)
+        count_stats = len(models.BackendContentIndicatorsModel.objects.values('indicator_id', 'indicator_id__name', 'indicator_id__updated_at', 'indicator_id__time_period_id__name').distinct())
+        dev_stats = len(models.BackendContentIndicatorsModel.objects.filter(~Q(indicator_id__level_data = '0')).values('indicator_id', 'indicator_id__name', 'indicator_id__updated_at', 'indicator_id__time_period_id__name', 'indicator_id__stat_category').distinct())
+
         context = {
             'title' : 'SDM | Satu Data Muna',
             'subjects' : subjs_data,
+            'count_stats' : '{:,}'.format(count_stats).replace(',','.'), 
+            'counts_dev' : '{:,}'.format(dev_stats).replace(',','.'),
+            'counts_dev' : '{:,}'.format(dev_stats).replace(',','.'),
+            'count_media_stats': '{:,}'.format(count_media_stats).replace(',','.'),
+            'count_services' : '{:,}'.format(count_services).replace(',','.'),
             'cards' : cards,
-            'publications' : publications,
-            'infographcs' : infographics,
-            'videographs': videographs,
+            'publications' : publications[:16],
+            'infographcs' : infographics[:16],
+            'videographs': videographs[:16],
             'items_summarize' : get_highlight_dashboard_items(),
-            'stats_data' : stats_data,
-            }
+        }
         
+        # return render(request, 'app/index.html', context)
         return render(request, 'app/app_new.html', context)
 
 class HomeDataConsultClassView(View):
@@ -63,7 +74,7 @@ class HomeDataConsultClassView(View):
 
         return JsonResponse({'status': 'Invalid request'}, status=400)
 
-class HomeDataTraceClassView(LoginRequiredMixin, View):
+class HomeDataTraceClassView(View):
 
     def post(self, request):
         
@@ -101,105 +112,11 @@ class HomeDataTraceClassView(LoginRequiredMixin, View):
 
         id_def_data = list(model.order_by(def_col).values_list('indicator_id', 'year', 'item_period').distinct())
         id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
-   
+        
         records_total = model.count()
         records_filtered = records_total
         if datatables.get('search_data'):
-            search = datatables.get('search_data')
-            model = models.BackendContentIndicatorsModel.objects.filter(
-                Q(indicator_id__subject_id__name__icontains=search) |
-                Q(indicator_id__name__icontains=search) |
-                Q(indicator_id__time_period_id__name__icontains=search)|
-                Q(created_at__icontains=search)|
-                Q(item_period__icontains=search)|
-                Q(year__icontains=search)
-            ).exclude(
-            Q(indicator_id=None) |
-            Q(year=None) |
-            Q(item_period=None) |
-            Q(item_row=None)).values('indicator_id', 'year', 'item_period').distinct()
 
-            records_total = model.count()
-            records_filtered = records_total
-        
-        model = model.order_by(order_col_name)
-            
-        # Conf Paginator
-        length = int(datatables.get('length')) if int(datatables.get('length')) > 0 else len(model)
-        page_number = int(start / length + 1)
-        paginator = Paginator(model, length)
-
-        try:
-            object_list = paginator.page(page_number).object_list
-        except PageNotAnInteger:
-            object_list = paginator.page(1).object_list
-        except EmptyPage:
-            object_list = paginator.page(1).object_list
-
-        data = []
-
-        for obj in object_list:
-            obj_dt = models.BackendContentIndicatorsModel.objects.filter(indicator_id = obj['indicator_id'], year=obj['year'], item_period=obj['item_period']).first()
-            obj_period = models.BackendPeriodNameItemsModel.objects.filter(pk = obj_dt.item_period).first()
-            data.append(
-            {
-                'no': [x for x in id_def_data if obj_dt.indicator_id.id == x[1] and obj_dt.year == x[2] and obj_dt.item_period == x[3]][0][0],
-                'indicator_id__name': obj_dt.indicator_id.name,
-                'indicator_id__subject_id__name': obj_dt.indicator_id.subject_id.name,
-                'indicator_id__time_period_id__name': f'{obj_period.item_period} {obj_dt.year}',
-                'created_at' : obj_dt.created_at.strftime('%d %b %Y'),
-            })
-            
-        return {    
-            'draw': draw,
-            'recordsTotal': records_total,
-            'recordsFiltered': records_filtered,
-            'data': data,
-        }
-
-
-class HomeDataStatisticsClassView(LoginRequiredMixin, View):
-
-    def post(self, request):
-        
-        data = self._datatables(request)
-        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder), content_type='application/json')
-		
-    def _datatables(self, request):
-
-        # Define default column for ordering first request
-        def_col = 'indicator_id__name' 
-
-        datatables = request.POST
-        # Get Draw
-        draw = int(datatables.get('draw'))
-        start = int(datatables.get('start'))
-        
-        order_idx = int(datatables.get('order[0][column]')) # Default 1st index for
-        order_dir = datatables.get('order[0][dir]') # Descending or Ascending
-        order_col = 'columns[' + str(order_idx) + '][data]'
-        order_col_name = datatables.get(order_col)
-
-        if 'no' in order_col_name:
-            order_col_name = def_col
-
-        if (order_dir == "desc"):
-            order_col_name =  str('-' + order_col_name)
-
-        model = models.BackendContentIndicatorsModel.objects
-        model = model.exclude(
-            Q(indicator_id=None) |
-            Q(year=None) |
-            Q(item_period=None) |
-            Q(item_row=None)
-        ).values('indicator_id', 'year', 'item_period').distinct()
-
-        id_def_data = list(model.order_by(def_col).values_list('indicator_id', 'year', 'item_period').distinct())
-        id_def_data = [list((idx+1, ) + id_def_data[idx]) for idx in range(len(id_def_data))]
-   
-        records_total = model.count()
-        records_filtered = records_total
-        if datatables.get('search_data'):
             search = datatables.get('search_data')
             model = models.BackendContentIndicatorsModel.objects.filter(
                 Q(indicator_id__subject_id__name__icontains=search) |

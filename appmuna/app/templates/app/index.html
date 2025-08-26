@@ -5,6 +5,7 @@
 <link href="http://kenwheeler.github.io/slick/slick/slick.css" rel="stylesheet" />
 <link href="http://kenwheeler.github.io/slick/slick/slick-theme.css" rel="stylesheet"/>
 
+
 <style>
   input,
   input::placeholder {
@@ -22,7 +23,7 @@
     background-color: #fff;
     overflow-x: hidden;
     overflow-y: auto;
-    z-index: 10;
+    z-index: 5;
   }
 
   datalist option {
@@ -37,10 +38,6 @@
   datalist option:focus {
     background-color: #f8f8f8;
     outline: 0 none;
-  }
-
-  .nav-pills > li > a.active {
-    background-color: #FA5C7C !important;
   }
 
 </style>
@@ -73,25 +70,30 @@
               <div class="app-search dropdown ml-5">
                 <form action="{% url 'app:search-app' %}" method="get">
                   <div class="row gy-2 gx-2 align-items-center">
-                    <div class="col-auto px-0">
-                      <input class="form-control" list="browserdata" id="browser" name="browser" placeholder="Filter Data" autocomplete="off" style=" width: 120px; height: 50px; background-color: #ffffff; padding-left: 20px; border: 0; border-radius: 5px;"/>
-                      <datalist id="browserdata">
-                        <span style="font-size: 0.9em;font-weight: bold;padding: 0.4em 1.5em;">All</span>
+                    <div class="col-auto px-0" id="input_subject">
+                      <input class="form-control" id="filter_by_subj" name="filter_by_subj" placeholder="Subject" autocomplete="off" style=" width: 120px; height: 50px; background-color: #ffffff; padding-left: 38px; border: 0; border-radius: 5px;">
+                      <span class="mdi mdi-filter-menu search-icon" style="margin-top: 7px; margin-left:-2px; font-size:15px"></span>
+                      <datalist id="subjectLists" style="display:none">
+                        <span style="font-size: 0.9em;font-weight: bold;padding: 0.4em 1.5em;" data-filter="all" class="option-datalist">All</span>
                         <br>
-                        {% for dt in subjects %}
-                          {% if dt.items|length > 0 %}
-                            <span style=" font-size: 0.9em; font-weight: bold; padding: 0.4em 1.5em;">
-                              <span class="text-warning fw-bold" style="font-size: 18px" ><i class="mdi mdi-minus"></i></span>
-                              {{dt.groups}}
-                            </span>
-                            <br>
-                            {% for dt_item in dt.items %}
-                              <option value="{{dt_item.item}}">
-                                {{dt_item.item}}
-                              </option>
-                            {% endfor %}
-                          {% endif %} 
-                        {% endfor %}
+                        <div class="items">
+                          {% for dt in subjects %}
+                            {% if dt.items|length > 0 %}
+                              {% with groups_ord=forloop.counter %}
+                                <span style=" font-size: 0.9em; font-weight: bold; padding: 0.4em 1.5em;">
+                                  <span class="text-warning fw-bold" style="font-size: 18px"><i class="mdi mdi-minus"></i></span>
+                                  {{dt.groups}}
+                                </span>
+                                <br>
+                                {% for dt_item in dt.items %}
+                                  <option value="{{dt_item.item}}" class="option-datalist" data-id="{{dt_item.id}}" data-groups="{{groups_ord}}">
+                                    {{dt_item.item}}
+                                  </option>
+                                {% endfor %}
+                              {% endwith %}
+                            {% endif %} 
+                          {% endfor %}
+                        </div>
                       </datalist>
                     </div>
                     <div class="col-auto">
@@ -180,7 +182,7 @@
         <div class="card bg-primary py-3">
           <div class="card-body">
             <div class="text-center text-white">
-              <h2>1.520</h2>
+              <h2>{{count_stats}}</h2>
               <p class="mb-0" style="font-size: 23px">Data Statistik</p>
             </div>
           </div>
@@ -190,7 +192,7 @@
         <div class="card bg-primary py-3">
           <div class="card-body">
             <div class="text-center text-white">
-              <h2>10</h2>
+              <h2>{{counts_dev}}</h2>
               <p class="mb-0" style="font-size: 23px">Indikator Strategis</p>
             </div>
           </div>
@@ -200,7 +202,7 @@
         <div class="card bg-primary py-3">
           <div class="card-body">
             <div class="text-center text-white">
-              <h2>35</h2>
+              <h2>{{count_media_stats}}</h2>
               <p class="mb-0" style="font-size: 23px">Media Statistik</p>
             </div>
           </div>
@@ -210,7 +212,7 @@
         <div class="card bg-primary py-3">
           <div class="card-body">
             <div class="text-center text-white">
-              <h2>100.231</h2>
+              <h2>{{count_services}}</h2>
               <p class="mb-0" style="font-size: 23px">Layanan Statistik</p>
             </div>
           </div>
@@ -252,123 +254,53 @@
           {% endfor %}
         </div>
       {% endfor %}
-
     </div>
   </div>
 </section>
 
-<section class="py-3 bg-light-lighten border-top border-bottom border-light">
+<section class="py-2 border-top border-bottom border-light">
   <div class="container">
     <div class="row pt-4">
       <div class="col-lg-12">
-        <div class="text-left">
-          <h3>
-            Pintasan Utama <span class="text-warning">__________________</span>
-          </h3>
-          <h2 class="text-muted mt-3">Akses Data Muna Dalam Angka</h2>
-        </div>
+          <div class="text-center">
+              <h3>Data Statistik <span class="text-primary">Terintegrasi Kab. Muna</span></h3>
+              <p class="text-muted mt-2">Telusuri berbagai indikator statistik dasar, sektoral, serta indikator strategis untuk penyusunan dan penilaian kinerja pemerintah daerah</p>
+          </div>
       </div>
     </div>
 
-    <div class="row py-4">
-      <div class="col-sm-2 mb-2 mt-2 mb-sm-0">
-          <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
-              <a class="nav-link active show py-2" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home" role="tab">
-                  <i class="mdi mdi-clipboard-text-search d-md-none d-block"></i>
-                  <span class="d-none d-md-block">Tabel Statistik</span>
-              </a>
-              <a class="nav-link mt-2 py-2" id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile" role="tab">
-                  <i class="mdi mdi-file-table-outline d-md-none d-block"></i>
-                  <span class="d-none d-md-block">Cek Ketersedian Data</span>
-              </a>
-          </div>
-      </div> <!-- end col-->
-  
-      <div class="col-sm-10 px-3">
-          <div class="tab-content" id="v-pills-tabContent">
-              <div class="tab-pane fade active show" id="v-pills-home" role="tabpanel">
-                <div class="row">
-                  <div class="col-12">
-                    <div class="table-responsive">
-                      <table class="table table-hover table-centered mb-0 table-xxl" id="statistics_table">
-                        <thead>
-                          <tr>
-                            <th>Data Statistik</th>
-                            <th>Kategori Statistik</th>
-                            <th>Jenis Data</th>
-                            <th>Tanggal Rilis</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {% if stats_data|length > 0 %} {% for dt in stats_data %}
-                          <tr>
-                            <td>
-                              <a href="#" class="text-secondary">{{dt.name}}</a>
-                            </td>
-                            <td>{{dt.subject_id.name}}</td>
-                            <td>Statistik {{dt.get_stat_category_display}}</td>
-                            <td>{{ dt.created_at|date:"d M Y" }}</td>
-                          </tr>
-                          {% endfor %} {% else %}
-                          <tr>
-                            <td colspan="4"><i>Data belum tersedia</i></td>
-                          </tr>
-                          {% endif %}
-                        </tbody>
-                      </table>
-                    </div>
-                    
-                    {% if stats_data|length > 3 %}
-                    <br>
-                    <a href="#" class="btn">Muat lebih banyak <i class="dripicons-chevron-right"></i></a>
-                    {% endif %}
-                  </div>
+    <div class="row pt-4 align-items-center">
+        <div class="col-lg-12 d-flex justify-content-center">
+            <div class="app-search dropdown ml-5">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Cek Ketersediaan Data ..." id="search_data" autocomplete="off" style="width:450px;height:50px">
+                    <span class="mdi mdi-magnify search-icon" style="margin-top:5px"></span>
+                    <button class="btn btn-primary btn-sm rounded" style="margin-left:15px" id="button-search_data">Cari Data</button>
                 </div>
-              </div>
-              <div class="tab-pane fade" id="v-pills-profile" role="tabpanel">
-                <div class="row mt-3">
-                  <div class="col-lg-12">
-                    <div class="app-search dropdown">
-                      <div class="row gy-2 gx-2 align-items-center">
-                        <div class="col-auto">
-                          <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Telusuri Ketersediaan Data ..." id="search_data" autocomplete="off" style="width: 300px; height: 45px; border-radius: 5px">
-                            <span class="mdi mdi-magnify search-icon" style="margin-top: 5px"></span>
-                          </div>
-                        </div>
-                        <div class="col-auto mt-2 px-0">
-                          <button class="btn btn-primary rounded ml-2"  id="button-search_data">
-                            Cek Data
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-2">
-                  <div class="col-12 table-responsive">
-                    <table class="table table-hover table-centered mb-0 w-100 dt-responsive" id="data_table_check">
-                      <thead>
-                        <tr>
-                          <th>No</th>
-                          <th>Data Statistik</th>
-                          <th>Kategori</th>
-                          <th>Periode</th>
-                          <th>Rilis</th>
-                        </tr>
-                      </thead>
-                      <tbody class="text-secondary"></tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-          </div> <!-- end tab-content-->
-      </div> <!-- end col-->
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2 py-3">
+      <div class="col-12 table-responsive">
+        <table class="table table-hover table-centered mb-0 w-100 dt-responsive" id="data_table_check">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Data Statistik</th>
+              <th>Kategori</th>
+              <th>Periode</th>
+              <th>Tanggal Rilis</th>
+            </tr>
+          </thead>
+          <tbody class="text-secondary"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="py-4">
+<section class="py-4 bg-light-lighten border-top border-bottom border-light">
   <div class="container">
     <div class="row mb-3">
       <div class="col-lg-12">
@@ -473,8 +405,48 @@
 
 {% block js-extender %}
 <script src="https://cdn.jsdelivr.net/jquery.slick/1.4.1/slick.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 <script>
+
+  $("body").click(function(e){
+    var myID = e.target.id;
+    if(myID !='filter_by_subj' ){
+      $('#subjectLists').hide(300)
+    }
+  })
+  
+  $('.option-datalist').on('click', function(){
+    if ($(this).attr('data-filter') == 'all'){
+      $('#filter_by_subj').val("")
+    }else{
+      $('#filter_by_subj').val($(this).attr('value'))
+    }
+    $('#subjectLists').hide(300)
+  })
+
+  $('#filter_by_subj').keyup(function () {
+    var allOptions = $('#subjectLists').find('option');
+    var filterText = $(this).val().toLowerCase();
+    allOptions.each(function (i, e) {
+      if ($(this).text().toLowerCase().indexOf(filterText) != -1) {
+        $(this).show();
+        console.log($(this).text());
+      } else {
+          $(this).hide();
+      }
+    });
+    $('#subjectLists').show(300)
+  })
+
+  $('#filter_by_subj').on('click', function(event){
+    if ($('#subjectLists').is(":hidden")){
+      $('#subjectLists').show(300)
+    }else{
+      $('#subjectLists').hide(300)
+    }
+  })
 
   function init_slick(target){
     $(target).slick('refresh')
@@ -578,6 +550,7 @@
 </script>
 
 <script>
+  
   var table_check = $("#data_table_check").DataTable({
     info: false,
     searching: false,
@@ -616,47 +589,9 @@
       $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
     },
   });
-
-  var table_static = $("#statistics_table").DataTable({
-    info: false,
-    searching: false,
-    lengthChange: false,
-    pageLength: 5,
-    processing: true,
-    serverSide: true,
-    bAutoWidth: false,
-    ajax: {
-      url: "{% url 'app:statistics-table' %}",
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-        "X-CSRFToken": "{{csrf_token}}",
-      },
-      type: "POST",
-      data: function (d) {
-        return $.extend({}, d, {
-          search_data: $("#search_data").val(),
-        });
-      },
-    },
-    columns: [
-      { data: "no", width: '5%',},
-      { data: "indicator_id__name", width: '50%'},
-      { data: "indicator_id__subject_id__name" },
-      { data: "indicator_id__time_period_id__name" },
-      { data: "created_at" },
-    ],
-    language: {
-      paginate: {
-        previous: "<i class='mdi mdi-chevron-left'>",
-        next: "<i class='mdi mdi-chevron-right'>",
-      },
-    },
-    drawCallback: function () {
-      $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
-    },
-  });
-  $("#button-search_data").on("click", function () {
-    table.draw();
-  });
+  
+  $('#button-search_data').on('click', function (){
+    table_check.draw();
+})
 </script>
 {% endblock js-extender %}

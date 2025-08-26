@@ -30,13 +30,40 @@ License: https://freebootstrap.net/license
     <link href="{% static 'assets/vendors/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
     <link href="{% static 'assets/vendors/aos/aos.css' %}" rel="stylesheet">
     <!-- End Styles-->
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+
     
     <!-- ======= Theme Style =======-->
     <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
     <!-- End Theme Style-->
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <style>
+      .slick-items {
+        visibility: hidden;
+      }
+      .slick-items.slick-initialized {
+        visibility: visible;
+      }
 
+      .card-gradient {
+        background: linear-gradient(135deg, #348F52, #45A291, #55B3D0);
+        color: white;
+        border-radius: 16px;
+        padding: 20px;
+      }
+
+        .info-box {
+          font-size: 18px;
+          margin-bottom: 15px;
+        }
+        .info-icon {
+          font-size: 22px;
+          margin-right: 8px;
+        }
+    </style>
     <style>
       .table {
           background-color: transparent !important;
@@ -128,7 +155,6 @@ License: https://freebootstrap.net/license
     <!-- ======= Site Wrap =======-->
     <div class="site-wrap">
       
-      
       <!-- ======= Header =======-->
       <header class="fbs__net-navbar navbar navbar-expand-lg dark" aria-label="freebootstrap.net navbar">
         <div class="container d-flex align-items-center justify-content-between">
@@ -155,10 +181,11 @@ License: https://freebootstrap.net/license
             <div class="offcanvas-body align-items-lg-center">
               <ul class="navbar-nav nav me-auto ps-lg-5 mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link scroll-link active" aria-current="page" href="#home">Home</a></li>
-                <li class="nav-item"><a class="nav-link scroll-link" href="#tabulation">Tabulasi</a></li>
-                <li class="nav-item"><a class="nav-link scroll-link" href="#infographics">Infografis</a></li>
-                <li class="nav-item"><a class="nav-link scroll-link" href="#news">Berita</a></li>
-                <li class="nav-item"><a class="nav-link scroll-link" href="#about-me">Tentang Kami</a></li>
+                <li class="nav-item"><a class="nav-link scroll-link" href="#tabulation">Dataset</a></li>
+                <li class="nav-item"><a class="nav-link scroll-link" href="#infographics">Metadata</a></li>
+                <li class="nav-item"><a class="nav-link scroll-link" href="#news">Infografis</a></li>
+                <li class="nav-item"><a class="nav-link scroll-link" href="#about-me">Diseminasi</a></li>
+                <li class="nav-item"><a class="nav-link scroll-link" href="#about-me">Integrasi Data</a></li>
               </ul>
               
             </div>
@@ -198,7 +225,7 @@ License: https://freebootstrap.net/license
             <div class="row">
               <div class="col-lg-6 mb-4 mb-lg-0">
                 <div class="row">
-                  <div class="col-lg-11"><span class="hero-subtitle text-uppercase" data-aos="fade-up" data-aos-delay="0">Portal Satu Data Desa</span>
+                  <div class="col-lg-11"><span class="hero-subtitle text-uppercase" data-aos="fade-up" data-aos-delay="0">Portal Satu Data</span>
                     <h1 class="hero-title mb-4 mt-3" data-aos="fade-up" data-aos-delay="100">Selamat Datang di Portal Satu Data <br>Muna</h1>
                     
                     <p class="hero-description mb-4 mb-lg-5" data-aos="fade-up" data-aos-delay="200">
@@ -207,9 +234,9 @@ License: https://freebootstrap.net/license
                     
                     <div class="logos mb-4" data-aos="fade-up" data-aos-delay="400"><span class="logos-title text-uppercase mb-4 d-block">Platform ini hasil kolaborasi antara:</span>
                       <div class="logos-images d-flex gap-4 align-items-center">
+                        <img class="img-fluid" src="{% static 'assets/images/bps.png' %}" alt="Company 2" style="width: 60px;">
                         <img class="img-fluid" src="{% static 'assets/images/pemda-muna.png' %}" alt="Company 1" style="width: 60px;">
-                        <img class="img-fluid" src="{% static 'customs/assets/images/bps_kab_muna_light.png' %}" alt="Company 2" style="width: 180px;">
-                        <img class="img-fluid" src="{% static 'customs/assets/images/descan.png' %}" alt="Company 3" style="width: 50px;">
+                        <img class="img-fluid" src="{% static 'assets/images/kominfo.png' %}" alt="Company 3" style="width: 50px;">
                         {% comment %} <img class="img-fluid js-img-to-inline-svg" src="{% static 'assets/images/logo/actual-size/logo-air-bnb__black.svg' %}" alt="Company 1" style="width: 110px;">
                         <img class="img-fluid js-img-to-inline-svg" src="{% static 'assets/images/logo/actual-size/logo-ibm__black.svg' %}" alt="Company 2" style="width: 80px;">
                         <img class="img-fluid js-img-to-inline-svg" src="{% static 'assets/images/logo/actual-size/logo-google__black.svg' %}" alt="Company 3" style="width: 110px;"> {% endcomment %}
@@ -228,13 +255,54 @@ License: https://freebootstrap.net/license
           <!-- End Hero-->
         </section>
         <!-- End Home-->
-            
+          
+        <!-- ======= Card Info =======-->
+        <section class="pricing__v2 section" id="home">
+          <div class="container">
+            <div class="row">
+              <div class="col-12 mx-auto text-center mb-5">
+                <span class="subtitle text-uppercase mb-3 " data-aos="fade-up" data-aos-delay="0">Data Desa</span>
+                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tabulasi Data Desa</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Data Desa Labaha meliputi Data Infrastruktur Desa & Kependudukan Desa Labaha Tahun 2025.</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="slick-items" >
+                  {% for i in '12345678'  %}
+                    <div class="testimonial border rounded-4 p-4 mx-2" style="font-size:13.5px!important;">
+                      <h3 class="fs-5 mb-3">Pertumbuhan Ekonomi Muna</h3>
+                      <div style="margin-top:26px">
+                        <div class="float-end" style="font-size:30px">
+                          <i class="mdi mdi-pulse widget-icon"></i>
+                        </div>
+                        <div class="mt-3" style="margin-bottom:20px">
+                          <h3 class="d-inline me-1">2.13</h3>
+                          <span style="font-size:18px">(Persen)</span>
+                          <span class="text-success font-15"><i class="bi bi-arrow-up"></i> 5%</span>
+                        </div>
+                        <p class="mb-0 text-muted">
+                          <span class="text-nowrap">Triwulan II 2024</span>
+                        </p>
+                      </div>
+                      
+                      <blockquote class="mb-4">
+                        Pada 15 Mei 2025, Desa Labaha mengadakan pelatihan data sosial .
+                      </blockquote>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- End Aggregate Data -->
+        
         <!-- ======= Aggregate Data =======-->
-        <section class="about__v4 section" id="aggregate-data">
+        <section class="stats__v3 section mt-0" data-aos="fade-up" data-aos-delay="0" id="aggregate-data" >
           <div class="container">
             <div class="row mb-5">
               <div class="col-md-5 mx-auto text-center">
-                <span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Data Desa</span>
                 <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tabulasi Data Desa</h2>
                 <p data-aos="fade-up" data-aos-delay="200">Data Desa Labaha meliputi Data Infrastruktur Desa & Kependudukan Desa Labaha Tahun 2025.</p>
               </div>
@@ -247,23 +315,37 @@ License: https://freebootstrap.net/license
                     <div class="rounded-border-2"></div>
                     <div class="rounded-border-3"></div>
                   </div>
-                  <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0 text-center" data-aos="fade-up" data-aos-delay="100">
-                    <div class="stat-item">
-                      <h3 class="fs-1 fw-bold"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="242" data-purecounter-duration="2">242</span> <span>KK</span></h3>
-                      <p class="mb-0">Jumlah Keluarga</p>
-                    </div>
+                  <div class="col-12 col-sm-6 col-md-3 mb-4 mb-md-0 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <a href="javascript:void(0)" style="text-decoration: none; color: inherit">
+                      <div class="stat-item">
+                        <h3 class="fs-1 fw-bold"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="4497" data-purecounter-duration="2">4.497</span></h3>
+                        <p class="mb-0">Data Strategis</p>
+                      </div>
+                    </a>
                   </div>
-                  <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0 text-center" data-aos="fade-up" data-aos-delay="857">
-                    <div class="stat-item">
-                      <h3 class="fs-1 fw-bold"> <span class="purecounter" data-purecounter-start="0" data-purecounter-end="857" data-purecounter-duration="2">857</span> <span>Jiwa</span></h3>
-                      <p class="mb-0">Jumlah Penduduk</p>
-                    </div>
+                  <div class="col-12 col-sm-6 col-md-3 mb-4 mb-md-0 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <a href="javascript:void(0)" style="text-decoration: none; color: inherit">
+                      <div class="stat-item">
+                        <h3 class="fs-1 fw-bold"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="13780" data-purecounter-duration="2">13.780</span></h3>
+                        <p class="mb-0">Data Non-Strategis</p>
+                      </div>
+                    </a>
                   </div>
-                  <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0 text-center" data-aos="fade-up" data-aos-delay="300">
-                    <div class="stat-item">
-                      <h3 class="fs-1 fw-bold"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="5.10" data-purecounter-duration="2">5.10</span> <span>Km<sup>2</sup></span></h3>
-                      <p class="mb-0">Luas Wilayah</p>
-                    </div>
+                  <div class="col-12 col-sm-6 col-md-3 mb-4 mb-md-0 text-center" data-aos="fade-up" data-aos-delay="100">
+                    <a href="javascript:void(0)" style="text-decoration: none; color: inherit">
+                      <div class="stat-item">
+                        <h3 class="fs-1 fw-bold"> <span class="purecounter" data-purecounter-start="0" data-purecounter-end="344" data-purecounter-duration="2">344</span> </h3>
+                        <p class="mb-0">Data SDGs</p> 
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md-3 mb-4 mb-md-0 text-center" data-aos="fade-up" data-aos-delay="0">
+                    <a href="javascript:void(0)" style="text-decoration: none; color: inherit">
+                      <div class="stat-item">
+                        <h3 class="fs-1 fw-bold"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="2235" data-purecounter-duration="2">2.235</span> </h3>
+                        <p class="mb-0">Lainnya</p>
+                      </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -271,6 +353,98 @@ License: https://freebootstrap.net/license
           </div>
         </section>
         <!-- End Aggregate Data -->
+
+        <!-- ======= Tabulation 2 =======-->
+        <section class="section pricing__v2" id="tabulation-2">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-4 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="0">
+                <div class="p-5 rounded-4 price-table h-100">
+                  <h3>Tabulasi Data</h3>
+                  <br>
+                  <p>Data Sosial-Kependudukan Desa Labaha bersumber dari pendataan langsung Desa Cantik Tahun 2025 yang dilaksanakan oleh perangkat Desa Labaha Berkoodinasi Bersama Tim Desa Cantik BPS Kabupaten Muna.</p>
+                  <br>
+                  <div class="form-group" >
+                    <label for="jenisTabulasi" style="font-size:15px; font-weight:bold">Jenis Tabulasi</label>
+                    <select class="form-control" id="jenisTabulasi">
+                      <optgroup label="Tabulasi Keluarga">
+                        <option value="1">1. Jml. Keluarga Menurut Status Penguasaan Bangunan Tempat Tinggal</option>
+                        <option value="2">2. Jml. Keluarga Menurut Status Kepemilikan Lahan Tempat Tinggal</option>
+                        <option value="3">3. Jml. Keluarga Menurut Jenis Lantai Bangunan Terluas</option>
+                        <option value="4">4. Jml. Keluarga Menurut Jenis Dinding Bangunan Terluas</option>
+                        <option value="5">5. Jml. Keluarga Menurut Jenis Atap Bangunan Terluas</option>
+                        <option value="6">6. Jml. Keluarga Menurut Sumber Penerangan Utama</option>
+                        <option value="7">7. Jml. Keluarga Menurut Sumber Air Minum Utama</option>
+                        <option value="8">8. Jml. Keluarga Menurut Kepemilikan Tanah/Lahan Pertanian</option>
+                      </optgroup>
+                      <optgroup label="Tabulasi Penduduk">
+                        <option value="9">9. Jumlah Penduduk Menurut Jenis Kelamin di Desa Labaha</option>
+                        <option value="10">10. Jumlah Penduduk Menurut Status Perkawinan di Desa Labaha</option>
+                        <option value="11">11. Jumlah Penduduk Menurut Kegiatan Utama di Desa Labaha</option>
+                        <option value="12">12. Jumlah Penduduk Menurut Lapangan Usaha di Desa Labaha</option>
+                        <option value="13">13. Jumlah Penduduk Menurut Partisipasi Sekolah di Desa Labaha</option>
+                        <option value="14">14. Jumlah Penduduk Menurut Pendidikan Tinggi yang Ditamatkan di Desa Labaha</option>
+                        <option value="15">15. Jumlah Penduduk Menurut Jaminan Kesehatan di Desa Labaha</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <br>
+                  <div class="align-self-start">
+                    <a class=" btn btn-play d-inline-flex align-items-center gap-2" href="{% static 'customs/assets/files/dda_labaha.pdf' %}" download="Publikasi Desa Labaha Dalam Angka 2025.pdf" style="font-size:12px"><i class="bi bi-cloud-download-fill"></i> Unduh Publikasi Desa</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
+                <div class="p-4 rounded-4 price-table  h-100">
+                    <div class="card card-gradient ">
+                      <div class="row">
+                        <!-- Grafik -->
+                        <div class="col-md-8">
+                          <h4 class="text-white">GRAFIK JUMLAH BANYAKNYA DATA</h4>
+                          <p class="text-white-50">Per Kategori Sektoral</p>
+                          <canvas id="myChart" height="200"></canvas>
+                          <small class="text-white-50" style="font-size:11px!important">
+                            <i>ℹ Klik pada Batang Grafik (Bar) untuk lihat detail per kategori sektoral.</i>
+                          </small>
+                        </div>
+
+                        <!-- Info box -->
+                        <div class="col-md-4 d-flex flex-column justify-content-center" style="font-size:13px!important">
+                          <ul class="list-unstyled">
+                            <li class="d-flex align-items-center pb-4 stats border-bottom-0">
+                                <div>
+                                    <span class="d-block text-white font-16">Total Data</span>
+                                    <h2 id="counter-dataset" class="counter-number mb-0 text-white" data-from="0" data-to="0" data-number="0" style="">21.053</h2>
+                                    <img src="https://satudata.bandungkab.go.id/images/loading-bar-white.gif" class="counter-loading" style="margin-top: 11px; height: 25px; display: none;">
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2 text-white ml-auto" style="width: 50px;height: 50px;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                            </li>
+                            <li class="d-flex align-items-center pb-4 stats border-bottom-0">
+                                <div>
+                                    <span class="d-block text-white font-16">Data Tersedia</span>
+                                    <h2 id="counter-available" class="counter-number mb-0 text-white" data-from="0" data-to="0" data-number="0" style="">21.053</h2>
+                                    <img src="https://satudata.bandungkab.go.id/images/loading-bar-white.gif" class="counter-loading" style="margin-top: 11px; height: 25px; display: none;">
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check text-white ml-auto" style="width: 50px;height: 50px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            </li>
+                            <li class="d-flex align-items-center pb-4 stats border-bottom-0">
+                                <div>
+                                    <span class="d-block text-white font-16">Data Belum Tersedia</span>
+                                    <h2 id="counter-not-available" class="counter-number mb-0 text-white" data-from="0" data-to="0" data-number="0" style="">0</h2>
+                                    <img src="https://satudata.bandungkab.go.id/images/loading-bar-white.gif" class="counter-loading" style="margin-top: 11px; height: 25px; display: none;">
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white ml-auto" style="width: 50px;height: 50px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </li>
+                        </ul>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- End Tabulation 2-->
 
         <!-- ======= Tabulation =======-->
         <section class="section features__v2" id="tabulation">
@@ -1135,11 +1309,10 @@ License: https://freebootstrap.net/license
               <div class="col-md-5 mx-auto text-center"><span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Sosial Kependudukan</span>
                 <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tabulasi Data Sosial</h2>
                 <p class="mb-5" style="font-size:14.5px">Data Kependudukan Desa Labaha diperoleh melalui kegiatan Pendataan Desa Cantik Tahun 2025.</p>
-                
               </div>
             </div>
             <div class="row">
-              <div class="col-md-5 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="300">
+              <div class="col-md-5 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="0">
                 <div class="p-5 rounded-4 price-table h-100">
                   <h3>Tabulasi Data</h3>
                   <br>
@@ -2401,16 +2574,21 @@ License: https://freebootstrap.net/license
     <!-- End Back to top-->
     
     <!-- ======= Javascripts =======-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'assets/vendors/bootstrap/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'assets/vendors/gsap/gsap.min.js' %}"></script>
     <script src="{% static 'assets/vendors/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
     <script src="{% static 'assets/vendors/isotope/isotope.pkgd.min.js' %}"></script>
     <script src="{% static 'assets/vendors/glightbox/glightbox.min.js' %}"></script>
     <script src="{% static 'assets/vendors/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script src="{% static 'assets/vendors/aos/aos.js' %}"></script>
     <script src="{% static 'assets/vendors/purecounter/purecounter.js' %}"></script>
     <script src="{% static 'assets/js/custom.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Slick JS -->
 
     <script>
     const showDataPodes = (targetId, triggerElement) => {
@@ -2455,6 +2633,71 @@ License: https://freebootstrap.net/license
     };
     
   </script>
+  <script>
+    $(window).on('load', function(){
+      $('.slick-items').slick({
+        infinite: true,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        dots: false,
+        arrows: true,
+        autoplay: true,
+        autoplaySpeed: 1500,
+        responsive: [
+          {
+            breakpoint: 992,
+            settings: { slidesToShow: 2 }
+          },
+          {
+            breakpoint: 576,
+            settings: { slidesToShow: 1 }
+          }
+        ]
+      });
+
+      // refresh AOS biar animasi terbaca lagi
+      AOS.refresh();
+    });
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['PKS', 'PUP', 'KDK', 'PTK', 'PKP', 'IPK', 'PPA', 'PNJ', 'PDK', 'KWL'],
+        datasets: [{
+          label: 'Jumlah Data',
+          data: [13, 5, 3, 3, 6, 4, 5, 4, 2, 45],
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          borderColor: 'rgba(255, 255, 255, 1)',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            ticks: {
+              color: 'white',
+              callback: function(value) {
+                return value + '%';
+              }
+            },
+            grid: { color: 'rgba(255,255,255,0.2)' },
+            beginAtZero: true,
+            max: 50
+          },
+          x: {
+            ticks: { color: 'white' },
+            grid: { color: 'rgba(255,255,255,0.2)' }
+          }
+        }
+      }
+    });
+  </script>
+  
     <!-- End JavaScripts-->
   </body>
 </html>
