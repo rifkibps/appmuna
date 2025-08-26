@@ -48,21 +48,19 @@ License: https://freebootstrap.net/license
         visibility: visible;
       }
 
-      .card-gradient {
-        background: linear-gradient(135deg, #348F52, #45A291, #55B3D0);
-        color: white;
-        border-radius: 16px;
-        padding: 20px;
-      }
-
-        .info-box {
-          font-size: 18px;
-          margin-bottom: 15px;
-        }
-        .info-icon {
-          font-size: 22px;
-          margin-right: 8px;
-        }
+          .chart-container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 25px 35px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #144b4b;
+    }
     </style>
     <style>
       .table {
@@ -396,49 +394,15 @@ License: https://freebootstrap.net/license
               </div>
               <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
                 <div class="p-4 rounded-4 price-table  h-100">
-                    <div class="card card-gradient ">
-                      <div class="row">
-                        <!-- Grafik -->
-                        <div class="col-md-8">
-                          <h4 class="text-white">GRAFIK JUMLAH BANYAKNYA DATA</h4>
-                          <p class="text-white-50">Per Kategori Sektoral</p>
-                          <canvas id="myChart" height="200"></canvas>
-                          <small class="text-white-50" style="font-size:11px!important">
-                            <i>ℹ Klik pada Batang Grafik (Bar) untuk lihat detail per kategori sektoral.</i>
-                          </small>
+                  <div class="row">
+                    <!-- Grafik -->
+                    <div class="col-md-12">
+                        <div class="chart-container">
+                          <h2>Grafik Jumlah Data OPD Kabupaten</h2>
+                          <canvas id="opdChart" height="200"></canvas>
                         </div>
-
-                        <!-- Info box -->
-                        <div class="col-md-4 d-flex flex-column justify-content-center" style="font-size:13px!important">
-                          <ul class="list-unstyled">
-                            <li class="d-flex align-items-center pb-4 stats border-bottom-0">
-                                <div>
-                                    <span class="d-block text-white font-16">Total Data</span>
-                                    <h2 id="counter-dataset" class="counter-number mb-0 text-white" data-from="0" data-to="0" data-number="0" style="">21.053</h2>
-                                    <img src="https://satudata.bandungkab.go.id/images/loading-bar-white.gif" class="counter-loading" style="margin-top: 11px; height: 25px; display: none;">
-                                </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2 text-white ml-auto" style="width: 50px;height: 50px;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                            </li>
-                            <li class="d-flex align-items-center pb-4 stats border-bottom-0">
-                                <div>
-                                    <span class="d-block text-white font-16">Data Tersedia</span>
-                                    <h2 id="counter-available" class="counter-number mb-0 text-white" data-from="0" data-to="0" data-number="0" style="">21.053</h2>
-                                    <img src="https://satudata.bandungkab.go.id/images/loading-bar-white.gif" class="counter-loading" style="margin-top: 11px; height: 25px; display: none;">
-                                </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check text-white ml-auto" style="width: 50px;height: 50px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            </li>
-                            <li class="d-flex align-items-center pb-4 stats border-bottom-0">
-                                <div>
-                                    <span class="d-block text-white font-16">Data Belum Tersedia</span>
-                                    <h2 id="counter-not-available" class="counter-number mb-0 text-white" data-from="0" data-to="0" data-number="0" style="">0</h2>
-                                    <img src="https://satudata.bandungkab.go.id/images/loading-bar-white.gif" class="counter-loading" style="margin-top: 11px; height: 25px; display: none;">
-                                </div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x text-white ml-auto" style="width: 50px;height: 50px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                            </li>
-                        </ul>
-                        </div>
-                      </div>
                     </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -2658,46 +2622,60 @@ License: https://freebootstrap.net/license
       // refresh AOS biar animasi terbaca lagi
       AOS.refresh();
     });
+  </script>
+  
+  <script>
+    const ctx = document.getElementById('opdChart').getContext('2d');
 
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
+    // Buat gradient untuk bar
+    const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
+
+    new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['PKS', 'PUP', 'KDK', 'PTK', 'PKP', 'IPK', 'PPA', 'PNJ', 'PDK', 'KWL'],
+        labels: [
+          'Dinas Pendidikan','Dinas Kesehatan','Dinas PU','Dinas Sosial','Dinas Pertanian',
+          'Dinas Perhubungan','Dinas Perindustrian','Dinas Perdagangan','Dinas Pariwisata',
+          'Dinas Lingkungan Hidup','Dinas Kependudukan','Dinas Tenaga Kerja',
+          'Dinas Kominfo','Dinas Perpustakaan','Dinas Perikanan',
+          'Bappeda','Satpol PP','Inspektorat','Badan Keuangan','Sekretariat Daerah'
+        ],
         datasets: [{
           label: 'Jumlah Data',
-          data: [13, 5, 3, 3, 6, 4, 5, 4, 2, 45],
-          backgroundColor: 'rgba(255, 255, 255, 0.5)',
-          borderColor: 'rgba(255, 255, 255, 1)',
-          borderWidth: 2
+          data: [2700, 1200, 800, 717, 1300, 950, 1100, 980, 600, 1500, 
+                 1800, 1250, 2100, 900, 750, 2200, 1300, 1100, 2400, 2000],
+          backgroundColor: '#215C5C',
+          borderRadius: 4,
+          barThickness: 20
         }]
       },
       options: {
+        indexAxis: 'x',
         responsive: true,
         plugins: {
-          legend: { display: false }
+          legend: { display: false },
+          title: {
+            display: false
+          }
         },
         scales: {
-          y: {
-            ticks: {
-              color: 'white',
-              callback: function(value) {
-                return value + '%';
-              }
-            },
-            grid: { color: 'rgba(255,255,255,0.2)' },
-            beginAtZero: true,
-            max: 50
-          },
           x: {
-            ticks: { color: 'white' },
-            grid: { color: 'rgba(255,255,255,0.2)' }
+            beginAtZero: true,
+            grid: { display: false },
+            ticks: {
+              font: { size: 12 }
+            }
+          },
+          y: {
+            grid: { display: false },
+            ticks: {
+              font: { size: 12, weight: '500' }
+            }
           }
         }
       }
     });
   </script>
-  
     <!-- End JavaScripts-->
   </body>
 </html>
