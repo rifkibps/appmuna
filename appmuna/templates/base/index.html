@@ -43,23 +43,40 @@ License: https://freebootstrap.net/license
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     <style>
-      .dataTables_paginate .pagination .page-link {
-        width: 38px;
-        height: 38px;
-        line-height: 38px;
-        text-align: center;
-        padding: 0;
+      .custom-input {
+        border: 1px solid #215C5C;
+        border-radius: 10px;
+        height: 35px;
+        font-size: 14.5px;
+        padding-left: 28px; /* beri jarak agar teks/placeholder tidak menimpa icon */
       }
+
+      .custom-input::placeholder {
+        font-size: 14.5px;
+        color: #888;
+      }
+
+      .search-icon {
+        position: absolute;
+        top: 50%;
+        left: 8px;
+        transform: translateY(-50%);
+        font-size: 14px;
+        color: #888;
+        pointer-events: none; /* biar klik fokus tetap ke input */
+      }
+
+
     </style>
     <style>
-      .slick-items {
+      .slick-items, .slick-items-graphs {
         visibility: hidden;
       }
-      .slick-items.slick-initialized {
+      .slick-items.slick-initialized, .slick-items-graphs.slick-initialized {
         visibility: visible;
       }
 
-          .chart-container {
+      .chart-container {
       max-width: 900px;
       margin: auto;
       background: white;
@@ -93,8 +110,15 @@ License: https://freebootstrap.net/license
         }
 
         .schrollable {
-          height: 300px; 
+          height: 350px; 
           overflow-y: auto;
+        }
+
+        .schrollable thead tr {
+          position: sticky;
+          top: 0;
+          background-color: #fff;  /* putih solid */
+          z-index: 5;                 /* biar selalu di atas isi tabel */
         }
 
         .active-tabs {
@@ -367,12 +391,11 @@ License: https://freebootstrap.net/license
         <section class="section pricing__v2" id="tabulation-2">
           <div class="container">
             <div class="row">
-              <div class="col-md-4 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="0">
+              <div class="col-md-4 mb-3 mb-md-0" data-aos="fade-up" data-aos-delay="0">
                 <div class="p-5 rounded-4 chart-container h-100">
-                  <h3>Tabulasi Data</h3>
+                  <h2 class="fw-bold" style="text-align:left">Tabulasi Data</h2>
                   <br>
                   <p>Data Sosial-Kependudukan Desa Labaha bersumber dari pendataan langsung Desa Cantik Tahun 2025 yang dilaksanakan oleh perangkat Desa Labaha Berkoodinasi Bersama Tim Desa Cantik BPS Kabupaten Muna.</p>
-
                   <div class="row mt-4">
                     {% for i in '12'  %}
                     <div class="col-md-6 mt-2">
@@ -396,14 +419,30 @@ License: https://freebootstrap.net/license
                 </div>
               </div>
               <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
-                <div class="p-4 rounded-4 h-100">
+                <div class="p-4 rounded-4">
                   <div class="row">
                     <!-- Grafik -->
                     <div class="col-md-12">
                         <div class="chart-container">
-                          <h2>Grafik Jumlah Data OPD Kabupaten</h2>
-                          <canvas id="opdChart" height="200"></canvas>
-                          <span style="font-size:11px">Sumber: Badan Pusat Statistik</span>
+                          
+                          <div class="slick-items-graphs">
+                            <div class="content-chart">
+                              <h5 class="text-center">Grafik Jumlah Data OPD Kabupaten</h5>
+                              <canvas id="opdChart" height="200"></canvas>
+                              <span style="font-size:11px">Sumber: Badan Pusat Statistik</span>
+                            </div>
+                            <div class="content-chart">
+                              <h5 class="text-center">Pertumbuhan Ekonomi Kabupaten ADHK(%)</h5>
+                              <canvas id="ecoChart" height="200"></canvas>
+                              <span style="font-size:11px">Sumber: Badan Pusat Statistik</span>
+                            </div>
+                            <div class="content-chart">
+                              <h5 class="text-center">Jumlah Penduduk Kabupaten Muna (Jiwa)</h5>
+                              <canvas id="popChart" height="200"></canvas>
+                              <span style="font-size:11px">Sumber: Badan Pusat Statistik</span>
+                            </div>
+                          </div>
+                          
                         </div>
                     </div>
                   </div>
@@ -425,14 +464,16 @@ License: https://freebootstrap.net/license
               </div>
             </div>
             <div class="row">
-              <div class="col-md-4 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="0">
-                <div class="p-5 rounded-4 chart-container h-100">
+              <div class="col-md-3 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="0">
+                <div class="p-4 rounded-4 price-table popular h-100">
                   <h3>Tabulasi Data</h3>
                   <br>
-                  <p>Data Sosial-Kependudukan Desa Labaha bersumber dari pendataan langsung Desa Cantik Tahun 2025 yang dilaksanakan oleh perangkat Desa Labaha Berkoodinasi Bersama Tim Desa Cantik BPS Kabupaten Muna.</p>
+                  <p style="font-size:14.5px">Data Sosial-Kependudukan Desa Labaha bersumber dari pendataan langsung Desa Cantik Tahun 2025 yang dilaksanakan oleh perangkat Desa Labaha Berkoodinasi Bersama Tim Desa Cantik BPS Kabupaten Muna.</p>
                   <br>
                   <div class="form-group" >
-                    <label for="jenisTabulasi" style="font-size:15px; font-weight:bold">Data Menurut OPD</label>
+                    <div class="mb-2">
+                      <label for="jenisTabulasi" style="font-size:15px; font-weight:bold">Data Menurut Instansi</label>
+                    </div>
                     <select class="form-control" id="jenisTabulasi">
                       <optgroup label="Lembaga Vertikal">
                         <option value="1">1. Badan Pusat Statistik</option>
@@ -445,45 +486,42 @@ License: https://freebootstrap.net/license
                       </optgroup>
                     </select>
                   </div>
-                  <br>
-                  <div class="align-self-start">
-                    <a class=" btn btn-play d-inline-flex align-items-center gap-2" href="{% static 'customs/assets/files/dda_labaha.pdf' %}" download="Publikasi Desa Labaha Dalam Angka 2025.pdf" style="font-size:12px"><i class="bi bi-cloud-download-fill"></i> Unduh Publikasi Desa</a>
-                  </div>
                 </div>
               </div>
-              <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
+              <div class="col-md-9" data-aos="fade-up" data-aos-delay="400">
                 <div class="p-4 rounded-4 chart-container h-100">
-                  <div id="tabs1" class="tabs-table mt-4">
+                  <div id="tabs1" class="tabs-table mt-2">
                     <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 1. </h3>
+                      <div class="col-sm-8">
+                        <h3 class="fw-bold text-primary" style="font-size:17px!important">Data di Badan Pusat Statistik Kabupaten Muna</h3>
                       </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Data di Badan Pusat Statistik Kabupaten Muna</h3>
+                      <div class="col-sm-4">
+                        <div class="position-relative d-inline-block">
+                          <i class="bi bi-search search-icon"></i>
+                          <input type="text" class="form-control form-control-sm custom-input" placeholder="Temukan Data">
+                        </div>
                       </div>
                     </div>
                     <hr>
                     <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered text-muted" style="font-size:14.5px" id="dataPublish">
-                        <thead class="align-item-center">
+                      <table class="table table-hover table-bordered text-muted" style="font-size:14.5px" id="dataPublish">
+                        <thead>
                           <tr>
                             <th>No</th>
                             <th>Indikator Data</th>
                             <th>Periode</th>
                             <th>Ketersedian</th>
-                            <th>Kategori</th>
                           </tr>
                         </thead>
                         <tbody >
-                          {% for i in '12345'  %}
+                          {% for i in '12345678999'  %}
                           <tr>
                             <td>{{i}}</td>
                             <td>
-                              <a href="" class="text-secondary" style="text-decoration: none;">Pertumbuhan Ekonomi Menurut Lapangan Usaha</a>
+                              <a href="" class="text-dark" style="text-decoration: none;">Pertumbuhan Ekonomi Menurut Lapangan Usaha Kabupaten Muna</a>
                             </td>
                             <td>Triwulanan</td>
                             <td>2010 - 2025</td>
-                            <td>Strategis</td>
                           </tr>
                           {% endfor %}
                         </tbody>
@@ -499,23 +537,30 @@ License: https://freebootstrap.net/license
         </section>
         <!-- End Tabulation 2-->
 
-                <!-- ======= Tabulation =======-->
-        <section class="section features__v2"  id="tabulation">
+        <!-- ======= Tabulation =======-->
+        <section class="section features__v2"  id="tabulation1">
           <div class="container">
+            <div class="row mb-5">
+              <div class="col-md-5 mx-auto text-center">
+                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tabulasi Data Sosial</h2>
+                <p style="font-size:14.5px">Data Kependudukan Desa Labaha diperoleh melalui kegiatan Pendataan Desa Cantik Tahun 2025.</p>
+              </div>
+            </div>
+
             <div class="row">
               <div class="col-12">
-                <div class="d-lg-flex p-5 rounded-4"  data-aos="fade-in" data-aos-delay="0">
+                <div class="d-lg-flex py-5 rounded-4"  data-aos="fade-in" data-aos-delay="0">
                   <div class="row">
-                    <div class="col-lg-3 mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="0">
+                    <div class="col-lg-3 py-1 mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="0">
                       <div class="row"> 
                         <div class="col-lg-11">
-                          <div class="h-100 flex-column justify-content-between d-flex">
+                          <div class="h-100">
                             <div>
-                              <h2 class="mb-4">Data Potensi Desa</h2>
+                              <h2 class="mb-4" style="text-align:left">Data Potensi Desa</h2>
                               <p class="mb-3" style="font-size:14.5px">Data Potensi Desa mencakup Keterangan Desa, Aparatur Desa, Kependudukan, Fasilitas Perumahan dan Pendidikan, Kondisi Sosial Budaya, Sarana Transportasi, serta Perekonomian Desa.</p>
                               <div class="form-group mb-3" >
-                                <label for="jenisTabulasi" style="font-size:15px; font-weight:bold">Pilih Desa</label>
-                                <select class="form-control" id="jenisTabulasi">
+                                <label for="desa" style="font-size:15px; font-weight:bold">Pilih Desa</label>
+                                <select class="form-control" id="desa">
                                   <optgroup label="Kecamatan Katobu">
                                     <option value="1">Kel. Raha I</option>
                                     <option value="2">Kel. Raha II</option>
@@ -586,7 +631,7 @@ License: https://freebootstrap.net/license
                                 <h3 class="fs-6 fw-bold mb-3">Tabel 1. Identitas Desa Labaha</h3>
                                 <hr>
                                 <div class="table-responsive schrollable">
-                                  <table class="table table-sm table-hover table-bordered" style="font-size:13.5px">
+                                  <table class="table table-hover table-bordered" style="font-size:13.5px">
                                     <thead>
                                       <tr>
                                         <th style="width: 5%;">No</th>
@@ -1854,6 +1899,7 @@ License: https://freebootstrap.net/license
     <script src="{% static 'assets/js/custom.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0"></script>
 
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -1891,6 +1937,10 @@ License: https://freebootstrap.net/license
       searchEnabled: true,
       itemSelectText: '',
     });
+    new Choices('#desa', {
+      searchEnabled: true,
+      itemSelectText: '',
+    });
     
     document.getElementById("jenisTabulasi").onchange = function () {
       const elements = document.querySelectorAll('.tabs-table');
@@ -1912,31 +1962,20 @@ License: https://freebootstrap.net/license
         lengthChange: false,
         searching: false,
         autoWidth: false,
+        pageLength: -1,
+        paging: false,
+        scrollY: '300px',   // tinggi area scroll
+        scrollCollapse: true,
         language: {
             search: '<span style="font-size:14px">Temukan Keluarga</span>',
             searchPlaceholder: ".....",
-            paginate: {
-                previous: "<i class='bi bi-chevron-left'>",
-                next: "<i class='bi bi-chevron-right'>",
-            },
         },
         columns: [
           { width: "8%" }, // kolom 1
-          { width: "47%" }, // kolom 2
-          { width: "15%" },  // kolom 3
-          { width: "17%" }, // kolom 4
-          { width: "13%" },  // kolom 5
+          { width: "52%" }, // kolom 2
+          { width: "20%" },  // kolom 3
+          { width: "20%" }, // kolom 4
         ],
-        drawCallback: function () {
-          let pagination = $(".dataTables_paginate > .pagination");
-          pagination.addClass("pagination-primary mt-2"); 
-          pagination.find("li.paginate_button a.page-link").addClass("rounded-circle").css({
-              "margin-left": "2px",
-              "margin-right": "2px"
-            });
-           $("table.dataTable thead th").css("padding-right", "20px");
-          $("table.dataTable thead th").css("vertical-align", "middle");
-        },
       }
     );
 
@@ -1961,6 +2000,26 @@ License: https://freebootstrap.net/license
         ]
       });
 
+      $('.slick-items-graphs').slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        dots: false,
+        arrows: false,
+        autoplay: true,
+        autoplaySpeed: 5000,
+        responsive: [
+          {
+            breakpoint: 992,
+            settings: { slidesToShow: 2 }
+          },
+          {
+            breakpoint: 576,
+            settings: { slidesToShow: 1 }
+          }
+        ]
+      });
+
       // refresh AOS biar animasi terbaca lagi
       AOS.refresh();
     });
@@ -1968,10 +2027,6 @@ License: https://freebootstrap.net/license
   
   <script>
     const ctx = document.getElementById('opdChart').getContext('2d');
-
-    // Buat gradient untuk bar
-    const gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0);
-
     new Chart(ctx, {
       type: 'bar',
       data: {
@@ -2018,6 +2073,137 @@ License: https://freebootstrap.net/license
       }
     });
   </script>
+
+    <script>
+    const ctx3 = document.getElementById('popChart').getContext('2d');
+    new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: [
+          'Tongkuno','Tongkuno Selatan','Parigi','Bone','Marobo',
+          'Kabawo','Kabangka','Kontukowuna','Kontunaga',
+          'Watopute','Katobu','Lohia',
+          'Duruka','Batalaiworu','Napabalano',
+          'Lasalepa','Towea','Wakorumba Selatan','Pasir Putih','Pasi Kolaga', 'Maligano', 'Batukara'
+        ],
+        datasets: [{
+          label: 'Jumlah Data',
+          data: [2700, 1200, 800, 717, 1300, 950, 1100, 980, 600, 1500, 
+                 1800, 1250, 2100, 900, 750, 2200, 1300, 1100, 2400, 2000, 1200, 800],
+          backgroundColor: '#215C5C',
+          borderRadius: 4,
+          barThickness: 20
+        }]
+      },
+      options: {
+        indexAxis: 'x',
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            grid: { display: false },
+            ticks: {
+              font: { size: 12 },
+               minRotation: 90,  // minimal 90 derajat
+              maxRotation: 90   // maksimal 90 derajat
+            }
+          },
+          y: {
+            grid: { display: false },
+            ticks: {
+              font: { size: 12, weight: '500' }
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+  <script>
+  const ctx2 = document.getElementById('ecoChart').getContext('2d');
+
+  // Tahun & Quarter
+  const years = ['2020','2021','2022','2023','2024','2025'];
+  const labels = [];
+  years.forEach((year, i) => {
+    ['Q1','Q2','Q3','Q4'].forEach((q, j) => {
+      // hanya Q1 yang ada tahun
+      if (q === 'Q1') {
+        labels.push([q, year]);
+      } else {
+        labels.push([q, '']);
+      }
+    });
+  });
+
+  // Dummy data pertumbuhan ekonomi (%)
+  const data = [
+    -2.5, -1.0, 0.5, 1.2,   // 2020
+    2.0, 3.1, 3.5, 4.0,     // 2021
+    4.2, 4.5, 4.8, 5.0,     // 2022
+    5.2, 5.3, 5.4, 5.6,     // 2023
+    5.7, 5.8, 6.0, 6.1,     // 2024
+    6.2, 6.3, 6.4, 6.5      // 2025
+  ];
+
+  new Chart(ctx2, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Pertumbuhan Ekonomi (%)',
+        data: data,
+        borderColor: '#215C5C',
+        backgroundColor: '#215C5C',
+        tension: 0.3,
+        pointRadius: 4,
+        pointBackgroundColor: '#215C5C',
+        pointBorderColor: '#215C5C',
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        title: { display: false },
+        annotation: {
+          annotations: {
+            line2021: { type: 'line', xMin: 4, xMax: 4, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] },
+            line2022: { type: 'line', xMin: 8, xMax: 8, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] },
+            line2023: { type: 'line', xMin: 12, xMax: 12, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] },
+            line2024: { type: 'line', xMin: 16, xMax: 16, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] },
+            line2025: { type: 'line', xMin: 20, xMax: 20, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            font: { size: 12 },
+            padding: 8,        // beri jarak biar tidak mepet
+            maxRotation: 0,    // biar horizontal
+            autoSkip: false    // tampilkan semua
+          }
+        },
+        y: {
+          grid: { display: false },
+          ticks: {
+            font: { size: 12, weight: '500' },
+            callback: function(value) { return value + '%'; }
+          }
+        }
+      }
+    }
+  });
+</script>
     <!-- End JavaScripts-->
   </body>
 </html>
