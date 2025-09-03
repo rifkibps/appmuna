@@ -31,6 +31,8 @@ License: https://freebootstrap.net/license
     <link href="{% static 'assets/vendors/aos/aos.css' %}" rel="stylesheet">
     <!-- End Styles-->
 
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 
@@ -40,6 +42,15 @@ License: https://freebootstrap.net/license
     <!-- End Theme Style-->
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <style>
+      .dataTables_paginate .pagination .page-link {
+        width: 38px;
+        height: 38px;
+        line-height: 38px;
+        text-align: center;
+        padding: 0;
+      }
+    </style>
     <style>
       .slick-items {
         visibility: hidden;
@@ -284,9 +295,9 @@ License: https://freebootstrap.net/license
                         </p>
                       </div>
                       
-                      <blockquote class="mb-4">
+                      {% comment %} <blockquote class="mb-4">
                         Pada 15 Mei 2025, Desa Labaha mengadakan pelatihan data sosial .
-                      </blockquote>
+                      </blockquote> {% endcomment %}
                     </div>
                   {% endfor %}
                 </div>
@@ -361,34 +372,26 @@ License: https://freebootstrap.net/license
                   <h3>Tabulasi Data</h3>
                   <br>
                   <p>Data Sosial-Kependudukan Desa Labaha bersumber dari pendataan langsung Desa Cantik Tahun 2025 yang dilaksanakan oleh perangkat Desa Labaha Berkoodinasi Bersama Tim Desa Cantik BPS Kabupaten Muna.</p>
-                  <br>
-                  <div class="form-group" >
-                    <label for="jenisTabulasi" style="font-size:15px; font-weight:bold">Jenis Tabulasi</label>
-                    <select class="form-control" id="jenisTabulasi">
-                      <optgroup label="Tabulasi Keluarga">
-                        <option value="1">1. Jml. Keluarga Menurut Status Penguasaan Bangunan Tempat Tinggal</option>
-                        <option value="2">2. Jml. Keluarga Menurut Status Kepemilikan Lahan Tempat Tinggal</option>
-                        <option value="3">3. Jml. Keluarga Menurut Jenis Lantai Bangunan Terluas</option>
-                        <option value="4">4. Jml. Keluarga Menurut Jenis Dinding Bangunan Terluas</option>
-                        <option value="5">5. Jml. Keluarga Menurut Jenis Atap Bangunan Terluas</option>
-                        <option value="6">6. Jml. Keluarga Menurut Sumber Penerangan Utama</option>
-                        <option value="7">7. Jml. Keluarga Menurut Sumber Air Minum Utama</option>
-                        <option value="8">8. Jml. Keluarga Menurut Kepemilikan Tanah/Lahan Pertanian</option>
-                      </optgroup>
-                      <optgroup label="Tabulasi Penduduk">
-                        <option value="9">9. Jumlah Penduduk Menurut Jenis Kelamin di Desa Labaha</option>
-                        <option value="10">10. Jumlah Penduduk Menurut Status Perkawinan di Desa Labaha</option>
-                        <option value="11">11. Jumlah Penduduk Menurut Kegiatan Utama di Desa Labaha</option>
-                        <option value="12">12. Jumlah Penduduk Menurut Lapangan Usaha di Desa Labaha</option>
-                        <option value="13">13. Jumlah Penduduk Menurut Partisipasi Sekolah di Desa Labaha</option>
-                        <option value="14">14. Jumlah Penduduk Menurut Pendidikan Tinggi yang Ditamatkan di Desa Labaha</option>
-                        <option value="15">15. Jumlah Penduduk Menurut Jaminan Kesehatan di Desa Labaha</option>
-                      </optgroup>
-                    </select>
-                  </div>
-                  <br>
-                  <div class="align-self-start">
-                    <a class=" btn btn-play d-inline-flex align-items-center gap-2" href="{% static 'customs/assets/files/dda_labaha.pdf' %}" download="Publikasi Desa Labaha Dalam Angka 2025.pdf" style="font-size:12px"><i class="bi bi-cloud-download-fill"></i> Unduh Publikasi Desa</a>
+
+                  <div class="row mt-4">
+                    {% for i in '12'  %}
+                    <div class="col-md-6 mt-2">
+                      <a href="javascript:void(0)" style="text-decoration: none; color: inherit">
+                        <div class="stat-item">
+                          <h3 class="fs-1 fw-bold text-primary"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="50" data-purecounter-duration="2">50</span></h3>
+                          <p class="mb-0">Data RPJMD</p>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="col-md-6 mt-2">
+                      <a href="javascript:void(0)" style="text-decoration: none; color: inherit">
+                        <div class="stat-item">
+                          <h3 class="fs-1 fw-bold text-primary"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="2">20</span></h3>
+                          <p class="mb-0">Data RPJPD</p>
+                        </div>
+                      </a>
+                    </div>
+                    {% endfor %}
                   </div>
                 </div>
               </div>
@@ -400,6 +403,7 @@ License: https://freebootstrap.net/license
                         <div class="chart-container">
                           <h2>Grafik Jumlah Data OPD Kabupaten</h2>
                           <canvas id="opdChart" height="200"></canvas>
+                          <span style="font-size:11px">Sumber: Badan Pusat Statistik</span>
                         </div>
                     </div>
                   </div>
@@ -410,20 +414,115 @@ License: https://freebootstrap.net/license
         </section>
         <!-- End Tabulation 2-->
 
-        <!-- ======= Tabulation =======-->
-        <section class="section features__v2" id="tabulation">
+
+        <!-- ======= Tabulation 2 =======-->
+        <section class="section pricing__v2" id="tabulation-2">
+          <div class="container">
+            <div class="row mb-5">
+              <div class="col-md-5 mx-auto text-center"><span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Sosial Kependudukan</span>
+                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tabulasi Data Sosial</h2>
+                <p class="mb-5" style="font-size:14.5px">Data Kependudukan Desa Labaha diperoleh melalui kegiatan Pendataan Desa Cantik Tahun 2025.</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="0">
+                <div class="p-5 rounded-4 chart-container h-100">
+                  <h3>Tabulasi Data</h3>
+                  <br>
+                  <p>Data Sosial-Kependudukan Desa Labaha bersumber dari pendataan langsung Desa Cantik Tahun 2025 yang dilaksanakan oleh perangkat Desa Labaha Berkoodinasi Bersama Tim Desa Cantik BPS Kabupaten Muna.</p>
+                  <br>
+                  <div class="form-group" >
+                    <label for="jenisTabulasi" style="font-size:15px; font-weight:bold">Data Menurut OPD</label>
+                    <select class="form-control" id="jenisTabulasi">
+                      <optgroup label="Lembaga Vertikal">
+                        <option value="1">1. Badan Pusat Statistik</option>
+                        <option value="2">2. Komisi Pemilihan Umum</option>
+                      </optgroup>
+                      <optgroup label="Lembaga Horizontal">
+                        <option value="1">1. Dinas Pendidikan</option>
+                        <option value="2">2. Dinas Kesehatan</option>
+                        <option value="2">3. Dinas Pertanian</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <br>
+                  <div class="align-self-start">
+                    <a class=" btn btn-play d-inline-flex align-items-center gap-2" href="{% static 'customs/assets/files/dda_labaha.pdf' %}" download="Publikasi Desa Labaha Dalam Angka 2025.pdf" style="font-size:12px"><i class="bi bi-cloud-download-fill"></i> Unduh Publikasi Desa</a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8" data-aos="fade-up" data-aos-delay="400">
+                <div class="p-4 rounded-4 chart-container h-100">
+                  <div id="tabs1" class="tabs-table mt-4">
+                    <div class="row">
+                      <div class="col-sm-2">
+                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 1. </h3>
+                      </div>
+                      <div class="col-sm-10 px-0">
+                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Data di Badan Pusat Statistik Kabupaten Muna</h3>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="table-responsive">
+                      <table class="table table-sm table-hover table-bordered text-muted" style="font-size:14.5px" id="dataPublish">
+                        <thead class="align-item-center">
+                          <tr>
+                            <th>No</th>
+                            <th>Indikator Data</th>
+                            <th>Periode</th>
+                            <th>Ketersedian</th>
+                            <th>Kategori</th>
+                          </tr>
+                        </thead>
+                        <tbody >
+                          {% for i in '12345'  %}
+                          <tr>
+                            <td>{{i}}</td>
+                            <td>
+                              <a href="" class="text-secondary" style="text-decoration: none;">Pertumbuhan Ekonomi Menurut Lapangan Usaha</a>
+                            </td>
+                            <td>Triwulanan</td>
+                            <td>2010 - 2025</td>
+                            <td>Strategis</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div> 
+                    <hr>
+                  </div>
+                  <p style="font-size:13px">Sumber: Pendataan Desa Cantik 2025 / Regsosek 2023</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- End Tabulation 2-->
+
+                <!-- ======= Tabulation =======-->
+        <section class="section features__v2"  id="tabulation">
           <div class="container">
             <div class="row">
               <div class="col-12">
-                <div class="d-lg-flex p-5 rounded-4 content" data-aos="fade-in" data-aos-delay="0">
+                <div class="d-lg-flex p-5 rounded-4"  data-aos="fade-in" data-aos-delay="0">
                   <div class="row">
                     <div class="col-lg-3 mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="0">
                       <div class="row"> 
                         <div class="col-lg-11">
                           <div class="h-100 flex-column justify-content-between d-flex">
                             <div>
-                              <h2 class="mb-5">Data Potensi Desa</h2>
-                              <p class="mb-5" style="font-size:14.5px">Data Potensi Desa Labaha meliputi Keterangan Desa, Aparatur Desa, Kependudukan, Fasilitas Perumahan dan Pendidikan, Kondisi Sosial Budaya, Sarana Transportasi, serta Perekonomian Desa Labaha yang bersumber dari PODES Tahun 2024.</p>
+                              <h2 class="mb-4">Data Potensi Desa</h2>
+                              <p class="mb-3" style="font-size:14.5px">Data Potensi Desa mencakup Keterangan Desa, Aparatur Desa, Kependudukan, Fasilitas Perumahan dan Pendidikan, Kondisi Sosial Budaya, Sarana Transportasi, serta Perekonomian Desa.</p>
+                              <div class="form-group mb-3" >
+                                <label for="jenisTabulasi" style="font-size:15px; font-weight:bold">Pilih Desa</label>
+                                <select class="form-control" id="jenisTabulasi">
+                                  <optgroup label="Kecamatan Katobu">
+                                    <option value="1">Kel. Raha I</option>
+                                    <option value="2">Kel. Raha II</option>
+                                    <option value="3">Kel. Raha III</option>
+                                  </optgroup>
+                                </select>
+                              </div>
                             </div>
                             <div class="align-self-start">
                               <a class=" btn btn-play d-inline-flex align-items-center gap-2" href="{% static 'customs/assets/files/podes_labaha.pdf' %}" download="Publikasi Potensi Desa Labaha 2024.pdf" style="font-size:12px"><i class="bi bi-cloud-download-fill"></i> Unduh Publikasi PODES</a>
@@ -1265,802 +1364,6 @@ License: https://freebootstrap.net/license
           </div>
         </section>
         <!-- End Tabulation -->
-        
-        <!-- ======= Tabulation 2 =======-->
-        <section class="section pricing__v2" id="tabulation-2">
-          <div class="container">
-            <div class="row mb-5">
-              <div class="col-md-5 mx-auto text-center"><span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Sosial Kependudukan</span>
-                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tabulasi Data Sosial</h2>
-                <p class="mb-5" style="font-size:14.5px">Data Kependudukan Desa Labaha diperoleh melalui kegiatan Pendataan Desa Cantik Tahun 2025.</p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-5 mb-4 mb-md-0" data-aos="fade-up" data-aos-delay="0">
-                <div class="p-5 rounded-4 price-table h-100">
-                  <h3>Tabulasi Data</h3>
-                  <br>
-                  <p>Data Sosial-Kependudukan Desa Labaha bersumber dari pendataan langsung Desa Cantik Tahun 2025 yang dilaksanakan oleh perangkat Desa Labaha Berkoodinasi Bersama Tim Desa Cantik BPS Kabupaten Muna.</p>
-                  <br>
-                  <div class="form-group" >
-                    <label for="jenisTabulasi" style="font-size:15px; font-weight:bold">Jenis Tabulasi</label>
-                    <select class="form-control" id="jenisTabulasi">
-                      <optgroup label="Tabulasi Keluarga">
-                        <option value="1">1. Jml. Keluarga Menurut Status Penguasaan Bangunan Tempat Tinggal</option>
-                        <option value="2">2. Jml. Keluarga Menurut Status Kepemilikan Lahan Tempat Tinggal</option>
-                        <option value="3">3. Jml. Keluarga Menurut Jenis Lantai Bangunan Terluas</option>
-                        <option value="4">4. Jml. Keluarga Menurut Jenis Dinding Bangunan Terluas</option>
-                        <option value="5">5. Jml. Keluarga Menurut Jenis Atap Bangunan Terluas</option>
-                        <option value="6">6. Jml. Keluarga Menurut Sumber Penerangan Utama</option>
-                        <option value="7">7. Jml. Keluarga Menurut Sumber Air Minum Utama</option>
-                        <option value="8">8. Jml. Keluarga Menurut Kepemilikan Tanah/Lahan Pertanian</option>
-                      </optgroup>
-                      <optgroup label="Tabulasi Penduduk">
-                        <option value="9">9. Jumlah Penduduk Menurut Jenis Kelamin di Desa Labaha</option>
-                        <option value="10">10. Jumlah Penduduk Menurut Status Perkawinan di Desa Labaha</option>
-                        <option value="11">11. Jumlah Penduduk Menurut Kegiatan Utama di Desa Labaha</option>
-                        <option value="12">12. Jumlah Penduduk Menurut Lapangan Usaha di Desa Labaha</option>
-                        <option value="13">13. Jumlah Penduduk Menurut Partisipasi Sekolah di Desa Labaha</option>
-                        <option value="14">14. Jumlah Penduduk Menurut Pendidikan Tinggi yang Ditamatkan di Desa Labaha</option>
-                        <option value="15">15. Jumlah Penduduk Menurut Jaminan Kesehatan di Desa Labaha</option>
-                      </optgroup>
-                    </select>
-                  </div>
-                  <br>
-                  <div class="align-self-start">
-                    <a class=" btn btn-play d-inline-flex align-items-center gap-2" href="{% static 'customs/assets/files/dda_labaha.pdf' %}" download="Publikasi Desa Labaha Dalam Angka 2025.pdf" style="font-size:12px"><i class="bi bi-cloud-download-fill"></i> Unduh Publikasi Desa</a>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-7" data-aos="fade-up" data-aos-delay="400">
-                <div class="p-4 rounded-4 price-table popular h-100">
-                  <div id="tabs1" class="tabs-table mt-4">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 1. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Keluarga Berdasarkan Status Penguasaan Bangunan Tempat Tinggal di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Status Penguasaan Bangunan Tempat Tinggal</th>
-                            <th style="width: 30%;">Jumlah Keluarga</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Milik Sendiri</td>
-                            <td>223</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Kontrak/Sewa</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Bebas Sewa</td>
-                            <td>19</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Dipinjami</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>5</td>
-                            <td>Rumah Dinas</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>6</td>
-                            <td>Lainnya</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs2" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 2. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Keluarga Berdasarkan Status Kepemilikan Lahan Tempat Tinggal di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Status Kepemilikan Lahan Tempat Tinggal</th>
-                            <th style="width: 30%;">Jumlah Keluarga</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Milik Sendiri</td>
-                            <td>221</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Milik Orang Lain</td>
-                            <td>2</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Tanah Negara</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Lainnya</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs3" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 3. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Keluarga Berdasarkan Jenis Lantai Bangunan Terluas di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Jenis Lantai Bangunan Terluas</th>
-                            <th style="width: 30%;">Jumlah Keluarga</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Marmer/Granit</td>
-                            <td>1</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Keramik</td>
-                            <td>55</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Parket/Vini/Karpet</td>
-                            <td>2</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Ubin/Tegel/Teraso</td>
-                            <td>2</td>
-                          </tr>
-                          <tr>
-                            <td>5</td>
-                            <td>Kayu/Papan</td>
-                            <td>117</td>
-                          </tr>
-                          <tr>
-                            <td>6</td>
-                            <td>Semen/Bata Merah</td>
-                            <td>58</td>
-                          </tr>
-                          <tr>
-                            <td>7</td>
-                            <td>Bambu</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>8</td>
-                            <td>Kayu/Papan Kualitas Rendah</td>
-                            <td>6</td>
-                          </tr>
-                          <tr>
-                            <td>9</td>
-                            <td>Tanah</td>
-                            <td>1</td>
-                          </tr>
-                          <tr>
-                            <td>10</td>
-                            <td>Lainnya</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs4" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 4. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Keluarga Berdasarkan Jenis Dinding Bangunan Terluas, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Jenis Dinding Bangunan Terluas</th>
-                            <th style="width: 30%;">Jumlah Keluarga</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Tembok</td>
-                            <td>93</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Plesteran Anyaman Bambu/Kawat</td>
-                            <td>1</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Kayu/Papan/Gypsum/GRC/Calciboard</td>
-                            <td>148</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Anyaman Bambu</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>5</td>
-                            <td>Batang Kayu</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>6</td>
-                            <td>Bambu</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>7</td>
-                            <td>Lainnya</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs5" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 5. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Keluarga Berdasarkan Jenis Atap Bangunan Terluas di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Jenis Atap Bangunan Terluas</th>
-                            <th style="width: 30%;">Jumlah Keluarga</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Beton/Genteng Beton</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Genteng Keramik</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Genteng Metal</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Genteng Tanah Liat</td>
-                            <td>2</td>
-                          </tr>
-                          <tr>
-                            <td>5</td>
-                            <td>Asbes</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>6</td>
-                            <td>Seng</td>
-                            <td>240</td>
-                          </tr>
-                          <tr>
-                            <td>7</td>
-                            <td>Sirap</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs6" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 6. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Keluarga Berdasarkan Sumber Penerangan Utama di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Sumber Penerangan Utama</th>
-                            <th style="width: 30%;">Jumlah Keluarga</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Listrik PLN</td>
-                            <td>203</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Listrik Non PLN</td>
-                            <td>37</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Lampu Minyak/Lilin</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Sumber Penerangan Lainnya</td>
-                            <td>2</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs7" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 7. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Keluarga Berdasarkan Sumber Air Minum Utama di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Sumber Air Minum Utama</th>
-                            <th style="width: 30%;">Jumlah Keluarga</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Air Kemasan Bermerk</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Air Isi Ulang</td>
-                            <td>36</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Air Leding</td>
-                            <td>0</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Sumur Terlindung</td>
-                            <td>26</td>
-                          </tr>
-                          <tr>
-                            <td>5</td>
-                            <td>Sumur Tak Terlindung</td>
-                            <td>2</td>
-                          </tr>
-                          <tr>
-                            <td>6</td>
-                            <td>Mata Air Terlindung</td>
-                            <td>165</td>
-                          </tr>
-                          <tr>
-                            <td>7</td>
-                            <td>Mata Air Tak Terlindung</td>
-                            <td>9</td>
-                          </tr>
-                          <tr>
-                            <td>8</td>
-                            <td>Air Hujan</td>
-                            <td>2</td>
-                          </tr>
-                          <tr>
-                            <td>9</td>
-                            <td>Lainnya</td>
-                            <td>2</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs8" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 8. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Keluarga Berdasarkan Kepemilikan Tanah/Lahan Pertanian di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Kepemilikan Tanah/Lahan Pertanian</th>
-                            <th style="width: 30%;">Jumlah Keluarga</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Ya</td>
-                            <td>6</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Tidak</td>
-                            <td>236</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  
-                  <div id="tabs9" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 9. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Penduduk Menurut Jenis Kelamin di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Jenis Kelamin</th>
-                            <th style="width: 30%;">Jumlah Penduduk</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Laki-Laki</td>
-                            <td>431</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Perempuan</td>
-                            <td>426</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs10" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 10. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Penduduk Menurut Status Perkawinan di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Status Perkawinan</th>
-                            <th style="width: 30%;">Jumlah Penduduk</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Belum Kawin</td>
-                            <td>493</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Kawin/Nikah</td>
-                            <td>375</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Cerai Hidup</td>
-                            <td>12</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Cerai Mati</td>
-                            <td>32</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs11" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-2">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 11. </h3>
-                      </div>
-                      <div class="col-sm-10 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Penduduk Menurut Kegiatan Utama di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Kegiatan Utama ART</th>
-                            <th style="width: 30%;">Jumlah Penduduk</th>
-                          </tr>
-                        </thead>
-                        <tbody >
-                          <tr>
-                            <td>1</td>
-                            <td>Bersekolah</td>
-                            <td>183</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Mengurus Rumah Tangga</td>
-                            <td>48</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>Tidak Bekerja</td>
-                            <td>281</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Sedang Mencari Pekerjaan</td>
-                            <td>1</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Bekerja</td>
-                            <td>289</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs12" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 12. </h3>
-                      </div>
-                      <div class="col-sm-9 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Penduduk Menurut Lapangan Usaha di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Kegiatan Utama ART</th>
-                            <th style="width: 30%;">Jumlah Penduduk</th>
-                          </tr>
-                        </thead>
-                        <tbody><tr><td class="text-center">1</td><td class="text-left">Pertanian tanaman padi &amp; palawija</td><td class="text-center">23</td></tr><tr><td class="text-center">2</td><td class="text-left">Hortikultura</td><td class="text-center">1</td></tr><tr><td class="text-center">3</td><td class="text-left">Perkebunan</td><td class="text-center">19</td></tr><tr><td class="text-center">4</td><td class="text-left">Perikanan</td><td class="text-center">1</td></tr><tr><td class="text-center">5</td><td class="text-left">Peternakan</td><td class="text-center">10</td></tr><tr><td class="text-center">6</td><td class="text-left">Kehutanan &amp; pertanian lainnya</td><td class="text-center">9</td></tr><tr><td class="text-center">7</td><td class="text-left">Pertambangan/penggalian</td><td class="text-center">4</td></tr><tr><td class="text-center">8</td><td class="text-left">Industri pengolahan</td><td class="text-center">22</td></tr><tr><td class="text-center">9</td><td class="text-left">Pengadaan listrik, gas, uap/air panas, dan udara dingin</td><td class="text-center">0</td></tr><tr><td class="text-center">10</td><td class="text-left">Pengelolaan air, pengelolaan air limbah, pengelolaan dan daur ulang sampah, dan aktivitas remediasi</td><td class="text-center">3</td></tr><tr><td class="text-center">11</td><td class="text-left">Konstruksi</td><td class="text-center">41</td></tr><tr><td class="text-center">12</td><td class="text-left">Perdagangan besar dan eceran, reparasi dan perawatan mobil dan sepeda motor</td><td class="text-center">59</td></tr><tr><td class="text-center">13</td><td class="text-left">Pengangkutan dan pergudangan</td><td class="text-center">21</td></tr><tr><td class="text-center">14</td><td class="text-left">Penyediaan akomodasi &amp; makan minum</td><td class="text-center">3</td></tr><tr><td class="text-center">15</td><td class="text-left">Informasi &amp; komunikasi</td><td class="text-center">1</td></tr><tr><td class="text-center">16</td><td class="text-left">Keuangan &amp; asuransi</td><td class="text-center">0</td></tr><tr><td class="text-center">17</td><td class="text-left">Real estate</td><td class="text-center">0</td></tr><tr><td class="text-center">18</td><td class="text-left">Aktivitas profesional, ilmiah, dan teknis</td><td class="text-center">0</td></tr><tr><td class="text-center">19</td><td class="text-left">Aktivitas penyewaan dan sewa guna tanpa hak opsi, ketenagakerjaan, agen perjalanan, dan penunjang usaha lainnya</td><td class="text-center">0</td></tr><tr><td class="text-center">20</td><td class="text-left">Administrasi pemerintahan, pertahanan, dan jaminan sosial wajib</td><td class="text-center">12</td></tr><tr><td class="text-center">21</td><td class="text-left">Pendidikan</td><td class="text-center">33</td></tr><tr><td class="text-center">22</td><td class="text-left">Aktivitas kesehatan manusia dan aktivitas sosial</td><td class="text-center">6</td></tr><tr><td class="text-center">23</td><td class="text-left">Kesenian, hiburan, dan rekreasi</td><td class="text-center">0</td></tr><tr><td class="text-center">24</td><td class="text-left">Aktivitas jasa lainnya</td><td class="text-center">19</td></tr><tr><td class="text-center">25</td><td class="text-left">Aktivitas keluarga sebagai pemberi kerja</td><td class="text-center">2</td></tr><tr><td class="text-center">26</td><td class="text-left">Aktivitas badan internasional dan badan ekstra internasional lainnya</td><td class="text-center">0</td></tr></tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs13" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 13. </h3>
-                      </div>
-                      <div class="col-sm-9 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Penduduk Menurut Partisipasi Sekolah di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Status Partisipasi Sekolah</th>
-                            <th style="width: 30%;">Jumlah Penduduk</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>Tidak/belum pernah sekolah</td>
-                            <td>81</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>Masih sekolah</td>
-                            <td>258</td>
-                          </tr>
-                          <tr>
-                            <td>1</td>
-                            <td>Tidak bersekolah lagi</td>
-                            <td>463</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs14" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 14. </h3>
-                      </div>
-                      <div class="col-sm-9 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Penduduk Menurut Pendidikan Tinggi yang Ditamatkan di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Jenjang Pendidikan yang Ditamatkan</th>
-                            <th style="width: 30%;">Jumlah Penduduk</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>Tidak/Belum Tamat SD</td>
-                            <td>44</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>SD/Sederajat</td>
-                            <td>201</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>SMP/Sederajat</td>
-                            <td>187</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>SMA/Sederajat</td>
-                            <td>203</td>
-                          </tr>
-                          <tr>
-                            <td>5</td>
-                            <td>D1/D2/D3</td>
-                            <td>30</td>
-                          </tr>
-                          <tr>
-                            <td>6</td>
-                            <td>S1/S2/S3</td>
-                            <td>56</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <div id="tabs15" class="tabs-table mt-4 d-none">
-                    <div class="row">
-                      <div class="col-sm-3">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Tabel 15. </h3>
-                      </div>
-                      <div class="col-sm-9 px-0">
-                        <h3 class="fs-6 fw-bold mb-3" style="font-size:15px!important">Jumlah Penduduk Menurut Jaminan Kesehatan di Desa Labaha, 2025</h3>
-                      </div>
-                    </div>
-                    <hr>
-                    <div class="table-responsive">
-                      <table class="table table-sm table-hover table-bordered table-white" style="font-size:13.5px">
-                        <thead class="align-item-center">
-                          <tr>
-                            <th style="width: 5%;">No</th>
-                            <th style="width: 65%;">Jaminan Kesehatan</th>
-                            <th style="width: 30%;">Jumlah Penduduk</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>Tidak Memiliki</td>
-                            <td>291</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>BPJS PBI</td>
-                            <td>402</td>
-                          </tr>
-                          <tr>
-                            <td>3</td>
-                            <td>BPJS Non-PBI</td>
-                            <td>253</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>Jamkes Lainnya</td>
-                            <td>0</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div> 
-                    <hr>
-                  </div>
-                  <p style="font-size:13px">Sumber: Pendataan Desa Cantik 2025 / Regsosek 2023</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <!-- End Tabulation 2-->
 
         <!-- ======= infographics =======-->
         <section class="section services__v3" id="infographics">
@@ -2552,6 +1855,10 @@ License: https://freebootstrap.net/license
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
     <!-- Slick JS -->
 
     <script>
@@ -2598,6 +1905,41 @@ License: https://freebootstrap.net/license
     
   </script>
   <script>
+
+    $('#dataPublish').DataTable(
+      {
+        info : false,
+        lengthChange: false,
+        searching: false,
+        autoWidth: false,
+        language: {
+            search: '<span style="font-size:14px">Temukan Keluarga</span>',
+            searchPlaceholder: ".....",
+            paginate: {
+                previous: "<i class='bi bi-chevron-left'>",
+                next: "<i class='bi bi-chevron-right'>",
+            },
+        },
+        columns: [
+          { width: "8%" }, // kolom 1
+          { width: "47%" }, // kolom 2
+          { width: "15%" },  // kolom 3
+          { width: "17%" }, // kolom 4
+          { width: "13%" },  // kolom 5
+        ],
+        drawCallback: function () {
+          let pagination = $(".dataTables_paginate > .pagination");
+          pagination.addClass("pagination-primary mt-2"); 
+          pagination.find("li.paginate_button a.page-link").addClass("rounded-circle").css({
+              "margin-left": "2px",
+              "margin-right": "2px"
+            });
+           $("table.dataTable thead th").css("padding-right", "20px");
+          $("table.dataTable thead th").css("vertical-align", "middle");
+        },
+      }
+    );
+
     $(window).on('load', function(){
       $('.slick-items').slick({
         infinite: true,

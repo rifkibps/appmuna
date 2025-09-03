@@ -145,7 +145,6 @@
                                         
                         <div id="cardCollpase" class="collapse pt-3 show">
                             <ul style="padding-left:0px!important;font-size:13.5px;overflow-y: scroll; height:200px;">
-
                                 {% for item in subjects.0.items %}
                                     <li style="list-style:none;"><p><a href="javascript:void(0)" class="text-secondary subject-filter" data-subj="{{item.id}}"> {{item.name}} <span class="badge badge-primary-lighten float-end ms-2">{{item.count}}</span></a></p></li>
                                 {% endfor %}
