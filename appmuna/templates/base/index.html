@@ -72,6 +72,15 @@ License: https://freebootstrap.net/license
       .slick-items, .slick-items-graphs {
         visibility: hidden;
       }
+      .slick-dots {
+        bottom: -93px; /* geser lebih jauh ke bawah */
+      }
+      
+      .slick-dots li button:before {
+        font-size: 8px;  /* ubah ukuran default (biasanya 6px) */
+      }
+
+
       .slick-items.slick-initialized, .slick-items-graphs.slick-initialized {
         visibility: visible;
       }
@@ -1410,95 +1419,7 @@ License: https://freebootstrap.net/license
         </section>
         <!-- End Tabulation -->
 
-        <!-- ======= infographics =======-->
-        <section class="section services__v3" id="infographics">
-          <div class="container">
-            <div class="row mb-5">
-              <div class="col-md-8 mx-auto text-center"><span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Visualisasi Data</span>
-                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Infografis Desa Labaha</h2>
-              </div>
-            </div>
-            <div class="row g-4">
-              <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
-                <div class="service-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between gap-5">
-                  <div>
-                    <div class="img-wrap position-relative text-center">
-                      <img class="img-fluid rounded-4 aos-init aos-animate" src="{% static 'customs/assets/images/labaha/infografis-labaha-1.png' %}"  data-aos="fade-up" data-aos-delay="0" width="400px">
-                    </div>
-                    <br>
-                    <h3 class="fs-5 mb-3">Statistik Kependudukan</h3>
-                    <p class="mb-4">Pada tahun 2025, Desa Labaha memiliki jumlah penduduk sebanyak 857 jiwa, yang terdiri dari 431 laki-laki dan 426 perempuan. Rasio jenis kelamin sebesar 101 ...</p>
-                  </div>
-                  <a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#infographicsModal1">
-                    <span class="icons">
-                    <i class="icon-1 bi bi-arrow-right-short"></i>
-                    <i class="icon-2 bi bi-arrow-right-short"> </i></span>
-                    <span>Selengkapnya</span></a>
-                </div>
-              </div>
-              <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
-                <div class="service-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between gap-5">
-                  <div>
-                    <div class="img-wrap position-relative text-center">
-                      <img class="img-fluid rounded-4 aos-init aos-animate" src="{% static 'customs/assets/images/labaha/infografis-labaha-2.png' %}"  data-aos="fade-up" data-aos-delay="0" width="400px">
-                    </div>
-                    <br>
-                    <h3 class="fs-5 mb-3">Statistik Perumahan</h3>
-                    <p class="mb-4">Sebagian besar keluarga di Desa Labaha tinggal di rumah milik sendiri, yakni sebanyak 223 keluarga atau 92,15% dari total keluarga.</p>
-                  </div><a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#infographicsModal2"><span class="icons"><i class="icon-1 bi bi-arrow-right-short"></i><i class="icon-2 bi bi-arrow-right-short"> </i></span><span>Selengkapnya</span></a>
-                </div>
-              </div>
-              <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
-                <div class="service-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between gap-5">
-                  <div>
-                    <div class="img-wrap position-relative text-center">
-                      <img class="img-fluid rounded-4 aos-init aos-animate" src="{% static 'customs/assets/images/labaha/infografis-labaha-3.png' %}" alt="FreeBootstrap.net image placeholder" data-aos="fade-up" data-aos-delay="0" width="400px">
-                    </div>
-                    <br>
-                    <h3 class="fs-5 mb-3">Statistik Keluarga</h3>
-                    <p class="mb-4">Jumlah keluarga di Desa Labaha pada tahun 2025 tercatat sebanyak 242 keluarga. Mayoritas keluarga memiliki 3–4 anggota rumah tangga (ART).</p>
-                  </div><a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#infographicsModal3"><span class="icons"><i class="icon-1 bi bi-arrow-right-short"></i><i class="icon-2 bi bi-arrow-right-short"> </i></span><span>Selengkapnya</span></a>
-                </div>
-              </div>              
-            </div>
-          </div>
-        </section>
-        <!-- end infographics-->
-        
-        <!-- ======= Berita =======-->
-        <section class="section testimonials__v2" id="news">
-          <div class="container">
-            <div class="row mb-5">
-              <div class="col-lg-5 mx-auto text-center"><span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Berita</span>
-                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Berita Terkini Desa Labaha</h2>
-                <p data-aos="fade-up" data-aos-delay="200">Kumpulan berita terkini dan <i>up to date</i> Desa Labaha</p>
-              </div>
-            </div>
-            <div class="row g-4" data-masonry="{&quot;percentPosition&quot;: true }">
-              <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
-                <div class="testimonial rounded-4 p-4" style="font-size:13.5px!important">
-                  <h3 class="fs-5 mb-3">Sosialisasi dan Pencanangan Desa Cantik 2025 Desa Labaha</h3>
-                  <blockquote class="mb-4">
-                    Pada 15 Mei 2025, Desa Labaha mengadakan pelatihan data sosial ekonomi pertanian yang diikuti aparat desa, BPS, dan mahasiswa. Kegiatan ini bertujuan menghasilkan data akurat untuk perencanaan pembangunan.
-                  </blockquote>
-                  <a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#NewsModal1"><span class="icons"><i class="icon-1 bi bi-arrow-right-short"></i><i class="icon-2 bi bi-arrow-right-short"> </i></span><span>Baca Selengkapnya</span></a>
-                </div>
-              </div>
-              <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="testimonial rounded-4 p-4" style="font-size:13.5px!important">
-                  <h3 class="fs-5 mb-3">Sosialisasi Pencanangan Desa Cantik 2025 Desa Banggai</h3>
-                  <blockquote class="mb-4">
-                    Pada 6 Mei 2025, Desa Labaha mencanangkan Program Desa Cantik 2025 untuk mendorong kemandirian desa dalam pengelolaan data. Kegiatan ini diresmikan Wakil Bupati Muna dan diharapkan memperkuat kualitas data statistik untuk mendukung pembangunan desa.
-                  </blockquote>
-                  <a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#NewsModal2" ><span class="icons"><i class="icon-1 bi bi-arrow-right-short"></i><i class="icon-2 bi bi-arrow-right-short"> </i></span><span>Baca Selengkapnya</span></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <!-- Berita-->
-        
-        <!-- ======= infrastruktur =======-->
+                <!-- ======= infrastruktur =======-->
         <section class="section services__v3" id="infrastructure">
           <div class="container">
             <div class="row mb-5">
@@ -1621,6 +1542,96 @@ License: https://freebootstrap.net/license
           </div>
         </section>
         <!-- end infrastruktur-->
+
+        <!-- ======= infographics =======-->
+        <section class="section services__v3" id="infographics">
+          <div class="container">
+            <div class="row mb-5">
+              <div class="col-md-8 mx-auto text-center"><span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Visualisasi Data</span>
+                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Infografis Desa Labaha</h2>
+              </div>
+            </div>
+            <div class="row g-4">
+              <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+                <div class="service-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between gap-5">
+                  <div>
+                    <div class="img-wrap position-relative text-center">
+                      <img class="img-fluid rounded-4 aos-init aos-animate" src="{% static 'customs/assets/images/labaha/infografis-labaha-1.png' %}"  data-aos="fade-up" data-aos-delay="0" width="400px">
+                    </div>
+                    <br>
+                    <h3 class="fs-5 mb-3">Statistik Kependudukan</h3>
+                    <p class="mb-4">Pada tahun 2025, Desa Labaha memiliki jumlah penduduk sebanyak 857 jiwa, yang terdiri dari 431 laki-laki dan 426 perempuan. Rasio jenis kelamin sebesar 101 ...</p>
+                  </div>
+                  <a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#infographicsModal1">
+                    <span class="icons">
+                    <i class="icon-1 bi bi-arrow-right-short"></i>
+                    <i class="icon-2 bi bi-arrow-right-short"> </i></span>
+                    <span>Selengkapnya</span></a>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+                <div class="service-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between gap-5">
+                  <div>
+                    <div class="img-wrap position-relative text-center">
+                      <img class="img-fluid rounded-4 aos-init aos-animate" src="{% static 'customs/assets/images/labaha/infografis-labaha-2.png' %}"  data-aos="fade-up" data-aos-delay="0" width="400px">
+                    </div>
+                    <br>
+                    <h3 class="fs-5 mb-3">Statistik Perumahan</h3>
+                    <p class="mb-4">Sebagian besar keluarga di Desa Labaha tinggal di rumah milik sendiri, yakni sebanyak 223 keluarga atau 92,15% dari total keluarga.</p>
+                  </div><a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#infographicsModal2"><span class="icons"><i class="icon-1 bi bi-arrow-right-short"></i><i class="icon-2 bi bi-arrow-right-short"> </i></span><span>Selengkapnya</span></a>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+                <div class="service-card p-4 rounded-4 h-100 d-flex flex-column justify-content-between gap-5">
+                  <div>
+                    <div class="img-wrap position-relative text-center">
+                      <img class="img-fluid rounded-4 aos-init aos-animate" src="{% static 'customs/assets/images/labaha/infografis-labaha-3.png' %}" alt="FreeBootstrap.net image placeholder" data-aos="fade-up" data-aos-delay="0" width="400px">
+                    </div>
+                    <br>
+                    <h3 class="fs-5 mb-3">Statistik Keluarga</h3>
+                    <p class="mb-4">Jumlah keluarga di Desa Labaha pada tahun 2025 tercatat sebanyak 242 keluarga. Mayoritas keluarga memiliki 3–4 anggota rumah tangga (ART).</p>
+                  </div><a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#infographicsModal3"><span class="icons"><i class="icon-1 bi bi-arrow-right-short"></i><i class="icon-2 bi bi-arrow-right-short"> </i></span><span>Selengkapnya</span></a>
+                </div>
+              </div>              
+            </div>
+          </div>
+        </section>
+        <!-- end infographics-->
+        
+        <!-- ======= Berita =======-->
+        <section class="section testimonials__v2" id="news">
+          <div class="container">
+            <div class="row mb-5">
+              <div class="col-lg-5 mx-auto text-center"><span class="subtitle text-uppercase mb-3" data-aos="fade-up" data-aos-delay="0">Berita</span>
+                <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Berita Terkini Desa Labaha</h2>
+                <p data-aos="fade-up" data-aos-delay="200">Kumpulan berita terkini dan <i>up to date</i> Desa Labaha</p>
+              </div>
+            </div>
+            <div class="row g-4" data-masonry="{&quot;percentPosition&quot;: true }">
+              <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
+                <div class="testimonial rounded-4 p-4" style="font-size:13.5px!important">
+                  <h3 class="fs-5 mb-3">Sosialisasi dan Pencanangan Desa Cantik 2025 Desa Labaha</h3>
+                  <blockquote class="mb-4">
+                    Pada 15 Mei 2025, Desa Labaha mengadakan pelatihan data sosial ekonomi pertanian yang diikuti aparat desa, BPS, dan mahasiswa. Kegiatan ini bertujuan menghasilkan data akurat untuk perencanaan pembangunan.
+                  </blockquote>
+                  <a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#NewsModal1"><span class="icons"><i class="icon-1 bi bi-arrow-right-short"></i><i class="icon-2 bi bi-arrow-right-short"> </i></span><span>Baca Selengkapnya</span></a>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="testimonial rounded-4 p-4" style="font-size:13.5px!important">
+                  <h3 class="fs-5 mb-3">Sosialisasi Pencanangan Desa Cantik 2025 Desa Banggai</h3>
+                  <blockquote class="mb-4">
+                    Pada 6 Mei 2025, Desa Labaha mencanangkan Program Desa Cantik 2025 untuk mendorong kemandirian desa dalam pengelolaan data. Kegiatan ini diresmikan Wakil Bupati Muna dan diharapkan memperkuat kualitas data statistik untuk mendukung pembangunan desa.
+                  </blockquote>
+                  <a class="special-link d-inline-flex gap-2 align-items-center text-decoration-none" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#NewsModal2" ><span class="icons"><i class="icon-1 bi bi-arrow-right-short"></i><i class="icon-2 bi bi-arrow-right-short"> </i></span><span>Baca Selengkapnya</span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Berita-->
+        
+
 
         <!-- Modal Infografis -->
         <div class="modal fade" id="infographicsModal1" tabindex="-1" >
@@ -2004,7 +2015,7 @@ License: https://freebootstrap.net/license
         infinite: true,
         slidesToShow: 1,
         slidesToScroll: 1,
-        dots: false,
+        dots: true,
         arrows: false,
         autoplay: true,
         autoplaySpeed: 5000,
