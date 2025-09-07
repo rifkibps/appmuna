@@ -28,7 +28,8 @@ urlpatterns = [
 
     path('app/media/videographics', views.VideographicsClassView.as_view(), name='videographics'),
     path('app/media/videographic/preview', views.VideographicPreviewClassView.as_view(), name='videographic-preview'),
-
-    path('app/search', views.SearchEngineClassView.as_view(), name='search-app')
-    
+    path('dataset', views.SearchEngineClassView.as_view(), name='dataset'),
+    path('metadata', views.MetaDataClassView.as_view(), name='metadata'),
+    path('visualisasi', views.VisualizationClassView.as_view(), name='visualization'),
+    path('dataset/preview', views.DatasetPreviewClassView.as_view(), name='dataset-preview')
 ]

@@ -1,0 +1,749 @@
+{% extends "base/index.html" %}
+{% load static %}
+
+{% block css-extender %}
+<style>
+
+  /* Style untuk link tab */
+  .nav-tabs .nav-link {
+    border: none !important;
+    color: #555;
+    font-weight: 300;
+  }
+
+  /* Hover effect */
+  .nav-tabs .nav-link:hover {
+    color: #215C5C;
+  }
+
+  /* Tab aktif dengan garis biru tipis di bawah */
+  .nav-tabs .nav-link.active {
+    border: none !important;
+    border-bottom: 2px solid #215C5C !important;
+    color: #000;
+    font-weight: 400;
+  }
+
+  /* Dropdown menu */
+  .nav-tabs .dropdown-menu {
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .title-data{
+    font-size:18px;
+    font-weight: 500
+  }
+  
+  .desc-data {
+    font-size:15px;
+  }
+
+  .results:hover{
+    background-color: rgba(33, 92, 92, 0.08);
+  }
+</style>
+
+<style>
+ /* Base circle style */
+  .pagination .page-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50% !important;
+    margin: 0 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #215C5C;
+  }
+
+  /* Active page */
+  .pagination .page-item.active .page-link {
+    background-color: #215C5C;
+    border-color: #215C5C;
+    color: #fff;
+  }
+  
+  /* Hover effect */
+  .pagination .page-link:hover {
+    background-color: rgba(33, 92, 92, 0.1);
+    color: #215C5C;
+  }
+</style>
+
+<style>
+  .form-filter {
+    width: 150px;
+    height: 37px;
+    border-radius: 5px;
+    font-size: 13.5px;
+  }
+  .input-group {
+    position: relative
+  }
+  
+  .search-icon-2 {
+    position: absolute;
+    top: 45%;
+    left: 17px;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #888;
+    pointer-events: none; /* biar klik fokus tetap ke input */
+    z-index:5
+  }
+  
+  .lable-count{
+    color: #215C5C;
+  }
+</style>
+{% endblock css-extender %}
+
+{% block main-content %}
+<section class="section pricing__v2" id="tabulation-2">
+    <div class="container" style="margin-top:100px">
+      <div class="row">
+          <div class="col-12 mx-auto text-center mb-5">
+          <h2 class="mb-3" data-aos="fade-up" data-aos-delay="100">Tabulasi Data Desa</h2>
+          <p data-aos="fade-up" data-aos-delay="200">Data Desa Labaha meliputi Data Infrastruktur Desa & Kependudukan Desa Labaha Tahun 2025.</p>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-3 mb-3 mb-md-0" data-aos="fade-up" data-aos-delay="0">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="p-4 rounded-4  h-100">
+                    <h3>Tabulasi Data</h3>
+                    <br>
+                    <p style="font-size:14.5px">Data Sosial-Kependudukan Desa Labaha bersumber dari pendataan langsung Desa Cantik Tahun 2025 yang dilaksanakan oleh perangkat Desa Labaha Berkoodinasi.</p>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="p-4 rounded-4 price-table popular h-100 mt-3">
+                    <div class="row mt-4">
+                      {% for i in '12'  %}
+                      <div class="col-md-6 mt-2">
+                          <a href="javascript:void(0)" style="text-decoration: none;">
+                          <div class="stat-item">
+                              <h3 class="fs-1 fw-bold"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="50" data-purecounter-duration="2">50</span></h3>
+                              <p class="mb-0">Data RPJMD</p>
+                          </div>
+                          </a>
+                      </div>
+                      <div class="col-md-6 mt-2">
+                          <a href="javascript:void(0)" style="text-decoration: none;">
+                          <div class="stat-item">
+                              <h3 class="fs-1 fw-bold"><span class="purecounter" data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="2">20</span></h3>
+                              <p class="mb-0">Data RPJPD</p>
+                          </div>
+                          </a>
+                      </div>
+                      {% endfor %}
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9" data-aos="fade-up" data-aos-delay="400">
+          <div class="p-4 rounded-4">
+              <div class="row">
+              <!-- Grafik -->
+              <div class="col-md-12">
+                  <div class="">
+                      <div class="slick-items-graphs">
+                      <div class="content-chart">
+                          <h5 class="text-center">Grafik Jumlah Data Menurut Kategori</h5>
+                          <canvas id="opdChart" height="180"></canvas>
+                      </div>
+                      <div class="content-chart">
+                          <h5 class="text-center">Pertumbuhan Ekonomi Kabupaten ADHK(%)</h5>
+                          <canvas id="ecoChart" height="180"></canvas>
+                      </div>
+                      <div class="content-chart">
+                          <h5 class="text-center">Jumlah Penduduk Kabupaten Muna (Jiwa)</h5>
+                          <canvas id="popChart" height="180"></canvas>
+                      </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
+          </div>
+          </div>
+      </div>
+    </div>
+</section>
+
+<section class="section" >
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-2 px-0" >
+        <div class="card" style=" border-radius: 20px; border:none; padding-top:90px" >
+          <div class="card-body p-0" >
+            <p style="color: #215C5C">
+              <b><i class="mdi mdi-filter-menu"></i> Filter Pencarian</b>
+            </p>
+            <div class="form-group my-3" >
+                <div class="mb-1">
+                    <label for="jenisTabulasi" style="font-size:14.5px; font-weight:500">Stakeholder Data</label>
+                </div>
+                <select class="form-control form-filter" id="jenisTabulasi">
+                    <optgroup label="Lembaga Vertikal">
+                    <option value="1">Badan Pusat Statistik</option>
+                    <option value="2">2. Komisi Pemilihan Umum</option>
+                    </optgroup>
+                    <optgroup label="Lembaga Horizontal">
+                    <option value="1">1. Dinas Pendidikan</option>
+                    <option value="2">2. Dinas Kesehatan</option>
+                    <option value="2">3. Dinas Pertanian</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="form-group my-3" >
+                <div class="mb-1">
+                    <label for="jenisTabulasi" style="font-size:14px; font-weight:500">Periode</label>
+                </div>
+                <select class="form-control form-filter" id="jenisTabulasi">
+                    <option value="1">2025</option>
+                    <option value="2">2024</option>
+                    <option value="3">2023</option>
+                </select>
+            </div>
+
+            <div class="form-group my-3" >
+                <div class="mb-1">
+                    <label for="jenisTabulasi" style="font-size:14px; font-weight:500">Urutkan Menurut</label>
+                </div>
+                <div class="mt-1">
+                  <div class="form-check">
+                    <input
+                      type="radio"
+                      id="customRadio1"
+                      name="customRadio"
+                      class="form-check-input"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="customRadio1"
+                      style="font-size: 13.5px"
+                      >Terbaru</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      type="radio"
+                      id="customRadio2"
+                      name="customRadio"
+                      class="form-check-input"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="customRadio2"
+                      style="font-size: 13.5px"
+                      >Relevansi</label
+                    >
+                  </div>
+                  <div class="form-check">
+                    <input
+                      type="radio"
+                      id="customRadio3"
+                      name="customRadio"
+                      class="form-check-input"
+                    />
+                    <label
+                      class="form-check-label"
+                      for="customRadio3"
+                      style="font-size: 13.5px"
+                      >Terunduh</label
+                    >
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <!-- end card-->
+
+        <a
+          href="#"
+          class="list-group-item list-group-item-action pt-1 pb-0"
+          style="border-radius: 10px; border: none"
+        >
+        </a>
+      </div>
+
+      <div class="col-lg-10 px-4">
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <div class="app-search dropdown" style="margin-left:0px">
+                    <form>
+                        <div class="input-group">
+                          <input type="text" class="form-control custom-input" placeholder="Telusuri data statistik ..." id="top-search-mitra" autofocus autocomplete="off"  style="width:50px;height:50px; border-radius:5px; padding-left:35px">
+                          <span class="bi bi-search search-icon-2" style="margin-top:5px"></span>
+                            <button class="btn btn-primary btn-sm rounded" style="margin-left:15px" id="button-top-search">Cari Data</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <ul class="nav nav-tabs nav-bordered mb-4">
+          <li class="nav-item mx-1">
+            <a
+              href="#home1"
+              data-bs-toggle="tab"
+              aria-expanded="show active"
+              class="nav-link py-2 "
+            >
+              <i class="mdi mdi-home-variant d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Semua <i class="mdi mdi-apps"></i
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item mx-1">
+            <a
+              href="#profile1"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2 active"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Statistik
+                <i class="mdi mdi-file-table-box-multiple-outline"></i
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item mx-1">
+            <a
+              href="#ikm_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+            >
+              <i class="mdi mdi-account-circle d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Publikasi <i class="mdi mdi-book-open-page-variant-outline"></i
+              ></span>
+            </a>
+          </li>
+
+          <li class="nav-item mx-1">
+            <a
+              href="#ids_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >BRS <i class="mdi mdi-newspaper-variant-multiple"></i
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item mx-1">
+            <a
+              href="#ids_table"
+              data-bs-toggle="tab"
+              aria-expanded="false"
+              class="nav-link py-2"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Infografis <i class="mdi mdi-chart-bar"></i
+              ></span>
+            </a>
+          </li>
+          <li class="nav-item mx-1 dropdown">
+            <a
+              class="nav-link py-2"
+              data-bs-toggle="dropdown"
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+              <span class="d-none d-md-block" style="font-weight: 300"
+                >Lainnya <i class="mdi mdi-chevron-right"></i
+              ></span>
+            </a>
+            <div
+              class="dropdown-menu"
+              style="font-size: 14px; border-radius: 10px"
+            >
+              <a class="dropdown-item pb-0" href="#"
+                >Videografis <i class="mdi mdi-youtube-subscription"></i
+              ></a>
+              <a class="dropdown-item" href="#"
+                >Metadata Statistik <i class="mdi mdi-bookshelf"></i
+              ></a>
+            </div>
+          </li>
+        </ul>
+        <div class="tab-content">
+              
+          <p class="px-3">
+            Menampilkan 250 hasil pencarian dalam 0.016 detik.
+          </p>
+
+          <div class="tab-pane " id="home1">
+            {% for i in '0123456789' %}
+            <a
+              href="#"
+              class="list-group-item list-group-item-action results p-3"
+              style="border-radius: 10px; border: none"
+            >
+              <div class="row g-0 align-items-center">
+                <div class="col-sm-12">
+                  <div class="d-flex w-100 justify-content-between">
+                    <h5 class="title-data mb-1" style="color: #215C5C">
+                      Kemiskinan di Kabupaten Muna Tahun 2023 Meningkat 2%
+                      dibanding tahun sebelumnya
+                    </h5>
+                  </div>
+                  <p class="desc-data mb-1">
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry.Lorem Ipsum is simply dummy text of the
+                    printing...
+                  </p>
+                  <small class="text-muted mt-3 font-12">
+                    <i class="text-truncate"
+                      >https://www.bps.go.id/publication/2020/12/17/9f10788b8f1a27df234dcf2e/women-and-men-in-indonesia-2019.html/</i
+                    >
+                  </small>
+
+                  <ul class="px-0 mt-1" style="list-style: none">
+                    <li class="d-inline">
+                      <span
+                        class="badge rounded-pill font-12"
+                        style="
+                          background-color: #215C5C;
+                          padding: 5px 10px 5px 10px;
+                        "
+                        ><i class="mdi mdi-book-open-page-variant-outline"></i>
+                        Publikasi</span
+                      >
+                    </li>
+                    <li class="d-inline" title="Release Date">
+                      <span
+                        class="badge rounded-pill font-12"
+                        style="
+                          background-color: #215C5C;
+                          padding: 5px 10px 5px 10px;
+                        "
+                        >Release 3 Februari 2023</span
+                      >
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+
+            <div class="row mt-5">
+              <div class="col-12">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                  <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Previous">
+                      <i class="bi bi-chevron-left"></i>
+                    </a>
+                  </li>
+                  <li class="page-item"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                      <i class="bi bi-chevron-right"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane show active" id="profile1">
+              <div class="p-4 rounded-4  h-100">
+                <div id="tabs1" class="tabs-table mt-2">
+                  <div class="row">
+                    <div class="col-sm-8">
+                    <h3 class="fw-bold text-primary" style="font-size:17px!important">Data di Badan Pusat Statistik Kabupaten Muna</h3>
+                    </div>
+                    <div class="col-sm-4">
+                    <div class="position-relative d-inline-block">
+                        <i class="bi bi-search search-icon"></i>
+                        <input type="text" class="form-control form-control-sm custom-input" placeholder="Temukan Data">
+                    </div>
+                    </div>
+                </div>
+                  <hr>
+                  <div class="table-responsive">
+                      <table class="table table-hover table-striped table-bordered text-muted" style="font-size:14.5px" id="dataPublishSearch">
+                      <thead>
+                          <tr>
+                          <th>No</th>
+                          <th>Indikator Data</th>
+                          <th>Stakeholder</th>
+                          <th>Periode</th>
+                          <th>Ketersedian</th>
+                          </tr>
+                      </thead>
+                      <tbody >
+                          {% for i in '12345678999'  %}
+                          <tr>
+                          <td>{{i}}</td>
+                          <td>
+                              <a href="" class="text-dark" style="text-decoration: none;">Pertumbuhan Ekonomi Menurut Lapangan Usaha Kabupaten Muna</a>
+                          </td>
+                          <td>BPS Kabupaten Muna</td>
+                          <td>Triwulanan</td>
+                          <td>2010 - 2025</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                      </table>
+                  </div> 
+                  <hr>
+                </div>
+                <p style="font-size:13px">Sumber: Pendataan Desa Cantik 2025 / Regsosek 2023</p>
+            </div>
+          </div>
+          <div class="tab-pane" id="settings1">
+            <p>...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock main-content %}
+
+{% block js-extender %}
+<script>
+
+  $('#dataPublishSearch').DataTable(
+    {
+      info : false,
+      lengthChange: false,
+      searching: false,
+      autoWidth: false,
+      pageLength: -1,
+      paging: false,
+      scrollY: '500px',   // tinggi area scroll
+      scrollCollapse: true,
+      columns: [
+        { width: "8%" }, // kolom 1
+        { width: "37%" }, // kolom 2
+        { width: "25%" }, // kolom 2
+        { width: "15%" },  // kolom 3
+        { width: "15%" }, // kolom 4
+      ],
+    }
+  );
+</script>
+<script>
+  $(window).on('load', function(){
+        $('.slick-items-graphs').slick({
+          infinite: true,
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          dots: true,
+          arrows: false,
+          autoplay: true,
+          autoplaySpeed: 5000,
+          responsive: [
+            {
+              breakpoint: 992,
+              settings: { slidesToShow: 2 }
+            },
+            {
+              breakpoint: 576,
+              settings: { slidesToShow: 1 }
+            }
+          ]
+        });
+        // refresh AOS biar animasi terbaca lagi
+        AOS.refresh();
+      });
+</script>
+    <script>
+      const ctx = document.getElementById('opdChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [
+            'Dinas Pendidikan','Dinas Kesehatan','Dinas PU','Dinas Sosial','Dinas Pertanian',
+            'Dinas Perhubungan','Dinas Perindustrian','Dinas Perdagangan','Dinas Pariwisata',
+            'Dinas Lingkungan Hidup','Dinas Kependudukan','Dinas Tenaga Kerja',
+            'Dinas Kominfo','Dinas Perpustakaan','Dinas Perikanan',
+            'Bappeda','Satpol PP','Inspektorat','Badan Keuangan','Sekretariat Daerah'
+          ],
+          datasets: [{
+            label: 'Jumlah Data',
+            data: [2700, 1200, 800, 717, 1300, 950, 1100, 980, 600, 1500, 
+                  1800, 1250, 2100, 900, 750, 2200, 1300, 1100, 2400, 2000],
+            backgroundColor: '#215C5C',
+            borderRadius: 4,
+            barThickness: 20
+          }]
+        },
+        options: {
+          indexAxis: 'x',
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: { display: false },
+              ticks: {
+                font: { size: 12 }
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: {
+                font: { size: 12, weight: '500' }
+              }
+            }
+          }
+        }
+      });
+    </script>
+
+    <script>
+      const ctx3 = document.getElementById('popChart').getContext('2d');
+      new Chart(ctx3, {
+        type: 'bar',
+        data: {
+          labels: [
+            'Tongkuno','Tongkuno Selatan','Parigi','Bone','Marobo',
+            'Kabawo','Kabangka','Kontukowuna','Kontunaga',
+            'Watopute','Katobu','Lohia',
+            'Duruka','Batalaiworu','Napabalano',
+            'Lasalepa','Towea','Wakorumba Selatan','Pasir Putih','Pasi Kolaga', 'Maligano', 'Batukara'
+          ],
+          datasets: [{
+            label: 'Jumlah Data',
+            data: [2700, 1200, 800, 717, 1300, 950, 1100, 980, 600, 1500, 
+                  1800, 1250, 2100, 900, 750, 2200, 1300, 1100, 2400, 2000, 1200, 800],
+            backgroundColor: '#215C5C',
+            borderRadius: 4,
+            barThickness: 20
+          }]
+        },
+        options: {
+          indexAxis: 'x',
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            title: {
+              display: false
+            }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              grid: { display: false },
+              ticks: {
+                font: { size: 12 },
+                minRotation: 90,  // minimal 90 derajat
+                maxRotation: 90   // maksimal 90 derajat
+              }
+            },
+            y: {
+              grid: { display: false },
+              ticks: {
+                font: { size: 12, weight: '500' }
+              }
+            }
+          }
+        }
+      });
+    </script>
+
+    <script>
+        const ctx2 = document.getElementById('ecoChart').getContext('2d');
+
+        // Tahun & Quarter
+        const years = ['2020','2021','2022','2023','2024','2025'];
+        const labels = [];
+        years.forEach((year, i) => {
+        ['Q1','Q2','Q3','Q4'].forEach((q, j) => {
+            // hanya Q1 yang ada tahun
+            if (q === 'Q1') {
+            labels.push([q, year]);
+            } else {
+            labels.push([q, '']);
+            }
+        });
+        });
+
+        // Dummy data pertumbuhan ekonomi (%)
+        const data = [
+        -2.5, -1.0, 0.5, 1.2,   // 2020
+        2.0, 3.1, 3.5, 4.0,     // 2021
+        4.2, 4.5, 4.8, 5.0,     // 2022
+        5.2, 5.3, 5.4, 5.6,     // 2023
+        5.7, 5.8, 6.0, 6.1,     // 2024
+        6.2, 6.3, 6.4, 6.5      // 2025
+        ];
+
+        new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+            label: 'Pertumbuhan Ekonomi (%)',
+            data: data,
+            borderColor: '#215C5C',
+            backgroundColor: '#215C5C',
+            tension: 0.3,
+            pointRadius: 4,
+            pointBackgroundColor: '#215C5C',
+            pointBorderColor: '#215C5C',
+            fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+            legend: { display: false },
+            title: { display: false },
+            annotation: {
+                annotations: {
+                line2021: { type: 'line', xMin: 4, xMax: 4, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] },
+                line2022: { type: 'line', xMin: 8, xMax: 8, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] },
+                line2023: { type: 'line', xMin: 12, xMax: 12, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] },
+                line2024: { type: 'line', xMin: 16, xMax: 16, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] },
+                line2025: { type: 'line', xMin: 20, xMax: 20, borderColor: '#ccc', borderWidth: 1, borderDash: [4,4] }
+                }
+            }
+            },
+            scales: {
+            x: {
+                grid: { display: false },
+                ticks: {
+                font: { size: 12 },
+                padding: 8,        // beri jarak biar tidak mepet
+                maxRotation: 0,    // biar horizontal
+                autoSkip: false    // tampilkan semua
+                }
+            },
+            y: {
+                grid: { display: false },
+                ticks: {
+                font: { size: 12, weight: '500' },
+                callback: function(value) { return value + '%'; }
+                }
+            }
+            }
+        }
+        });
+    </script>
+
+{% endblock js-extender %}

@@ -169,6 +169,30 @@ class HomeDataTraceClassView(View):
             'data': data,
         }
 
+class MetaDataClassView(View):
+    def get(self,request):
+        context = {
+            'title' : 'Kemiskinan | Telusuri Data'
+        }
+
+        return render(request, 'app/metadata.html', context)
+        # return render(request, 'app/search_app.html', context)
+class VisualizationClassView(View):
+    def get(self,request):
+        context = {
+            'title' : 'Kemiskinan | Telusuri Data'
+        }
+
+        return render(request, 'app/visualization.html', context)
+        # return render(request, 'app/search_app.html', context)
+class DatasetPreviewClassView(View):
+    def get(self,request):
+        context = {
+            'title' : 'Kemiskinan | Telusuri Data'
+        }
+
+        return render(request, 'app/dataset-preview.html', context)
+        # return render(request, 'app/search_app.html', context)
 
 class SearchEngineClassView(View):
     def get(self,request):
@@ -176,7 +200,8 @@ class SearchEngineClassView(View):
             'title' : 'Kemiskinan | Telusuri Data'
         }
 
-        return render(request, 'app/search_app.html', context)
+        return render(request, 'app/search.html', context)
+        # return render(request, 'app/search_app.html', context)
 
 class StatisticsTablesClassView(View):
     def get(self,request):
