@@ -78,6 +78,19 @@
 }
 
 </style>
+
+<style>
+  /* Warna checkbox custom */
+  .form-check-input:checked {
+    background-color: #215C5C;
+    border-color: #215C5C;
+  }
+  .form-check-input:focus {
+    border-color: #215C5C;
+    box-shadow: 0 0 0 0.2rem rgba(33, 92, 92, 0.25);
+  }
+</style>
+
 {% endblock css-extender %}
 
 {% block main-content %}
@@ -187,98 +200,267 @@
       </div>
     <div class="row">
       <div class="col-lg-2 px-0" >
-        <div class="card" style=" border-radius: 20px; border:none; padding-top:90px" >
+        <div class="card d-none" style=" border-radius: 20px; border:none; padding-top:90px" >
           <div class="card-body p-0" >
             <p style="color: #215C5C">
               <b><i class="mdi mdi-filter-menu"></i> Pilih Series</b>
             </p>
-            <div class="form-group my-3" >
-                <div class="mb-1">
-                    <label for="jenisTabulasi" style="font-size:14.5px; font-weight:500">Stakeholder Data</label>
+
+            <!-- Tahun 2025 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading2025">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2025" >
+                  <i class="bi bi-caret-right-fill"></i>&ensp; Tahun 2025
+                </button>
+              </h2>
+              <div id="collapse2025" class="accordion-collapse collapse show" style="padding: 0 30px" data-bs-parent="#accordionPeriode">
+                <div class="accordion-body py-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q1" checked>
+                    <label class="form-check-label" for="2023q1" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan I</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q2" checked>
+                    <label class="form-check-label" for="2023q2" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan II</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q3" checked>
+                    <label class="form-check-label" for="2023q3" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan III</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q4">
+                    <label class="form-check-label" for="2023q4" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan IV</label>
+                  </div>
                 </div>
-                <select class="form-control form-filter" id="jenisTabulasi">
-                    <optgroup label="Lembaga Vertikal">
-                    <option value="1">Badan Pusat Statistik</option>
-                    <option value="2">2. Komisi Pemilihan Umum</option>
-                    </optgroup>
-                    <optgroup label="Lembaga Horizontal">
-                    <option value="1">1. Dinas Pendidikan</option>
-                    <option value="2">2. Dinas Kesehatan</option>
-                    <option value="2">3. Dinas Pertanian</option>
-                    </optgroup>
-                </select>
+              </div>
             </div>
 
-            <div class="form-group my-3" >
-                <div class="mb-1">
-                    <label for="jenisTabulasi" style="font-size:14px; font-weight:500">Periode</label>
+            <!-- Tahun 2024 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading2024">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2024" >
+                  <i class="bi bi-caret-right-fill"></i>&ensp; Tahun 2024
+                </button>
+              </h2>
+              <div id="collapse2024" class="accordion-collapse collapse" style="padding: 0 30px" data-bs-parent="#accordionPeriode">
+                <div class="accordion-body py-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q1" checked>
+                    <label class="form-check-label" for="2023q1" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan I</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q2" checked>
+                    <label class="form-check-label" for="2023q2" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan II</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q3" checked>
+                    <label class="form-check-label" for="2023q3" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan III</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q4">
+                    <label class="form-check-label" for="2023q4" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan IV</label>
+                  </div>
                 </div>
-                <select class="form-control form-filter" id="jenisTabulasi">
-                    <option value="1">2025</option>
-                    <option value="2">2024</option>
-                    <option value="3">2023</option>
-                </select>
+              </div>
+            </div>
+            
+            <p class="my-3" style="color: #215C5C">
+              <b><i class="mdi mdi-filter-menu"></i> Pilih Grafik</b>
+            </p>
+            
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headInfographisc">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#graphics" >
+                  <i class="bi bi-caret-right-fill"></i>&ensp; Grafik
+                </button>
+              </h2>
+              <div id="graphics" class="accordion-collapse collapse show" style="padding: 0 30px" data-bs-parent="#accordionPeriode">
+                <div class="accordion-body py-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q1" checked>
+                    <label class="form-check-label" for="2023q1" style="font-size:15px"><i class="bi bi-bar-chart-line-fill"></i> Bar Chart</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q2" checked>
+                    <label class="form-check-label" for="2023q2" style="font-size:15px"><i class="bi bi-bezier"></i> Line Chart</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q3" checked>
+                    <label class="form-check-label" for="2023q3" style="font-size:15px"><i class="bi bi-pie-chart-fill"></i> Pie Chart</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="my-3">
+              <button class="btn btn-sm btn-primary" style="font-size:12px"><i class="bi bi-filter me-1"></i> Pilih Dataset</button>
+            </div>
+            
+          </div>
+        </div>
+        <div class="card" style=" border-radius: 20px; border:none; padding-top:90px" >
+          <div class="card-body p-0" >
+            <p style="color: #215C5C">
+              <b><i class="mdi mdi-filter-menu"></i> Perbandingan Series</b>
+            </p>
+
+            <p class="mb-1" style="color: #215C5C">
+              <b><i class="mdi mdi-filter-menu"></i> Series 1</b>
+            </p>
+
+            <!-- Tahun 2025 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading2025">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2025" >
+                  <i class="bi bi-caret-right-fill"></i>&ensp; Tahun 2025
+                </button>
+              </h2>
+              <div id="collapse2025" class="accordion-collapse collapse" style="padding: 0 30px" data-bs-parent="#accordionPeriode">
+                <div class="accordion-body py-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q1" checked>
+                    <label class="form-check-label" for="2023q1" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan I</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q2" checked>
+                    <label class="form-check-label" for="2023q2" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan II</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q3" checked>
+                    <label class="form-check-label" for="2023q3" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan III</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q4">
+                    <label class="form-check-label" for="2023q4" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan IV</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Tahun 2024 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading2024">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2024" >
+                  <i class="bi bi-caret-right-fill"></i>&ensp; Tahun 2024
+                </button>
+              </h2>
+              <div id="collapse2024" class="accordion-collapse collapse" style="padding: 0 30px" data-bs-parent="#accordionPeriode">
+                <div class="accordion-body py-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q1" checked>
+                    <label class="form-check-label" for="2023q1" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan I</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q2" checked>
+                    <label class="form-check-label" for="2023q2" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan II</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q3" checked>
+                    <label class="form-check-label" for="2023q3" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan III</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q4">
+                    <label class="form-check-label" for="2023q4" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan IV</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <p class="mt-3" style="color: #215C5C">
+              <b><i class="mdi mdi-filter-menu"></i> Series 2</b>
+            </p>
+
+            <!-- Tahun 2025 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading2025">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2025" >
+                  <i class="bi bi-caret-right-fill"></i>&ensp; Tahun 2025
+                </button>
+              </h2>
+              <div id="collapse2025" class="accordion-collapse collapse" style="padding: 0 30px" data-bs-parent="#accordionPeriode">
+                <div class="accordion-body py-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q1" checked>
+                    <label class="form-check-label" for="2023q1" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan I</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q2" checked>
+                    <label class="form-check-label" for="2023q2" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan II</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q3" checked>
+                    <label class="form-check-label" for="2023q3" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan III</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q4">
+                    <label class="form-check-label" for="2023q4" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan IV</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Tahun 2024 -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="heading2024">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2024" >
+                  <i class="bi bi-caret-right-fill"></i>&ensp; Tahun 2024
+                </button>
+              </h2>
+              <div id="collapse2024" class="accordion-collapse collapse" style="padding: 0 30px" data-bs-parent="#accordionPeriode">
+                <div class="accordion-body py-2">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q1" checked>
+                    <label class="form-check-label" for="2023q1" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan I</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q2" checked>
+                    <label class="form-check-label" for="2023q2" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan II</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q3" checked>
+                    <label class="form-check-label" for="2023q3" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan III</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="2023q4">
+                    <label class="form-check-label" for="2023q4" style="font-size:15px"><i class="bi bi-calendar3"></i> Triwulan IV</label>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div class="form-group my-3" >
-                <div class="mb-1">
-                    <label for="jenisTabulasi" style="font-size:14px; font-weight:500">Urutkan Menurut</label>
-                </div>
-                <div class="mt-1">
+            <p class="my-3" style="color: #215C5C">
+              <b><i class="mdi mdi-filter-menu"></i> Pilih Grafik</b>
+            </p>
+            
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headInfographisc">
+                <button class="accordion-button collapsed py-2" type="button" data-bs-toggle="collapse" data-bs-target="#graphics" >
+                  <i class="bi bi-caret-right-fill"></i>&ensp; Grafik
+                </button>
+              </h2>
+              <div id="graphics" class="accordion-collapse collapse show" style="padding: 0 30px" data-bs-parent="#accordionPeriode">
+                <div class="accordion-body py-2">
                   <div class="form-check">
-                    <input
-                      type="radio"
-                      id="customRadio1"
-                      name="customRadio"
-                      class="form-check-input"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="customRadio1"
-                      style="font-size: 13.5px"
-                      >Terbaru</label
-                    >
+                    <input class="form-check-input" type="checkbox" id="2023q1" checked>
+                    <label class="form-check-label" for="2023q1" style="font-size:15px"><i class="bi bi-bar-chart-line-fill"></i> Bar Chart</label>
                   </div>
                   <div class="form-check">
-                    <input
-                      type="radio"
-                      id="customRadio2"
-                      name="customRadio"
-                      class="form-check-input"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="customRadio2"
-                      style="font-size: 13.5px"
-                      >Relevansi</label
-                    >
+                    <input class="form-check-input" type="checkbox" id="2023q2" checked>
+                    <label class="form-check-label" for="2023q2" style="font-size:15px"><i class="bi bi-bezier"></i> Line Chart</label>
                   </div>
                   <div class="form-check">
-                    <input
-                      type="radio"
-                      id="customRadio3"
-                      name="customRadio"
-                      class="form-check-input"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="customRadio3"
-                      style="font-size: 13.5px"
-                      >Terunduh</label
-                    >
+                    <input class="form-check-input" type="checkbox" id="2023q3" checked>
+                    <label class="form-check-label" for="2023q3" style="font-size:15px"><i class="bi bi-pie-chart-fill"></i> Pie Chart</label>
                   </div>
                 </div>
+              </div>
             </div>
+            
+            <div class="my-3">
+              <button class="btn btn-sm btn-primary" style="font-size:12px"><i class="bi bi-filter me-1"></i> Bandingkan</button>
+            </div>
+            
           </div>
         </div>
         <!-- end card-->
-
-        <a
-          href="#"
-          class="list-group-item list-group-item-action pt-1 pb-0"
-          style="border-radius: 10px; border: none"
-        >
-        </a>
       </div>
 
       <div class="col-lg-10 px-4">
@@ -337,11 +519,12 @@
                       <h3 class="fw-bold text-primary" style="font-size:17px!important">Data di Badan Pusat Statistik Kabupaten Muna</h3>
                     </div>
                     <div class="col-sm-6 d-flex align-items-center justify-content-end">
-                      <div class="position-relative d-inline-block">
+                      <div class="position-relative d-inline-block mx-2">
                           <i class="bi bi-search search-icon"></i>
                           <input type="text" class="form-control form-control-sm custom-input" placeholder="Temukan Data">
                       </div>
-                      <button class="btn btn-sm btn-primary mx-1 p-3 d-flex justify-content-center align-items-center" style="height:35px!important"><i class="bi bi-search "></i></button>
+                      <button class="btn btn-sm btn-primary p-3 d-flex justify-content-center align-items-center" style="height:35px!important"><i class="bi bi-file-earmark-text "></i></button>
+                      <button class="btn btn-sm btn-primary mx-1 p-3 d-flex justify-content-center align-items-center" style="height:35px!important"><i class="bi bi-file-pdf"></i></button>
                      </div>
                   </div>
                   <hr>

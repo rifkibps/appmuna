@@ -184,7 +184,16 @@ class VisualizationClassView(View):
         }
 
         return render(request, 'app/visualization.html', context)
-        # return render(request, 'app/search_app.html', context)
+
+class VisPricesClassView(View):
+    def get(self,request):
+        context = {
+            'title' : 'Kemiskinan | Telusuri Data'
+        }
+
+        return render(request, 'app/prices.html', context)
+
+
 class DatasetPreviewClassView(View):
     def get(self,request):
         context = {
@@ -200,7 +209,8 @@ class SearchEngineClassView(View):
             'title' : 'Kemiskinan | Telusuri Data'
         }
 
-        return render(request, 'app/search.html', context)
+        return render(request, 'app/prices.html', context)
+        # return render(request, 'app/search.html', context)
         # return render(request, 'app/search_app.html', context)
 
 class StatisticsTablesClassView(View):

@@ -31,5 +31,6 @@ urlpatterns = [
     path('dataset', views.SearchEngineClassView.as_view(), name='dataset'),
     path('metadata', views.MetaDataClassView.as_view(), name='metadata'),
     path('visualisasi', views.VisualizationClassView.as_view(), name='visualization'),
+    path('visualisasi/harga', views.VisPricesClassView.as_view(), name='vis-prices'),
     path('dataset/preview', views.DatasetPreviewClassView.as_view(), name='dataset-preview')
 ]
